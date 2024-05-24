@@ -10,6 +10,7 @@ public class Program
             builder.Services.AddSwaggerGen();
             builder.Services.AddControllers();
 
+            builder.Services.ConfigureCors();
             builder.Services.ConfigureDbContext(builder.Configuration);
         }
 
@@ -17,13 +18,14 @@ public class Program
         var app = builder.Build();
         {
             app.ConfigureExceptionHandler();
-
+                
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("MainCorsPolicy");
             app.UseHttpsRedirection();
 
             app.MapControllers();

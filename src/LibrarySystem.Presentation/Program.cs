@@ -10,6 +10,7 @@ public class Program
             builder.Services.AddSwaggerGen();
             builder.Services.AddControllers();
 
+            builder.Services.ConfigureDbContext(builder.Configuration);
         }
 
         // application pipeline

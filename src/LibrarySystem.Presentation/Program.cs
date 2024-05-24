@@ -12,6 +12,9 @@ public class Program
 
             builder.Services.ConfigureCors();
             builder.Services.ConfigureDbContext(builder.Configuration);
+
+            builder.Services.ConfigureRepositoryManager();
+            builder.Services.ConfigureServiceManager();
         }
 
         // application pipeline

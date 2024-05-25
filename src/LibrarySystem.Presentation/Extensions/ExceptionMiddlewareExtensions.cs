@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
@@ -19,8 +20,10 @@ public static class ExceptionMiddlewareExtensions
                 if (contextFeature != null)
                 {
                     context.Response.StatusCode = contextFeature.Error switch {
-                        NotFoundException => StatusCodes.Status404NotFound,
+                        NotAuthorizedException => StatusCodes.Status401Unauthorized, 
                         BadRequestException => StatusCodes.Status400BadRequest,
+                        ArgumentException => StatusCodes.Status400BadRequest,
+                        NotFoundException => StatusCodes.Status404NotFound,
                         InternalServerErrorException => StatusCodes.Status500InternalServerError,
                         _ => StatusCodes.Status500InternalServerError,
                     };

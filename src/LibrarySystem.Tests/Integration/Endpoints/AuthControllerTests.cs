@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using FluentAssertions;
+using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
@@ -10,7 +11,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class AuthControllerTests
 {
     [Fact]
-    private async Task AuthController_RegisterUser_Returns201AndLocationHeader()
+    public async void AuthController_RegisterUser_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -24,4 +25,59 @@ public class AuthControllerTests
 
         header.Should().Equal(string.Format("/api/user/{0}", user.Id));
     }
+
+    [Fact]
+    public async void AuthController_LoginUser_Returns200AndJwtTokenAndUser()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+
+        var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var loginDto = new LoginUserDto
+        {
+            Email = user.Email,
+            Password = user.Password
+        };
+
+        var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<LoginUserResponseDto>() ?? throw new Exception("Failed to deserialize the response content.");
+
+        content.User!.Id.Should().Be(user.Id);
+        content.Token.Should().NotBeNull();
+
+        var tokenPayload = JwtToken.ParseTokenPayload(content.Token!);
+        var tokenType = tokenPayload.ElementAt(0).Type;
+        var tokenValue = tokenPayload.ElementAt(0).Value;
+
+        tokenType.Should().Be("AccountId");
+        tokenValue.Should().Be(user.Id.ToString());
+    }
+
+    [Fact]
+    public async void AuthController_LoginUser_Returns401()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+
+        var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var loginDto = new LoginUserDto
+        {
+            Email = user.Email,
+            Password = user.Password + "BLEEH"
+        };
+
+        var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+    }
+
 }

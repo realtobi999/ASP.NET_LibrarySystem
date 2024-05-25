@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrarySystem.Application",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrarySystem.Presentation", "LibrarySystem.Presentation\LibrarySystem.Presentation.csproj", "{DCA25465-8327-4DCC-A3D0-7D5B1640B208}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrarySystem.Tests", "LibrarySystem.Tests\LibrarySystem.Tests.csproj", "{90C308D9-048A-4E6C-ABE1-DD5C933514AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{DCA25465-8327-4DCC-A3D0-7D5B1640B208}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCA25465-8327-4DCC-A3D0-7D5B1640B208}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCA25465-8327-4DCC-A3D0-7D5B1640B208}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C308D9-048A-4E6C-ABE1-DD5C933514AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C308D9-048A-4E6C-ABE1-DD5C933514AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C308D9-048A-4E6C-ABE1-DD5C933514AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C308D9-048A-4E6C-ABE1-DD5C933514AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

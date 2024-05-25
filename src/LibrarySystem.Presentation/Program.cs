@@ -1,3 +1,5 @@
+using LibrarySystem.Application.Services.Users;
+using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Presentation.Extensions;
 
 public class Program
@@ -13,8 +15,10 @@ public class Program
             builder.Services.ConfigureCors();
             builder.Services.ConfigureDbContext(builder.Configuration);
 
+            // services
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
+            builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
         }
 
         // application pipeline

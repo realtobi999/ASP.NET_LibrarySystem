@@ -2,4 +2,5 @@
 
 public interface IRepositoryFactory
 {
+    IUserRepository CreateUserRepository();
 }

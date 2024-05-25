@@ -16,4 +16,14 @@ public class User
 
     [Required, Column("password")]
     public string? Password { get; set; }
+
+    public UserDto ToDto()
+    {
+        return new UserDto
+        {
+            Id = this.Id,
+            Username = this.Username,
+            Email = this.Email,
+        };
+    }
 }

@@ -1,7 +1,4 @@
-﻿using EntityFrameworkCore.EncryptColumn.Extension;
-using EntityFrameworkCore.EncryptColumn.Interfaces;
-using EntityFrameworkCore.EncryptColumn.Util;
-using LibrarySystem.Domain.Entities;
+﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +16,11 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // properties 
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
         // relationships
         modelBuilder.ConfigureBookAuthorRelationship(); 
         modelBuilder.ConfigureBookGenreRelationship();

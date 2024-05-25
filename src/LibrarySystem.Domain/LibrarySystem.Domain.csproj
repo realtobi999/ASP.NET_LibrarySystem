@@ -10,8 +10,4 @@
     <Folder Include="Interfaces\Repositories\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="EntityFrameworkCore.EncryptColumn" Version="6.0.8" />
-  </ItemGroup>
-
 </Project>

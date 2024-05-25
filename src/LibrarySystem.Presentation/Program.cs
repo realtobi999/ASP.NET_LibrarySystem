@@ -18,6 +18,7 @@ public class Program
             // services
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
+            builder.Services.ConfigureJwtAuthentication(builder.Configuration);
             builder.Services.ConfigureJwtToken(builder.Configuration);
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
         }
@@ -26,7 +27,7 @@ public class Program
         var app = builder.Build();
         {
             app.ConfigureExceptionHandler();
-                
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -35,6 +36,9 @@ public class Program
 
             app.UseCors("MainCorsPolicy");
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
             app.Run();

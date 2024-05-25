@@ -35,7 +35,7 @@ public class JwtToken : IJwtToken
         return tokenHandler.WriteToken(token);
     }
 
-    public static IEnumerable<Claim> ParseTokenPayload(string token)
+    public static IEnumerable<Claim> ParsePayload(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var payload = handler.ReadJwtToken(token).Claims;

@@ -1,6 +1,7 @@
 ﻿using LibrarySystem.Application.Contracts;
 using LibrarySystem.Application.Factories;
 using LibrarySystem.Application.Services;
+using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Infrastructure;
 using LibrarySystem.Infrastructure.Factories;
@@ -40,5 +41,22 @@ public static class ServiceExtensions
     {
         services.AddScoped<IRepositoryFactory, RepositoryFactory>();
         services.AddScoped<IRepositoryManager, RepositoryManager>();
+    }
+
+    public static void ConfigureJwtToken(this IServiceCollection services, IConfiguration configuration)
+    {
+        var jwtIssuer = configuration.GetSection("Jwt:Issuer").Value;
+        var jwtKey = configuration.GetSection("Jwt:Key").Value;
+
+        if (string.IsNullOrEmpty(jwtIssuer))
+        {
+            throw new ArgumentNullException(nameof(jwtIssuer), "JWT Issuer configuration is missing");
+        }
+        if (string.IsNullOrEmpty(jwtKey))
+        {
+            throw new ArgumentNullException(nameof(jwtKey), "JWT Key configuration is missing");
+        }
+
+        services.AddScoped<IJwtToken>(provider => new JwtToken(jwtIssuer, jwtKey));
     }
 }

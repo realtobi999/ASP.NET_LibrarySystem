@@ -1,4 +1,4 @@
-using LibrarySystem.Application.Services.Users;
+using LibrarySystem.Application.Services;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Presentation.Extensions;
 
@@ -18,6 +18,7 @@ public class Program
             // services
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
+            builder.Services.ConfigureJwtToken(builder.Configuration);
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
         }
 

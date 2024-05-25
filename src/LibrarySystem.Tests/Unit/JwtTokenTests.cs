@@ -43,7 +43,7 @@ public class JwtTokenTests
         ]);
         token.Should().NotBeNull();
 
-        var payload = jwt.ParseTokenPayload(token); 
+        var payload = JwtToken.ParseTokenPayload(token); 
         payload.Count().Should().BeGreaterThan(0);
         payload.ElementAt(0).Type.Should().Be("AccountId");
         payload.ElementAt(0).Value.Should().Be(user.Id.ToString());

@@ -1,5 +1,5 @@
 ﻿using LibrarySystem.Application.Contracts.Services;
-using LibrarySystem.Domain;
+using LibrarySystem.Domain.Dtos;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces;
@@ -37,7 +37,8 @@ public class UserService : IUserService
 
     public async Task<User> RegisterUser(RegisterUserDto registerUserDto)
     {
-        var user = new User(){
+        var user = new User
+        {
             Id = registerUserDto.Id ?? Guid.NewGuid(),
             Username = registerUserDto.Username,
             Email = registerUserDto.Email,

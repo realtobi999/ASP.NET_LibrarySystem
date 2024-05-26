@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Domain.Entities;
 
-namespace LibrarySystem.Domain;
+namespace LibrarySystem.Domain.Dtos;
 
 public record class LoginUserResponseDto
 {

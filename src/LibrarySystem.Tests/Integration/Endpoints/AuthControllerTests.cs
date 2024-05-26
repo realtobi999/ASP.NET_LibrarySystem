@@ -1,7 +1,8 @@
 ﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Application.Services;
-using LibrarySystem.Domain;
+using LibrarySystem.Domain.Dtos;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -22,7 +23,6 @@ public class AuthControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-
         header.Should().Equal(string.Format("/api/user/{0}", user.Id));
     }
 
@@ -78,6 +78,26 @@ public class AuthControllerTests
 
         var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]    
+    public async void AuthController_RegisterStaff_Returns201AndLocationHeader()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var staff = new Staff().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Admin")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        // act & assert
+        var response = await client.PostAsJsonAsync("/api/auth/staff/register", staff.ToRegisterStaffDto());
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var header = response.Headers.GetValues("Location");
+        header.Should().Equal(string.Format("/api/staff/{0}", staff.Id));
     }
 
 }

@@ -21,6 +21,24 @@ public class Program
             builder.Services.ConfigureJwtAuthentication(builder.Configuration);
             builder.Services.ConfigureJwtToken(builder.Configuration);
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+            // user authorization
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("User", policy => policy.RequireRole("User"));
+            });
+
+            // staff authorization
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Staff", policy => policy.RequireRole("Staff"));
+            });
+
+            // admin authorization
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+            });
         }
 
         // application pipeline

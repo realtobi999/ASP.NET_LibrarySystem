@@ -13,11 +13,16 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
     public DbSet<BookAuthor> BookAuthor { get; set; }
     public DbSet<BookGenre> BookGenre { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Staff> Staff { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // properties 
         modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<Staff>()
             .HasIndex(u => u.Email)
             .IsUnique();
 

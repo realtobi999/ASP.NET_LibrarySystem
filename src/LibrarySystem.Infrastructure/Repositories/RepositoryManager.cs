@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Domain.Interfaces.Repositories;
+﻿using LibrarySystem.Domain;
+using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Infrastructure.Repositories;
 
@@ -14,6 +15,8 @@ public class RepositoryManager : IRepositoryManager
     }
 
     public IUserRepository User => _factory.CreateUserRepository();
+
+    public IStaffRepository Staff => _factory.CreateStaffRepository();
 
     public Task<int> SaveAsync()
     {

@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
 using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain;
+using LibrarySystem.Domain.Dtos;
 using LibrarySystem.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
@@ -11,6 +13,7 @@ namespace LibrarySystem.Presentation.Controllers;
 
 POST    /api/auth/register
 POST    /api/auth/login
+POST    /api/auth/staff/register
 
 */
 public class AuthController : ControllerBase
@@ -43,12 +46,22 @@ public class AuthController : ControllerBase
 
         var user = await _service.UserService.GetUserByEmail(loginUserDto.Email!);
         var token = _jwt.Generate([
-            new Claim("AccountId", user.Id.ToString())
+            new Claim("AccountId", user.Id.ToString()),
+            new Claim(ClaimTypes.Role, "User"),
         ]);
 
         return Ok(new LoginUserResponseDto{
             User = user,
             Token = token,
         });
+    }
+
+    [Authorize(Policy = "Admin")]
+    [HttpPost("api/auth/staff/register")]
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterStaffDto registerStaffDto)
+    {
+        var staff = await _service.StaffService.RegisterStaff(registerStaffDto);
+
+        return Created(string.Format("/api/staff/{0}", staff.Id), null);
     }
 }

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Response;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;

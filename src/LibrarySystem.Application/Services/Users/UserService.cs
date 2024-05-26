@@ -40,9 +40,9 @@ public class UserService : IUserService
         var user = new User
         {
             Id = registerUserDto.Id ?? Guid.NewGuid(),
-            Username = registerUserDto.Username,
-            Email = registerUserDto.Email,
-            Password = _hasher.Hash(registerUserDto.Password!)
+            Username = registerUserDto.Username ?? throw new ArgumentNullException("The username must be set."),
+            Email = registerUserDto.Email ?? throw new ArgumentNullException("The email must be set."),
+            Password = _hasher.Hash(registerUserDto.Password ?? throw new ArgumentNullException("The password must be set."))
         };
 
         _repository.User.CreateUser(user);

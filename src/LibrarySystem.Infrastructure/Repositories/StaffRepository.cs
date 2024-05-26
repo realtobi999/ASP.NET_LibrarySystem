@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Infrastructure;
 
@@ -15,5 +16,10 @@ public class StaffRepository : IStaffRepository
     public void CreateStaff(Staff staff)
     {
         _context.Staff.Add(staff);
+    }
+
+    public Task<Staff?> GetStaffByEmail(string email)
+    {
+        return _context.Staff.FirstOrDefaultAsync(s => s.Email == email);
     }
 }

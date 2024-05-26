@@ -15,6 +15,7 @@ namespace LibrarySystem.Presentation.Controllers;
 POST    /api/auth/register
 POST    /api/auth/login
 POST    /api/auth/staff/register
+POST    /api/auth/staff/login
 
 */
 public class AuthController : ControllerBase
@@ -31,7 +32,7 @@ public class AuthController : ControllerBase
     [HttpPost("api/auth/register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto registerUserDto)
     {
-        var user = await _service.UserService.RegisterUser(registerUserDto); 
+        var user = await _service.UserService.RegisterUser(registerUserDto);
 
         return Created(string.Format("/api/user/{0}", user.Id), null);
     }
@@ -51,7 +52,8 @@ public class AuthController : ControllerBase
             new Claim(ClaimTypes.Role, "User"),
         ]);
 
-        return Ok(new LoginUserResponseDto{
+        return Ok(new LoginUserResponseDto
+        {
             User = user,
             Token = token,
         });
@@ -64,5 +66,27 @@ public class AuthController : ControllerBase
         var staff = await _service.StaffService.RegisterStaff(registerStaffDto);
 
         return Created(string.Format("/api/staff/{0}", staff.Id), null);
+    }
+
+    [HttpPost("api/auth/staff/login")]
+    public async Task<IActionResult> LoginUser([FromBody] LoginStaffDto loginStaffDto)
+    {
+        var authorized = await _service.StaffService.LoginStaff(loginStaffDto);
+        if (!authorized)
+        {
+            throw new NotAuthorizedException("These credentials are invalid.");
+        }
+
+        var staff = await _service.StaffService.GetStaffByEmail(loginStaffDto.Email!);
+        var token = _jwt.Generate([
+            new Claim("StaffId", staff.Id.ToString()),
+            new Claim(ClaimTypes.Role, "Staff"),
+        ]);
+
+        return Ok(new LoginStaffResponseDto
+        {
+            Staff = staff,
+            Token = token
+        });
     }
 }

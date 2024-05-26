@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Application.Services;
+using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos;
 using LibrarySystem.Domain.Dtos.Response;
 using LibrarySystem.Domain.Entities;
@@ -53,11 +54,11 @@ public class AuthControllerTests
         content.Token.Should().NotBeNull();
 
         var tokenPayload = JwtToken.ParsePayload(content.Token!);
-        var tokenType = tokenPayload.ElementAt(0).Type;
-        var tokenValue = tokenPayload.ElementAt(0).Value;
-
-        tokenType.Should().Be("AccountId");
-        tokenValue.Should().Be(user.Id.ToString());
+        tokenPayload.Count().Should().BeGreaterThan(2);
+        tokenPayload.ElementAt(0).Type.Should().Be("AccountId");
+        tokenPayload.ElementAt(0).Value.Should().Be(user.Id.ToString());
+        tokenPayload.ElementAt(1).Type.Should().Be("role");
+        tokenPayload.ElementAt(1).Value.Should().Be("User");
     }
 
     [Fact]
@@ -99,6 +100,46 @@ public class AuthControllerTests
 
         var header = response.Headers.GetValues("Location");
         header.Should().Equal(string.Format("/api/staff/{0}", staff.Id));
+    }
+
+    [Fact]
+    public async void AuthController_LoginStaff_Returns201AndJwtTokenAndStaff()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var staff = new Staff().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Admin")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create = await client.PostAsJsonAsync("/api/auth/staff/register", staff.ToRegisterStaffDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        client.DefaultRequestHeaders.Remove("Authorization");
+
+        // act & assert
+        var loginDto = new LoginStaffDto
+        {
+            Email = staff.Email,
+            Password = staff.Password,
+        };
+
+        var response = await client.PostAsJsonAsync("/api/auth/staff/login", loginDto);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<LoginStaffResponseDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        
+        content.Staff!.Id.Should().Be(staff.Id);
+        content.Token.Should().NotBeNull();
+
+        var tokenPayload = JwtToken.ParsePayload(content.Token!);
+        tokenPayload.Count().Should().BeGreaterThan(2);
+        tokenPayload.ElementAt(0).Type.Should().Be("StaffId");
+        tokenPayload.ElementAt(0).Value.Should().Be(staff.Id.ToString());
+        tokenPayload.ElementAt(1).Type.Should().Be("role");
+        tokenPayload.ElementAt(1).Value.Should().Be("Staff");
     }
 
 }

@@ -20,7 +20,7 @@ public class ServiceFactory : IServiceFactory
 
     public IStaffService CreateStaffService()
     {
-        return new StaffService(_repository);
+        return new StaffService(_repository, _hasher);
     }
 
     public IUserService CreateUserService()

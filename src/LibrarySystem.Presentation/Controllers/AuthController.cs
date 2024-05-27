@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
     [HttpPost("api/auth/register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto registerUserDto)
     {
-        var user = await _service.UserService.RegisterUser(registerUserDto);
+        var user = await _service.UserService.Register(registerUserDto);
 
         return Created(string.Format("/api/user/{0}", user.Id), null);
     }
@@ -40,13 +40,13 @@ public class AuthController : ControllerBase
     [HttpPost("api/auth/login")]
     public async Task<IActionResult> LoginUser([FromBody] LoginUserDto loginUserDto)
     {
-        var authorized = await _service.UserService.LoginUser(loginUserDto);
+        var authorized = await _service.UserService.Login(loginUserDto);
         if (!authorized)
         {
             throw new NotAuthorizedException("These credentials are invalid.");
         }
 
-        var user = await _service.UserService.GetUserByEmail(loginUserDto.Email!);
+        var user = await _service.UserService.Get(loginUserDto.Email!);
         var token = _jwt.Generate([
             new Claim("AccountId", user.Id.ToString()),
             new Claim(ClaimTypes.Role, "User"),
@@ -63,7 +63,7 @@ public class AuthController : ControllerBase
     [HttpPost("api/auth/staff/register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterStaffDto registerStaffDto)
     {
-        var staff = await _service.StaffService.RegisterStaff(registerStaffDto);
+        var staff = await _service.StaffService.Register(registerStaffDto);
 
         return Created(string.Format("/api/staff/{0}", staff.Id), null);
     }
@@ -71,13 +71,13 @@ public class AuthController : ControllerBase
     [HttpPost("api/auth/staff/login")]
     public async Task<IActionResult> LoginUser([FromBody] LoginStaffDto loginStaffDto)
     {
-        var authorized = await _service.StaffService.LoginStaff(loginStaffDto);
+        var authorized = await _service.StaffService.Login(loginStaffDto);
         if (!authorized)
         {
             throw new NotAuthorizedException("These credentials are invalid.");
         }
 
-        var staff = await _service.StaffService.GetStaffByEmail(loginStaffDto.Email!);
+        var staff = await _service.StaffService.Get(loginStaffDto.Email!);
         var token = _jwt.Generate([
             new Claim("StaffId", staff.Id.ToString()),
             new Claim(ClaimTypes.Role, "Staff"),

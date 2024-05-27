@@ -13,12 +13,12 @@ public class StaffRepository : IStaffRepository
         _context = context;
     }
 
-    public void CreateStaff(Staff staff)
+    public void Create(Staff staff)
     {
         _context.Staff.Add(staff);
     }
 
-    public Task<Staff?> GetStaffByEmail(string email)
+    public Task<Staff?> Get(string email)
     {
         return _context.Staff.FirstOrDefaultAsync(s => s.Email == email);
     }

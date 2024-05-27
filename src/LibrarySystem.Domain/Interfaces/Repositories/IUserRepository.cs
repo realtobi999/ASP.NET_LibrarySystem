@@ -4,8 +4,8 @@ namespace LibrarySystem.Domain.Interfaces.Repositories;
 
 public interface IUserRepository
 {
-    void CreateUser(User user);
-    Task<User?> GetUser(Guid Id);
-    Task<User?> GetUserByEmail(string Email);
-    Task<IEnumerable<User>> GetUsers();
+    void Create(User user);
+    Task<User?> Get(Guid Id);
+    Task<User?> Get(string Email);
+    Task<IEnumerable<User>> GetAll();
 }

@@ -13,22 +13,22 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public void CreateUser(User user)
+    public void Create(User user)
     {
         _context.Users.Add(user);
     }
 
-    public async Task<User?> GetUser(Guid Id)
+    public async Task<User?> Get(Guid Id)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Id == Id);
     }
 
-    public async Task<User?> GetUserByEmail(string Email)
+    public async Task<User?> Get(string Email)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == Email);
     }
 
-    public async Task<IEnumerable<User>> GetUsers()
+    public async Task<IEnumerable<User>> GetAll()
     {
         return await _context.Users.ToListAsync();
     }

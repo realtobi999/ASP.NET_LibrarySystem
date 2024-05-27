@@ -20,38 +20,38 @@ public class UserService : IUserService
         _hasher = hasher;
     }
 
-    public async Task<User> GetUser(Guid id)
+    public async Task<User> Get(Guid id)
     {
-        var user = await _repository.User.GetUser(id) ?? throw new UserNotFoundException(id);
+        var user = await _repository.User.Get(id) ?? throw new UserNotFoundException(id);
 
         return user;
     }
 
-    public async Task<User> GetUserByEmail(string email)
+    public async Task<User> Get(string email)
     {
-        var user = await _repository.User.GetUserByEmail(email) ?? throw new NotFoundException($"The user with email {email} doesnt exist.");
+        var user = await _repository.User.Get(email) ?? throw new NotFoundException($"The user with email {email} doesnt exist.");
 
         return user;
     }
 
-    public async Task<IEnumerable<User>> GetUsers()
+    public async Task<IEnumerable<User>> GetAll()
     {
-        var users = await _repository.User.GetUsers();
+        var users = await _repository.User.GetAll();
 
         return users;
     }
 
-    public async Task<bool> LoginUser(LoginUserDto loginUserDto)
+    public async Task<bool> Login(LoginUserDto loginUserDto)
     {
         var email = loginUserDto.Email ?? throw new ArgumentNullException("The email must be set.");
         var password = loginUserDto.Password ?? throw new ArgumentNullException("The password must be set."); 
 
-        var user = await _repository.User.GetUserByEmail(email) ?? throw new NotFoundException($"The user with email {email} doesnt exist.");
+        var user = await _repository.User.Get(email) ?? throw new NotFoundException($"The user with email {email} doesnt exist.");
 
         return _hasher.Compare(password, user.Password!);
     }
 
-    public async Task<User> RegisterUser(RegisterUserDto registerUserDto)
+    public async Task<User> Register(RegisterUserDto registerUserDto)
     {
         var user = new User
         {
@@ -61,15 +61,15 @@ public class UserService : IUserService
             Password = _hasher.Hash(registerUserDto.Password ?? throw new ArgumentNullException("The password must be set."))
         };
 
-        _repository.User.CreateUser(user);
+        _repository.User.Create(user);
         await _repository.SaveAsync();
 
         return user;
     }
 
-    public async Task<int> UpdateUser(Guid id, UpdateUserDto updateUserDto)
+    public async Task<int> Update(Guid id, UpdateUserDto updateUserDto)
     {
-        var user = await _repository.User.GetUser(id) ?? throw new UserNotFoundException(id);
+        var user = await _repository.User.Get(id) ?? throw new UserNotFoundException(id);
 
         var email = updateUserDto.Email;
         var username = updateUserDto.Username;

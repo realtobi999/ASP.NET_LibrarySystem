@@ -6,10 +6,10 @@ namespace LibrarySystem.Application.Contracts.Services;
 
 public interface IUserService
 {
-    Task<IEnumerable<User>> GetUsers();
-    Task<User> GetUser(Guid id);
-    Task<User> GetUserByEmail(string email);
-    Task<User> RegisterUser(RegisterUserDto registerUserDto);
-    Task<bool> LoginUser(LoginUserDto loginUserDto);
-    Task<int> UpdateUser(Guid id, UpdateUserDto updateUserDto);
+    Task<IEnumerable<User>> GetAll();
+    Task<User> Get(Guid id);
+    Task<User> Get(string email);
+    Task<User> Register(RegisterUserDto registerUserDto);
+    Task<bool> Login(LoginUserDto loginUserDto);
+    Task<int> Update(Guid id, UpdateUserDto updateUserDto);
 }

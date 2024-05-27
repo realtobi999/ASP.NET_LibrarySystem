@@ -19,24 +19,24 @@ public class StaffService : IStaffService
         _hasher = hasher;
     }
 
-    public async Task<Staff> GetStaffByEmail(string email)
+    public async Task<Staff> Get(string email)
     {
-        var staff = await _repository.Staff.GetStaffByEmail(email) ?? throw new NotFoundException($"The staff with email {email} doesnt exist.");
+        var staff = await _repository.Staff.Get(email) ?? throw new NotFoundException($"The staff with email {email} doesnt exist.");
 
         return staff;
     }
 
-    public async Task<bool> LoginStaff(LoginStaffDto loginStaffDto)
+    public async Task<bool> Login(LoginStaffDto loginStaffDto)
     {
         var email = loginStaffDto.Email ?? throw new ArgumentNullException("The email must be set.");
         var password = loginStaffDto.Password ?? throw new ArgumentNullException("The password must be set."); 
 
-        var staff = await _repository.Staff.GetStaffByEmail(email) ?? throw new NotFoundException($"The staff with email {email} doesnt exist.");
+        var staff = await _repository.Staff.Get(email) ?? throw new NotFoundException($"The staff with email {email} doesnt exist.");
 
         return _hasher.Compare(password, staff.Password!);
     }
 
-    public async Task<Staff> RegisterStaff(RegisterStaffDto registerStaffDto)
+    public async Task<Staff> Register(RegisterStaffDto registerStaffDto)
     {
         var staff = new Staff
         {
@@ -46,7 +46,7 @@ public class StaffService : IStaffService
             Password = _hasher.Hash(registerStaffDto.Password ?? throw new ArgumentNullException("The password must be set.")),
         };
 
-        _repository.Staff.CreateStaff(staff);
+        _repository.Staff.Create(staff);
         await _repository.SaveAsync();
 
         return staff;

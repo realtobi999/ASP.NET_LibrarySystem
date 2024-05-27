@@ -26,7 +26,7 @@ public class UserController : ControllerBase
     [HttpGet("api/user")]
     public async Task<IActionResult> GetUsers(int limit, int offset)
     {
-        var users = await _service.UserService.GetUsers();
+        var users = await _service.UserService.GetAll();
 
         if (offset > 0)
             users = users.Skip(offset);
@@ -39,7 +39,7 @@ public class UserController : ControllerBase
     [HttpGet("api/user/{userId:guid}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
-        var user = await _service.UserService.GetUser(userId);
+        var user = await _service.UserService.Get(userId);
 
         return Ok(user.ToDto());
     }
@@ -48,7 +48,7 @@ public class UserController : ControllerBase
     [HttpPut("api/user/{userId:guid}")]
     public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
-        var affected = await _service.UserService.UpdateUser(userId, updateUserDto);
+        var affected = await _service.UserService.Update(userId, updateUserDto);
 
         if (affected == 0)
         {

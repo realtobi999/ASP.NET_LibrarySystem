@@ -10,7 +10,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class UserControllerTests
 {
     [Fact]
-    public async Task UserController_GetUsers_Returns200AndUsersAsync()
+    public async void UserController_GetUsers_Returns200AndUsersAsync()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -35,5 +35,23 @@ public class UserControllerTests
         var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new Exception("Failed to deserialize the response content.");
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().Be(user2.ToDto());
+    }
+
+    [Fact]
+    public async Task UserController_GetUser_Returns200AndUserAsync()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+
+        var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var response = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        content.Should().Be(user.ToDto());
     }
 }

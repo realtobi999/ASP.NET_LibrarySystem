@@ -1,4 +1,5 @@
 ﻿using LibrarySystem.Application.Contracts.Services;
+using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
@@ -16,6 +17,13 @@ public class UserService : IUserService
     {
         _repository = repository;
         _hasher = hasher;
+    }
+
+    public async Task<User> GetUser(Guid id)
+    {
+        var user = await _repository.User.GetUser(id) ?? throw new UserNotFoundException(id);
+
+        return user;
     }
 
     public async Task<User> GetUserByEmail(string email)

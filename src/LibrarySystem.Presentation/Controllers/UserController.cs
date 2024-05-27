@@ -7,6 +7,7 @@ namespace LibrarySystem.Presentation.Controllers;
 /*
 
 GET     /api/user params: offset, limit
+GET     /api/user/{user_id}
 
 */
 public class UserController : ControllerBase
@@ -29,5 +30,13 @@ public class UserController : ControllerBase
             users = users.Take(limit); 
 
         return Ok(users.Select(u => u.ToDto()));
+    }
+
+    [HttpGet("api/user/{userId:guid}")]
+    public async Task<IActionResult> GetUser(Guid userId)
+    {
+        var user = await _service.UserService.GetUser(userId);
+
+        return Ok(user.ToDto());
     }
 }

@@ -1,4 +1,7 @@
 ﻿using LibrarySystem.Application.Contracts;
+using LibrarySystem.Domain;
+using LibrarySystem.Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
@@ -8,6 +11,7 @@ namespace LibrarySystem.Presentation.Controllers;
 
 GET     /api/user params: offset, limit
 GET     /api/user/{user_id}
+PUT     /api/user/{user_id}
 
 */
 public class UserController : ControllerBase
@@ -38,5 +42,19 @@ public class UserController : ControllerBase
         var user = await _service.UserService.GetUser(userId);
 
         return Ok(user.ToDto());
+    }
+
+    [Authorize(Policy = "User")]
+    [HttpPut("api/user/{userId:guid}")]
+    public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
+    {
+        var affected = await _service.UserService.UpdateUser(userId, updateUserDto);
+
+        if (affected == 0)
+        {
+            throw new InternalServerErrorException("Zero affected rows while trying to modify the database!");
+        }
+
+        return Ok();
     }
 }

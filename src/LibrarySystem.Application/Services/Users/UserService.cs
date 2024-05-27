@@ -5,6 +5,7 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Users;
 
@@ -64,5 +65,24 @@ public class UserService : IUserService
         await _repository.SaveAsync();
 
         return user;
+    }
+
+    public async Task<int> UpdateUser(Guid id, UpdateUserDto updateUserDto)
+    {
+        var user = await _repository.User.GetUser(id) ?? throw new UserNotFoundException(id);
+
+        var email = updateUserDto.Email;
+        var username = updateUserDto.Username;
+
+        if (!email.IsNullOrEmpty())
+        {
+            user.Email = email;
+        }
+        if (!username.IsNullOrEmpty())
+        {
+            user.Username = email;
+        }
+
+        return await _repository.SaveAsync();
     }
 }

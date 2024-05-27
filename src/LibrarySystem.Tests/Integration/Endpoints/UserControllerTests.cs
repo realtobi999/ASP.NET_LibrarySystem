@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using FluentAssertions;
+using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
@@ -38,7 +40,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async Task UserController_GetUser_Returns200AndUserAsync()
+    public async void UserController_GetUser_Returns200AndUserAsync()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -54,4 +56,41 @@ public class UserControllerTests
         var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new Exception("Failed to deserialize the response content.");
         content.Should().Be(user.ToDto());
     }
+
+    [Fact]
+    public async void UserController_UpdateUser_Returns200AndIsUpdatedAsync()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "User")
+        ]);
+
+        var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        // act & assert
+        var updateDto = new UpdateUserDto
+        {
+            Username = "test_test_test",
+            Email = "test_test_test",
+        };
+
+        var response = await client.PutAsJsonAsync(string.Format("/api/user/{0}", user.Id), updateDto); 
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        client.DefaultRequestHeaders.Remove("Authorization");
+
+        var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        newUser.Id.Should().Be(user.Id); 
+        newUser.Username.Should().Be("test_test_test");
+        newUser.Email.Should().Be("test_test_test");
+    }
+
 }

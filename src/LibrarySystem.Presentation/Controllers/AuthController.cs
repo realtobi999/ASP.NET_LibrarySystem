@@ -54,7 +54,7 @@ public class AuthController : ControllerBase
 
         return Ok(new LoginUserResponseDto
         {
-            User = user,
+            UserDto = user.ToDto(),
             Token = token,
         });
     }
@@ -85,7 +85,7 @@ public class AuthController : ControllerBase
 
         return Ok(new LoginStaffResponseDto
         {
-            Staff = staff,
+            StaffDto = staff.ToDto(),
             Token = token
         });
     }

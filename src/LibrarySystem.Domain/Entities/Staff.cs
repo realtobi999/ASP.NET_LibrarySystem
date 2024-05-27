@@ -16,4 +16,14 @@ public class Staff
 
     [Required, Column("password")]
     public string? Password { get; set; }
+
+    public StaffDto ToDto()
+    {
+        return new StaffDto
+        {
+            Id = this.Id,
+            Name = this.Name,
+            Email = this.Email,
+        };
+    }
 }

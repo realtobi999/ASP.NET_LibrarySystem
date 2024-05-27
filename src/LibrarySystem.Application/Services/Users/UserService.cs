@@ -25,6 +25,13 @@ public class UserService : IUserService
         return user;
     }
 
+    public async Task<IEnumerable<User>> GetUsers()
+    {
+        var users = await _repository.User.GetUsers();
+
+        return users;
+    }
+
     public async Task<bool> LoginUser(LoginUserDto loginUserDto)
     {
         var email = loginUserDto.Email ?? throw new ArgumentNullException("The email must be set.");

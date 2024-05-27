@@ -27,4 +27,9 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == Email);
     }
+
+    public async Task<IEnumerable<User>> GetUsers()
+    {
+        return await _context.Users.ToListAsync();
+    }
 }

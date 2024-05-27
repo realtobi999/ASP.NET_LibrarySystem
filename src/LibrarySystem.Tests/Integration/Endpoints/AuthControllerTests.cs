@@ -50,7 +50,7 @@ public class AuthControllerTests
 
         var content = await response.Content.ReadFromJsonAsync<LoginUserResponseDto>() ?? throw new Exception("Failed to deserialize the response content.");
 
-        content.User!.Id.Should().Be(user.Id);
+        content.UserDto!.Id.Should().Be(user.Id);
         content.Token.Should().NotBeNull();
 
         var tokenPayload = JwtToken.ParsePayload(content.Token!);
@@ -131,7 +131,7 @@ public class AuthControllerTests
 
         var content = await response.Content.ReadFromJsonAsync<LoginStaffResponseDto>() ?? throw new Exception("Failed to deserialize the response content.");
         
-        content.Staff!.Id.Should().Be(staff.Id);
+        content.StaffDto!.Id.Should().Be(staff.Id);
         content.Token.Should().NotBeNull();
 
         var tokenPayload = JwtToken.ParsePayload(content.Token!);

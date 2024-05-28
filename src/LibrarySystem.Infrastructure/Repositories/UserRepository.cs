@@ -18,6 +18,11 @@ public class UserRepository : IUserRepository
         _context.Users.Add(user);
     }
 
+    public void Delete(User user)
+    {
+        _context.Users.Remove(user);
+    }
+
     public async Task<User?> Get(Guid Id)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Id == Id);

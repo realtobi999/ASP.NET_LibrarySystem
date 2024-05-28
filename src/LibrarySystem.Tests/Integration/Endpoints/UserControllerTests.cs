@@ -93,4 +93,27 @@ public class UserControllerTests
         newUser.Email.Should().Be("test_test_test");
     }
 
+    [Fact]
+    public async void UserController_DeleteUser_Returns200AndUserDoesntExistInTheDb()
+    {
+        //prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "User")
+        ]);
+
+        var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        // act & assert
+        var response = await client.DeleteAsync(string.Format("/api/user/{0}", user.Id));
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
+
 }

@@ -12,6 +12,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/user params: offset, limit
 GET     /api/user/{user_id}
 PUT     /api/user/{user_id}
+DELETE  /api/user/{user_id}
 
 */
 public class UserController : ControllerBase
@@ -50,6 +51,20 @@ public class UserController : ControllerBase
     {
         var affected = await _service.UserService.Update(userId, updateUserDto);
 
+        if (affected == 0)
+        {
+            throw new InternalServerErrorException("Zero affected rows while trying to modify the database!");
+        }
+
+        return Ok();
+    }
+
+    [Authorize(Policy = "User")]
+    [HttpDelete("api/user/{userId:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid userId)
+    {
+        var affected = await _service.UserService.Delete(userId);
+        
         if (affected == 0)
         {
             throw new InternalServerErrorException("Zero affected rows while trying to modify the database!");

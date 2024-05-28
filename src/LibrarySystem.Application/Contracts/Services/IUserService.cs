@@ -12,4 +12,5 @@ public interface IUserService
     Task<User> Register(RegisterUserDto registerUserDto);
     Task<bool> Login(LoginUserDto loginUserDto);
     Task<int> Update(Guid id, UpdateUserDto updateUserDto);
+    Task<int> Delete(Guid id);
 }

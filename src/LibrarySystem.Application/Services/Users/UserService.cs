@@ -20,6 +20,14 @@ public class UserService : IUserService
         _hasher = hasher;
     }
 
+    public async Task<int> Delete(Guid id)
+    {
+        var user = await _repository.User.Get(id) ?? throw new UserNotFoundException(id);
+
+        _repository.User.Delete(user);
+        return await _repository.SaveAsync();
+    }
+
     public async Task<User> Get(Guid id)
     {
         var user = await _repository.User.Get(id) ?? throw new UserNotFoundException(id);

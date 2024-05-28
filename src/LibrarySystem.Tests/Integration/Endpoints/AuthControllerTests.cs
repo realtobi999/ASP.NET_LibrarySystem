@@ -55,7 +55,7 @@ public class AuthControllerTests
 
         var tokenPayload = JwtToken.ParsePayload(content.Token!);
         tokenPayload.Count().Should().BeGreaterThan(2);
-        tokenPayload.ElementAt(0).Type.Should().Be("AccountId");
+        tokenPayload.ElementAt(0).Type.Should().Be("UserId");
         tokenPayload.ElementAt(0).Value.Should().Be(user.Id.ToString());
         tokenPayload.ElementAt(1).Type.Should().Be("role");
         tokenPayload.ElementAt(1).Value.Should().Be("User");

@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
 
         var user = await _service.UserService.Get(loginUserDto.Email!);
         var token = _jwt.Generate([
-            new Claim("AccountId", user.Id.ToString()),
+            new Claim("UserId", user.Id.ToString()),
             new Claim(ClaimTypes.Role, "User"),
         ]);
 

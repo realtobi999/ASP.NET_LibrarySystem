@@ -1,4 +1,3 @@
-using LibrarySystem.Application.Services;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Presentation.Extensions;
 
@@ -57,6 +56,9 @@ public class Program
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // custom middlewares
+            app.UseUserAuthentication();
 
             app.MapControllers();
             app.Run();

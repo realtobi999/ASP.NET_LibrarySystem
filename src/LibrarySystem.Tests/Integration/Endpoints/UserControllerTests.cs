@@ -64,7 +64,8 @@ public class UserControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var token = JwtTokenTestExtensions.Create().Generate([
-            new Claim(ClaimTypes.Role, "User")
+            new Claim("UserId", user.Id.ToString()),
+            new Claim(ClaimTypes.Role, "User"),
         ]);
 
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
@@ -100,7 +101,8 @@ public class UserControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var token = JwtTokenTestExtensions.Create().Generate([
-            new Claim(ClaimTypes.Role, "User")
+            new Claim("UserId", user.Id.ToString()),
+            new Claim(ClaimTypes.Role, "User"),
         ]);
 
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());

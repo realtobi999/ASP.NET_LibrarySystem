@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using LibrarySystem.Application;
 using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos;
@@ -67,6 +68,7 @@ public class AuthController : ControllerBase
 
         return Created(string.Format("/api/staff/{0}", staff.Id), null);
     }
+
 
     [HttpPost("api/auth/staff/login")]
     public async Task<IActionResult> LoginUser([FromBody] LoginStaffDto loginStaffDto)

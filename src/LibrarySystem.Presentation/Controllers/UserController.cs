@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Contracts;
+﻿using LibrarySystem.Application;
+using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
@@ -45,7 +46,7 @@ public class UserController : ControllerBase
         return Ok(user.ToDto());
     }
 
-    [Authorize(Policy = "User")]
+    [Authorize(Policy = "User"), UserAuth]
     [HttpPut("api/user/{userId:guid}")]
     public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
@@ -59,12 +60,12 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [Authorize(Policy = "User")]
+    [Authorize(Policy = "User"), UserAuth]
     [HttpDelete("api/user/{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
         var affected = await _service.UserService.Delete(userId);
-        
+
         if (affected == 0)
         {
             throw new InternalServerErrorException("Zero affected rows while trying to modify the database!");

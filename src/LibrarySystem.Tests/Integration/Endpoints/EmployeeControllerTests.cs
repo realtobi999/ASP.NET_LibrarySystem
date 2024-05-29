@@ -114,4 +114,37 @@ public class EmployeeControllerTests
         updatedEmployee.Name.Should().Be(updateDto.Name);
         updatedEmployee.Email.Should().Be(updateDto.Email);
     }
+
+    [Fact]
+    public async void EmployeeController_UpdateEmployee_Returns200AndEmployeeIsDeleted()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var employee = new Employee().WithFakeData();
+
+        var token1 = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Admin")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+
+        var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        client.DefaultRequestHeaders.Remove("Authorization");
+
+        var token2 = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+
+        // act & assert
+        var response = await client.DeleteAsync(string.Format("/api/employee/{0}", employee.Id));
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
+
 }

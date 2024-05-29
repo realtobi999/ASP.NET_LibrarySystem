@@ -18,6 +18,11 @@ public class EmployeeRepository : IEmployeeRepository
         _context.Employee.Add(employee);
     }
 
+    public void Delete(Employee employee)
+    {
+        _context.Employee.Remove(employee);
+    }
+
     public async Task<Employee?> Get(string email)
     {
         return await _context.Employee.FirstOrDefaultAsync(s => s.Email == email);

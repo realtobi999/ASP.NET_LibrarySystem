@@ -85,4 +85,12 @@ public class EmployeeService : IEmployeeService
 
         return await _repository.SaveAsync();
     }
+
+    public async Task<int> Delete(Guid id)
+    {
+        var employee = await _repository.Employee.Get(id) ?? throw new EmployeeNotFoundException(id);
+
+        _repository.Employee.Delete(employee);
+        return await _repository.SaveAsync();
+    }
 }

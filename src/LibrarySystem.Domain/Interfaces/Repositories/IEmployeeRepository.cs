@@ -8,4 +8,5 @@ public interface IEmployeeRepository
     void Create(Employee employee);
     Task<Employee?> Get(string email);
     Task<Employee?> Get(Guid id);
+    void Delete(Employee employee);
 }

@@ -12,6 +12,7 @@ namespace LibrarySystem.Presentation;
 GET     /api/employee params: offset, limit
 GET     /api/employee/{employee_id}
 PUT     /api/employee/{employee_id}
+DELETE  /api/employee/{employee_id}
 
 */
 public class EmployeeController : ControllerBase
@@ -49,6 +50,19 @@ public class EmployeeController : ControllerBase
     public async Task<IActionResult> UpdateEmployee(Guid employeeId, [FromBody] UpdateEmployeeDto updateEmployeeDto)
     {
         var affected = await _service.EmployeeService.Update(employeeId, updateEmployeeDto);
+        if (affected == 0)
+        {
+            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
+        }
+
+        return Ok();
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpDelete("api/employee/{employeeId:guid}")]
+    public async Task<IActionResult> DeleteEmployee(Guid employeeId)
+    {
+        var affected = await _service.EmployeeService.Delete(employeeId);
         if (affected == 0)
         {
             throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");

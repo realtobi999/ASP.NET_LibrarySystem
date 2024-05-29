@@ -12,4 +12,5 @@ public interface IEmployeeService
     Task<Employee> Create(RegisterEmployeeDto registerEmployeeDto);
     Task<bool> Login(LoginEmployeeDto loginEmployeeDto);
     Task<int> Update(Guid id, UpdateEmployeeDto updateEmployeeDto);
+    Task<int> Delete(Guid id);
 }

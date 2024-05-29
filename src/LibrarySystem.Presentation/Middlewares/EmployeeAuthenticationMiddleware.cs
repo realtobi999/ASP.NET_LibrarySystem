@@ -3,13 +3,13 @@ using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Exceptions;
 
-namespace LibrarySystem.Presentation.Middlewares;
+namespace LibrarySystem.Presentation;
 
-public class UserAuthenticationMiddleware
+public class EmployeeAuthenticationMiddleware
 {
     private readonly RequestDelegate _next;
 
-    public UserAuthenticationMiddleware(RequestDelegate next)
+    public EmployeeAuthenticationMiddleware(RequestDelegate next)
     {
         _next = next;
     }
@@ -17,7 +17,7 @@ public class UserAuthenticationMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         // skip if the endpoint doesnt have the specific middleware attribute
-        if (context.GetEndpoint()?.Metadata.GetMetadata<UserAuthAttribute>() is null)
+        if (context.GetEndpoint()?.Metadata.GetMetadata<EmployeeAuthAttribute>() is null)
         {
             await _next(context);
             return;
@@ -39,12 +39,12 @@ public class UserAuthenticationMiddleware
         var payload = JwtToken.ParsePayload(token);
 
         // get the id from the jwt token
-        var tokenUserId = payload.FirstOrDefault(c => c.Type.ToUpper() == "USERID")?.Value;
+        var tokenEmployeeId = payload.FirstOrDefault(c => c.Type.ToUpper() == "EMPLOYEEID")?.Value;
 
         // get the id from the route middleware
-        var routeUserId = context.Request.RouteValues.FirstOrDefault(v => v.Key.ToUpper() == "USERID").Value as string;
+        var routeEmployeeId = context.Request.RouteValues.FirstOrDefault(v => v.Key.ToUpper() == "EMPLOYEEID").Value as string;
 
-        if (tokenUserId != routeUserId)
+        if (tokenEmployeeId != routeEmployeeId)
         {
             throw new NotAuthorizedException("Not Authorized!");
         }
@@ -52,5 +52,3 @@ public class UserAuthenticationMiddleware
         await _next(context);
     }
 }
-
-

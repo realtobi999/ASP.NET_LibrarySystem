@@ -91,7 +91,8 @@ public class EmployeeControllerTests
         client.DefaultRequestHeaders.Remove("Authorization");
 
         var token2 = JwtTokenTestExtensions.Create().Generate([
-            new Claim(ClaimTypes.Role, "Employee")
+            new Claim(ClaimTypes.Role, "Employee"),
+            new Claim("EmployeeId", employee.Id.ToString()),
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
@@ -134,7 +135,8 @@ public class EmployeeControllerTests
         client.DefaultRequestHeaders.Remove("Authorization");
 
         var token2 = JwtTokenTestExtensions.Create().Generate([
-            new Claim(ClaimTypes.Role, "Employee")
+            new Claim(ClaimTypes.Role, "Employee"),
+            new Claim("EmployeeId", employee.Id.ToString()),
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));

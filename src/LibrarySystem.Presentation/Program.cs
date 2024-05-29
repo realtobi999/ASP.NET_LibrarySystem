@@ -59,6 +59,7 @@ public class Program
 
             // custom middlewares
             app.UseUserAuthentication();
+            app.UseEmployeeAuthentication();
 
             app.MapControllers();
             app.Run();

@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Contracts;
+﻿using LibrarySystem.Application;
+using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain.Dtos;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
@@ -45,7 +46,7 @@ public class EmployeeController : ControllerBase
         return Ok(employee);
     }
 
-    [Authorize(Policy = "Employee")]
+    [Authorize(Policy = "Employee"), EmployeeAuth]
     [HttpPut("api/employee/{employeeId:guid}")]
     public async Task<IActionResult> UpdateEmployee(Guid employeeId, [FromBody] UpdateEmployeeDto updateEmployeeDto)
     {
@@ -58,7 +59,7 @@ public class EmployeeController : ControllerBase
         return Ok();
     }
 
-    [Authorize(Policy = "Employee")]
+    [Authorize(Policy = "Employee"), EmployeeAuth]
     [HttpDelete("api/employee/{employeeId:guid}")]
     public async Task<IActionResult> DeleteEmployee(Guid employeeId)
     {

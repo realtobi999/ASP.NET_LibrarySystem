@@ -1,4 +1,7 @@
 ﻿using LibrarySystem.Application.Contracts;
+using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation;
@@ -6,7 +9,9 @@ namespace LibrarySystem.Presentation;
 [ApiController]
 /*
 
-GET     /api/Employee params: offset, limit
+GET     /api/employee params: offset, limit
+GET     /api/employee/{employee_id}
+PUT     /api/employee/{employee_id}
 
 */
 public class EmployeeController : ControllerBase
@@ -38,4 +43,18 @@ public class EmployeeController : ControllerBase
 
         return Ok(employee);
     }
+
+    [Authorize(Policy = "Employee")]
+    [HttpPut("api/employee/{employeeId:guid}")]
+    public async Task<IActionResult> UpdateEmployee(Guid employeeId, [FromBody] UpdateEmployeeDto updateEmployeeDto)
+    {
+        var affected = await _service.EmployeeService.Update(employeeId, updateEmployeeDto);
+        if (affected == 0)
+        {
+            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
+        }
+
+        return Ok();
+    }
+
 }

@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain;
+using LibrarySystem.Domain.Dtos;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -69,5 +70,48 @@ public class EmployeeControllerTests
 
         var response2 = await client.GetAsync(string.Format("/api/employee/{0}", Guid.NewGuid()));
         response2.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async void EmployeeController_UpdateEmployee_Returns200AndEmployeeIsUpdated()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var employee = new Employee().WithFakeData();
+
+        var token1 = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Admin")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+
+        var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        client.DefaultRequestHeaders.Remove("Authorization");
+
+        var token2 = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+
+        // act & assert
+        var updateDto = new UpdateEmployeeDto
+        {
+            Name = "test",
+            Email = "test@test.com"
+        };
+
+        var response = await client.PutAsJsonAsync(string.Format("api/employee/{0}", employee.Id), updateDto);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var updatedEmployee = await get.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        updatedEmployee.Id.Should().Be(employee.Id);
+        updatedEmployee.Name.Should().Be(updateDto.Name);
+        updatedEmployee.Email.Should().Be(updateDto.Email);
     }
 }

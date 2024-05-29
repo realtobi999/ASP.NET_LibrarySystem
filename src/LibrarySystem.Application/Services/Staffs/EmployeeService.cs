@@ -5,6 +5,7 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Employees;
 
@@ -64,5 +65,24 @@ public class EmployeeService : IEmployeeService
         var employee = await _repository.Employee.Get(id) ?? throw new EmployeeNotFoundException(id);
 
         return employee;
+    }
+
+    public async Task<int> Update(Guid id, UpdateEmployeeDto updateEmployeeDto)
+    {
+        var employee = await _repository.Employee.Get(id) ?? throw new EmployeeNotFoundException(id);
+
+        var name = updateEmployeeDto.Name;
+        var email = updateEmployeeDto.Email;
+
+        if (!email.IsNullOrEmpty())
+        {
+            employee.Email = email;
+        }
+        if (!name.IsNullOrEmpty())
+        {
+            employee.Name = name;
+        }
+
+        return await _repository.SaveAsync();
     }
 }

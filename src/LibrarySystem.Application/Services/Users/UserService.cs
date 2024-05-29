@@ -88,7 +88,7 @@ public class UserService : IUserService
         }
         if (!username.IsNullOrEmpty())
         {
-            user.Username = email;
+            user.Username = username;
         }
 
         return await _repository.SaveAsync();

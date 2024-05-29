@@ -54,7 +54,7 @@ public class UserController : ControllerBase
 
         if (affected == 0)
         {
-            throw new InternalServerErrorException("Zero affected rows while trying to modify the database!");
+            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
         }
 
         return Ok();

@@ -76,8 +76,8 @@ public class UserControllerTests
         // act & assert
         var updateDto = new UpdateUserDto
         {
-            Username = "test_test_test",
-            Email = "test_test_test",
+            Username = "test",
+            Email = "test@test.com",
         };
 
         var response = await client.PutAsJsonAsync(string.Format("/api/user/{0}", user.Id), updateDto); 
@@ -90,8 +90,8 @@ public class UserControllerTests
 
         var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new Exception("Failed to deserialize the response content.");
         newUser.Id.Should().Be(user.Id); 
-        newUser.Username.Should().Be("test_test_test");
-        newUser.Email.Should().Be("test_test_test");
+        newUser.Username.Should().Be(updateDto.Username);
+        newUser.Email.Should().Be(updateDto.Email);
     }
 
     [Fact]

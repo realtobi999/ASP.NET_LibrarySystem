@@ -22,4 +22,9 @@ public class StaffRepository : IStaffRepository
     {
         return _context.Staff.FirstOrDefaultAsync(s => s.Email == email);
     }
+
+    public async Task<IEnumerable<Staff>> GetAll()
+    {
+        return await _context.Staff.ToListAsync();
+    }
 }

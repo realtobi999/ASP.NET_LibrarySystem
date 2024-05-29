@@ -51,4 +51,11 @@ public class StaffService : IStaffService
 
         return staff;
     }
+
+    public Task<IEnumerable<Staff>> GetAll()
+    {
+        var staff = _repository.Staff.GetAll();
+
+        return staff;
+    }
 }

@@ -4,7 +4,7 @@ using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Tests;
 
-public static class StaffUserExtensions
+public static class StaffTestExtensions
 {
     private static readonly Faker<Staff> _staffFaker = new Faker<Staff>()
         .RuleFor(u => u.Id, f => f.Random.Guid())

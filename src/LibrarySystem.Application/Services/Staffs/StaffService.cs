@@ -36,7 +36,7 @@ public class StaffService : IStaffService
         return _hasher.Compare(password, staff.Password!);
     }
 
-    public async Task<Staff> Register(RegisterStaffDto registerStaffDto)
+    public async Task<Staff> Create(RegisterStaffDto registerStaffDto)
     {
         var staff = new Staff
         {

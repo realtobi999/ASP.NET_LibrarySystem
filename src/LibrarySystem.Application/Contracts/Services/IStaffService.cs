@@ -6,7 +6,7 @@ namespace LibrarySystem.Application.Contracts.Services;
 
 public interface IStaffService
 {
-    Task<Staff> Register(RegisterStaffDto registerStaffDto);
+    Task<Staff> Create(RegisterStaffDto registerStaffDto);
     Task<bool> Login(LoginStaffDto loginStaffDto);
     Task<Staff> Get(string email);
 }

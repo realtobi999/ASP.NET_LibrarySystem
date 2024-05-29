@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
     [HttpPost("api/auth/register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto registerUserDto)
     {
-        var user = await _service.UserService.Register(registerUserDto);
+        var user = await _service.UserService.Create(registerUserDto);
 
         return Created(string.Format("/api/user/{0}", user.Id), null);
     }
@@ -64,7 +64,7 @@ public class AuthController : ControllerBase
     [HttpPost("api/auth/staff/register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterStaffDto registerStaffDto)
     {
-        var staff = await _service.StaffService.Register(registerStaffDto);
+        var staff = await _service.StaffService.Create(registerStaffDto);
 
         return Created(string.Format("/api/staff/{0}", staff.Id), null);
     }

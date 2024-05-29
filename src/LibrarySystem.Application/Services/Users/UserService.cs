@@ -59,7 +59,7 @@ public class UserService : IUserService
         return _hasher.Compare(password, user.Password!);
     }
 
-    public async Task<User> Register(RegisterUserDto registerUserDto)
+    public async Task<User> Create(RegisterUserDto registerUserDto)
     {
         var user = new User
         {

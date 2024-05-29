@@ -61,16 +61,16 @@ public class AuthController : ControllerBase
     }
 
     [Authorize(Policy = "Admin")]
-    [HttpPost("api/auth/Employee/register")]
+    [HttpPost("api/auth/employee/register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterEmployeeDto registerEmployeeDto)
     {
-        var Employee = await _service.EmployeeService.Create(registerEmployeeDto);
+        var employee = await _service.EmployeeService.Create(registerEmployeeDto);
 
-        return Created(string.Format("/api/Employee/{0}", Employee.Id), null);
+        return Created(string.Format("/api/employee/{0}", employee.Id), null);
     }
 
 
-    [HttpPost("api/auth/Employee/login")]
+    [HttpPost("api/auth/employee/login")]
     public async Task<IActionResult> LoginUser([FromBody] LoginEmployeeDto loginEmployeeDto)
     {
         var authorized = await _service.EmployeeService.Login(loginEmployeeDto);
@@ -79,15 +79,15 @@ public class AuthController : ControllerBase
             throw new NotAuthorizedException("These credentials are invalid.");
         }
 
-        var Employee = await _service.EmployeeService.Get(loginEmployeeDto.Email!);
+        var employee = await _service.EmployeeService.Get(loginEmployeeDto.Email!);
         var token = _jwt.Generate([
-            new Claim("EmployeeId", Employee.Id.ToString()),
+            new Claim("EmployeeId", employee.Id.ToString()),
             new Claim(ClaimTypes.Role, "Employee"),
         ]);
 
         return Ok(new LoginEmployeeResponseDto
         {
-            EmployeeDto = Employee.ToDto(),
+            EmployeeDto = employee.ToDto(),
             Token = token
         });
     }

@@ -21,9 +21,9 @@ public class EmployeeService : IEmployeeService
 
     public async Task<Employee> Get(string email)
     {
-        var Employee = await _repository.Employee.Get(email) ?? throw new NotFoundException($"The Employee with email {email} doesnt exist.");
+        var employee = await _repository.Employee.Get(email) ?? throw new NotFoundException($"The Employee with email {email} doesnt exist.");
 
-        return Employee;
+        return employee;
     }
 
     public async Task<bool> Login(LoginEmployeeDto loginEmployeeDto)
@@ -31,14 +31,14 @@ public class EmployeeService : IEmployeeService
         var email = loginEmployeeDto.Email ?? throw new ArgumentNullException("The email must be set.");
         var password = loginEmployeeDto.Password ?? throw new ArgumentNullException("The password must be set."); 
 
-        var Employee = await _repository.Employee.Get(email) ?? throw new NotFoundException($"The Employee with email {email} doesnt exist.");
+        var employee = await _repository.Employee.Get(email) ?? throw new NotFoundException($"The Employee with email {email} doesnt exist.");
 
-        return _hasher.Compare(password, Employee.Password!);
+        return _hasher.Compare(password, employee.Password!);
     }
 
     public async Task<Employee> Create(RegisterEmployeeDto registerEmployeeDto)
     {
-        var Employee = new Employee
+        var employee = new Employee
         {
             Id = registerEmployeeDto.Id ?? Guid.NewGuid(),
             Name = registerEmployeeDto.Name ?? throw new ArgumentNullException("The name must be set."),
@@ -46,16 +46,23 @@ public class EmployeeService : IEmployeeService
             Password = _hasher.Hash(registerEmployeeDto.Password ?? throw new ArgumentNullException("The password must be set.")),
         };
 
-        _repository.Employee.Create(Employee);
+        _repository.Employee.Create(employee);
         await _repository.SaveAsync();
 
-        return Employee;
+        return employee;
     }
 
     public Task<IEnumerable<Employee>> GetAll()
     {
-        var Employee = _repository.Employee.GetAll();
+        var employees = _repository.Employee.GetAll();
 
-        return Employee;
+        return employees;
+    }
+
+    public async Task<Employee> Get(Guid id)
+    {
+        var employee = await _repository.Employee.Get(id) ?? throw new EmployeeNotFoundException(id);
+
+        return employee;
     }
 }

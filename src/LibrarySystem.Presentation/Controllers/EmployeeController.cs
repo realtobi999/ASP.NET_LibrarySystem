@@ -18,16 +18,24 @@ public class EmployeeController : ControllerBase
         _service = service;
     }
 
-    [HttpGet("api/Employee")]
+    [HttpGet("api/employee")]
     public async Task<IActionResult> GetEmployees(int limit, int offset)
     {
-        var Employee = await _service.EmployeeService.GetAll();
+        var employees = await _service.EmployeeService.GetAll();
 
         if (offset > 0)
-            Employee = Employee.Skip(offset);
+            employees = employees.Skip(offset);
         if (limit > 0)
-            Employee = Employee.Take(limit); 
+            employees = employees.Take(limit); 
 
-        return Ok(Employee);
+        return Ok(employees);
+    }
+
+    [HttpGet("api/employee/{employeeId:guid}")]
+    public async Task<IActionResult> GetEmployee(Guid employeeId)
+    {
+        var employee = await _service.EmployeeService.Get(employeeId);
+
+        return Ok(employee);
     }
 }

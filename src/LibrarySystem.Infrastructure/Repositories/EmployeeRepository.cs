@@ -13,14 +13,19 @@ public class EmployeeRepository : IEmployeeRepository
         _context = context;
     }
 
-    public void Create(Employee Employee)
+    public void Create(Employee employee)
     {
-        _context.Employee.Add(Employee);
+        _context.Employee.Add(employee);
     }
 
-    public Task<Employee?> Get(string email)
+    public async Task<Employee?> Get(string email)
     {
-        return _context.Employee.FirstOrDefaultAsync(s => s.Email == email);
+        return await _context.Employee.FirstOrDefaultAsync(s => s.Email == email);
+    }
+
+    public async Task<Employee?> Get(Guid id)
+    {
+        return await _context.Employee.FirstOrDefaultAsync(s => s.Id == id);
     }
 
     public async Task<IEnumerable<Employee>> GetAll()

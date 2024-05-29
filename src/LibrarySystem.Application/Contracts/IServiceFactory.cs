@@ -5,5 +5,5 @@ namespace LibrarySystem.Application.Contracts;
 public interface IServiceFactory
 {
     IUserService CreateUserService();
-    IStaffService CreateStaffService();
+    IEmployeeService CreateEmployeeService();
 }

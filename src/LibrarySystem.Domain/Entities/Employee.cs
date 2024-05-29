@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Staff
+public class Employee
 {
     [Required, Column("id")]
     public Guid Id { get; set; }
@@ -17,9 +17,9 @@ public class Staff
     [Required, Column("password")]
     public string? Password { get; set; }
 
-    public StaffDto ToDto()
+    public EmployeeDto ToDto()
     {
-        return new StaffDto
+        return new EmployeeDto
         {
             Id = this.Id,
             Name = this.Name,

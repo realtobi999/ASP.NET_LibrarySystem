@@ -27,10 +27,10 @@ public class Program
                 options.AddPolicy("User", policy => policy.RequireRole("User"));
             });
 
-            // staff authorization
+            // Employee authorization
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Staff", policy => policy.RequireRole("Staff"));
+                options.AddPolicy("Employee", policy => policy.RequireRole("Employee"));
             });
 
             // admin authorization

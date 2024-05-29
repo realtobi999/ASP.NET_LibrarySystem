@@ -12,9 +12,9 @@ public class RepositoryFactory : IRepositoryFactory
         _context = context;
     }
 
-    public IStaffRepository CreateStaffRepository()
+    public IEmployeeRepository CreateEmployeeRepository()
     {
-        return new StaffRepository(_context);
+        return new EmployeeRepository(_context);
     }
 
     public IUserRepository CreateUserRepository()

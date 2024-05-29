@@ -3,6 +3,6 @@
 public interface IRepositoryManager
 {
     IUserRepository User { get; }
-    IStaffRepository Staff { get; }
+    IEmployeeRepository Employee { get; }
     Task<int> SaveAsync(); 
 }

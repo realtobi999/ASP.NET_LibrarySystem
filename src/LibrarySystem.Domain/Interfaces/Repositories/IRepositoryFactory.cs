@@ -3,5 +3,5 @@
 public interface IRepositoryFactory
 {
     IUserRepository CreateUserRepository();
-    IStaffRepository CreateStaffRepository();
+    IEmployeeRepository CreateEmployeeRepository();
 }

@@ -15,8 +15,8 @@ namespace LibrarySystem.Presentation.Controllers;
 
 POST    /api/auth/register
 POST    /api/auth/login
-POST    /api/auth/staff/register
-POST    /api/auth/staff/login
+POST    /api/auth/Employee/register
+POST    /api/auth/Employee/login
 
 */
 public class AuthController : ControllerBase
@@ -61,33 +61,33 @@ public class AuthController : ControllerBase
     }
 
     [Authorize(Policy = "Admin")]
-    [HttpPost("api/auth/staff/register")]
-    public async Task<IActionResult> RegisterUser([FromBody] RegisterStaffDto registerStaffDto)
+    [HttpPost("api/auth/Employee/register")]
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterEmployeeDto registerEmployeeDto)
     {
-        var staff = await _service.StaffService.Create(registerStaffDto);
+        var Employee = await _service.EmployeeService.Create(registerEmployeeDto);
 
-        return Created(string.Format("/api/staff/{0}", staff.Id), null);
+        return Created(string.Format("/api/Employee/{0}", Employee.Id), null);
     }
 
 
-    [HttpPost("api/auth/staff/login")]
-    public async Task<IActionResult> LoginUser([FromBody] LoginStaffDto loginStaffDto)
+    [HttpPost("api/auth/Employee/login")]
+    public async Task<IActionResult> LoginUser([FromBody] LoginEmployeeDto loginEmployeeDto)
     {
-        var authorized = await _service.StaffService.Login(loginStaffDto);
+        var authorized = await _service.EmployeeService.Login(loginEmployeeDto);
         if (!authorized)
         {
             throw new NotAuthorizedException("These credentials are invalid.");
         }
 
-        var staff = await _service.StaffService.Get(loginStaffDto.Email!);
+        var Employee = await _service.EmployeeService.Get(loginEmployeeDto.Email!);
         var token = _jwt.Generate([
-            new Claim("StaffId", staff.Id.ToString()),
-            new Claim(ClaimTypes.Role, "Staff"),
+            new Claim("EmployeeId", Employee.Id.ToString()),
+            new Claim(ClaimTypes.Role, "Employee"),
         ]);
 
-        return Ok(new LoginStaffResponseDto
+        return Ok(new LoginEmployeeResponseDto
         {
-            StaffDto = staff.ToDto(),
+            EmployeeDto = Employee.ToDto(),
             Token = token
         });
     }

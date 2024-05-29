@@ -2,8 +2,8 @@
 
 namespace LibrarySystem.Domain.Dtos.Responses;
 
-public record class LoginStaffResponseDto
+public record class LoginEmployeeResponseDto
 {
-    public StaffDto? StaffDto { get; set; }
+    public EmployeeDto? EmployeeDto { get; set; }
     public string? Token { get; set; }
 }

@@ -83,11 +83,11 @@ public class AuthControllerTests
     }
 
     [Fact]    
-    public async void AuthController_RegisterStaff_Returns201AndLocationHeader()
+    public async void AuthController_RegisterEmployee_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var staff = new Staff().WithFakeData();
+        var Employee = new Employee().WithFakeData();
         var token = JwtTokenTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
@@ -95,51 +95,51 @@ public class AuthControllerTests
         client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
 
         // act & assert
-        var response = await client.PostAsJsonAsync("/api/auth/staff/register", staff.ToRegisterStaffDto());
+        var response = await client.PostAsJsonAsync("/api/auth/Employee/register", Employee.ToRegisterEmployeeDto());
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-        header.Should().Equal(string.Format("/api/staff/{0}", staff.Id));
+        header.Should().Equal(string.Format("/api/Employee/{0}", Employee.Id));
     }
 
     [Fact]
-    public async void AuthController_LoginStaff_Returns201AndJwtTokenAndStaff()
+    public async void AuthController_LoginEmployee_Returns201AndJwtTokenAndEmployee()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var staff = new Staff().WithFakeData();
+        var Employee = new Employee().WithFakeData();
         var token = JwtTokenTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
 
-        var create = await client.PostAsJsonAsync("/api/auth/staff/register", staff.ToRegisterStaffDto());
+        var create = await client.PostAsJsonAsync("/api/auth/Employee/register", Employee.ToRegisterEmployeeDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Remove("Authorization");
 
         // act & assert
-        var loginDto = new LoginStaffDto
+        var loginDto = new LoginEmployeeDto
         {
-            Email = staff.Email,
-            Password = staff.Password,
+            Email = Employee.Email,
+            Password = Employee.Password,
         };
 
-        var response = await client.PostAsJsonAsync("/api/auth/staff/login", loginDto);
+        var response = await client.PostAsJsonAsync("/api/auth/Employee/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<LoginStaffResponseDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        var content = await response.Content.ReadFromJsonAsync<LoginEmployeeResponseDto>() ?? throw new Exception("Failed to deserialize the response content.");
         
-        content.StaffDto!.Id.Should().Be(staff.Id);
+        content.EmployeeDto!.Id.Should().Be(Employee.Id);
         content.Token.Should().NotBeNull();
 
         var tokenPayload = JwtToken.ParsePayload(content.Token!);
         tokenPayload.Count().Should().BeGreaterThan(2);
-        tokenPayload.ElementAt(0).Type.Should().Be("StaffId");
-        tokenPayload.ElementAt(0).Value.Should().Be(staff.Id.ToString());
+        tokenPayload.ElementAt(0).Type.Should().Be("EmployeeId");
+        tokenPayload.ElementAt(0).Value.Should().Be(Employee.Id.ToString());
         tokenPayload.ElementAt(1).Type.Should().Be("role");
-        tokenPayload.ElementAt(1).Value.Should().Be("Staff");
+        tokenPayload.ElementAt(1).Value.Should().Be("Employee");
     }
 
 }

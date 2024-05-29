@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos;
 
-public record class RegisterStaffDto
+public record class RegisterEmployeeDto
 {
     public Guid? Id { get; set; }
     

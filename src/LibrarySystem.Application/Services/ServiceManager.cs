@@ -14,5 +14,5 @@ public class ServiceManager : IServiceManager
 
     public IUserService UserService => _factory.CreateUserService();
 
-    public IStaffService StaffService => _factory.CreateStaffService(); 
+    public IEmployeeService EmployeeService => _factory.CreateEmployeeService(); 
 }

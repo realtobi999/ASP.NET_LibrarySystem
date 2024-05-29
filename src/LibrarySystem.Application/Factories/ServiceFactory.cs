@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Application.Contracts;
 using LibrarySystem.Application.Contracts.Services;
-using LibrarySystem.Application.Services.Staffs;
+using LibrarySystem.Application.Services.Employees;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -18,9 +18,9 @@ public class ServiceFactory : IServiceFactory
         _hasher = hasher;
     }
 
-    public IStaffService CreateStaffService()
+    public IEmployeeService CreateEmployeeService()
     {
-        return new StaffService(_repository, _hasher);
+        return new EmployeeService(_repository, _hasher);
     }
 
     public IUserService CreateUserService()

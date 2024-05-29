@@ -13,7 +13,7 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
     public DbSet<BookAuthor> BookAuthor { get; set; }
     public DbSet<BookGenre> BookGenre { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Staff> Staff { get; set; }
+    public DbSet<Employee> Employee { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,7 +22,7 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
             .HasIndex(u => u.Email)
             .IsUnique();
 
-        modelBuilder.Entity<Staff>()
+        modelBuilder.Entity<Employee>()
             .HasIndex(u => u.Email)
             .IsUnique();
 

@@ -28,7 +28,7 @@ public class EmployeeController : ControllerBase
     [HttpGet("api/employee")]
     public async Task<IActionResult> GetEmployees(int limit, int offset)
     {
-        var employees = await _service.EmployeeService.GetAll();
+        var employees = await _service.Employee.GetAll();
 
         if (offset > 0)
             employees = employees.Skip(offset);
@@ -41,7 +41,7 @@ public class EmployeeController : ControllerBase
     [HttpGet("api/employee/{employeeId:guid}")]
     public async Task<IActionResult> GetEmployee(Guid employeeId)
     {
-        var employee = await _service.EmployeeService.Get(employeeId);
+        var employee = await _service.Employee.Get(employeeId);
 
         return Ok(employee);
     }
@@ -50,7 +50,7 @@ public class EmployeeController : ControllerBase
     [HttpPut("api/employee/{employeeId:guid}")]
     public async Task<IActionResult> UpdateEmployee(Guid employeeId, [FromBody] UpdateEmployeeDto updateEmployeeDto)
     {
-        var affected = await _service.EmployeeService.Update(employeeId, updateEmployeeDto);
+        var affected = await _service.Employee.Update(employeeId, updateEmployeeDto);
         if (affected == 0)
         {
             throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
@@ -63,7 +63,7 @@ public class EmployeeController : ControllerBase
     [HttpDelete("api/employee/{employeeId:guid}")]
     public async Task<IActionResult> DeleteEmployee(Guid employeeId)
     {
-        var affected = await _service.EmployeeService.Delete(employeeId);
+        var affected = await _service.Employee.Delete(employeeId);
         if (affected == 0)
         {
             throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");

@@ -12,7 +12,7 @@ public class ServiceManager : IServiceManager
         _factory = factory;
     }
 
-    public IUserService UserService => _factory.CreateUserService();
+    public IUserService User => _factory.CreateUserService();
 
-    public IEmployeeService EmployeeService => _factory.CreateEmployeeService(); 
+    public IEmployeeService Employee => _factory.CreateEmployeeService(); 
 }

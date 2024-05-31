@@ -28,7 +28,7 @@ public class UserController : ControllerBase
     [HttpGet("api/user")]
     public async Task<IActionResult> GetUsers(int limit, int offset)
     {
-        var users = await _service.UserService.GetAll();
+        var users = await _service.User.GetAll();
 
         if (offset > 0)
             users = users.Skip(offset);
@@ -41,7 +41,7 @@ public class UserController : ControllerBase
     [HttpGet("api/user/{userId:guid}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
-        var user = await _service.UserService.Get(userId);
+        var user = await _service.User.Get(userId);
 
         return Ok(user.ToDto());
     }
@@ -50,7 +50,7 @@ public class UserController : ControllerBase
     [HttpPut("api/user/{userId:guid}")]
     public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
-        var affected = await _service.UserService.Update(userId, updateUserDto);
+        var affected = await _service.User.Update(userId, updateUserDto);
 
         if (affected == 0)
         {
@@ -64,7 +64,7 @@ public class UserController : ControllerBase
     [HttpDelete("api/user/{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
-        var affected = await _service.UserService.Delete(userId);
+        var affected = await _service.User.Delete(userId);
 
         if (affected == 0)
         {

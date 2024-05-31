@@ -4,6 +4,6 @@ namespace LibrarySystem.Application.Contracts;
 
 public interface IServiceManager
 {
-    IUserService UserService { get; }
-    IEmployeeService EmployeeService { get; }
+    IUserService User { get; }
+    IEmployeeService Employee { get; }
 }

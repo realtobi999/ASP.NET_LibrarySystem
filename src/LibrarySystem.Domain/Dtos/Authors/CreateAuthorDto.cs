@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Authors;
 
-public class CreateAuthorDto
+public record class CreateAuthorDto
 {
     public Guid? Id { get; set; }
 

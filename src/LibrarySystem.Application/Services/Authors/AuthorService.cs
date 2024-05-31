@@ -36,4 +36,11 @@ public class AuthorService : IAuthorService
 
         return author;
     }
+
+    public async Task<IEnumerable<Author>> GetAll()
+    {
+        var authors = await _repository.Author.GetAll();
+
+        return authors;
+    }
 }

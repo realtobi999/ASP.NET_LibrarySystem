@@ -19,4 +19,16 @@ public class Author
 
     [Required, Column("profile_photo")]
     public byte[]? ProfilePicture { get; set; }
+
+    public AuthorDto ToDto()
+    {
+        return new AuthorDto
+        {
+            Id = this.Id,
+            Name = this.Name,
+            Description = this.Description,
+            Birthday = this.Birthday,
+            ProfilePicture = Convert.ToBase64String(this.ProfilePicture ?? [])
+        };
+    }
 }

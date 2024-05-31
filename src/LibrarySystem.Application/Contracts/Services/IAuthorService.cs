@@ -6,4 +6,5 @@ namespace LibrarySystem.Application.Contracts.Services;
 public interface IAuthorService
 {
     Task<Author> Create(CreateAuthorDto createAuthorDto);
+    Task<IEnumerable<Author>> GetAll();
 }

@@ -12,6 +12,11 @@ public class RepositoryFactory : IRepositoryFactory
         _context = context;
     }
 
+    public IAuthorRepository CreateAuthorRepository()
+    {
+        return new AuthorRepository(_context);
+    }
+
     public IEmployeeRepository CreateEmployeeRepository()
     {
         return new EmployeeRepository(_context);

@@ -6,4 +6,5 @@ public interface IServiceFactory
 {
     IUserService CreateUserService();
     IEmployeeService CreateEmployeeService();
+    IAuthorService CreateAuthorService();
 }

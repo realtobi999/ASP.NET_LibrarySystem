@@ -27,7 +27,7 @@ public class Program
                 options.AddPolicy("User", policy => policy.RequireRole("User"));
             });
 
-            // Employee authorization
+            // employee authorization
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Employee", policy => policy.RequireRole("Employee"));

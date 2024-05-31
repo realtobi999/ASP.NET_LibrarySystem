@@ -14,6 +14,9 @@ public class Author
     [Required, Column("description")]
     public string? Description { get; set; }
 
+    [Required, Column("birthday")]
+    public DateTimeOffset Birthday { get; set; }
+
     [Required, Column("profile_photo")]
     public byte[]? ProfilePicture { get; set; }
 }

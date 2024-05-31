@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Application.Contracts;
 using LibrarySystem.Application.Contracts.Services;
+using LibrarySystem.Application.Services.Authors;
 using LibrarySystem.Application.Services.Employees;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Domain.Interfaces;
@@ -16,6 +17,11 @@ public class ServiceFactory : IServiceFactory
     {
         _repository = repository;
         _hasher = hasher;
+    }
+
+    public IAuthorService CreateAuthorService()
+    {
+        return new AuthorService(_repository);
     }
 
     public IEmployeeService CreateEmployeeService()

@@ -6,4 +6,5 @@ public interface IServiceManager
 {
     IUserService User { get; }
     IEmployeeService Employee { get; }
+    IAuthorService Author { get; }
 }

@@ -18,6 +18,8 @@ public class RepositoryManager : IRepositoryManager
 
     public IEmployeeRepository Employee => _factory.CreateEmployeeRepository();
 
+    public IAuthorRepository Author => _factory.CreateAuthorRepository();  
+
     public Task<int> SaveAsync()
     {
         return _context.SaveChangesAsync();

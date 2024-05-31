@@ -1,7 +1,6 @@
 ﻿using LibrarySystem.Application.Contracts;
-using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Authors;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation;

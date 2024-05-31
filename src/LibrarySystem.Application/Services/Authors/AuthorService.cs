@@ -1,9 +1,7 @@
-﻿using System.Security.Cryptography;
-using LibrarySystem.Application.Contracts.Services;
-using LibrarySystem.Domain.Dtos;
+﻿using LibrarySystem.Application.Contracts.Services;
+using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Authors;
 

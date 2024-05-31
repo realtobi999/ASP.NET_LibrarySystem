@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Tests;

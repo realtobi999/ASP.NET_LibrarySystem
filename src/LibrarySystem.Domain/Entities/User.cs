@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Users;
 
 namespace LibrarySystem.Domain.Entities;
 

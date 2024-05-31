@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Domain.Entities;
+﻿using LibrarySystem.Domain.Dtos.Users;
 
 namespace LibrarySystem.Domain.Dtos.Responses;
 

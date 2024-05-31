@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
-using LibrarySystem.Application;
 using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain;
-using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
+using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

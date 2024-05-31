@@ -1,5 +1,4 @@
-﻿using LibrarySystem.Domain;
-using LibrarySystem.Domain.Dtos;
+﻿using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Application.Contracts.Services;

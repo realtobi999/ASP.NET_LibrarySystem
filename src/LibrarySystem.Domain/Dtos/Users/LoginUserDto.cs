@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LibrarySystem.Domain;
+namespace LibrarySystem.Domain.Dtos.Users;
 
-public record class LoginEmployeeDto
+public record class LoginUserDto
 {
     [Required]
     public string? Email { get; set; }

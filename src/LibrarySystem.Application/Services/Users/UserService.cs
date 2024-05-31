@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Application.Contracts.Services;
 using LibrarySystem.Domain;
-using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces;

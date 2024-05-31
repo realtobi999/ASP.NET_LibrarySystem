@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Domain.Dtos;
+﻿using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Application.Contracts.Services;

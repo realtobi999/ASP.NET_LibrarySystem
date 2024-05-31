@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Application;
 using LibrarySystem.Application.Contracts;
-using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

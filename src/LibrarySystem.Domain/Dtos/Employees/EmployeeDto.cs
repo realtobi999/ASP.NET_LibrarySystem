@@ -1,4 +1,4 @@
-﻿namespace LibrarySystem.Domain;
+﻿namespace LibrarySystem.Domain.Dtos.Employees;
 
 public record class EmployeeDto
 {

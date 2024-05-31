@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Application.Services;
-using LibrarySystem.Domain;
-using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Users;
+using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LibrarySystem.Domain;
+namespace LibrarySystem.Domain.Dtos.Employees;
 
-public class UpdateUserDto
+public class UpdateEmployeeDto
 {
     [Required]
-    public string? Username { get; set; }
+    public string? Name { get; set; }
 
     [Required]
     public string? Email { get; set; }

@@ -1,8 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
-using LibrarySystem.Domain;
-using LibrarySystem.Domain.Dtos;
+using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;

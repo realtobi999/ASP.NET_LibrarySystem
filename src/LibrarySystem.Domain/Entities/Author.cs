@@ -17,7 +17,7 @@ public class Author
     [Required, Column("birthday")]
     public DateTimeOffset Birthday { get; set; }
 
-    [Required, Column("profile_photo")]
+    [Column("profile_photo")]
     public byte[]? ProfilePicture { get; set; }
 
     public AuthorDto ToDto()

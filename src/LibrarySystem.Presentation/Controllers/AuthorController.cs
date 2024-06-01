@@ -70,4 +70,18 @@ public class AuthorController : ControllerBase
 
         return Ok();
     }
+
+    [Authorize(Policy = "Employee")]
+    [HttpDelete("api/author/{authorId:guid}")]
+    public async Task<IActionResult> DeleteAuthor(Guid authorId)
+    {
+        var affected = await _service.Author.Delete(authorId);
+
+        if (affected == 0)
+        {
+            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
+        }
+
+        return Ok();
+    }
 }

@@ -80,4 +80,12 @@ public class AuthorService : IAuthorService
 
         return await _repository.SaveAsync();
     }
+
+    public async Task<int> Delete(Guid id)
+    {
+        var author = await _repository.Author.Get(id) ?? throw new AuthorNotFoundException(id);
+
+        _repository.Author.Delete(author);
+        return await _repository.SaveAsync();
+    }
 }

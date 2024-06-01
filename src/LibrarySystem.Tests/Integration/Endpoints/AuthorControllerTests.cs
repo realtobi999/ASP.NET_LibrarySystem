@@ -126,4 +126,27 @@ public class AuthorControllerTests
         content.Birthday.Should().Be(updateDto.Birthday);
         content.ProfilePicture.Should().Be(updateDto.ProfilePicture);
     }
+
+    [Fact]
+    public async void AuthorController_DeleteAuthor_Returns200AndCheckIfItExists()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var author = new Author().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var response = await client.DeleteAsync(string.Format("/api/author/{0}", author.Id));
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
 }

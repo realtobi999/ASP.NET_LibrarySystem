@@ -10,4 +10,5 @@ public interface IAuthorService
     Task<IEnumerable<Author>> GetAll();
     Task<Author> Create(CreateAuthorDto createAuthorDto);
     Task<int> Update(Guid id, UpdateAuthorDto updateAuthorDto);
+    Task<int> Delete(Guid id);
 }

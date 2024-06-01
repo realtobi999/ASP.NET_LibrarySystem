@@ -13,11 +13,6 @@ public class AuthorRepository : IAuthorRepository
         _context = context;
     }
 
-    public void Create(Author author)
-    {
-        _context.Authors.Add(author);
-    }
-
     public async Task<Author?> Get(Guid id)
     {
         return await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
@@ -26,5 +21,15 @@ public class AuthorRepository : IAuthorRepository
     public async Task<IEnumerable<Author>> GetAll()
     {
         return await _context.Authors.ToListAsync();
+    }
+
+    public void Create(Author author)
+    {
+        _context.Authors.Add(author);
+    }
+
+    public void Delete(Author author)
+    {
+        _context.Authors.Remove(author);
     }
 }

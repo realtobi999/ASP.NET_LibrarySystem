@@ -42,9 +42,9 @@ public class AuthorService : IAuthorService
         };
 
         // if the picture isn't null convert it into byte array and save to the author entity
-        if (picture is not null)
+        if (!picture.IsNullOrEmpty())
         {
-            author.ProfilePicture = Convert.FromBase64String(picture);    
+            author.ProfilePicture = Convert.FromBase64String(picture!);    
         }
 
         _repository.Author.Create(author);
@@ -73,9 +73,9 @@ public class AuthorService : IAuthorService
 
         author.Birthday = birthday;
 
-        if (picture is not null)
+        if (!picture.IsNullOrEmpty())
         {
-            author.ProfilePicture = Convert.FromBase64String(picture);    
+            author.ProfilePicture = Convert.FromBase64String(picture!);    
         }
 
         return await _repository.SaveAsync();

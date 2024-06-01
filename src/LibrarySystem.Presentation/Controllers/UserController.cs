@@ -53,9 +53,7 @@ public class UserController : ControllerBase
         var affected = await _service.User.Update(userId, updateUserDto);
 
         if (affected == 0)
-        {
-            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
-        }
+            throw new ZeroRowsAffectedException();
 
         return Ok();
     }
@@ -67,9 +65,7 @@ public class UserController : ControllerBase
         var affected = await _service.User.Delete(userId);
 
         if (affected == 0)
-        {
-            throw new InternalServerErrorException("Zero affected rows while trying to modify the database!");
-        }
+            throw new ZeroRowsAffectedException();
 
         return Ok();
     }

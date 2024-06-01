@@ -64,9 +64,7 @@ public class AuthorController : ControllerBase
         var affected = await _service.Author.Update(authorId, updateAuthorDto);
 
         if (affected == 0)
-        {
-            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
-        }
+            throw new ZeroRowsAffectedException();
 
         return Ok();
     }
@@ -78,9 +76,7 @@ public class AuthorController : ControllerBase
         var affected = await _service.Author.Delete(authorId);
 
         if (affected == 0)
-        {
-            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
-        }
+            throw new ZeroRowsAffectedException();
 
         return Ok();
     }

@@ -52,9 +52,7 @@ public class EmployeeController : ControllerBase
     {
         var affected = await _service.Employee.Update(employeeId, updateEmployeeDto);
         if (affected == 0)
-        {
-            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
-        }
+            throw new ZeroRowsAffectedException();
 
         return Ok();
     }
@@ -65,9 +63,7 @@ public class EmployeeController : ControllerBase
     {
         var affected = await _service.Employee.Delete(employeeId);
         if (affected == 0)
-        {
-            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
-        }
+            throw new ZeroRowsAffectedException();
 
         return Ok();
     }

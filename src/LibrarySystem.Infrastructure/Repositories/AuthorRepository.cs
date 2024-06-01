@@ -18,6 +18,11 @@ public class AuthorRepository : IAuthorRepository
         _context.Authors.Add(author);
     }
 
+    public async Task<Author?> Get(Guid id)
+    {
+        return await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
+    }
+
     public async Task<IEnumerable<Author>> GetAll()
     {
         return await _context.Authors.ToListAsync();

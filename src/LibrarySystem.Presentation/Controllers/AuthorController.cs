@@ -9,6 +9,7 @@ namespace LibrarySystem.Presentation;
 /*
 
 GET     /api/author param: offset, limit
+GET     /api/author/{author_id}
 POST    /api/author
 
 */
@@ -33,6 +34,15 @@ public class AuthorController : ControllerBase
             authors = authors.Take(limit);
 
         return Ok(authors.Select(a => a.ToDto()));
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpGet("api/author/{authorId:guid}")]
+    public async Task<IActionResult> GetAuthor(Guid authorId)
+    {
+        var author = await _service.Author.Get(authorId);
+
+        return Ok(author.ToDto());
     }
 
     [Authorize(Policy = "Employee")]

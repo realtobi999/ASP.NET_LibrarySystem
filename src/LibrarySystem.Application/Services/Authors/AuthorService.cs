@@ -1,6 +1,7 @@
 ﻿using LibrarySystem.Application.Contracts.Services;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Authors;
@@ -33,6 +34,13 @@ public class AuthorService : IAuthorService
 
         _repository.Author.Create(author);
         await _repository.SaveAsync();
+
+        return author;
+    }
+
+    public async Task<Author> Get(Guid id)
+    {
+        var author = await _repository.Author.Get(id) ?? throw new AuthorNotFoundException(id);
 
         return author;
     }

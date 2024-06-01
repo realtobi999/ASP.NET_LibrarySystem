@@ -62,4 +62,30 @@ public class AuthorControllerTests
         var header = response.Headers.GetValues("Location");
         header.Should().Equal(string.Format("/api/author/{0}", author.Id));
     }
+
+    [Fact]
+    public async void AuthorController_GetAuthor_Returns200AndCorrectAuthor()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var author = new Author().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+ 
+        // act & assert
+        var get1 = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
+        get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get2 = await client.GetAsync(string.Format("/api/author/{0}", Guid.NewGuid()));
+        get2.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+
+        var content = await get1.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        content.Should().Be(author.ToDto());
+    }
 }

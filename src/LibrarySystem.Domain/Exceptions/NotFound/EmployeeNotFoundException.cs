@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain;
 
-public class EmployeeNotFoundException(Guid Id) : NotFoundException($"The employee {Id} doesnt exist.")
+public class EmployeeNotFoundException(Guid Id) : NotFoundException($"The employee with: {Id} doesnt exist.")
 {
 
 }

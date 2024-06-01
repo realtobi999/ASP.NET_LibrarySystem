@@ -1,5 +1,7 @@
 ﻿using LibrarySystem.Application.Contracts;
+using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Authors;
+using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +13,7 @@ namespace LibrarySystem.Presentation;
 GET     /api/author param: offset, limit
 GET     /api/author/{author_id}
 POST    /api/author
+PUT     /api/author/{author_id}
 
 */
 public class AuthorController : ControllerBase
@@ -52,5 +55,19 @@ public class AuthorController : ControllerBase
         var author = await _service.Author.Create(createAuthorDto);
 
         return Created(string.Format("/api/author/{0}", author.Id), null);
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpPut("api/author/{authorId:guid}")]
+    public async Task<IActionResult> UpdateAuthor(Guid authorId, [FromBody] UpdateAuthorDto updateAuthorDto)
+    {
+        var affected = await _service.Author.Update(authorId, updateAuthorDto);
+
+        if (affected == 0)
+        {
+            throw new InternalServerErrorException("Zero affected rows while trying to modify the database.");
+        }
+
+        return Ok();
     }
 }

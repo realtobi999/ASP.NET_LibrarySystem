@@ -88,4 +88,42 @@ public class AuthorControllerTests
         var content = await get1.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new Exception("Failed to deserialize the response content.");
         content.Should().Be(author.ToDto());
     }
+
+    [Fact]
+    public async void AuthorController_UpdateAuthor_Returns200AndCheckIfTheAuthorIsUpdated()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var author = new Author().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var updateDto = new UpdateAuthorDto
+        {
+            Name = "test",
+            Description = "test_test_test",
+            Birthday = DateTimeOffset.UtcNow.AddDays(2),
+            ProfilePicture = Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 }) // imagine this is the encoded string
+        };
+
+        var response = await client.PutAsJsonAsync(string.Format("/api/author/{0}", author.Id), updateDto);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new Exception("Failed to deserialize the response content."); 
+        content.Id.Should().Be(author.Id);
+        content.Name.Should().Be(updateDto.Name);
+        content.Description.Should().Be(updateDto.Description);
+        content.Birthday.Should().Be(updateDto.Birthday);
+        content.ProfilePicture.Should().Be(updateDto.ProfilePicture);
+    }
 }

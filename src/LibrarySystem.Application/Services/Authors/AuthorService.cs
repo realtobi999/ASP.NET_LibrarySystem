@@ -1,8 +1,10 @@
 ﻿using LibrarySystem.Application.Contracts.Services;
+using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Authors;
 
@@ -15,6 +17,19 @@ public class AuthorService : IAuthorService
         _repository = repository;
     }
 
+    public async Task<Author> Get(Guid id)
+    {
+        var author = await _repository.Author.Get(id) ?? throw new AuthorNotFoundException(id);
+
+        return author;
+    }
+
+    public async Task<IEnumerable<Author>> GetAll()
+    {
+        var authors = await _repository.Author.GetAll();
+
+        return authors;
+    }
     public async Task<Author> Create(CreateAuthorDto createAuthorDto)
     {
         var picture = createAuthorDto.ProfilePicture;
@@ -38,17 +53,31 @@ public class AuthorService : IAuthorService
         return author;
     }
 
-    public async Task<Author> Get(Guid id)
+    public async Task<int> Update(Guid id, UpdateAuthorDto updateAuthorDto)
     {
         var author = await _repository.Author.Get(id) ?? throw new AuthorNotFoundException(id);
 
-        return author;
-    }
+        var name = updateAuthorDto.Name;
+        var description = updateAuthorDto.Description;
+        var birthday = updateAuthorDto.Birthday;
+        var picture = updateAuthorDto.ProfilePicture;
 
-    public async Task<IEnumerable<Author>> GetAll()
-    {
-        var authors = await _repository.Author.GetAll();
+        if (!name.IsNullOrEmpty())
+        {
+            author.Name = name;
+        }
+        if (!description.IsNullOrEmpty())
+        {
+            author.Description = description;
+        }
 
-        return authors;
+        author.Birthday = birthday;
+
+        if (picture is not null)
+        {
+            author.ProfilePicture = Convert.FromBase64String(picture);    
+        }
+
+        return await _repository.SaveAsync();
     }
 }

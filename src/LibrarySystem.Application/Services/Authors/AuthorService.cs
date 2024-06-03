@@ -36,8 +36,8 @@ public class AuthorService : IAuthorService
         var author = new Author
         {
             Id = createAuthorDto.Id ?? Guid.NewGuid(),
-            Name = createAuthorDto.Name ?? throw new ArgumentException("The name must be set."),
-            Description = createAuthorDto.Description ?? throw new ArgumentException("The description must be set."),
+            Name = createAuthorDto.Name ?? throw new ArgumentNullException("The name must be set."),
+            Description = createAuthorDto.Description ?? throw new ArgumentNullException("The description must be set."),
             Birthday = createAuthorDto.Birthday.ToUniversalTime(),
         };
 

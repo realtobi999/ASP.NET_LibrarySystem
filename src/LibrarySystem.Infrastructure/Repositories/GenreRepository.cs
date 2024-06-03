@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Infrastructure.Repositories;
 
@@ -15,5 +16,10 @@ public class GenreRepository : IGenreRepository
     public void Create(Genre genre)
     {
         _context.Genres.Add(genre);        
+    }
+
+    public async Task<Genre?> Get(Guid id)
+    {
+        return await _context.Genres.FirstOrDefaultAsync(g => g.Id == id);
     }
 }

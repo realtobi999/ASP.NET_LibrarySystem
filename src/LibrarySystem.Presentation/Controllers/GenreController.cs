@@ -8,6 +8,7 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /*
 
+GET     /api/genre/{genre_id}
 POST    /api/genre
 
 */
@@ -18,6 +19,15 @@ public class GenreController : ControllerBase
     public GenreController(IServiceManager service)
     {
         _service = service;
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpGet("api/genre/{genreId:guid}")]
+    public async Task<IActionResult> GetGenre(Guid genreId)
+    {
+        var genre = await _service.Genre.Get(genreId);
+
+        return Ok(genre.ToDto());
     }
 
     [Authorize(Policy = "Employee")]

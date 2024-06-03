@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain;
 
-public class UserNotFoundException(Guid Id) : NotFoundException($"The user {Id} doesnt exist.")
+public class UserNotFoundException(Guid Id) : NotFoundException($"The user with: {Id} doesnt exist.")
 {
 
 }

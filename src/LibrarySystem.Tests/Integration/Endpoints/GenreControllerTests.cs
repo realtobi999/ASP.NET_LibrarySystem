@@ -1,0 +1,31 @@
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
+using FluentAssertions;
+using LibrarySystem.Domain.Entities;
+using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Server;
+
+namespace LibrarySystem.Tests.Integration.Endpoints;
+
+public class GenreControllerTests
+{
+    [Fact]
+    public async void GenreController_CreateGenre_Returns200AndLocationHeader()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var genre = new Genre().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        // act & assert
+        var response = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var header = response.Headers.GetValues("Location");
+        header.Should().Equal(string.Format("/api/genre/{0}", genre.Id));
+    }
+}

@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Infrastructure.Repositories;
 
 namespace LibrarySystem.Infrastructure.Factories;
 
@@ -20,6 +21,11 @@ public class RepositoryFactory : IRepositoryFactory
     public IEmployeeRepository CreateEmployeeRepository()
     {
         return new EmployeeRepository(_context);
+    }
+
+    public IGenreRepository CreateGenreRepository()
+    {
+        return new GenreRepository(_context);
     }
 
     public IUserRepository CreateUserRepository()

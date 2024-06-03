@@ -2,6 +2,7 @@
 using LibrarySystem.Application.Contracts.Services;
 using LibrarySystem.Application.Services.Authors;
 using LibrarySystem.Application.Services.Employees;
+using LibrarySystem.Application.Services.Genres;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -27,6 +28,11 @@ public class ServiceFactory : IServiceFactory
     public IEmployeeService CreateEmployeeService()
     {
         return new EmployeeService(_repository, _hasher);
+    }
+
+    public IGenreService CreateGenreService()
+    {
+        return new GenreService(_repository);
     }
 
     public IUserService CreateUserService()

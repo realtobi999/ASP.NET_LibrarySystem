@@ -16,5 +16,7 @@ public class ServiceManager : IServiceManager
 
     public IEmployeeService Employee => _factory.CreateEmployeeService();
 
-    public IAuthorService Author => _factory.CreateAuthorService(); 
+    public IAuthorService Author => _factory.CreateAuthorService();
+
+    public IGenreService Genre => _factory.CreateGenreService();
 }

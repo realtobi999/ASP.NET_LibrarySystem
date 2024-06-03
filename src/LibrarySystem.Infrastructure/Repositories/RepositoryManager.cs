@@ -18,7 +18,9 @@ public class RepositoryManager : IRepositoryManager
 
     public IEmployeeRepository Employee => _factory.CreateEmployeeRepository();
 
-    public IAuthorRepository Author => _factory.CreateAuthorRepository();  
+    public IAuthorRepository Author => _factory.CreateAuthorRepository();
+
+    public IGenreRepository Genre => _factory.CreateGenreRepository(); 
 
     public Task<int> SaveAsync()
     {

@@ -5,4 +5,5 @@ public interface IRepositoryFactory
     IUserRepository CreateUserRepository();
     IEmployeeRepository CreateEmployeeRepository();
     IAuthorRepository CreateAuthorRepository();
+    IGenreRepository CreateGenreRepository();
 }

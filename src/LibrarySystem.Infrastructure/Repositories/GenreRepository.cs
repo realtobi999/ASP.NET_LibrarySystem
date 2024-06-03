@@ -18,6 +18,11 @@ public class GenreRepository : IGenreRepository
         _context.Genres.Add(genre);        
     }
 
+    public void Delete(Genre genre)
+    {
+        _context.Genres.Remove(genre);
+    }
+
     public async Task<Genre?> Get(Guid id)
     {
         return await _context.Genres.FirstOrDefaultAsync(g => g.Id == id);

@@ -30,6 +30,14 @@ public class GenreService : IGenreService
         return genre;
     }
 
+    public async Task<int> Delete(Guid id)
+    {
+        var genre = await _repository.Genre.Get(id) ?? throw new GenreNotFoundException(id);
+
+        _repository.Genre.Delete(genre);
+        return await _repository.SaveAsync();
+    }
+
     public async Task<Genre> Get(Guid id)
     {
         var genre = await _repository.Genre.Get(id) ?? throw new GenreNotFoundException(id);

@@ -126,4 +126,27 @@ public class GenreControllerTests
         content.Id.Should().Be(genre.Id);
         content.Name.Should().Be(updateDto.Name);
     }
+
+    [Fact]
+    public async void GenreController_DeleteGenre_Returns200AndIsDeleted()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var genre = new Genre().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var response = await client.DeleteAsync(string.Format("/api/genre/{0}", genre.Id));
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/genre/{0}", genre.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
 }

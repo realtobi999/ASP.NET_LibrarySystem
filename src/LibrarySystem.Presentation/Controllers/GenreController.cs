@@ -66,4 +66,16 @@ public class GenreController : ControllerBase
 
         return Ok();
     } 
+
+    [Authorize(Policy = "Employee")]
+    [HttpDelete("api/genre/{genreId:guid}")]
+    public async Task<IActionResult> DeleteGenre(Guid genreId)
+    {
+        var affected = await _service.Genre.Delete(genreId);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();
+    } 
 }

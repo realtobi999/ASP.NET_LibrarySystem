@@ -35,4 +35,11 @@ public class GenreService : IGenreService
 
         return genre;
     }
+
+    public async Task<IEnumerable<Genre>> GetAll()
+    {
+       var genres = await _repository.Genre.GetAll();
+
+       return genres; 
+    }
 }

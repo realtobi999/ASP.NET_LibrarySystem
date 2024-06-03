@@ -8,6 +8,7 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /*
 
+GET     /api/genre param: limit, offset
 GET     /api/genre/{genre_id}
 POST    /api/genre
 
@@ -20,6 +21,20 @@ public class GenreController : ControllerBase
     {
         _service = service;
     }
+
+    [Authorize(Policy = "Employee")]
+    [HttpGet("api/genre")]
+    public async Task<IActionResult> GetGenres(int limit, int offset)
+    {
+        var genres = await _service.Genre.GetAll();
+        
+        if (offset > 0)
+            genres = genres.Skip(offset);
+        if (limit > 0)
+            genres = genres.Take(limit);
+
+        return Ok(genres.Select(g => g.ToDto()));
+    }    
 
     [Authorize(Policy = "Employee")]
     [HttpGet("api/genre/{genreId:guid}")]

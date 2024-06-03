@@ -6,6 +6,7 @@ namespace LibrarySystem.Application.Contracts.Services;
 
 public interface IGenreService
 {
+    Task<IEnumerable<Genre>> GetAll();
     Task<Genre> Get(Guid id);
     Task<Genre> Create(CreateGenreDto createGenreDto);
 }

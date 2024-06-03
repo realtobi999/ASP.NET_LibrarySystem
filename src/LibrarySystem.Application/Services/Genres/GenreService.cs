@@ -3,6 +3,7 @@ using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Genres;
 
@@ -41,5 +42,19 @@ public class GenreService : IGenreService
        var genres = await _repository.Genre.GetAll();
 
        return genres; 
+    }
+
+    public async Task<int> Update(Guid id, UpdateGenreDto updateGenreDto)
+    {
+        var genre = await _repository.Genre.Get(id) ?? throw new GenreNotFoundException(id);
+
+        var name = updateGenreDto.Name;
+
+        if (!name.IsNullOrEmpty())
+        {
+            genre.Name = name;
+        }
+
+        return await _repository.SaveAsync();
     }
 }

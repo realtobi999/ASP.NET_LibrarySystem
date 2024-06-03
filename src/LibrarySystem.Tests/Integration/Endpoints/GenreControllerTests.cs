@@ -6,6 +6,7 @@ using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
+using Microsoft.VisualBasic;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 
@@ -92,5 +93,37 @@ public class GenreControllerTests
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().BeEquivalentTo(genre2.ToDto());
         content.ElementAt(1).Should().BeEquivalentTo(genre3.ToDto());
+    }
+
+    [Fact]
+    public async void GenreController_UpdateGenre_Returns200AndUpdatesTheRecord()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var genre = new Genre().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var updateDto = new UpdateGenreDto
+        {
+            Name = "test",
+        };
+
+        var response = await client.PutAsJsonAsync(string.Format("/api/genre/{0}", genre.Id), updateDto);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/genre/{0}", genre.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await get.Content.ReadFromJsonAsync<GenreDto>() ?? throw new DeserializationException();
+        content.Id.Should().Be(genre.Id);
+        content.Name.Should().Be(updateDto.Name);
     }
 }

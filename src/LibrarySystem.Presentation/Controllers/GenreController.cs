@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain.Dtos.Genres;
+using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,4 +54,16 @@ public class GenreController : ControllerBase
 
         return Created(string.Format("/api/genre/{0}", genre.Id), null);
     }
+
+    [Authorize(Policy = "Employee")]
+    [HttpPut("api/genre/{genreId:guid}")]
+    public async Task<IActionResult> UpdateGenre(Guid genreId, [FromBody] UpdateGenreDto updateGenreDto)
+    {
+        var affected = await _service.Genre.Update(genreId, updateGenreDto);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();
+    } 
 }

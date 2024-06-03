@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
+using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
@@ -33,7 +34,7 @@ public class UserControllerTests
         var response = await client.GetAsync(string.Format("/api/user?limit={0}&offset={1}", limit, offset));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new Exception("Failed to deserialize the response content.");
+        var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new DeserializationException();
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().Be(user2.ToDto());
     }
@@ -52,7 +53,7 @@ public class UserControllerTests
         var response = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new DeserializationException();
         content.Should().Be(user.ToDto());
     }
 
@@ -87,7 +88,7 @@ public class UserControllerTests
         var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new DeserializationException();
         newUser.Id.Should().Be(user.Id); 
         newUser.Username.Should().Be(updateDto.Username);
         newUser.Email.Should().Be(updateDto.Email);

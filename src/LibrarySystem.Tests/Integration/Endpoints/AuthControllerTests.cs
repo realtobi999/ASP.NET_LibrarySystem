@@ -8,6 +8,7 @@ using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
+using LibrarySystem.Domain;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 
@@ -48,7 +49,7 @@ public class AuthControllerTests
         var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<LoginUserResponseDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        var content = await response.Content.ReadFromJsonAsync<LoginUserResponseDto>() ?? throw new DeserializationException();
 
         content.UserDto!.Id.Should().Be(user.Id);
         content.Token.Should().NotBeNull();
@@ -129,7 +130,7 @@ public class AuthControllerTests
         var response = await client.PostAsJsonAsync("/api/auth/employee/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<LoginEmployeeResponseDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        var content = await response.Content.ReadFromJsonAsync<LoginEmployeeResponseDto>() ?? throw new DeserializationException();
         
         content.EmployeeDto!.Id.Should().Be(employee.Id);
         content.Token.Should().NotBeNull();

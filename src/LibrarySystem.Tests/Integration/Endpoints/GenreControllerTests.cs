@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
+using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
@@ -49,7 +50,7 @@ public class GenreControllerTests
         var response = await client.GetAsync(string.Format("/api/genre/{0}", genre.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<GenreDto>() ?? throw new Exception("Failed to deserialize the response content.");
+        var content = await response.Content.ReadFromJsonAsync<GenreDto>() ?? throw new DeserializationException();
         content.Should().BeEquivalentTo(genre.ToDto());
 
         // test for 404

@@ -1,5 +1,4 @@
-﻿using LibrarySystem.Domain;
-using LibrarySystem.Domain.Interfaces.Repositories;
+﻿using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Infrastructure.Repositories;
 
@@ -20,7 +19,11 @@ public class RepositoryManager : IRepositoryManager
 
     public IAuthorRepository Author => _factory.CreateAuthorRepository();
 
-    public IGenreRepository Genre => _factory.CreateGenreRepository(); 
+    public IGenreRepository Genre => _factory.CreateGenreRepository();
+
+    public IAssociationsRepository Associations => _factory.CreateAssociationsRepository();
+
+    public IBookRepository Book => _factory.CreateBookRepository();
 
     public Task<int> SaveAsync()
     {

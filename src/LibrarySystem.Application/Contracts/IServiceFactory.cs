@@ -8,4 +8,5 @@ public interface IServiceFactory
     IEmployeeService CreateEmployeeService();
     IAuthorService CreateAuthorService();
     IGenreService CreateGenreService();
+    IBookService CreateBookService();
 }

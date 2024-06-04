@@ -1,6 +1,7 @@
 ﻿using LibrarySystem.Application.Contracts;
 using LibrarySystem.Application.Contracts.Services;
 using LibrarySystem.Application.Services.Authors;
+using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Application.Services.Employees;
 using LibrarySystem.Application.Services.Genres;
 using LibrarySystem.Application.Services.Users;
@@ -13,16 +14,23 @@ public class ServiceFactory : IServiceFactory
 {
     private readonly IRepositoryManager _repository;
     private readonly IPasswordHasher _hasher;
+    private readonly IBookAssociations _bookAssociations;
 
-    public ServiceFactory(IRepositoryManager repository, IPasswordHasher hasher)
+    public ServiceFactory(IRepositoryManager repository, IPasswordHasher hasher, IBookAssociations bookAssociations)
     {
         _repository = repository;
         _hasher = hasher;
+        _bookAssociations = bookAssociations;
     }
 
     public IAuthorService CreateAuthorService()
     {
         return new AuthorService(_repository);
+    }
+
+    public IBookService CreateBookService()
+    {
+        return new BookService(_repository, _bookAssociations);
     }
 
     public IEmployeeService CreateEmployeeService()

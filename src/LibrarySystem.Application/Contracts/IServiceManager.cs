@@ -8,4 +8,5 @@ public interface IServiceManager
     IEmployeeService Employee { get; }
     IAuthorService Author { get; }
     IGenreService Genre { get; }
+    IBookService Book { get; }
 }

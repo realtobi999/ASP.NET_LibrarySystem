@@ -6,4 +6,6 @@ public interface IRepositoryFactory
     IEmployeeRepository CreateEmployeeRepository();
     IAuthorRepository CreateAuthorRepository();
     IGenreRepository CreateGenreRepository();
+    IBookRepository CreateBookRepository();
+    IAssociationsRepository CreateAssociationsRepository();
 }

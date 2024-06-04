@@ -25,7 +25,7 @@ public class Book
     public DateTimeOffset PublishedAt { get; set; }
 
     [Required, Column("cover_photo")]
-    public byte[]? CoverPicture { get; set; }
+    public string? CoverPicture { get; set; }
 
     // relationship
 

@@ -19,4 +19,6 @@ public class ServiceManager : IServiceManager
     public IAuthorService Author => _factory.CreateAuthorService();
 
     public IGenreService Genre => _factory.CreateGenreService();
+
+    public IBookService Book => _factory.CreateBookService(); 
 }

@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Domain;
+﻿using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Infrastructure.Repositories;
 
@@ -13,9 +13,19 @@ public class RepositoryFactory : IRepositoryFactory
         _context = context;
     }
 
+    public IAssociationsRepository CreateAssociationsRepository()
+    {
+        return new AssociationsRepository(_context);
+    }
+
     public IAuthorRepository CreateAuthorRepository()
     {
         return new AuthorRepository(_context);
+    }
+
+    public IBookRepository CreateBookRepository()
+    {
+        return new BookRepository(_context);
     }
 
     public IEmployeeRepository CreateEmployeeRepository()

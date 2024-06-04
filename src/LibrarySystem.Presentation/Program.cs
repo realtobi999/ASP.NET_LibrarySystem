@@ -1,3 +1,5 @@
+using LibrarySystem.Application.Contracts;
+using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Presentation.Extensions;
 
@@ -20,6 +22,7 @@ public class Program
             builder.Services.ConfigureJwtAuthentication(builder.Configuration);
             builder.Services.ConfigureJwtToken(builder.Configuration);
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+            builder.Services.AddScoped<IBookAssociations, BookAssociations>();
 
             // user authorization
             builder.Services.AddAuthorization(options =>

@@ -54,4 +54,11 @@ public class BookService : IBookService
 
         return book;
     }
+
+    public async Task<IEnumerable<Book>> GetAll()
+    {
+        var books = await _repository.Book.GetAll();
+
+        return books;
+    }
 }

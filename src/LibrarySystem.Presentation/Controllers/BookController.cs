@@ -8,6 +8,7 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /*
 
+GET     /api/book params: limit, offset
 GET     /api/book/{book_id}
 POST    /api/book
 
@@ -19,6 +20,19 @@ public class BookController : ControllerBase
     public BookController(IServiceManager service)
     {
         _service = service;
+    }
+
+    [HttpGet("api/book")]
+    public async Task<IActionResult> GetBooks(int limit, int offset)
+    {
+        var books = await _service.Book.GetAll();
+
+        if (offset > 0)
+            books = books.Skip(offset);
+        if (limit > 0)
+            books = books.Take(limit);
+
+        return Ok(books);
     }
 
     [HttpGet("api/book/{bookId:guid}")]

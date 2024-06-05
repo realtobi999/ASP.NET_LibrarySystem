@@ -27,5 +27,5 @@ public record class CreateBookDto
     [Required]
     public IEnumerable<Guid>? AuthorIds { get; set; }
     
-    public byte[]? CoverPicture { get; set; }
+    public string? CoverPicture { get; set; }
 }

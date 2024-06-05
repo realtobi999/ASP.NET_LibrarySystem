@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities.Relationships;
 
 namespace LibrarySystem.Domain.Entities;
@@ -31,4 +32,28 @@ public class Book
 
     public ICollection<BookAuthor> BookAuthors { get; set; } = [];
     public ICollection<BookGenre> BookGenres { get; set; } = [];
+
+    public BookDto ToDto()
+    {
+        var authors = this.BookAuthors.Where(ba => ba.Author is not null)
+                        .Select(ba => ba.Author!.ToDto())
+                        .ToList();
+
+        var genres = this.BookGenres.Where(bg => bg.Genre is not null)
+                        .Select(bg => bg.Genre!.ToDto())
+                        .ToList();
+
+        return new BookDto
+        {
+            Id = this.Id,
+            ISBN = this.ISBN,
+            Title = this.Title,
+            Description = this.Description,
+            PagesCount = this.PagesCount,
+            PublishedAt = this.PublishedAt,
+            CoverPicture = this.CoverPicture,
+            Authors = authors,
+            Genres = genres,
+        };
+    } 
 }

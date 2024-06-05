@@ -28,23 +28,17 @@ public class BookService : IBookService
             Description = createBookDto.Description,
             PagesCount = createBookDto.PagesCount,
             PublishedAt = createBookDto.PublishedAt,
+            CoverPicture = createBookDto.CoverPicture,
         };
 
         var authorIds = createBookDto.AuthorIds ?? throw new ArgumentNullException("At least one author must be assigned.");
         var genreIds = createBookDto.GenreIds ?? throw new ArgumentNullException("At least one genre must be assigned.");
-        var coverPicture = createBookDto.CoverPicture;
 
         // Handle authors
         await _associations.HandleAuthorsAsync(authorIds, book);
 
         // Handle genres
         await _associations.HandleGenresAsync(genreIds, book);        
-
-        // Handle cover picture
-        if(!coverPicture.IsNullOrEmpty())
-        {
-            book.CoverPicture = Convert.ToBase64String(coverPicture!);
-        }
 
         // Create book and save changes
         _repository.Book.Create(book);

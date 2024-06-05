@@ -12,6 +12,8 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/genre param: limit, offset
 GET     /api/genre/{genre_id}
 POST    /api/genre
+PUT     /api/genre/{genre_id}
+DELETE  /api/genre/{genre_id}
 
 */
 public class GenreController : ControllerBase

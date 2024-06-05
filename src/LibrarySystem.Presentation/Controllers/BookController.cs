@@ -8,6 +8,7 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /*
 
+GET     /api/book/{book_id}
 POST    /api/book
 
 */
@@ -18,6 +19,14 @@ public class BookController : ControllerBase
     public BookController(IServiceManager service)
     {
         _service = service;
+    }
+
+    [HttpGet("api/book/{bookId:guid}")]
+    public async Task<IActionResult> GetBook(Guid bookId)
+    {
+        var book = await _service.Book.Get(bookId);
+
+        return Ok(book.ToDto());
     }
 
     [Authorize(Policy = "Employee")]

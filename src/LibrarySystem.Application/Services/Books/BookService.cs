@@ -2,6 +2,7 @@
 using LibrarySystem.Application.Contracts.Services;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.IdentityModel.Tokens;
 
@@ -43,6 +44,13 @@ public class BookService : IBookService
         // Create book and save changes
         _repository.Book.Create(book);
         await _repository.SaveAsync();
+
+        return book;
+    }
+
+    public async Task<Book> Get(Guid id)
+    {
+        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
 
         return book;
     }

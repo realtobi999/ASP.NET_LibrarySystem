@@ -1,6 +1,8 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
+using LibrarySystem.Domain;
+using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -42,4 +44,47 @@ public class BookControllerTests
         var header = response.Headers.GetValues("Location");
         header.Should().Equal(string.Format("/api/book/{0}", book.Id));
     }
+
+    [Fact]
+    public async void BookController_GetBook_Returns200AndBookWithGenresAndAuthors()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var book = new Book().WithFakeData();
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var author1 = new Author().WithFakeData();
+        var author2 = new Author().WithFakeData();
+        var genre1 = new Genre().WithFakeData();
+        var genre2 = new Genre().WithFakeData();
+
+        var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
+        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create2 = await client.PostAsJsonAsync("/api/genre", genre2.ToCreateGenreDto());
+        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create3 = await client.PostAsJsonAsync("/api/author", author1.ToCreateAuthorDto());
+        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create4 = await client.PostAsJsonAsync("/api/author", author2.ToCreateAuthorDto());
+        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var create5 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author1.Id, author2.Id], [genre1.Id, genre2.Id]));
+        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        
+        // act & assert
+        var response = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK); 
+
+        var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        content.Id.Should().Be(book.Id);
+        content.Authors.Count.Should().Be(2);
+        content.Authors.ElementAt(0).Should().BeEquivalentTo(author1.ToDto());
+        content.Authors.ElementAt(1).Should().BeEquivalentTo(author2.ToDto());
+        content.Genres.Count.Should().Be(2);
+        content.Genres.ElementAt(0).Should().BeEquivalentTo(genre1.ToDto());
+        content.Genres.ElementAt(1).Should().BeEquivalentTo(genre2.ToDto());
+    } 
 }

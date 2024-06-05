@@ -5,5 +5,6 @@ namespace LibrarySystem.Application.Contracts.Services;
 
 public interface IBookService
 {
+    Task<Book> Get(Guid id);
     Task<Book> Create(CreateBookDto createBookDto);
 }

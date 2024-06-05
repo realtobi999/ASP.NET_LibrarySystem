@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities.Relationships;
 
@@ -30,7 +31,9 @@ public class Book
 
     // relationship
 
+    [JsonIgnore]
     public ICollection<BookAuthor> BookAuthors { get; set; } = [];
+    [JsonIgnore]
     public ICollection<BookGenre> BookGenres { get; set; } = [];
 
     public BookDto ToDto()

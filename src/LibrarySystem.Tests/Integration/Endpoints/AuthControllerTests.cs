@@ -8,7 +8,7 @@ using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
-using LibrarySystem.Domain;
+using LibrarySystem.Domain.Exceptions;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 

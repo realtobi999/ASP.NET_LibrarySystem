@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LibrarySystem.Domain.Dtos.Authors;
 
 namespace LibrarySystem.Domain.Entities;
 

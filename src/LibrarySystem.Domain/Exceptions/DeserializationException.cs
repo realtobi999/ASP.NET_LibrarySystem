@@ -1,4 +1,4 @@
-﻿namespace LibrarySystem.Domain;
+﻿namespace LibrarySystem.Domain.Exceptions;
 
 public class DeserializationException : Exception
 {

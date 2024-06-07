@@ -1,4 +1,4 @@
-﻿namespace LibrarySystem.Domain;
+﻿namespace LibrarySystem.Domain.Dtos.Authors;
 
 public record class AuthorDto
 {

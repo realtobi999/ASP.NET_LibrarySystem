@@ -70,9 +70,10 @@ public class AuthorService : IAuthorService
         {
             author.Description = description;
         }
-
-        author.Birthday = birthday;
-
+        if (birthday != DateTimeOffset.MinValue)
+        {
+            author.Birthday = birthday;
+        }
         if (!picture.IsNullOrEmpty())
         {
             author.ProfilePicture = Convert.FromBase64String(picture!);    

@@ -9,4 +9,5 @@ public interface IBookService
     Task<Book> Get(Guid id);
     Task<Book> Create(CreateBookDto createBookDto);
     Task<int> Update(Guid id, UpdateBookDto updateBookDto);
+    Task<int> Delete(Guid id);
 }

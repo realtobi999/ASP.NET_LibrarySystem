@@ -12,7 +12,7 @@ namespace LibrarySystem.Application.Services.Books;
 public class BookService : IBookService
 {
     private readonly IRepositoryManager _repository;
-    private readonly IBookAssociations _associations; 
+    private readonly IBookAssociations _associations;
 
     public BookService(IRepositoryManager repository, IBookAssociations associations)
     {
@@ -40,13 +40,21 @@ public class BookService : IBookService
         await _associations.AssignAuthorsAsync(authorIds, book);
 
         // Handle genres
-        await _associations.AssignGenresAsync(genreIds, book);        
+        await _associations.AssignGenresAsync(genreIds, book);
 
         // Create book and save changes
         _repository.Book.Create(book);
         await _repository.SaveAsync();
 
         return book;
+    }
+
+    public async Task<int> Delete(Guid id)
+    {
+        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
+
+        _repository.Book.Delete(book);
+        return await _repository.SaveAsync();        
     }
 
     public async Task<Book> Get(Guid id)
@@ -98,7 +106,7 @@ public class BookService : IBookService
         if (authors.Count != 0)
         {
             _associations.CleanAuthors(book);
-            
+
             // Handle authors
             await _associations.AssignAuthorsAsync(authors.Select(a => a.Id), book);
         }
@@ -107,7 +115,7 @@ public class BookService : IBookService
             _associations.CleanGenres(book);
 
             // Handle genres
-            await _associations.AssignGenresAsync(genres.Select(g => g.Id), book);   
+            await _associations.AssignGenresAsync(genres.Select(g => g.Id), book);
         }
 
         return await _repository.SaveAsync();

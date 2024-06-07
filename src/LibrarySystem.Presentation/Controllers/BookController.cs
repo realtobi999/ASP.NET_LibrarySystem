@@ -13,6 +13,7 @@ GET     /api/book params: limit, offset
 GET     /api/book/{book_id}
 POST    /api/book
 PUT     /api/book/{book_id}
+DELETE  /api/book/{book_id}
 
 */
 public class BookController : ControllerBase
@@ -59,6 +60,18 @@ public class BookController : ControllerBase
     public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookDto updateBookDto)
     {
         var affected = await _service.Book.Update(bookId, updateBookDto);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpDelete("api/book/{bookId:guid}")]
+    public async Task<IActionResult> DeleteBook(Guid bookId)
+    {
+        var affected = await _service.Book.Delete(bookId);
 
         if (affected == 0)
             throw new ZeroRowsAffectedException();

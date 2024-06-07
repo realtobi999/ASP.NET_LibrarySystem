@@ -18,6 +18,11 @@ public class BookRepository : IBookRepository
         _context.Books.Add(book);
     }
 
+    public void Delete(Book book)
+    {
+        _context.Books.Remove(book);
+    }
+
     public async Task<Book?> Get(Guid id)
     {
         return await _context.Books

@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain.Dtos.Books;
+using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/book params: limit, offset
 GET     /api/book/{book_id}
 POST    /api/book
+PUT     /api/book/{book_id}
 
 */
 public class BookController : ControllerBase
@@ -30,7 +32,7 @@ public class BookController : ControllerBase
         if (offset > 0)
             books = books.Skip(offset);
         if (limit > 0)
-            books = books.Take(limit);
+            books = books.Take(limit); 
 
         return Ok(books);
     }
@@ -50,5 +52,17 @@ public class BookController : ControllerBase
         var book = await _service.Book.Create(createBookDto);
 
         return Created(string.Format("/api/book/{0}", book.Id), null);
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpPut("api/book/{bookId:guid}")]
+    public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookDto updateBookDto)
+    {
+        var affected = await _service.Book.Update(bookId, updateBookDto);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();
     }
 }

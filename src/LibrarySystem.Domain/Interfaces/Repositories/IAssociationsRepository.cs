@@ -6,4 +6,6 @@ public interface IAssociationsRepository
 {
     void CreateBookAuthor(BookAuthor bookAuthor);
     void CreateBookGenre(BookGenre bookGenre);
+    void RemoveBookAuthor(BookAuthor bookAuthor);
+    void RemoveBookGenre(BookGenre bookGenre);
 }

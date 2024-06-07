@@ -15,10 +15,10 @@ public class BookAssociations : IBookAssociations
         _repository = repository;
     }
 
-    public async Task HandleAuthorsAsync(IEnumerable<Guid> authorIds, Book book)
+    public async Task AssignAuthorsAsync(IEnumerable<Guid> authorIds, Book book)
     {
         if (authorIds == null) throw new ArgumentNullException(nameof(authorIds));
-        
+
         var tasks = authorIds.Select(async authorId =>
         {
             var author = await _repository.Author.Get(authorId) ?? throw new AuthorNotFoundException(authorId);
@@ -34,7 +34,7 @@ public class BookAssociations : IBookAssociations
         await Task.WhenAll(tasks);
     }
 
-    public async Task HandleGenresAsync(IEnumerable<Guid> genreIds, Book book)
+    public async Task AssignGenresAsync(IEnumerable<Guid> genreIds, Book book)
     {
         if (genreIds == null) throw new ArgumentNullException(nameof(genreIds));
 
@@ -51,5 +51,21 @@ public class BookAssociations : IBookAssociations
         });
 
         await Task.WhenAll(tasks);
+    }
+
+    public void CleanAuthors(Book book)
+    {
+        foreach (var association in book.BookAuthors)
+        {
+            _repository.Associations.RemoveBookAuthor(association);
+        }
+    }
+
+    public void CleanGenres(Book book)
+    {
+        foreach (var association in book.BookGenres)
+        {
+            _repository.Associations.RemoveBookGenre(association);
+        }
     }
 }

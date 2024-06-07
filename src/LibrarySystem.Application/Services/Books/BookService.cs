@@ -2,6 +2,7 @@
 using LibrarySystem.Application.Contracts.Services;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.IdentityModel.Tokens;
@@ -36,10 +37,10 @@ public class BookService : IBookService
         var genreIds = createBookDto.GenreIds ?? throw new ArgumentNullException("At least one genre must be assigned.");
 
         // Handle authors
-        await _associations.HandleAuthorsAsync(authorIds, book);
+        await _associations.AssignAuthorsAsync(authorIds, book);
 
         // Handle genres
-        await _associations.HandleGenresAsync(genreIds, book);        
+        await _associations.AssignGenresAsync(genreIds, book);        
 
         // Create book and save changes
         _repository.Book.Create(book);
@@ -60,5 +61,55 @@ public class BookService : IBookService
         var books = await _repository.Book.GetAll();
 
         return books;
+    }
+
+    public async Task<int> Update(Guid id, UpdateBookDto updateBookDto)
+    {
+        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
+
+        var title = updateBookDto.Title;
+        var description = updateBookDto.Description;
+        var pages = updateBookDto.PagesCount;
+        var published = updateBookDto.PublishedAt;
+        var picture = updateBookDto.CoverPicture;
+        var authors = updateBookDto.Authors;
+        var genres = updateBookDto.Genres;
+
+        if (!title.IsNullOrEmpty())
+        {
+            book.Title = title;
+        }
+        if (!description.IsNullOrEmpty())
+        {
+            book.Description = description;
+        }
+        if (pages > 0)
+        {
+            book.PagesCount = pages;
+        }
+        if (published != DateTimeOffset.MinValue)
+        {
+            book.PublishedAt = published;
+        }
+        if (!picture.IsNullOrEmpty())
+        {
+            book.CoverPicture = picture;
+        }
+        if (authors.Count != 0)
+        {
+            _associations.CleanAuthors(book);
+            
+            // Handle authors
+            await _associations.AssignAuthorsAsync(authors.Select(a => a.Id), book);
+        }
+        if (genres.Count != 0)
+        {
+            _associations.CleanGenres(book);
+
+            // Handle genres
+            await _associations.AssignGenresAsync(genres.Select(g => g.Id), book);   
+        }
+
+        return await _repository.SaveAsync();
     }
 }

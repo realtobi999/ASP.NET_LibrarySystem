@@ -21,4 +21,14 @@ public class AssociationsRepository : IAssociationsRepository
     {
         _context.BookGenre.Add(bookGenre);
     }
+
+    public void RemoveBookAuthor(BookAuthor bookAuthor)
+    {
+        _context.BookAuthor.Remove(bookAuthor);
+    }
+
+    public void RemoveBookGenre(BookGenre bookGenre)
+    {
+        _context.BookGenre.Remove(bookGenre);
+    }
 }

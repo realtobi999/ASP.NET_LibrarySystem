@@ -30,6 +30,7 @@ public class BookService : IBookService
             Description = createBookDto.Description,
             PagesCount = createBookDto.PagesCount,
             PublishedAt = createBookDto.PublishedAt,
+            Available = createBookDto.Available,
             CoverPicture = createBookDto.CoverPicture,
         };
 
@@ -99,6 +100,7 @@ public class BookService : IBookService
         {
             book.PublishedAt = published;
         }
+
         if (!picture.IsNullOrEmpty())
         {
             book.CoverPicture = picture;

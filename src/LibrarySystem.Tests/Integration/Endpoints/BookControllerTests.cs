@@ -193,6 +193,7 @@ public class BookControllerTests
         content.Genres.ElementAt(0).Should().BeEquivalentTo(genre3.ToDto());
     }
 
+    [Fact]
     public async void BookController_DeleteBook_Returns200AndIsDeleted()
     {
         // prepare

@@ -30,6 +30,7 @@ public static class BookTestExtensions
             Description = book.Description,
             PagesCount = book.PagesCount,
             PublishedAt = book.PublishedAt,
+            Available = book.Available,
             CoverPicture = book.CoverPicture,
         };
     }
@@ -44,6 +45,7 @@ public static class BookTestExtensions
             Description = book.Description,
             PagesCount = book.PagesCount,
             PublishedAt = book.PublishedAt,
+            Available = book.Available,
             CoverPicture = book.CoverPicture,
             AuthorIds = authorIds,
             GenreIds = genreIds,

@@ -178,7 +178,7 @@ public class BookControllerTests
             Genres = [ genre3.ToDto()],
         };
 
-        var response = await client.PutAsJsonAsync(string.Format("/api/book/{0}", book.Id), updateDto);
+        var response = await client.PutAsJsonAsync(string.Format("/api/book/{0}?available=-1", book.Id), updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
@@ -187,6 +187,7 @@ public class BookControllerTests
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
         content.Id.Should().Be(book.Id);
         content.Title.Should().Be(updateDto.Title);
+        content.Available.Should().Be(false);
         content.Authors.Count.Should().Be(3);
         content.Authors.ElementAt(2).Should().BeEquivalentTo(author3.ToDto());
         content.Genres.Count.Should().Be(1);

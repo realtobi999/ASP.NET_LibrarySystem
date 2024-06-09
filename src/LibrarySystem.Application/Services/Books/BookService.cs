@@ -122,4 +122,13 @@ public class BookService : IBookService
 
         return await _repository.SaveAsync();
     }
+
+    public async Task<int> UpdateAvailability(Guid id, bool available)
+    {
+        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
+
+        book.Available = available;
+
+        return await _repository.SaveAsync();
+    }
 }

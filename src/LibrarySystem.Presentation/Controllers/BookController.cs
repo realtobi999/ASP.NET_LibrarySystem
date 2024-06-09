@@ -57,12 +57,21 @@ public class BookController : ControllerBase
 
     [Authorize(Policy = "Employee")]
     [HttpPut("api/book/{bookId:guid}")]
-    public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookDto updateBookDto)
+    public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookDto updateBookDto, int available)
     {
         var affected = await _service.Book.Update(bookId, updateBookDto);
 
         if (affected == 0)
             throw new ZeroRowsAffectedException();
+            
+        if (available == -1)
+        {
+            await _service.Book.UpdateAvailability(bookId, false);
+        }
+        if (available == 1)
+        {
+            await _service.Book.UpdateAvailability(bookId, true);
+        }
 
         return Ok();
     }

@@ -11,6 +11,7 @@ namespace LibrarySystem.Presentation.Controllers;
 
 GET     /api/book params: limit, offset
 GET     /api/book/{book_id}
+GET     /api/book/isbn-{isbn}
 POST    /api/book
 PUT     /api/book/{book_id}
 DELETE  /api/book/{book_id}
@@ -42,6 +43,14 @@ public class BookController : ControllerBase
     public async Task<IActionResult> GetBook(Guid bookId)
     {
         var book = await _service.Book.Get(bookId);
+
+        return Ok(book.ToDto());
+    }
+
+    [HttpGet("api/book/isbn-{isbn}")]
+    public async Task<IActionResult> GetBookByIsbn(string isbn)
+    {
+        var book = await _service.Book.Get(isbn);
 
         return Ok(book.ToDto());
     }

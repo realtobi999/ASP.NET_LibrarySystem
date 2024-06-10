@@ -7,6 +7,7 @@ public interface IBookService
 {
     Task<IEnumerable<Book>> GetAll();
     Task<Book> Get(Guid id);
+    Task<Book> Get(string isbn);
     Task<Book> Create(CreateBookDto createBookDto);
     Task<int> Update(Guid id, UpdateBookDto updateBookDto);
     Task<int> UpdateAvailability(Guid id, bool available);

@@ -55,7 +55,7 @@ public class BookService : IBookService
         var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
 
         _repository.Book.Delete(book);
-        return await _repository.SaveAsync();        
+        return await _repository.SaveAsync();
     }
 
     public async Task<Book> Get(Guid id)
@@ -70,6 +70,13 @@ public class BookService : IBookService
         var books = await _repository.Book.GetAll();
 
         return books;
+    }
+
+    public async Task<Book> Get(string isbn)
+    {
+        var book = await _repository.Book.Get(isbn) ?? throw new NotFoundException($"The book with isbn: {isbn} doesnt exist.");
+
+        return book; 
     }
 
     public async Task<int> Update(Guid id, UpdateBookDto updateBookDto)

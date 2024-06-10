@@ -42,4 +42,14 @@ public class BookRepository : IBookRepository
                 .ThenInclude(bg => bg.Genre)
             .ToListAsync();
     }
+
+    public async Task<Book?> Get(string isbn)
+    {
+        return await _context.Books
+            .Include(b => b.BookAuthors)
+                .ThenInclude(ba => ba.Author)
+            .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.Genre)
+            .SingleOrDefaultAsync(h => h.ISBN == isbn);
+    }
 }

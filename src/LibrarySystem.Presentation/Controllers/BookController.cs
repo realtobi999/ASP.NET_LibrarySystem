@@ -10,7 +10,7 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /*
 
-GET     /api/book params: limit, offset, authorId
+GET     /api/book params: limit, offset, authorId, genreId
 GET     /api/book/{book_id}
 GET     /api/book/isbn-{isbn}
 POST    /api/book
@@ -28,12 +28,14 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("api/book")]
-    public async Task<IActionResult> GetBooks(int limit, int offset, Guid authorId)
+    public async Task<IActionResult> GetBooks(int limit, int offset, Guid authorId, Guid genreId)
     {
         var books = await _service.Book.GetAll();         
 
         if (authorId != Guid.Empty)
             books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId)); 
+        if (genreId != Guid.Empty)
+            books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreId));    
         if (offset > 0)
             books = books.Skip(offset).ToList();
         if (limit > 0)

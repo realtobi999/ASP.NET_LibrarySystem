@@ -1,9 +1,9 @@
 ﻿using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain.Dtos.Books;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Presentation.Controllers;
 
@@ -12,7 +12,8 @@ namespace LibrarySystem.Presentation.Controllers;
 
 GET     /api/book params: limit, offset, authorId, genreId
 GET     /api/book/{book_id}
-GET     /api/book/isbn-{isbn}
+GET     /api/book/isbn/{isbn}
+GET     /api/book/search/{query} params: limit, offset, authorId, genreId
 POST    /api/book
 PUT     /api/book/{book_id}
 DELETE  /api/book/{book_id}
@@ -34,10 +35,36 @@ public class BookController : ControllerBase
 
         if (authorId != Guid.Empty)
             books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId)); 
+
         if (genreId != Guid.Empty)
             books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreId));    
+
         if (offset > 0)
             books = books.Skip(offset).ToList();
+            
+        if (limit > 0)
+            books = books.Take(limit).ToList(); 
+
+        return Ok(books.Select(b => b.ToDto()));
+    }
+
+    [HttpGet("api/book/search/{query}")]
+    public async Task<IActionResult> SearchBooks(int limit, int offset, Guid authorId, Guid genreId, string query)
+    {
+        var books = await _service.Book.GetAll();         
+
+        if (authorId != Guid.Empty)
+            books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId)); 
+
+        if (genreId != Guid.Empty)
+            books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreId));    
+
+        if (!query.IsNullOrEmpty())
+            books = books.Where(b => b.Title!.Contains(query) || b.Description!.Contains(query));    
+
+        if (offset > 0)
+            books = books.Skip(offset).ToList();
+
         if (limit > 0)
             books = books.Take(limit).ToList(); 
 
@@ -52,7 +79,7 @@ public class BookController : ControllerBase
         return Ok(book.ToDto());
     }
 
-    [HttpGet("api/book/isbn-{isbn}")]
+    [HttpGet("api/book/isbn/{isbn}")]
     public async Task<IActionResult> GetBookByIsbn(string isbn)
     {
         var book = await _service.Book.Get(isbn);

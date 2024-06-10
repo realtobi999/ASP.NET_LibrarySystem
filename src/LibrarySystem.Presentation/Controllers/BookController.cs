@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Application.Contracts;
 using LibrarySystem.Domain.Dtos.Books;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /*
 
-GET     /api/book params: limit, offset
+GET     /api/book params: limit, offset, authorId
 GET     /api/book/{book_id}
 GET     /api/book/isbn-{isbn}
 POST    /api/book
@@ -27,16 +28,18 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("api/book")]
-    public async Task<IActionResult> GetBooks(int limit, int offset)
+    public async Task<IActionResult> GetBooks(int limit, int offset, Guid authorId)
     {
-        var books = await _service.Book.GetAll();
+        var books = await _service.Book.GetAll();         
 
+        if (authorId != Guid.Empty)
+            books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId)); 
         if (offset > 0)
-            books = books.Skip(offset);
+            books = books.Skip(offset).ToList();
         if (limit > 0)
-            books = books.Take(limit); 
+            books = books.Take(limit).ToList(); 
 
-        return Ok(books);
+        return Ok(books.Select(b => b.ToDto()));
     }
 
     [HttpGet("api/book/{bookId:guid}")]

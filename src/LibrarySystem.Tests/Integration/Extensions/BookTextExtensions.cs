@@ -12,7 +12,7 @@ public static class BookTestExtensions
         .RuleFor(b => b.Title, f => f.Lorem.Sentence(3))
         .RuleFor(b => b.Description, f => f.Lorem.Paragraph())
         .RuleFor(b => b.PagesCount, f => f.Random.Int(100, 1000))
-        .RuleFor(b => b.PublishedAt, f => f.Date.PastOffset())
+        .RuleFor(b => b.PublishedDate, f => f.Date.PastOffset())
         .RuleFor(b => b.Available , true)
         .RuleFor(b => b.CoverPicture, f => f.Internet.Url());
 
@@ -30,7 +30,7 @@ public static class BookTestExtensions
             Title = book.Title,
             Description = book.Description,
             PagesCount = book.PagesCount,
-            PublishedAt = book.PublishedAt,
+            PublishedDate = book.PublishedDate,
             Available = book.Available,
             CoverPicture = book.CoverPicture,
         };
@@ -45,7 +45,7 @@ public static class BookTestExtensions
             Title = book.Title,
             Description = book.Description,
             PagesCount = book.PagesCount,
-            PublishedAt = book.PublishedAt,
+            PublishedDate = book.PublishedDate,
             Available = book.Available,
             CoverPicture = book.CoverPicture,
             AuthorIds = authorIds,

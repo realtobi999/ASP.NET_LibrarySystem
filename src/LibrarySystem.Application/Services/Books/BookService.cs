@@ -29,7 +29,7 @@ public class BookService : IBookService
             Title = createBookDto.Title,
             Description = createBookDto.Description,
             PagesCount = createBookDto.PagesCount,
-            PublishedAt = createBookDto.PublishedAt,
+            PublishedDate = createBookDto.PublishedDate,
             Available = createBookDto.Available,
             CoverPicture = createBookDto.CoverPicture,
         };
@@ -86,7 +86,7 @@ public class BookService : IBookService
         var title = updateBookDto.Title;
         var description = updateBookDto.Description;
         var pages = updateBookDto.PagesCount;
-        var published = updateBookDto.PublishedAt;
+        var published = updateBookDto.PublishedDate;
         var picture = updateBookDto.CoverPicture;
         var authors = updateBookDto.Authors;
         var genres = updateBookDto.Genres;
@@ -105,7 +105,7 @@ public class BookService : IBookService
         }
         if (published != DateTimeOffset.MinValue)
         {
-            book.PublishedAt = published;
+            book.PublishedDate = published;
         }
 
         if (!picture.IsNullOrEmpty())

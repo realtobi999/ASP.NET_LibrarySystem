@@ -24,7 +24,7 @@ public class Book
     public int PagesCount { get; set; } 
 
     [Required, Column("published_at")]
-    public DateTimeOffset PublishedAt { get; set; }
+    public DateTimeOffset PublishedDate { get; set; }
 
     [Required, Column("available")]
     public bool Available { get; set; }
@@ -56,7 +56,7 @@ public class Book
             Title = this.Title,
             Description = this.Description,
             PagesCount = this.PagesCount,
-            PublishedAt = this.PublishedAt,
+            PublishedDate = this.PublishedDate,
             Available = this.Available,
             CoverPicture = this.CoverPicture,
             Authors = authors,

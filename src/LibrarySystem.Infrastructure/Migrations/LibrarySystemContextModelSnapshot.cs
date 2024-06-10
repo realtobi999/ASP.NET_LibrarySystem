@@ -75,7 +75,7 @@ namespace LibrarySystem.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("pages_count");
 
-                    b.Property<DateTimeOffset>("PublishedAt")
+                    b.Property<DateTimeOffset>("PublishedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("published_at");
 

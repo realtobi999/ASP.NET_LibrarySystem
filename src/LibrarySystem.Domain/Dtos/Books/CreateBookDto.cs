@@ -19,7 +19,7 @@ public record class CreateBookDto
     public int PagesCount { get; set; } 
 
     [Required]
-    public DateTimeOffset PublishedAt { get; set; }
+    public DateTimeOffset PublishedDate { get; set; }
 
     [Required]
     public bool Available { get; set; }

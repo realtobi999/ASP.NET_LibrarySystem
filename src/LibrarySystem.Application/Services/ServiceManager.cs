@@ -20,5 +20,7 @@ public class ServiceManager : IServiceManager
 
     public IGenreService Genre => _factory.CreateGenreService();
 
-    public IBookService Book => _factory.CreateBookService(); 
+    public IBookService Book => _factory.CreateBookService();
+
+    public IBorrowService Borrow => _factory.CreateBorrowService(); 
 }

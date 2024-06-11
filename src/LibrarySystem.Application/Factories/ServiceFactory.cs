@@ -2,6 +2,7 @@
 using LibrarySystem.Application.Contracts.Services;
 using LibrarySystem.Application.Services.Authors;
 using LibrarySystem.Application.Services.Books;
+using LibrarySystem.Application.Services.Borrows;
 using LibrarySystem.Application.Services.Employees;
 using LibrarySystem.Application.Services.Genres;
 using LibrarySystem.Application.Services.Users;
@@ -31,6 +32,11 @@ public class ServiceFactory : IServiceFactory
     public IBookService CreateBookService()
     {
         return new BookService(_repository, _bookAssociations);
+    }
+
+    public IBorrowService CreateBorrowService()
+    {
+        return new BorrowService(_repository);
     }
 
     public IEmployeeService CreateEmployeeService()

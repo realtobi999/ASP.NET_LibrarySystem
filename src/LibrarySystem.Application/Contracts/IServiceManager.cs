@@ -9,4 +9,5 @@ public interface IServiceManager
     IAuthorService Author { get; }
     IGenreService Genre { get; }
     IBookService Book { get; }
+    IBorrowService Borrow { get; }
 }

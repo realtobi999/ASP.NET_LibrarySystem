@@ -14,6 +14,7 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
     public DbSet<BookGenre> BookGenre { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Employee> Employee { get; set; }
+    public DbSet<Borrow> Borrow {get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

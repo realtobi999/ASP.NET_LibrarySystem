@@ -28,6 +28,11 @@ public class RepositoryFactory : IRepositoryFactory
         return new BookRepository(_context);
     }
 
+    public IBorrowRepository CreateBorrowRepository()
+    {
+        return new BorrowRepository(_context);
+    }
+
     public IEmployeeRepository CreateEmployeeRepository()
     {
         return new EmployeeRepository(_context);

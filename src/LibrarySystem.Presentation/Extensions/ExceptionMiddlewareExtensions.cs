@@ -24,7 +24,7 @@ public static class ExceptionMiddlewareExtensions
                         BadRequestException => StatusCodes.Status400BadRequest,
                         ArgumentException => StatusCodes.Status400BadRequest,
                         NotFoundException => StatusCodes.Status404NotFound,
-                        InternalServerErrorException => StatusCodes.Status500InternalServerError,
+                        ConflictException => StatusCodes.Status409Conflict,
                         _ => StatusCodes.Status500InternalServerError,
                     };
 

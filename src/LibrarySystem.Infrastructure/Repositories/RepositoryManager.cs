@@ -25,6 +25,8 @@ public class RepositoryManager : IRepositoryManager
 
     public IBookRepository Book => _factory.CreateBookRepository();
 
+    public IBorrowRepository Borrow => _factory.CreateBorrowRepository(); 
+
     public Task<int> SaveAsync()
     {
         return _context.SaveChangesAsync();

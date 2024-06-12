@@ -1,6 +1,5 @@
 ﻿using Bogus;
-using LibrarySystem.Domain;
-using LibrarySystem.Domain.Dtos.Books;
+using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Tests.Integration.Extensions;
@@ -8,8 +7,7 @@ namespace LibrarySystem.Tests.Integration.Extensions;
 public static class BorrowTestExtensions
 {
     private static readonly Faker<Borrow> _borrowFaker = new Faker<Borrow>()
-        .RuleFor(u => u.Id, f => f.Random.Guid())
-        .RuleFor(u => u.BorrowDate, DateTimeOffset.UtcNow);
+        .RuleFor(u => u.Id, f => f.Random.Guid());
 
     public static Borrow WithFakeData(this Borrow borrow, Guid bookId, Guid userId)
     {

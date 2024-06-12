@@ -35,7 +35,7 @@ public class BorrowService : IBorrowService
             BorrowDue = DateTimeOffset.UtcNow.AddMonths(1),
         };
 
-        // set the availability of the book to false - borrowed
+        // set the availability of the book to false -> borrowed
         book.Available = false; 
 
         _repository.Borrow.Create(borrow);

@@ -7,7 +7,7 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /**
 
-GET     /api/borrow params: limit, offset, userId
+GET     /api/borrow params: limit, offset, userId, active
 GET     /api/borrow/{borrow_id}
 POST    /api/borrow
 
@@ -22,12 +22,15 @@ public class BorrowController : ControllerBase
     }
 
     [HttpGet("api/borrow")]
-    public async Task<IActionResult> GetBorrows(int limit, int offset, Guid userId)
+    public async Task<IActionResult> GetBorrows(int limit, int offset, Guid userId, bool active)
     {
         var borrows = await _service.Borrow.GetAll();
 
         if (userId != Guid.Empty)
             borrows = borrows.Where(b => b.UserId == userId);
+            
+        if (active)
+            borrows = borrows.Where(b => DateTimeOffset.UtcNow <= b.BorrowDue);
 
         if (offset > 0)
             borrows = borrows.Skip(offset);

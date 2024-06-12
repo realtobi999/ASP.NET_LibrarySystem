@@ -7,7 +7,8 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /**
 
-POST    /api/book/{book_id}/borrow
+GET     /api/borrow
+POST    /api/borrow
 
 **/
 public class BorrowController : ControllerBase
@@ -17,6 +18,20 @@ public class BorrowController : ControllerBase
     public BorrowController(IServiceManager service)
     {
         _service = service;
+    }
+
+    [HttpGet("api/borrow")]
+    public async Task<IActionResult> GetBorrows(int limit, int offset)
+    {
+        var borrows = await _service.Borrow.GetAll();
+
+        if (offset > 0)
+            borrows = borrows.Skip(offset);
+            
+        if (limit > 0)
+            borrows = borrows.Take(limit); 
+
+        return Ok(borrows.Select(b => b.ToDto()));
     }
 
     [HttpPost("api/borrow")]

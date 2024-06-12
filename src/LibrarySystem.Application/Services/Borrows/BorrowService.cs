@@ -43,4 +43,11 @@ public class BorrowService : IBorrowService
 
         return borrow;
     }
+
+    public async Task<IEnumerable<Borrow>> GetAll()
+    {
+        var borrows = await _repository.Borrow.GetAll();
+
+        return borrows;
+    }
 }

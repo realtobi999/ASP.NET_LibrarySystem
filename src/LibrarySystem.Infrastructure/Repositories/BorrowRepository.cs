@@ -18,6 +18,11 @@ public class BorrowRepository : IBorrowRepository
         _context.Borrow.Add(borrow);
     }
 
+    public async Task<Borrow?> Get(Guid id)
+    {
+        return await _context.Borrow.FirstOrDefaultAsync(b => b.Id == id);
+    }
+
     public async Task<IEnumerable<Borrow>> GetAll()
     {
         return await _context.Borrow.ToListAsync();

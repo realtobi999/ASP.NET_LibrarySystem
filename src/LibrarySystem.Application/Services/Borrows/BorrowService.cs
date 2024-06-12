@@ -44,6 +44,13 @@ public class BorrowService : IBorrowService
         return borrow;
     }
 
+    public async Task<Borrow> Get(Guid id)
+    {
+        var borrow = await _repository.Borrow.Get(id) ?? throw new BorrowNotFoundException(id);
+
+        return borrow;
+    }
+
     public async Task<IEnumerable<Borrow>> GetAll()
     {
         var borrows = await _repository.Borrow.GetAll();

@@ -8,6 +8,7 @@ namespace LibrarySystem.Presentation.Controllers;
 /**
 
 GET     /api/borrow params: limit, offset, userId
+GET     /api/borrow/{borrow_id}
 POST    /api/borrow
 
 **/
@@ -35,6 +36,14 @@ public class BorrowController : ControllerBase
             borrows = borrows.Take(limit); 
 
         return Ok(borrows.Select(b => b.ToDto()));
+    }
+
+    [HttpGet("api/borrow/{borrowId:guid}")]
+    public async Task<IActionResult> GetBorrow(Guid borrowId)
+    {
+        var borrow = await _service.Borrow.Get(borrowId);
+
+        return Ok(borrow.ToDto());
     }
 
     [HttpPost("api/borrow")]

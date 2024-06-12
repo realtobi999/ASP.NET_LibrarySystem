@@ -202,4 +202,35 @@ public class BorrowControllerTests
         content.Count.Should().Be(1);
         content.ElementAt(0).Id.Should().Be(borrow1.Id);
     }
+
+    [Fact]
+    public async void BorrowController_GetBorrow_Returns200AndCorrectBorrowRecord()
+    {
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+        var book = new Book().WithFakeData();
+        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+
+        var token = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var create2 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var create3 = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
+        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var response = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new DeserializationException();
+        content.Id.Should().Be(borrow.Id);
+    }
 }

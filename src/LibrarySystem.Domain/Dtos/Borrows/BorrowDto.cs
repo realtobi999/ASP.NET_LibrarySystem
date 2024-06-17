@@ -9,4 +9,5 @@ public class BorrowDto
     public Guid UserId { get; set; }
     public DateTimeOffset BorrowDate { get; set; }
     public DateTimeOffset BorrowDue { get; set; }
+    public bool Returned { get; set; }
 }

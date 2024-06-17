@@ -233,4 +233,70 @@ public class BorrowControllerTests
         var content = await response.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new DeserializationException();
         content.Id.Should().Be(borrow.Id);
     }
+
+    [Fact]
+    public async void BorrowController_ReturnBorrow_Returns200AndWorksCorrectly()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+        var book = new Book().WithFakeData();
+        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+
+        var token1 = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+
+        var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var create2 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var create3 = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
+        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        client.DefaultRequestHeaders.Remove("Authorization");
+
+        var token2 = JwtTokenTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "User"),
+            new Claim("UserId", user.Id.ToString()),
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+
+        // act & assert
+
+        // get the book and borrow and check if the availability and returned status is correct
+        var get1 = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        content1.Id.Should().Be(book.Id);
+        content1.Available.Should().Be(false);
+
+        var get2 = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
+        get2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        var content2 = await get2.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new DeserializationException();
+        content2.Id.Should().Be(borrow.Id);
+        content2.Returned.Should().Be(false);
+
+        // return the book
+        var response = await client.PutAsJsonAsync(string.Format("/api/borrow/{0}/return", borrow.Id), 0);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        // get the book and borrow and check if the availability and returned status is correct
+        var get3 = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        var content3 = await get3.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        content3.Id.Should().Be(book.Id);
+        content3.Available.Should().Be(true);
+
+        var get4 = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
+        get4.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        var content4 = await get4.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new DeserializationException();
+        content4.Id.Should().Be(borrow.Id);
+        content4.Returned.Should().Be(true);
+    }
 }

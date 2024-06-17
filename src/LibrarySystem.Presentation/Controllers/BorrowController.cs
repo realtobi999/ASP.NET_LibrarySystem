@@ -1,5 +1,8 @@
 ﻿using LibrarySystem.Application.Contracts;
+using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
+using LibrarySystem.Domain.Dtos.Borrows;
+using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
@@ -10,6 +13,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/borrow params: limit, offset, userId, active
 GET     /api/borrow/{borrow_id}
 POST    /api/borrow
+PUT     /api/borrow/{borrow_id}/return
 
 **/
 public class BorrowController : ControllerBase
@@ -30,7 +34,7 @@ public class BorrowController : ControllerBase
             borrows = borrows.Where(b => b.UserId == userId);
             
         if (active)
-            borrows = borrows.Where(b => DateTimeOffset.UtcNow <= b.BorrowDue);
+            borrows = borrows.Where(b => !b.Returned);
 
         if (offset > 0)
             borrows = borrows.Skip(offset);
@@ -55,5 +59,29 @@ public class BorrowController : ControllerBase
         var borrow = await _service.Borrow.Create(createBorrowDto);
 
         return Created(string.Format("/api/borrow/{0}", borrow.Id), null);
+    }
+
+    [HttpPut("api/borrow/{borrowId:guid}/return")]
+    public async Task<IActionResult> ReturnBorrow(Guid borrowId)
+    {
+        var borrow = await _service.Borrow.Get(borrowId);
+
+        // extract the jwt token to get the user id from the request
+        var token = JwtToken.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
+        var payload = JwtToken.ParsePayload(token);
+        var tokenUserId = payload.FirstOrDefault(c => c.Type.Equals("USERID", StringComparison.CurrentCultureIgnoreCase))?.Value;
+
+        // match the user id of the borrow and from the request
+        if (borrow.UserId.ToString() != tokenUserId)
+        {
+            throw new NotAuthorizedException("You are not authorized to return this book.");
+        }
+
+        var affected = await _service.Borrow.Return(borrow);
+        
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+         
+        return Ok();
     }
 }

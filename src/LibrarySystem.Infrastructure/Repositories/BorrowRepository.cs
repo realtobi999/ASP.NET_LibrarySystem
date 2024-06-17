@@ -23,8 +23,13 @@ public class BorrowRepository : IBorrowRepository
         return await _context.Borrow.FirstOrDefaultAsync(b => b.Id == id);
     }
 
+    public async Task<Borrow?> Get(Guid bookId, Guid userId)
+    {
+        return await _context.Borrow.FirstOrDefaultAsync(b => b.UserId == userId && b.BookId == bookId);
+    }
+
     public async Task<IEnumerable<Borrow>> GetAll()
     {
-        return await _context.Borrow.ToListAsync();
+        return await _context.Borrow.OrderBy(b => b.BorrowDate).ToListAsync();
     }
 }

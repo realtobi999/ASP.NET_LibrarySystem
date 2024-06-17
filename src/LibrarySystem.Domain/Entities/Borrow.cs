@@ -21,6 +21,9 @@ public class Borrow
     [Required, Column("borrow_due")]
     public DateTimeOffset BorrowDue { get; set; }
 
+    [Required, Column]
+    public bool Returned { get; set; }
+    
     public BorrowDto ToDto()
     {
         return new BorrowDto
@@ -30,6 +33,7 @@ public class Borrow
             UserId = this.UserId,
             BorrowDate = this.BorrowDate,
             BorrowDue = this.BorrowDue,
+            Returned = this.Returned,
         };
     }
 }

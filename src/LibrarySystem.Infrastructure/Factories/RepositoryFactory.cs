@@ -43,6 +43,11 @@ public class RepositoryFactory : IRepositoryFactory
         return new GenreRepository(_context);
     }
 
+    public IBaseRepository CreateBaseRepository()
+    {
+        return new BaseRepository(_context);    
+    }
+
     public IUserRepository CreateUserRepository()
     {
         return new UserRepository(_context);

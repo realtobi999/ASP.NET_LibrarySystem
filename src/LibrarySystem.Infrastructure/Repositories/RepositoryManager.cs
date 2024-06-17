@@ -5,12 +5,10 @@ namespace LibrarySystem.Infrastructure.Repositories;
 public class RepositoryManager : IRepositoryManager
 {
     private readonly IRepositoryFactory _factory;
-    private readonly LibrarySystemContext _context;
 
-    public RepositoryManager(IRepositoryFactory factory, LibrarySystemContext context)
+    public RepositoryManager(IRepositoryFactory factory)
     {
         _factory = factory;
-        _context = context;
     }
 
     public IUserRepository User => _factory.CreateUserRepository();
@@ -27,8 +25,10 @@ public class RepositoryManager : IRepositoryManager
 
     public IBorrowRepository Borrow => _factory.CreateBorrowRepository(); 
 
+    private IBaseRepository _baseRepository => _factory.CreateBaseRepository();
+
     public Task<int> SaveAsync()
     {
-        return _context.SaveChangesAsync();
+        return _baseRepository.SaveAsync();
     }
 }

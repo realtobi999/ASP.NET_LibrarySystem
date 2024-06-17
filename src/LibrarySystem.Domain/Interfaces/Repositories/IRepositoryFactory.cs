@@ -9,4 +9,5 @@ public interface IRepositoryFactory
     IBookRepository CreateBookRepository();
     IAssociationsRepository CreateAssociationsRepository();
     IBorrowRepository CreateBorrowRepository();
+    IBaseRepository CreateBaseRepository();
 }

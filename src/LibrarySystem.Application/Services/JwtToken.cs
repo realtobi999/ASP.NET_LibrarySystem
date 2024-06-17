@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,6 +16,29 @@ public class JwtToken : IJwtToken
     {
         _jwtIssuer = jwtIssuer;
         _jwtKey = jwtKey;
+    }
+
+    public static string Parse(string? header)
+    {
+        if (header is null)
+        {
+            throw new BadRequestException("Authorization header is missing. Expected Format: BEARER <TOKEN>");
+        }
+
+        const string bearerPrefix = "Bearer ";
+        if (!header.StartsWith(bearerPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new BadRequestException("Invalid authorization header format. Expected format: BEARER <TOKEN>");
+        }
+
+        string token = header.Substring(bearerPrefix.Length).Trim();
+
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new BadRequestException("Token is missing in the authorization header.");
+        }
+
+        return token;
     }
 
     public string Generate(IEnumerable<Claim> claims)

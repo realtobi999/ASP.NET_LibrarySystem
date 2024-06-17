@@ -36,7 +36,7 @@ public class UserAuthenticationMiddleware
         }
 
         var token = splitHeader.ElementAt(1);
-        var payload = JwtToken.ParsePayload(token);
+        var payload = Jwt.ParsePayload(token);
 
         // get the id from the jwt token
         var tokenUserId = payload.FirstOrDefault(c => c.Type.ToUpper() == "USERID")?.Value;

@@ -22,9 +22,9 @@ POST    /api/auth/Employee/login
 public class AuthController : ControllerBase
 {
     private readonly IServiceManager _service;
-    private readonly IJwtToken _jwt;
+    private readonly IJwt _jwt;
 
-    public AuthController(IServiceManager service, IJwtToken jwt)
+    public AuthController(IServiceManager service, IJwt jwt)
     {
         _service = service;
         _jwt = jwt;

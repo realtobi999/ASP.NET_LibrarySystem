@@ -17,7 +17,7 @@ public class BookControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var book = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -51,7 +51,7 @@ public class BookControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var book = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -96,7 +96,7 @@ public class BookControllerTests
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -127,7 +127,7 @@ public class BookControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var book = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -186,7 +186,7 @@ public class BookControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var book = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -209,7 +209,7 @@ public class BookControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var book = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -235,7 +235,7 @@ public class BookControllerTests
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -281,7 +281,7 @@ public class BookControllerTests
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -327,7 +327,7 @@ public class BookControllerTests
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -372,7 +372,7 @@ public class BookControllerTests
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 

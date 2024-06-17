@@ -3,9 +3,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace LibrarySystem.Tests.Integration.Extensions;
 
-public static class JwtTokenTestExtensions
+public static class JwtTestExtensions
 {
-    public static JwtToken Create()
+    public static Jwt Create()
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -25,6 +25,6 @@ public static class JwtTokenTestExtensions
             throw new ArgumentNullException(nameof(jwtKey), "JWT Key configuration is missing");
         }
 
-        return new JwtToken(jwtIssuer, jwtKey);
+        return new Jwt(jwtIssuer, jwtKey);
     }
 }

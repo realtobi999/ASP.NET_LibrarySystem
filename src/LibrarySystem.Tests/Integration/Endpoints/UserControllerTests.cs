@@ -63,7 +63,7 @@ public class UserControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user.Id.ToString()),
             new Claim(ClaimTypes.Role, "User"),
         ]);
@@ -100,7 +100,7 @@ public class UserControllerTests
         //prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user.Id.ToString()),
             new Claim(ClaimTypes.Role, "User"),
         ]);

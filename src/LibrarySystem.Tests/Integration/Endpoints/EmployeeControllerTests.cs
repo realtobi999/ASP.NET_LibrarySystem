@@ -20,7 +20,7 @@ public class EmployeeControllerTests
         var employee2 = new Employee().WithFakeData();
         var employee3 = new Employee().WithFakeData();
 
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
@@ -52,7 +52,7 @@ public class EmployeeControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var employee = new Employee().WithFakeData();
 
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
@@ -79,7 +79,7 @@ public class EmployeeControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var employee = new Employee().WithFakeData();
 
-        var token1 = JwtTokenTestExtensions.Create().Generate([
+        var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
@@ -90,7 +90,7 @@ public class EmployeeControllerTests
 
         client.DefaultRequestHeaders.Remove("Authorization");
 
-        var token2 = JwtTokenTestExtensions.Create().Generate([
+        var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee"),
             new Claim("EmployeeId", employee.Id.ToString()),
         ]);
@@ -123,7 +123,7 @@ public class EmployeeControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var employee = new Employee().WithFakeData();
 
-        var token1 = JwtTokenTestExtensions.Create().Generate([
+        var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
@@ -134,7 +134,7 @@ public class EmployeeControllerTests
 
         client.DefaultRequestHeaders.Remove("Authorization");
 
-        var token2 = JwtTokenTestExtensions.Create().Generate([
+        var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee"),
             new Claim("EmployeeId", employee.Id.ToString()),
         ]);

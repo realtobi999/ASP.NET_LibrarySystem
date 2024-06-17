@@ -17,7 +17,7 @@ public class GenreControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var genre = new Genre().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -37,7 +37,7 @@ public class GenreControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var genre = new Genre().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -66,7 +66,7 @@ public class GenreControllerTests
         var genre1 = new Genre().WithFakeData();
         var genre2 = new Genre().WithFakeData();
         var genre3 = new Genre().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -100,7 +100,7 @@ public class GenreControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var genre = new Genre().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
@@ -132,7 +132,7 @@ public class GenreControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var genre = new Genre().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 

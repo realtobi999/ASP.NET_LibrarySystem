@@ -7,15 +7,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services;
 
-public class JwtToken : IJwtToken
+public class Jwt : IJwt
 {
-    private readonly string _jwtIssuer;
-    private readonly string _jwtKey;
+    public string Issuer { get; set; }
+    public string Key { get; set; }
 
-    public JwtToken(string jwtIssuer, string jwtKey)
+
+    public Jwt(string issuer, string key)
     {
-        _jwtIssuer = jwtIssuer;
-        _jwtKey = jwtKey;
+        Issuer = issuer;
+        Key = key;
     }
 
     public static string Parse(string? header)
@@ -43,13 +44,13 @@ public class JwtToken : IJwtToken
 
     public string Generate(IEnumerable<Claim> claims)
     {
-        var key = Encoding.ASCII.GetBytes(_jwtKey);
+        var key = Encoding.ASCII.GetBytes(this.Key);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddMinutes(30),
-            Issuer = _jwtIssuer,
-            Audience = _jwtIssuer,
+            Issuer = this.Issuer,
+            Audience = this.Issuer,
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 

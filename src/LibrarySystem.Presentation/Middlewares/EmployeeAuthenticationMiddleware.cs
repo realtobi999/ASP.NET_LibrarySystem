@@ -36,7 +36,7 @@ public class EmployeeAuthenticationMiddleware
         }
 
         var token = splitHeader.ElementAt(1);
-        var payload = JwtToken.ParsePayload(token);
+        var payload = Jwt.ParsePayload(token);
 
         // get the id from the jwt token
         var tokenEmployeeId = payload.FirstOrDefault(c => c.Type.ToUpper() == "EMPLOYEEID")?.Value;

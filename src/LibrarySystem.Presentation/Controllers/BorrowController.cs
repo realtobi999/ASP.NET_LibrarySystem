@@ -67,8 +67,8 @@ public class BorrowController : ControllerBase
         var borrow = await _service.Borrow.Get(borrowId);
 
         // extract the jwt token to get the user id from the request
-        var token = JwtToken.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
-        var payload = JwtToken.ParsePayload(token);
+        var token = Jwt.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
+        var payload = Jwt.ParsePayload(token);
         var tokenUserId = payload.FirstOrDefault(c => c.Type.Equals("USERID", StringComparison.CurrentCultureIgnoreCase))?.Value;
 
         // match the user id of the borrow and from the request

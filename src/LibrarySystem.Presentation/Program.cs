@@ -1,7 +1,9 @@
 using LibrarySystem.Application.Contracts;
+using LibrarySystem.Application.Factories;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Presentation.Extensions;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 public class Program
 {
@@ -19,10 +21,14 @@ public class Program
             // services
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
-            builder.Services.ConfigureJwtAuthentication(builder.Configuration);
-            builder.Services.ConfigureJwtToken(builder.Configuration);
+
+            var jwt = JwtFactory.CreateInstance(builder.Configuration);
+            builder.Services.AddSingleton<IJwt>(p => jwt);
+            
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
             builder.Services.AddScoped<IBookAssociations, BookAssociations>();
+
+            builder.Services.ConfigureJwtAuthentication(jwt);
 
             // user authorization
             builder.Services.AddAuthorization(options =>

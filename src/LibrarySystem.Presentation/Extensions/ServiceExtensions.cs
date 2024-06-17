@@ -46,20 +46,8 @@ public static class ServiceExtensions
         services.AddScoped<IRepositoryManager, RepositoryManager>();
     }
 
-    public static void ConfigureJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureJwtAuthentication(this IServiceCollection services, IJwt jwt)
     {
-        var jwtIssuer = configuration.GetSection("Jwt:Issuer").Value;
-        var jwtKey = configuration.GetSection("Jwt:Key").Value;
-
-        if (string.IsNullOrEmpty(jwtIssuer))
-        {
-            throw new ArgumentNullException(nameof(jwtIssuer), "JWT Issuer configuration is missing");
-        }
-        if (string.IsNullOrEmpty(jwtKey))
-        {
-            throw new ArgumentNullException(nameof(jwtKey), "JWT Key configuration is missing");
-        }
-
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -69,27 +57,10 @@ public static class ServiceExtensions
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtIssuer,
-                ValidAudience = jwtIssuer,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                ValidIssuer = jwt.Issuer,
+                ValidAudience = jwt.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key))
             };
         });
-    }
-
-    public static void ConfigureJwtToken(this IServiceCollection services, IConfiguration configuration)
-    {
-        var jwtIssuer = configuration.GetSection("Jwt:Issuer").Value;
-        var jwtKey = configuration.GetSection("Jwt:Key").Value;
-
-        if (string.IsNullOrEmpty(jwtIssuer))
-        {
-            throw new ArgumentNullException(nameof(jwtIssuer), "JWT Issuer configuration is missing");
-        }
-        if (string.IsNullOrEmpty(jwtKey))
-        {
-            throw new ArgumentNullException(nameof(jwtKey), "JWT Key configuration is missing");
-        }
-
-        services.AddScoped<IJwtToken>(provider => new JwtToken(jwtIssuer, jwtKey));
     }
 }

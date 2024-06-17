@@ -17,7 +17,7 @@ public class UserAuthenticationMiddlewareTests
         var user1 = new User().WithFakeData();
         var user2 = new User().WithFakeData();
         // user1 jwt token
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user1.Id.ToString()),
             new Claim(ClaimTypes.Role, "User"),
         ]);

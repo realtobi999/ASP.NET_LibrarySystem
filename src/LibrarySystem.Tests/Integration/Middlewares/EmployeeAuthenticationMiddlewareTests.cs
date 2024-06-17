@@ -17,7 +17,7 @@ public class EmployeeAuthenticationMiddlewareTests
         var employee1 = new Employee().WithFakeData();
         var employee2 = new Employee().WithFakeData();
 
-        var token1 = JwtTokenTestExtensions.Create().Generate([
+        var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
@@ -31,7 +31,7 @@ public class EmployeeAuthenticationMiddlewareTests
 
         client.DefaultRequestHeaders.Remove("Authorization");
 
-        var token2 = JwtTokenTestExtensions.Create().Generate([
+        var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee"),
             new Claim("EmployeeId", employee1.Id.ToString()),
         ]);

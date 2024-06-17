@@ -30,7 +30,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void AuthController_LoginUser_Returns200AndJwtTokenAndUser()
+    public async void AuthController_LoginUser_Returns200AndJwtAndUser()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -54,7 +54,7 @@ public class AuthControllerTests
         content.UserDto!.Id.Should().Be(user.Id);
         content.Token.Should().NotBeNull();
 
-        var tokenPayload = JwtToken.ParsePayload(content.Token!);
+        var tokenPayload = Jwt.ParsePayload(content.Token!);
         tokenPayload.Count().Should().BeGreaterThan(2);
         tokenPayload.ElementAt(0).Type.Should().Be("UserId");
         tokenPayload.ElementAt(0).Value.Should().Be(user.Id.ToString());
@@ -89,7 +89,7 @@ public class AuthControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var employee = new Employee().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
@@ -104,12 +104,12 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void AuthController_LoginEmployee_Returns201AndJwtTokenAndEmployee()
+    public async void AuthController_LoginEmployee_Returns201AndJwtAndEmployee()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var employee = new Employee().WithFakeData();
-        var token = JwtTokenTestExtensions.Create().Generate([
+        var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
@@ -135,7 +135,7 @@ public class AuthControllerTests
         content.EmployeeDto!.Id.Should().Be(employee.Id);
         content.Token.Should().NotBeNull();
 
-        var tokenPayload = JwtToken.ParsePayload(content.Token!);
+        var tokenPayload = Jwt.ParsePayload(content.Token!);
         tokenPayload.Count().Should().BeGreaterThan(2);
         tokenPayload.ElementAt(0).Type.Should().Be("EmployeeId");
         tokenPayload.ElementAt(0).Value.Should().Be(employee.Id.ToString());

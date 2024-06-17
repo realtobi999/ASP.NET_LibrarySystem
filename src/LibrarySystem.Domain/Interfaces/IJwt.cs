@@ -2,7 +2,10 @@
 
 namespace LibrarySystem.Domain.Interfaces;
 
-public interface IJwtToken
+public interface IJwt
 {
+    string Issuer { get; }
+    string Key { get; }
+
     string Generate(IEnumerable<Claim> claims);
 }

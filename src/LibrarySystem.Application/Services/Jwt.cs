@@ -67,4 +67,11 @@ public class Jwt : IJwt
 
         return payload;
     }
+
+    public static string? ParseFromPayload(string token, string key)
+    {
+        var payload = Jwt.ParsePayload(token);
+
+        return payload.FirstOrDefault(c => c.Type.Equals(key, StringComparison.CurrentCultureIgnoreCase))?.Value;
+    }
 }

@@ -78,4 +78,27 @@ public class JwtTests
         // act & assert
         Jwt.Parse(string.Format("Bearer {0}", token)).Should().Be(token);
     }
+
+    [Fact]
+    public void Jwt_ParseFromPayload_Works()
+    {
+        // prepare
+        var issuer = "TEST_ISSUER";
+        var key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
+        var jwt = new Jwt(issuer, key);
+        
+        var user = new User().WithFakeData();
+
+        var token = jwt.Generate([
+            new Claim("AccountId", user.Id.ToString())
+        ]);
+        token.Should().NotBeNull();
+
+        // act & assert
+        Jwt.ParseFromPayload(token, "AccountId").Should().Be(user.Id.ToString());
+        Jwt.ParseFromPayload(token, "ACCOUNTID").Should().Be(user.Id.ToString());
+        Jwt.ParseFromPayload(token, "accountid").Should().Be(user.Id.ToString());
+
+        Jwt.ParseFromPayload(token, "account_id").Should().BeNull();
+    }
 }

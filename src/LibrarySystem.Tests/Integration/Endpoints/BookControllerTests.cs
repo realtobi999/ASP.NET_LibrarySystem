@@ -173,7 +173,7 @@ public class BookControllerTests
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
         content.Id.Should().Be(book.Id);
         content.Title.Should().Be(updateDto.Title);
-        content.Available.Should().Be(false);
+        content.IsAvailable.Should().Be(false);
         content.Authors.Count.Should().Be(3);
         content.Authors.ElementAt(2).Should().BeEquivalentTo(author3.ToDto());
         content.Genres.Count.Should().Be(1);

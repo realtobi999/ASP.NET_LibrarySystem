@@ -27,7 +27,7 @@ public class Book
     public DateTimeOffset PublishedDate { get; set; }
 
     [Required, Column("available")]
-    public bool Available { get; set; }
+    public bool IsAvailable { get; set; }
 
     [Required, Column("cover_photo")]
     public string? CoverPicture { get; set; }
@@ -57,7 +57,7 @@ public class Book
             Description = this.Description,
             PagesCount = this.PagesCount,
             PublishedDate = this.PublishedDate,
-            Available = this.Available,
+            IsAvailable = this.IsAvailable,
             CoverPicture = this.CoverPicture,
             Authors = authors,
             Genres = genres,

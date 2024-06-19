@@ -11,7 +11,7 @@ public record class BookDto
     public string? Description { get; set; }
     public int PagesCount { get; set; } 
     public DateTimeOffset PublishedDate { get; set; }
-    public bool Available { get; set; }
+    public bool IsAvailable { get; set; }
     public string? CoverPicture { get; set; }
     public List<AuthorDto> Authors { get; set; } = [];
     public List<GenreDto> Genres { get; set; } = [];

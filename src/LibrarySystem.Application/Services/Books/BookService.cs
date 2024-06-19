@@ -30,7 +30,7 @@ public class BookService : IBookService
             Description = createBookDto.Description,
             PagesCount = createBookDto.PagesCount,
             PublishedDate = createBookDto.PublishedDate,
-            Available = createBookDto.Available,
+            IsAvailable = createBookDto.Available,
             CoverPicture = createBookDto.CoverPicture,
         };
 
@@ -130,12 +130,17 @@ public class BookService : IBookService
         return await _repository.SaveAsync();
     }
 
-    public async Task<int> UpdateAvailability(Guid id, bool available)
+    public async Task<int> SetAvailable(Book book)
     {
-        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
+        book.IsAvailable = true;
+        
+        return await _repository.SaveAsync();
+    }
 
-        book.Available = available;
-
+    public async Task<int> SetAvailable(Book book, bool availability)
+    {
+        book.IsAvailable = availability;
+        
         return await _repository.SaveAsync();
     }
 }

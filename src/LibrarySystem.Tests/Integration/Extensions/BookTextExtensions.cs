@@ -13,7 +13,7 @@ public static class BookTestExtensions
         .RuleFor(b => b.Description, f => f.Lorem.Paragraph())
         .RuleFor(b => b.PagesCount, f => f.Random.Int(100, 1000))
         .RuleFor(b => b.PublishedDate, f => f.Date.PastOffset())
-        .RuleFor(b => b.Available , true)
+        .RuleFor(b => b.IsAvailable , true)
         .RuleFor(b => b.CoverPicture, f => f.Internet.Url());
 
     public static Book WithFakeData(this Book book)
@@ -31,7 +31,7 @@ public static class BookTestExtensions
             Description = book.Description,
             PagesCount = book.PagesCount,
             PublishedDate = book.PublishedDate,
-            Available = book.Available,
+            Available = book.IsAvailable,
             CoverPicture = book.CoverPicture,
         };
     }
@@ -46,7 +46,7 @@ public static class BookTestExtensions
             Description = book.Description,
             PagesCount = book.PagesCount,
             PublishedDate = book.PublishedDate,
-            Available = book.Available,
+            Available = book.IsAvailable,
             CoverPicture = book.CoverPicture,
             AuthorIds = authorIds,
             GenreIds = genreIds,

@@ -69,7 +69,7 @@ public class BorrowControllerTests
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
         content.Id.Should().Be(book.Id);
-        content.Available.Should().Be(false);
+        content.IsAvailable.Should().Be(false);
     }
 
     [Fact]
@@ -103,7 +103,7 @@ public class BorrowControllerTests
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
         content.Id.Should().Be(book.Id);
-        content.Available.Should().Be(false);
+        content.IsAvailable.Should().Be(false);
 
         var response = await client.PostAsJsonAsync("/api/borrow", borrow2.ToCreateBorrowDto());
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Conflict);
@@ -274,7 +274,7 @@ public class BorrowControllerTests
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
         content1.Id.Should().Be(book.Id);
-        content1.Available.Should().Be(false);
+        content1.IsAvailable.Should().Be(false);
 
         var get2 = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -291,7 +291,7 @@ public class BorrowControllerTests
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         var content3 = await get3.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
         content3.Id.Should().Be(book.Id);
-        content3.Available.Should().Be(true);
+        content3.IsAvailable.Should().Be(true);
 
         var get4 = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
         get4.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

@@ -162,9 +162,10 @@ public class BookControllerTests
             Title = "test_test_test",
             Authors = [author1.ToDto(), author2.ToDto(), author3.ToDto()],
             Genres = [genre3.ToDto()],
+            Availability = -1,
         };
 
-        var response = await client.PutAsJsonAsync(string.Format("/api/book/{0}?available=-1", book.Id), updateDto);
+        var response = await client.PutAsJsonAsync(string.Format("/api/book/{0}", book.Id), updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));

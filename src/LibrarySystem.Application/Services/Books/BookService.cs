@@ -84,6 +84,7 @@ public class BookService : IBookService
         var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
 
         var title = updateBookDto.Title;
+        var availability = updateBookDto.Availability;
         var description = updateBookDto.Description;
         var pages = updateBookDto.PagesCount;
         var published = updateBookDto.PublishedDate;
@@ -125,6 +126,11 @@ public class BookService : IBookService
 
             // Handle genres
             await _associations.AssignGenresAsync(genres.Select(g => g.Id), book);
+        }
+        if (availability != 0)
+        {
+            if (availability == 1) book.IsAvailable = true;
+            if (availability == -1) book.IsAvailable = false;
         }
 
         return await _repository.SaveAsync();

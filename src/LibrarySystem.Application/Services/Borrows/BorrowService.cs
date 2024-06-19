@@ -18,7 +18,7 @@ public class BorrowService : IBorrowService
     public async Task<Borrow> Create(CreateBorrowDto createBorrowDto)
     {
         var book = await _repository.Book.Get(createBorrowDto.BookId) ?? throw new BookNotFoundException(createBorrowDto.BookId);
-        if (!book.Available) // if the book is already borrowed throw an exception
+        if (!book.IsAvailable) // if the book is already borrowed throw an exception
         {
             throw new ConflictException($"The book with id: {book.Id} is already borrowed.");
         }
@@ -32,12 +32,9 @@ public class BorrowService : IBorrowService
             BookId = book.Id,
             UserId = user.Id,
             BorrowDate = DateTimeOffset.UtcNow,
-            BorrowDue = DateTimeOffset.UtcNow.AddMonths(1),
-            Returned = false,
+            DueDate = DateTimeOffset.UtcNow.AddMonths(1),
+            IsReturned = false,
         };
-
-        // set the availability of the book to false -> borrowed
-        book.Available = false;
 
         _repository.Borrow.Create(borrow);
         await _repository.SaveAsync();
@@ -66,29 +63,16 @@ public class BorrowService : IBorrowService
         return borrows;
     }
 
-    public async Task<int> Return(Borrow borrow)
+    public async Task<int> SetIsReturned(Borrow borrow)
     {
-        var book = await _repository.Book.Get(borrow.BookId) ?? throw new BookNotFoundException(borrow.BookId);
+        borrow.IsReturned = true;
 
-        if (book.Available) // if the book isn't borrowed throw an exception
-        {
-            throw new ConflictException($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
-        }
+        return await _repository.SaveAsync();
+    }
 
-        if (borrow.Returned)
-        {
-            throw new BadRequestException($"The borrow record for book ID: {book.Id} is already closed. This book has already been returned.");
-        }
-
-        // check if it is past the due date
-        if (DateTimeOffset.UtcNow > borrow.BorrowDue)
-        {
-            throw new ConflictException($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.BorrowDue}). Please contact the library for assistance.");
-        }
-
-        // set the availability of the book back to true -> free to borrow
-        book.Available = true;
-        borrow.Returned = true;
+    public async Task<int> SetIsReturned(Borrow borrow, bool returned)
+    {
+        borrow.IsReturned = returned;
 
         return await _repository.SaveAsync();
     }

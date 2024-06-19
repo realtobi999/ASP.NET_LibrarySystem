@@ -9,5 +9,6 @@ public interface IBorrowService
     Task<Borrow> Get(Guid id);
     Task<Borrow> Get(Guid bookId, Guid userId);
     Task<Borrow> Create(CreateBorrowDto createBorrowDto);
-    Task<int> Return(Borrow borrow);
+    Task<int> SetIsReturned(Borrow borrow);
+    Task<int> SetIsReturned(Borrow borrow, bool returned);
 }

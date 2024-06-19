@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Contracts;
+﻿using System.Security.Claims;
+using LibrarySystem.Application.Contracts;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Borrows;
@@ -32,15 +33,15 @@ public class BorrowController : ControllerBase
 
         if (userId != Guid.Empty)
             borrows = borrows.Where(b => b.UserId == userId);
-            
+
         if (active)
-            borrows = borrows.Where(b => !b.Returned);
+            borrows = borrows.Where(b => !b.IsReturned);
 
         if (offset > 0)
             borrows = borrows.Skip(offset);
-            
+
         if (limit > 0)
-            borrows = borrows.Take(limit); 
+            borrows = borrows.Take(limit);
 
         return Ok(borrows.Select(b => b.ToDto()));
     }
@@ -58,6 +59,10 @@ public class BorrowController : ControllerBase
     {
         var borrow = await _service.Borrow.Create(createBorrowDto);
 
+        // set the book unavailable
+        var book = await _service.Book.Get(borrow.BookId);
+        _ = _service.Book.SetAvailable(book, false);
+
         return Created(string.Format("/api/borrow/{0}", borrow.Id), null);
     }
 
@@ -65,23 +70,35 @@ public class BorrowController : ControllerBase
     public async Task<IActionResult> ReturnBorrow(Guid borrowId)
     {
         var borrow = await _service.Borrow.Get(borrowId);
+        var book = await _service.Book.Get(borrow.BookId);
 
-        // extract the jwt token to get the user id from the request
-        var token = Jwt.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
-        var payload = Jwt.ParsePayload(token);
-        var tokenUserId = payload.FirstOrDefault(c => c.Type.Equals("USERID", StringComparison.CurrentCultureIgnoreCase))?.Value;
+        // extract the content of the JWT token payload
+        var jwtToken = Jwt.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
+        var userIdFromToken = Jwt.ParseFromPayload(jwtToken, "UserId");
+        var userRole = Jwt.ParseFromPayload(jwtToken, ClaimTypes.Role);
 
-        // match the user id of the borrow and from the request
-        if (borrow.UserId.ToString() != tokenUserId)
+        // match the user ID of the borrow and from the request
+        if (borrow.UserId.ToString() != userIdFromToken)
         {
             throw new NotAuthorizedException("You are not authorized to return this book.");
         }
 
-        var affected = await _service.Borrow.Return(borrow);
-        
-        if (affected == 0)
-            throw new ZeroRowsAffectedException();
-         
+        if (borrow.IsReturned)
+        {
+            throw new BadRequestException($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
+        }
+        if (book.IsAvailable) 
+        {
+            throw new ConflictException($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
+        }
+        if (DateTimeOffset.UtcNow > borrow.DueDate && userRole != "Employee") // this role check enables the librarians to return the book even if it's past due
+        {
+            throw new ConflictException($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
+        }
+
+        _ = _service.Borrow.SetIsReturned(borrow);
+        _ = _service.Book.SetAvailable(book);
+
         return Ok();
     }
 }

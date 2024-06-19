@@ -8,6 +8,6 @@ public class BorrowDto
     public Guid BookId { get; set; }
     public Guid UserId { get; set; }
     public DateTimeOffset BorrowDate { get; set; }
-    public DateTimeOffset BorrowDue { get; set; }
-    public bool Returned { get; set; }
+    public DateTimeOffset DueDate { get; set; }
+    public bool IsReturned { get; set; }
 }

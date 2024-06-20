@@ -1,9 +1,10 @@
+using System.Net.Mail;
 using LibrarySystem.Application.Contracts;
 using LibrarySystem.Application.Factories;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Interfaces;
+using LibrarySystem.EmailService;
 using LibrarySystem.Presentation.Extensions;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 public class Program
 {
@@ -24,9 +25,13 @@ public class Program
 
             var jwt = JwtFactory.CreateInstance(builder.Configuration);
             builder.Services.AddSingleton<IJwt>(p => jwt);
-            
+
+            var SMPT = SmtpFactory.CreateInstance(builder.Configuration);
+            builder.Services.AddSingleton<SmtpClient>(p => SMPT);
+
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
             builder.Services.AddScoped<IBookAssociations, BookAssociations>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
             builder.Services.ConfigureJwtAuthentication(jwt);
 

@@ -4,6 +4,7 @@ using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
@@ -20,10 +21,14 @@ PUT     /api/borrow/{borrow_id}/return
 public class BorrowController : ControllerBase
 {
     private readonly IServiceManager _service;
+    private readonly IEmailSender _email;
+    private readonly IMessageBuilder _messageBuilder;
 
-    public BorrowController(IServiceManager service)
+    public BorrowController(IServiceManager service, IEmailSender email, IMessageBuilder messageBuilder)
     {
         _service = service;
+        _email = email;
+        _messageBuilder = messageBuilder;
     }
 
     [HttpGet("api/borrow")]
@@ -98,6 +103,15 @@ public class BorrowController : ControllerBase
 
         _ = _service.Borrow.SetIsReturned(borrow);
         _ = _service.Book.SetAvailable(book);
+
+        var user = await _service.User.Get(borrow.UserId);
+        var message = _messageBuilder.BuildBookReturnMessage(user.Email!, new ReturnBookMessageDto{
+            Username = user.Username!,
+            BookTitle = book.Title!,
+            BookISBN = book.ISBN!
+        });
+
+        _email.SendEmail(message);
 
         return Ok();
     }

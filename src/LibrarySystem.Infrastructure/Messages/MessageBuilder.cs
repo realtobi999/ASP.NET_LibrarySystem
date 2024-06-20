@@ -19,6 +19,16 @@ public class MessageBuilder : IMessageBuilder
         _sender = _configuration.GetSection("SMTP:Username").Value ?? throw new NullReferenceException();
     }
 
+    public MailMessage BuildBookReturnMessage(string toEmail, ReturnBookMessageDto dto)
+    {
+        var message = BuildBaseMessage(toEmail);
+
+        message.Subject = string.Format("{0} - Successfully returned!", dto.BookTitle);
+        message.Body = AttachHtml("book_return_message.html", dto);
+
+        return message;
+    }
+
     private MailMessage BuildBaseMessage(string toEmail)
     {
         var message = new MailMessage
@@ -33,7 +43,7 @@ public class MessageBuilder : IMessageBuilder
 
     private static string AttachHtml(string fileName, object model)
     {
-        var filePath = string.Format("{0}/LibrarySystem.Infrastructure/Messages/Html/{1}", DirectoryExtensions.GetProjectSourceDirectory(), fileName); 
+        var filePath = string.Format("{0}/LibrarySystem.Infrastructure/Messages/Html/{1}", DirectoryExtensions.GetProjectSourceDirectory(), fileName);
 
         if (!File.Exists(filePath))
         {

@@ -1,7 +1,10 @@
 ﻿using System.Net.Mail;
+using LibrarySystem.Domain;
+using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Extensions;
 using LibrarySystem.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
-using RazorEngine.Templating;
+using RazorLight;
 
 namespace LibrarySystem.Infrastructure.Messages;
 
@@ -28,15 +31,24 @@ public class MessageBuilder : IMessageBuilder
         return message;
     }
 
-    private void AttachHtml(MailMessage message, string fileName, object model)
+    private static string AttachHtml(string fileName, object model)
     {
-        using var stream = GetType().Assembly.GetManifestResourceStream(fileName) ?? throw new InvalidOperationException();
-        using var reader = new StreamReader(stream);
+        var filePath = string.Format("{0}/LibrarySystem.Infrastructure/Messages/Html/{1}", DirectoryExtensions.GetProjectSourceDirectory(), fileName); 
 
-        var html = reader.ReadToEnd();
-        var engine = RazorEngineService.Create();
-        var body = engine.RunCompile(html, Guid.NewGuid().ToString(), typeof(object), model);
+        if (!File.Exists(filePath))
+        {
+            throw new HtmlTemplateNotFoundException(filePath);
+        }
 
-        message.Body = body;
+        var html = File.ReadAllText(filePath);
+
+        var engine = new RazorLightEngineBuilder()
+                      .UseFileSystemProject(Path.GetDirectoryName(filePath))
+                      .UseMemoryCachingProvider()
+                      .Build();
+
+        var body = engine.CompileRenderStringAsync(Guid.NewGuid().ToString(), html, model).Result;
+
+        return body;
     }
 }

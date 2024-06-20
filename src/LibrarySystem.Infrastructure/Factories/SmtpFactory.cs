@@ -2,7 +2,7 @@
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 
-namespace LibrarySystem.Application.Factories;
+namespace LibrarySystem.Infrastructure.Factories;
 
 public class SmtpFactory
 {

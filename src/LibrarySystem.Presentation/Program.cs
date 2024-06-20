@@ -4,6 +4,8 @@ using LibrarySystem.Application.Factories;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.EmailService;
+using LibrarySystem.Infrastructure.Factories;
+using LibrarySystem.Infrastructure.Messages;
 using LibrarySystem.Presentation.Extensions;
 
 public class Program
@@ -32,6 +34,7 @@ public class Program
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
             builder.Services.AddScoped<IBookAssociations, BookAssociations>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IMessageBuilder, MessageBuilder>();
 
             builder.Services.ConfigureJwtAuthentication(jwt);
 

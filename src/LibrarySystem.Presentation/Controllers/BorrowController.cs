@@ -3,6 +3,7 @@ using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Borrows;
+using LibrarySystem.Domain.Dtos.Messages;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -65,6 +66,16 @@ public class BorrowController : ControllerBase
         // set the book unavailable
         var book = await _service.Book.Get(borrow.BookId);
         _ = _service.Book.SetAvailable(book, false);
+
+        // send confirmation email
+        var user = await _service.User.Get(createBorrowDto.UserId);
+        _email.Borrow.SendBorrowBookEmail(new BorrowBookMessageDto{
+            UserEmail = user.Email!,
+            Username = user.Username!,
+            BookTitle = book.Title!,
+            BookISBN = book.ISBN!,
+            BorrowDueDate = borrow.DueDate.ToString("dd-MM-yyyy")
+        });
 
         return Created(string.Format("/api/borrow/{0}", borrow.Id), null);
     }

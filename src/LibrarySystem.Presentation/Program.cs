@@ -1,5 +1,4 @@
 using System.Net.Mail;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Application.Factories;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Interfaces;

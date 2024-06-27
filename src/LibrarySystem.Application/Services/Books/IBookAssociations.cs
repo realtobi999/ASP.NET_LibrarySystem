@@ -1,8 +1,8 @@
 ﻿using LibrarySystem.Domain.Entities;
 
-namespace LibrarySystem.Application.Interfaces;
+namespace LibrarySystem.Application.Services.Books;
 
-public interface IBookAssociations // TODO: přehodit do Services.Books 
+public interface IBookAssociations 
 {
     public Task AssignAuthorsAsync(IEnumerable<Guid> authorIds, Book book);
     public Task AssignGenresAsync(IEnumerable<Guid> genreIds, Book book);

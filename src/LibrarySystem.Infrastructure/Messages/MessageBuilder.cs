@@ -8,7 +8,7 @@ using RazorLight;
 
 namespace LibrarySystem.Infrastructure.Messages;
 
-public class MessageBuilder : IMessageBuilder
+public class MessageBuilder
 {
     private readonly IConfiguration _configuration;
     private readonly string _sender;
@@ -19,17 +19,7 @@ public class MessageBuilder : IMessageBuilder
         _sender = _configuration.GetSection("SMTP:Username").Value ?? throw new NullReferenceException();
     }
 
-    public MailMessage BuildBookReturnMessage(string toEmail, ReturnBookMessageDto dto)
-    {
-        var message = BuildBaseMessage(toEmail);
-
-        message.Subject = string.Format("{0} - Successfully returned!", dto.BookTitle);
-        message.Body = AttachHtml("book_return_message.html", dto);
-
-        return message;
-    }
-
-    private MailMessage BuildBaseMessage(string toEmail)
+    protected MailMessage BuildBaseMessage(string toEmail)
     {
         var message = new MailMessage
         {
@@ -41,7 +31,7 @@ public class MessageBuilder : IMessageBuilder
         return message;
     }
 
-    private static string AttachHtml(string fileName, object model)
+    protected static string AttachHtml(string fileName, object model)
     {
         var filePath = string.Format("{0}/LibrarySystem.Infrastructure/Messages/Html/{1}", DirectoryExtensions.GetProjectSourceDirectory(), fileName);
 

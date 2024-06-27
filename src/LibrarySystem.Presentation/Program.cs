@@ -27,17 +27,17 @@ public class Program
 
             var jwt = JwtFactory.CreateInstance(builder.Configuration);
             builder.Services.AddSingleton<IJwt>(p => jwt);
-
-            var SMPT = SmtpFactory.CreateInstance(builder.Configuration);
-            builder.Services.AddSingleton<SmtpClient>(p => SMPT);
-
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-            builder.Services.AddScoped<IBookAssociations, BookAssociations>();
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddScoped<IMessageBuilder, MessageBuilder>();
-
             builder.Services.ConfigureJwtAuthentication(jwt);
 
+            // email clients
+            var SMPT = SmtpFactory.CreateInstance(builder.Configuration);
+            builder.Services.AddSingleton<SmtpClient>(p => SMPT);
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.ConfigureMessageBuilders();
+
+
+            builder.Services.AddScoped<IBookAssociations, BookAssociations>();
             // user authorization
             builder.Services.AddAuthorization(options =>
             {

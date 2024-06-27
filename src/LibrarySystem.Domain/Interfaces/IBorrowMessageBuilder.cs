@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Interfaces;
 
-public interface IMessageBuilder
+public interface IBorrowMessageBuilder
 {
     MailMessage BuildBookReturnMessage(string toEmail, ReturnBookMessageDto dto);
 }

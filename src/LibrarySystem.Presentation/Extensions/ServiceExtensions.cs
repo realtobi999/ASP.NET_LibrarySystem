@@ -6,6 +6,7 @@ using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Infrastructure;
 using LibrarySystem.Infrastructure.Factories;
+using LibrarySystem.Infrastructure.Messages.Borrows;
 using LibrarySystem.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -62,5 +63,10 @@ public static class ServiceExtensions
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key))
             };
         });
+    }
+
+    public static void ConfigureMessageBuilders(this IServiceCollection services)
+    {
+        services.AddSingleton<IBorrowMessageBuilder, BorrowMessageBuilder>();
     }
 }

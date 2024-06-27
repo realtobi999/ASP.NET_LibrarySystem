@@ -22,13 +22,13 @@ public class BorrowController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IEmailSender _email;
-    private readonly IMessageBuilder _messageBuilder;
+    private readonly IBorrowMessageBuilder _messages;
 
-    public BorrowController(IServiceManager service, IEmailSender email, IMessageBuilder messageBuilder)
+    public BorrowController(IServiceManager service, IEmailSender email, IBorrowMessageBuilder messages)
     {
         _service = service;
         _email = email;
-        _messageBuilder = messageBuilder;
+        _messages = messages;
     }
 
     [HttpGet("api/borrow")]
@@ -80,7 +80,7 @@ public class BorrowController : ControllerBase
         // extract the content of the JWT token payload
         var jwtToken = Jwt.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
         var userIdFromToken = Jwt.ParseFromPayload(jwtToken, "UserId");
-        var userRole = Jwt.ParseFromPayload(jwtToken, ClaimTypes.Role);
+        var role = Jwt.ParseFromPayload(jwtToken, ClaimTypes.Role);
 
         // match the user ID of the borrow and from the request
         if (borrow.UserId.ToString() != userIdFromToken)
@@ -96,7 +96,7 @@ public class BorrowController : ControllerBase
         {
             throw new ConflictException($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
         }
-        if (DateTimeOffset.UtcNow > borrow.DueDate && userRole != "Employee") // this role check enables the librarians to return the book even if it's past due
+        if (DateTimeOffset.UtcNow > borrow.DueDate && role != "Employee") // this role check enables the librarians to return the book even if it's past due
         {
             throw new ConflictException($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
         }
@@ -104,8 +104,9 @@ public class BorrowController : ControllerBase
         _ = _service.Borrow.SetIsReturned(borrow);
         _ = _service.Book.SetAvailable(book);
 
+        // send confirmation email
         var user = await _service.User.Get(borrow.UserId);
-        var message = _messageBuilder.BuildBookReturnMessage(user.Email!, new ReturnBookMessageDto{
+        var message = _messages.BuildBookReturnMessage(user.Email!, new ReturnBookMessageDto{
             Username = user.Username!,
             BookTitle = book.Title!,
             BookISBN = book.ISBN!

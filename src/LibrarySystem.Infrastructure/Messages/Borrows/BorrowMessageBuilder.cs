@@ -7,9 +7,9 @@ namespace LibrarySystem.Infrastructure.Messages.Borrows;
 
 public class BorrowMessageBuilder(IConfiguration configuration) : MessageBuilder(configuration), IBorrowMessageBuilder
 {
-    public MailMessage BuildBookReturnMessage(string toEmail, ReturnBookMessageDto dto)
+    public MailMessage BuildBookReturnMessage(ReturnBookMessageDto dto)
     {
-        var message = BuildBaseMessage(toEmail);
+        var message = BuildBaseMessage(dto.UserEmail);
 
         message.Subject = string.Format("{0} - Successfully returned!", dto.BookTitle);
         message.Body = AttachHtml("book_return_message.html", dto);

@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using LibrarySystem.Application.Contracts;
+using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Borrows;
@@ -21,14 +21,12 @@ PUT     /api/borrow/{borrow_id}/return
 public class BorrowController : ControllerBase
 {
     private readonly IServiceManager _service;
-    private readonly IEmailSender _email;
-    private readonly IBorrowMessageBuilder _messages;
+    private readonly IEmailManager _email;
 
-    public BorrowController(IServiceManager service, IEmailSender email, IBorrowMessageBuilder messages)
+    public BorrowController(IServiceManager service, IEmailManager email)
     {
         _service = service;
         _email = email;
-        _messages = messages;
     }
 
     [HttpGet("api/borrow")]
@@ -104,15 +102,16 @@ public class BorrowController : ControllerBase
         _ = _service.Borrow.SetIsReturned(borrow);
         _ = _service.Book.SetAvailable(book);
 
+
         // send confirmation email
         var user = await _service.User.Get(borrow.UserId);
-        var message = _messages.BuildBookReturnMessage(user.Email!, new ReturnBookMessageDto{
+        
+        _email.Borrow.SendReturnBookEmail(new ReturnBookMessageDto{
+            UserEmail = user.Email!,
             Username = user.Username!,
             BookTitle = book.Title!,
             BookISBN = book.ISBN!
         });
-
-        _email.SendEmail(message);
 
         return Ok();
     }

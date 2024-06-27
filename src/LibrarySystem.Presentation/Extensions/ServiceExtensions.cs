@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using LibrarySystem.Application.Contracts;
+using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Application.Factories;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain.Interfaces;
@@ -11,6 +11,7 @@ using LibrarySystem.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using LibrarySystem.Application.Emails;
 
 namespace LibrarySystem.Presentation.Extensions;
 
@@ -69,4 +70,10 @@ public static class ServiceExtensions
     {
         services.AddSingleton<IBorrowMessageBuilder, BorrowMessageBuilder>();
     }
+
+    public static void ConfigureEmailManager(this IServiceCollection services)
+    {
+        services.AddScoped<IEmailFactory, EmailFactory>();
+        services.AddScoped<IEmailManager, EmailManager>();
+    } 
 }

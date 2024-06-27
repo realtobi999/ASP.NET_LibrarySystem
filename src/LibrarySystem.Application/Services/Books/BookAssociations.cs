@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Contracts;
+﻿using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Exceptions;

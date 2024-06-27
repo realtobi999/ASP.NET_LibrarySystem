@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Contracts.Services;
+﻿using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;

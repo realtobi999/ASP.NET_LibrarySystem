@@ -35,6 +35,7 @@ public class Program
             builder.Services.AddSingleton<SmtpClient>(p => SMPT);
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.ConfigureMessageBuilders();
+            builder.Services.ConfigureEmailManager();
 
 
             builder.Services.AddScoped<IBookAssociations, BookAssociations>();

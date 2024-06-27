@@ -2,7 +2,7 @@
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
-namespace LibrarySystem.Application.Contracts.Services;
+namespace LibrarySystem.Application.Interfaces.Services;
 
 public interface IGenreService
 {

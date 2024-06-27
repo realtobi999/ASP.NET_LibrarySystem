@@ -2,7 +2,7 @@
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
 
-namespace LibrarySystem.Application.Contracts.Services;
+namespace LibrarySystem.Application.Interfaces.Services;
 
 public interface IAuthorService
 {

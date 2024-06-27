@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Contracts;
+﻿using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;

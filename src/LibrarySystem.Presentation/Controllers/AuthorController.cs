@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Contracts;
+﻿using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Exceptions;

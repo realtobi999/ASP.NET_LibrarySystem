@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Contracts.Services;
+﻿using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;

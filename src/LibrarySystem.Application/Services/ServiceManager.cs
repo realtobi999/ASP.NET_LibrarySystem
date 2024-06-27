@@ -1,5 +1,5 @@
-﻿using LibrarySystem.Application.Contracts;
-using LibrarySystem.Application.Contracts.Services;
+﻿using LibrarySystem.Application.Interfaces;
+using LibrarySystem.Application.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services;
 

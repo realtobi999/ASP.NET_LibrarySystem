@@ -1,5 +1,5 @@
-﻿using LibrarySystem.Application.Contracts;
-using LibrarySystem.Application.Contracts.Services;
+﻿using LibrarySystem.Application.Interfaces;
+using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Application.Services.Authors;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Application.Services.Borrows;

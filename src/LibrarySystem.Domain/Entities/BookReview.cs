@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LibrarySystem.Domain.Dtos.Reviews;
 
 namespace LibrarySystem.Domain.Entities;
 
@@ -26,4 +27,17 @@ public class BookReview
     // relationships
 
     public Book? Book { get; set; }
+
+    public BookReviewDto ToDto()
+    {
+        return new BookReviewDto
+        {
+            Id = this.Id,
+            BookId = this.BookId,
+            UserId = this.UserId,
+            Rating = this.Rating,
+            Text = this.Text,
+            CreatedAt = this.CreatedAt       
+        };
+    }
 }

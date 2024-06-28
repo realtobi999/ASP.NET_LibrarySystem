@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Dtos.Genres;
+using LibrarySystem.Domain.Dtos.Reviews;
 
 namespace LibrarySystem.Domain.Dtos.Books;
 
@@ -15,4 +16,5 @@ public record class BookDto
     public string? CoverPicture { get; set; }
     public List<AuthorDto> Authors { get; set; } = [];
     public List<GenreDto> Genres { get; set; } = [];
+    public List<BookReviewDto> Reviews { get; set; } = [];
 }

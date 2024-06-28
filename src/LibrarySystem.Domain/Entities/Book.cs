@@ -52,6 +52,9 @@ public class Book
                         .Select(bg => bg.Genre!.ToDto())
                         .ToList();
 
+        var reviews = this.BookReviews.Select(br => br.ToDto())
+                                      .ToList();
+                                      
         return new BookDto
         {
             Id = this.Id,
@@ -64,6 +67,7 @@ public class Book
             CoverPicture = this.CoverPicture,
             Authors = authors,
             Genres = genres,
+            Reviews = reviews,
         };
     } 
 }

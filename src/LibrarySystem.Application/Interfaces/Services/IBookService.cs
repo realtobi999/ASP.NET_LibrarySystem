@@ -5,9 +5,9 @@ namespace LibrarySystem.Application.Interfaces.Services;
 
 public interface IBookService
 {
-    Task<IEnumerable<Book>> GetAll();
-    Task<Book> Get(Guid id);
-    Task<Book> Get(string isbn);
+    Task<IEnumerable<Book>> GetAll(bool relations = true);
+    Task<Book> Get(Guid id, bool relations = true);
+    Task<Book> Get(string isbn, bool relations = true);
     Task<Book> Create(CreateBookDto createBookDto);
     Task<int> Update(Guid id, UpdateBookDto updateBookDto);
     Task<int> SetAvailable(Book book); 

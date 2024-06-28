@@ -30,5 +30,6 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
         // relationships
         modelBuilder.ConfigureBookAuthorRelationship(); 
         modelBuilder.ConfigureBookGenreRelationship();
+        modelBuilder.ConfigureBookReviewsRelationShip();
     }
 }

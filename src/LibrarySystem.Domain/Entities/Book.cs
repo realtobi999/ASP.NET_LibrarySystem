@@ -32,12 +32,15 @@ public class Book
     [Required, Column("cover_photo")]
     public string? CoverPicture { get; set; }
 
-    // relationship
+    // relationships
 
     [JsonIgnore]
     public ICollection<BookAuthor> BookAuthors { get; set; } = [];
     [JsonIgnore]
     public ICollection<BookGenre> BookGenres { get; set; } = [];
+
+    [JsonIgnore]
+    public ICollection<BookReview> BookReviews { get; set; } = [];
 
     public BookDto ToDto()
     {

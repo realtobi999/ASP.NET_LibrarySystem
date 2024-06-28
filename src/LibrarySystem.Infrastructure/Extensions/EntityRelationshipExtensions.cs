@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Domain.Entities.Relationships;
+﻿using LibrarySystem.Domain.Entities;
+using LibrarySystem.Domain.Entities.Relationships;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Infrastructure.Extensions;
@@ -37,5 +38,14 @@ public static class EntityRelationshipExtensions
             .HasOne(bg => bg.Genre)
             .WithMany()
             .HasForeignKey(bg => bg.GenreId);
+    }
+
+    public static void ConfigureBookReviewsRelationShip(this ModelBuilder builder)
+    {
+        // configure one-to-many relationship between Book and BookReview
+        builder.Entity<Book>()
+            .HasMany(b => b.BookReviews)
+            .WithOne(br => br.Book)
+            .HasForeignKey(br => br.BookId);
     }
 }

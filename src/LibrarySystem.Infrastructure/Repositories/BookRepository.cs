@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Domain.Entities;
+﻿using System.Net.Http.Headers;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,31 +26,32 @@ public class BookRepository : IBookRepository
 
     public async Task<Book?> Get(Guid id)
     {
-        return await _context.Books
-            .Include(b => b.BookAuthors)
-                .ThenInclude(ba => ba.Author)
-            .Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
-            .SingleOrDefaultAsync(h => h.Id == id);
+        return await GetBooksQuery(true).SingleOrDefaultAsync(b => b.Id == id); 
     }
 
     public async Task<IEnumerable<Book>> GetAll()
     {
-        return await _context.Books
-            .Include(b => b.BookAuthors)
-                .ThenInclude(ba => ba.Author)
-            .Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
-            .ToListAsync();
+        return await GetBooksQuery(true).ToListAsync(); 
     }
 
     public async Task<Book?> Get(string isbn)
     {
-        return await _context.Books
-            .Include(b => b.BookAuthors)
-                .ThenInclude(ba => ba.Author)
-            .Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
-            .SingleOrDefaultAsync(h => h.ISBN == isbn);
+        return await GetBooksQuery(true).SingleOrDefaultAsync(b => b.ISBN == isbn);
+    }
+
+    private IQueryable<Book> GetBooksQuery(bool includeRelations = true)
+    {
+        var query = _context.Books.AsQueryable();
+
+        if (includeRelations)
+        {
+            query = query.Include(b => b.BookAuthors)
+                             .ThenInclude(ba => ba.Author)
+                         .Include(b => b.BookGenres)
+                            .ThenInclude(bg => bg.Genre)
+                         .Include(b => b.BookReviews);
+        }
+
+        return query;
     }
 }

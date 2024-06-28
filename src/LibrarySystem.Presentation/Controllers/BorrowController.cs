@@ -67,15 +67,15 @@ public class BorrowController : ControllerBase
         var book = await _service.Book.Get(borrow.BookId);
         _ = _service.Book.SetAvailable(book, false);
 
-        // send confirmation email
-        var user = await _service.User.Get(createBorrowDto.UserId);
-        _email.Borrow.SendBorrowBookEmail(new BorrowBookMessageDto{
-            UserEmail = user.Email!,
-            Username = user.Username!,
-            BookTitle = book.Title!,
-            BookISBN = book.ISBN!,
-            BorrowDueDate = borrow.DueDate.ToString("dd-MM-yyyy")
-        });
+        // send confirmation email - FOR PRODUCTION ONLY
+        // var user = await _service.User.Get(createBorrowDto.UserId);
+        // _email.Borrow.SendBorrowBookEmail(new BorrowBookMessageDto{
+        //     UserEmail = user.Email!,
+        //     Username = user.Username!,
+        //     BookTitle = book.Title!,
+        //     BookISBN = book.ISBN!,
+        //     BorrowDueDate = borrow.DueDate.ToString("dd-MM-yyyy")
+        // });
 
         return Created(string.Format("/api/borrow/{0}", borrow.Id), null);
     }
@@ -115,14 +115,13 @@ public class BorrowController : ControllerBase
 
 
         // send confirmation email
-        var user = await _service.User.Get(borrow.UserId);
-        
-        _email.Borrow.SendReturnBookEmail(new ReturnBookMessageDto{
-            UserEmail = user.Email!,
-            Username = user.Username!,
-            BookTitle = book.Title!,
-            BookISBN = book.ISBN!
-        });
+        // var user = await _service.User.Get(borrow.UserId); - FOR PRODUCTION ONLY
+        // _email.Borrow.SendReturnBookEmail(new ReturnBookMessageDto{
+        //     UserEmail = user.Email!,
+        //     Username = user.Username!,
+        //     BookTitle = book.Title!,
+        //     BookISBN = book.ISBN!
+        // });
 
         return Ok();
     }

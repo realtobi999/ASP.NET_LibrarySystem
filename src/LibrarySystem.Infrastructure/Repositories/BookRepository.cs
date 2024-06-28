@@ -24,19 +24,19 @@ public class BookRepository : IBookRepository
         _context.Books.Remove(book);
     }
 
-    public async Task<Book?> Get(Guid id, bool relations = true)
+    public async Task<Book?> Get(Guid id, bool withRelations = true)
     {
-        return await GetBooksQuery(relations).SingleOrDefaultAsync(b => b.Id == id); 
+        return await GetBooksQuery(withRelations).SingleOrDefaultAsync(b => b.Id == id); 
     }
 
-    public async Task<IEnumerable<Book>> GetAll( bool relations = true)
+    public async Task<IEnumerable<Book>> GetAll( bool withRelations = true)
     {
-        return await GetBooksQuery(relations).ToListAsync(); 
+        return await GetBooksQuery(withRelations).ToListAsync(); 
     }
 
-    public async Task<Book?> Get(string isbn, bool relations = true)
+    public async Task<Book?> Get(string isbn, bool withRelations = true)
     {
-        return await GetBooksQuery(relations).SingleOrDefaultAsync(b => b.ISBN == isbn);
+        return await GetBooksQuery(withRelations).SingleOrDefaultAsync(b => b.ISBN == isbn);
     }
 
     private IQueryable<Book> GetBooksQuery(bool includeRelations = true)

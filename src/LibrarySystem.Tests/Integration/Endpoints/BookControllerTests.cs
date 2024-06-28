@@ -9,7 +9,7 @@ using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests;
 
-public class BookControllerTests // TODO: make one huge test that tests all endpoints that are using relations filter
+public class BookControllerTests // TODO: make one huge test that tests all endpoints that are using withRelations filter
 {
     [Fact]
     public async void BookController_CreateBook_Returns201AndLocationHeader()
@@ -118,7 +118,7 @@ public class BookControllerTests // TODO: make one huge test that tests all endp
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/book/{0}?relations=false", book.Id));
+        var response = await client.GetAsync(string.Format("/api/book/{0}?withRelations=false", book.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
@@ -193,7 +193,7 @@ public class BookControllerTests // TODO: make one huge test that tests all endp
         create6.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync("/api/book?relations=false");
+        var response = await client.GetAsync("/api/book?withRelations=false");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new DeserializationException();

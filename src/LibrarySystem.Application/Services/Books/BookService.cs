@@ -57,23 +57,23 @@ public class BookService : IBookService
         return await _repository.SaveAsync();
     }
 
-    public async Task<Book> Get(Guid id, bool relations = true)
+    public async Task<Book> Get(Guid id, bool withRelations = true)
     {
-        var book = await _repository.Book.Get(id, relations) ?? throw new BookNotFoundException(id);
+        var book = await _repository.Book.Get(id, withRelations) ?? throw new BookNotFoundException(id);
 
         return book;
     }
 
-    public async Task<IEnumerable<Book>> GetAll(bool relations = true)
+    public async Task<IEnumerable<Book>> GetAll(bool withRelations = true)
     {
-        var books = await _repository.Book.GetAll(relations);
+        var books = await _repository.Book.GetAll(withRelations);
 
         return books;
     }
 
-    public async Task<Book> Get(string isbn, bool relations = true)
+    public async Task<Book> Get(string isbn, bool withRelations = true)
     {
-        var book = await _repository.Book.Get(isbn, relations) ?? throw new NotFoundException($"The book with isbn: {isbn} doesnt exist.");
+        var book = await _repository.Book.Get(isbn, withRelations) ?? throw new NotFoundException($"The book with isbn: {isbn} doesnt exist.");
 
         return book; 
     }

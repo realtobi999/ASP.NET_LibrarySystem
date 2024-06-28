@@ -10,10 +10,10 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController] 
 /*
 
-GET     /api/book params: limit, offset, authorId, genreId, relations
-GET     /api/book/{book_id} params: relations
-GET     /api/book/isbn/{isbn} params: relations
-GET     /api/book/search/{query} params: limit, offset, authorId, genreId, relations
+GET     /api/book params: limit, offset, authorId, genreId, withRelations
+GET     /api/book/{book_id} params: withRelations
+GET     /api/book/isbn/{isbn} params: withRelations
+GET     /api/book/search/{query} params: limit, offset, authorId, genreId, withRelations
 POST    /api/book
 PUT     /api/book/{book_id}
 DELETE  /api/book/{book_id}
@@ -29,9 +29,9 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("api/book")]
-    public async Task<IActionResult> GetBooks(int limit, int offset, Guid authorId, Guid genreId, bool relations = true)
+    public async Task<IActionResult> GetBooks(int limit, int offset, Guid authorId, Guid genreId, bool withRelations = true)
     {
-        var books = await _service.Book.GetAll(relations);         
+        var books = await _service.Book.GetAll(withRelations);         
 
         if (authorId != Guid.Empty)
             books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId)); 
@@ -49,9 +49,9 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("api/book/search/{query}")]
-    public async Task<IActionResult> SearchBooks(int limit, int offset, Guid authorId, Guid genreId, string query, bool relations = true)
+    public async Task<IActionResult> SearchBooks(int limit, int offset, Guid authorId, Guid genreId, string query, bool withRelations = true)
     {
-        var books = await _service.Book.GetAll(relations);         
+        var books = await _service.Book.GetAll(withRelations);         
 
         if (authorId != Guid.Empty)
             books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId)); 
@@ -72,17 +72,17 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("api/book/{bookId:guid}")]
-    public async Task<IActionResult> GetBook(Guid bookId, bool relations = true)
+    public async Task<IActionResult> GetBook(Guid bookId, bool withRelations = true)
     {
-        var book = await _service.Book.Get(bookId, relations);
+        var book = await _service.Book.Get(bookId, withRelations);
 
         return Ok(book.ToDto());
     }
 
     [HttpGet("api/book/isbn/{isbn}")]
-    public async Task<IActionResult> GetBookByIsbn(string isbn, bool relations = true)
+    public async Task<IActionResult> GetBookByIsbn(string isbn, bool withRelations = true)
     {
-        var book = await _service.Book.Get(isbn, relations);
+        var book = await _service.Book.Get(isbn, withRelations);
 
         return Ok(book.ToDto());
     }

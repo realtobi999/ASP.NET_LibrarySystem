@@ -22,5 +22,7 @@ public class ServiceManager : IServiceManager
 
     public IBookService Book => _factory.CreateBookService();
 
-    public IBorrowService Borrow => _factory.CreateBorrowService(); 
+    public IBorrowService Borrow => _factory.CreateBorrowService();
+
+    public IBookReviewService BookReview => _factory.CreateBookReviewService(); 
 }

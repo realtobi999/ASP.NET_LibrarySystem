@@ -23,7 +23,9 @@ public class RepositoryManager : IRepositoryManager
 
     public IBookRepository Book => _factory.CreateBookRepository();
 
-    public IBorrowRepository Borrow => _factory.CreateBorrowRepository(); 
+    public IBorrowRepository Borrow => _factory.CreateBorrowRepository();
+
+    public IBookReviewRepository BookReview => _factory.CreateBookReviewRepository();
 
     private IBaseRepository _baseRepository => _factory.CreateBaseRepository();
 

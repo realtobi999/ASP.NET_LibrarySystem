@@ -5,6 +5,7 @@ using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Application.Services.Borrows;
 using LibrarySystem.Application.Services.Employees;
 using LibrarySystem.Application.Services.Genres;
+using LibrarySystem.Application.Services.Reviews;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -27,6 +28,11 @@ public class ServiceFactory : IServiceFactory
     public IAuthorService CreateAuthorService()
     {
         return new AuthorService(_repository);
+    }
+
+    public IBookReviewService CreateBookReviewService()
+    {
+        return new BookReviewService(_repository);
     }
 
     public IBookService CreateBookService()

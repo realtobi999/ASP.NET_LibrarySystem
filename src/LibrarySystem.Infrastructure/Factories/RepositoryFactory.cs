@@ -52,4 +52,9 @@ public class RepositoryFactory : IRepositoryFactory
     {
         return new UserRepository(_context);
     }
+
+    public IBookReviewRepository CreateBookReviewRepository()
+    {
+        return new BookReviewRepository(_context);
+    }
 }

@@ -22,7 +22,7 @@ public class BookReview
     public string? Text { get; set; }
 
     [Required, Column("created_at")]
-    public string? CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
     // relationships
 

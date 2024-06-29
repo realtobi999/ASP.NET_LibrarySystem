@@ -46,16 +46,16 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_GetBook_Returns200AndBookWithGenresAndAuthors()
+    public async void BookController_GetBook_Returns200AndBookWithGenresAndAuthorsAndReviews()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var book = new Book().WithFakeData();
-        var token = JwtTestExtensions.Create().Generate([
+        var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
 
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
@@ -74,6 +74,23 @@ public class BookControllerTests
         var create5 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author1.Id, author2.Id], [genre1.Id, genre2.Id]));
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
+        var user = new User().WithFakeData();
+
+        var create6 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create6.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var review = new BookReview().WithFakeData(book, user);
+        var token2 = JwtTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "User"),
+            new Claim("UserId", user.Id.ToString()),
+        ]);
+
+        client.DefaultRequestHeaders.Remove("Authorization");
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+
+        var create7 = await client.PostAsJsonAsync("/api/book/review", review.ToCreateBookReviewDto());
+        create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
         // act & assert
         var response = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -86,6 +103,8 @@ public class BookControllerTests
         content.Genres.Count.Should().Be(2);
         content.Genres.ElementAt(0).Should().BeEquivalentTo(genre1.ToDto());
         content.Genres.ElementAt(1).Should().BeEquivalentTo(genre2.ToDto());
+        content.Reviews.Count.Should().Be(1);
+        content.Reviews.ElementAt(0).Id.Should().Be(review.Id);
     }
 
     [Fact]

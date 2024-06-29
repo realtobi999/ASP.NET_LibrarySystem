@@ -9,5 +9,6 @@ public interface IRepositoryManager
     IAssociationsRepository Associations { get; }
     IBookRepository Book { get; }
     IBorrowRepository Borrow { get; }
+    IBookReviewRepository BookReview { get; }
     Task<int> SaveAsync(); 
 }

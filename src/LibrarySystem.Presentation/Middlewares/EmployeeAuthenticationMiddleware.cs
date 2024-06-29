@@ -1,11 +1,10 @@
 ﻿using LibrarySystem.Application;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
-using LibrarySystem.Domain.Exceptions;
 
-namespace LibrarySystem.Presentation;
+namespace LibrarySystem.Presentation.Middlewares;
 
-public class EmployeeAuthenticationMiddleware
+public class EmployeeAuthenticationMiddleware : AuthenticationMiddlewareBase
 {
     private readonly RequestDelegate _next;
 
@@ -23,28 +22,15 @@ public class EmployeeAuthenticationMiddleware
             return;
         }
 
-        var header = context.Request.Headers.Authorization.FirstOrDefault() ?? throw new BadRequestException("Missing header: Bearer <JWT_TOKEN>");
-        var splitHeader = header.Split(" ");
-        
-        if (splitHeader.Length != 2)
-        {
-            throw new BadRequestException("Bad authorization header format, try: Bearer <JWT_TOKEN>");
-        }
-        if (splitHeader.ElementAt(0).ToUpper() != "BEARER")
-        {
-            throw new BadRequestException("Bad authorization header format, try: Bearer <JWT_TOKEN>");
-        }
+        // parse the jwt token from the request header and get the token
+        var token = Jwt.Parse(context.Request.Headers.Authorization);
+        var tokenEmployeeId = Jwt.ParseFromPayload(token, "EmployeeId");
 
-        var token = splitHeader.ElementAt(1);
-        var payload = Jwt.ParsePayload(token);
+        // try to parse the token from the request - first from route parameter, then from json body
+        var requestEmployeeId = await ExtractKeyFromRouteOrBodyAsync(context, "EmployeeId");
 
-        // get the id from the jwt token
-        var tokenEmployeeId = payload.FirstOrDefault(c => c.Type.ToUpper() == "EMPLOYEEID")?.Value;
-
-        // get the id from the route middleware
-        var routeEmployeeId = context.Request.RouteValues.FirstOrDefault(v => v.Key.ToUpper() == "EMPLOYEEID").Value as string;
-
-        if (tokenEmployeeId != routeEmployeeId)
+        // validate that the id from the token matches the id from the route or body
+        if (tokenEmployeeId != requestEmployeeId)
         {
             throw new NotAuthorizedException("Not Authorized!");
         }

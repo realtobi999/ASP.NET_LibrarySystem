@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
+using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -37,5 +38,29 @@ public class UserAuthenticationMiddlewareTests
 
         var response2 = await client.DeleteAsync(string.Format("/api/user/{0}", user1.Id));
         response2.StatusCode.Should().NotBe(System.Net.HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async void UserAuthenticationMiddleware_Returns401WhenTheIdIsWrongInTheBody()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+        var token = JwtTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "User"),
+            new Claim("UserId", user.Id.ToString()),
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        // act & assert
+        var response = await client.PostAsJsonAsync("/api/book/review", new CreateBookReviewDto{
+            Id = Guid.Empty,
+            BookId = Guid.Empty,
+            UserId = Guid.NewGuid(), // insert bad id
+            Rating = 0,
+            Text = "test",
+        });
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
     }
 }

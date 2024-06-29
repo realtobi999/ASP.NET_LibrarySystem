@@ -1,4 +1,6 @@
-﻿namespace LibrarySystem.Presentation.Extensions;
+﻿using LibrarySystem.Presentation.Middlewares;
+
+namespace LibrarySystem.Presentation.Extensions;
 
 public static class EmployeeMiddlewareExtensions
 {

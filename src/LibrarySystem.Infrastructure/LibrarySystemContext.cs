@@ -12,6 +12,7 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
     public DbSet<Genre> Genres { get; set; }
     public DbSet<BookAuthor> BookAuthor { get; set; }
     public DbSet<BookGenre> BookGenre { get; set; }
+    public DbSet<BookReview> BookReviews { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Employee> Employee { get; set; }
     public DbSet<Borrow> Borrow {get; set; }

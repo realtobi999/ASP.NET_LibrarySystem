@@ -1,5 +1,5 @@
 ﻿using System.Security.Cryptography;
-using LibrarySystem.Domain.Interfaces;
+using LibrarySystem.Domain.Interfaces.Utilities;
 
 public class PasswordHasher : IPasswordHasher
 {

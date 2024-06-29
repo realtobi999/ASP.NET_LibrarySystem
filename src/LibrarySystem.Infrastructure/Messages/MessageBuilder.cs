@@ -1,7 +1,7 @@
 ﻿using System.Net.Mail;
+using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Exceptions;
-using LibrarySystem.Domain.Extensions;
 using LibrarySystem.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using RazorLight;

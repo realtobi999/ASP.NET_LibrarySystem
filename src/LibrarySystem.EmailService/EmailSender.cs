@@ -1,5 +1,5 @@
 ﻿using System.Net.Mail;
-using LibrarySystem.Domain.Interfaces;
+using LibrarySystem.Domain.Interfaces.Emails;
 
 namespace LibrarySystem.EmailService;
 

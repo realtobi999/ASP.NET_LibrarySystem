@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Nodes;
-using LibrarySystem.Application;
+using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Exceptions;

@@ -1,11 +1,11 @@
-﻿using LibrarySystem.Application;
+﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LibrarySystem.Presentation;
+namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
 /*
@@ -33,7 +33,7 @@ public class EmployeeController : ControllerBase
         if (offset > 0)
             employees = employees.Skip(offset);
         if (limit > 0)
-            employees = employees.Take(limit); 
+            employees = employees.Take(limit);
 
         return Ok(employees.Select(e => e.ToDto()));
     }

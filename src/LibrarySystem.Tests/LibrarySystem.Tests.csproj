@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Integration\Server\" />
-    <Folder Include="Unit\Services\" />
+    <Folder Include="Unit/Utilities/" />
   </ItemGroup>
 
   <ItemGroup>

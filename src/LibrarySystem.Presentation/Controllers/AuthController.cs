@@ -4,7 +4,7 @@ using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Dtos.Users;
-using LibrarySystem.Domain.Interfaces;
+using LibrarySystem.Domain.Interfaces.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

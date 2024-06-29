@@ -1,0 +1,62 @@
+﻿using LibrarySystem.Application.Interfaces;
+using LibrarySystem.Application.Interfaces.Services;
+using LibrarySystem.Application.Services.Authors;
+using LibrarySystem.Application.Services.Books;
+using LibrarySystem.Application.Services.Borrows;
+using LibrarySystem.Application.Services.Employees;
+using LibrarySystem.Application.Services.Genres;
+using LibrarySystem.Application.Services.Reviews;
+using LibrarySystem.Application.Services.Users;
+using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Utilities;
+
+namespace LibrarySystem.Application.Core.Factories;
+
+public class ServiceFactory : IServiceFactory
+{
+    private readonly IRepositoryManager _repository;
+    private readonly IPasswordHasher _hasher;
+    private readonly IBookAssociations _bookAssociations;
+
+    public ServiceFactory(IRepositoryManager repository, IPasswordHasher hasher, IBookAssociations bookAssociations)
+    {
+        _repository = repository;
+        _hasher = hasher;
+        _bookAssociations = bookAssociations;
+    }
+
+    public IAuthorService CreateAuthorService()
+    {
+        return new AuthorService(_repository);
+    }
+
+    public IBookReviewService CreateBookReviewService()
+    {
+        return new BookReviewService(_repository);
+    }
+
+    public IBookService CreateBookService()
+    {
+        return new BookService(_repository, _bookAssociations);
+    }
+
+    public IBorrowService CreateBorrowService()
+    {
+        return new BorrowService(_repository);
+    }
+
+    public IEmployeeService CreateEmployeeService()
+    {
+        return new EmployeeService(_repository, _hasher);
+    }
+
+    public IGenreService CreateGenreService()
+    {
+        return new GenreService(_repository);
+    }
+
+    public IUserService CreateUserService()
+    {
+        return new UserService(_repository, _hasher);
+    }
+}

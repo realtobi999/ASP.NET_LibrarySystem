@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application;
+﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Exceptions;

@@ -1,7 +1,8 @@
 using System.Net.Mail;
-using LibrarySystem.Application.Factories;
+using LibrarySystem.Application.Core.Factories;
 using LibrarySystem.Application.Services.Books;
-using LibrarySystem.Domain.Interfaces;
+using LibrarySystem.Domain.Interfaces.Emails;
+using LibrarySystem.Domain.Interfaces.Utilities;
 using LibrarySystem.EmailService;
 using LibrarySystem.Infrastructure.Factories;
 using LibrarySystem.Infrastructure.Messages;

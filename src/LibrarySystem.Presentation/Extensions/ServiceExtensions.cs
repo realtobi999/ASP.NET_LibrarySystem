@@ -1,17 +1,18 @@
 ﻿using System.Text;
 using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Application.Factories;
 using LibrarySystem.Application.Services;
-using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Infrastructure;
 using LibrarySystem.Infrastructure.Factories;
 using LibrarySystem.Infrastructure.Messages.Borrows;
-using LibrarySystem.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using LibrarySystem.Application.Emails;
+using LibrarySystem.Application.Core.Emails;
+using LibrarySystem.Application.Core.Factories;
+using LibrarySystem.Domain.Interfaces.Emails;
+using LibrarySystem.Domain.Interfaces.Utilities;
+using LibrarySystem.Infrastructure.Persistence.Repositories;
+using LibrarySystem.Infrastructure.Persistence;
 
 namespace LibrarySystem.Presentation.Extensions;
 

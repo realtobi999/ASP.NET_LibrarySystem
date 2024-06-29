@@ -1,6 +1,7 @@
 ﻿using LibrarySystem.Domain.Interfaces;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Infrastructure.Repositories;
+using LibrarySystem.Infrastructure.Persistence;
+using LibrarySystem.Infrastructure.Persistence.Repositories;
 
 namespace LibrarySystem.Infrastructure.Factories;
 

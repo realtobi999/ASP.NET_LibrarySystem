@@ -8,12 +8,12 @@ using RazorLight;
 
 namespace LibrarySystem.Infrastructure.Messages;
 
-public class MessageBuilder
+public abstract class MessageBuilderBase
 {
     private readonly IConfiguration _configuration;
     private readonly string _sender;
 
-    public MessageBuilder(IConfiguration configuration)
+    public MessageBuilderBase(IConfiguration configuration)
     {
         _configuration = configuration;
         _sender = _configuration.GetSection("SMTP:Username").Value ?? throw new NullReferenceException();

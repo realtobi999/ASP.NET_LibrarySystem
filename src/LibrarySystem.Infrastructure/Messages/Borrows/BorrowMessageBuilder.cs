@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace LibrarySystem.Infrastructure.Messages.Borrows;
 
-public class BorrowMessageBuilder(IConfiguration configuration) : MessageBuilder(configuration), IBorrowMessageBuilder
+public class BorrowMessageBuilder(IConfiguration configuration) : MessageBuilderBase(configuration), IBorrowMessageBuilder
 {
     public MailMessage BuildBorrowBookMessage(BorrowBookMessageDto dto)
     {

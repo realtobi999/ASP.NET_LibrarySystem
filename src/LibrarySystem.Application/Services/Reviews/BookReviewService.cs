@@ -2,6 +2,7 @@
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.NotFound;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Reviews;
@@ -32,6 +33,28 @@ public class BookReviewService : IBookReviewService
 
         _repository.BookReview.Create(review);
         await _repository.SaveAsync();
+
+        return review;
+    }
+
+    public async Task<int> Delete(Guid id)
+    {
+       var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id); 
+
+       _repository.BookReview.Delete(review);
+       return await _repository.SaveAsync();
+    }
+
+    public async Task<int> Delete(BookReview bookReview)
+    {
+       _repository.BookReview.Delete(bookReview);
+       return await _repository.SaveAsync();
+
+    }
+
+    public async Task<BookReview> Get(Guid id)
+    {
+        var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id); 
 
         return review;
     }

@@ -4,6 +4,7 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Exceptions.NotFound;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Reviews;
 
@@ -39,23 +40,48 @@ public class BookReviewService : IBookReviewService
 
     public async Task<int> Delete(Guid id)
     {
-       var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id); 
+        var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id);
 
-       _repository.BookReview.Delete(review);
-       return await _repository.SaveAsync();
+        _repository.BookReview.Delete(review);
+        return await _repository.SaveAsync();
     }
 
     public async Task<int> Delete(BookReview bookReview)
     {
-       _repository.BookReview.Delete(bookReview);
-       return await _repository.SaveAsync();
+        _repository.BookReview.Delete(bookReview);
+        return await _repository.SaveAsync();
 
     }
 
     public async Task<BookReview> Get(Guid id)
     {
-        var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id); 
+        var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id);
 
         return review;
+    }
+
+    public async Task<int> Update(Guid id, UpdateBookReviewDto updateBookReviewDto)
+    {
+        var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id);
+        var newText = updateBookReviewDto.Text;
+
+        if (newText.IsNullOrEmpty())
+        {
+            review.Text = newText;
+        }
+
+        return await _repository.SaveAsync();
+    }
+
+    public async Task<int> Update(BookReview bookReview, UpdateBookReviewDto updateBookReviewDto)
+    {
+       var newText = updateBookReviewDto.Text;
+
+        if (!newText.IsNullOrEmpty())
+        {
+            bookReview.Text = newText;
+        }
+
+        return await _repository.SaveAsync();
     }
 }

@@ -51,4 +51,22 @@ public class BookReviewController : ControllerBase
 
         return Ok();
     }
+
+    [Authorize(Policy = "User")]
+    [HttpPut("api/book/review/{reviewId:guid}")]
+    public async Task<IActionResult> UpdateBookReview(Guid reviewId, UpdateBookReviewDto updateBookReviewDto)
+    {
+        var review = await _service.BookReview.Get(reviewId); 
+
+        // verify that the request user id matches the user id of the review
+        if (Jwt.ParseFromPayload(Jwt.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
+            throw new NotAuthorizedException("Not Authorized!");
+
+        var affected = await _service.BookReview.Update(review, updateBookReviewDto);
+        
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();
+    }
 }

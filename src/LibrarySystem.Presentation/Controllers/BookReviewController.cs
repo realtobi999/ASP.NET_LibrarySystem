@@ -12,8 +12,9 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /*
 
-POST    /api/book/review
-DELETE  /api/book/review/{review_id}
+POST    /api/review
+DELETE  /api/review/{review_id}
+PUT     /api/review/{review_id}
 
 */
 public class BookReviewController : ControllerBase
@@ -26,7 +27,7 @@ public class BookReviewController : ControllerBase
     }
 
     [Authorize(Policy = "User"), UserAuth]
-    [HttpPost("api/book/review")]
+    [HttpPost("api/review")]
     public async Task<IActionResult> CreateBookReview([FromBody] CreateBookReviewDto createBookReviewDto)
     {
         var _ = await _service.BookReview.Create(createBookReviewDto);
@@ -35,7 +36,7 @@ public class BookReviewController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpDelete("api/book/review/{reviewId:guid}")]
+    [HttpDelete("api/review/{reviewId:guid}")]
     public async Task<IActionResult> DeleteBookReview(Guid reviewId)
     {
         var review = await _service.BookReview.Get(reviewId); 
@@ -53,7 +54,7 @@ public class BookReviewController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpPut("api/book/review/{reviewId:guid}")]
+    [HttpPut("api/review/{reviewId:guid}")]
     public async Task<IActionResult> UpdateBookReview(Guid reviewId, UpdateBookReviewDto updateBookReviewDto)
     {
         var review = await _service.BookReview.Get(reviewId); 

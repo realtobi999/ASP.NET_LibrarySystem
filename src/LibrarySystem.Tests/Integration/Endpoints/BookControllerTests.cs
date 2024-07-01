@@ -88,7 +88,7 @@ public class BookControllerTests
         client.DefaultRequestHeaders.Remove("Authorization");
         client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
 
-        var create7 = await client.PostAsJsonAsync("/api/book/review", review.ToCreateBookReviewDto());
+        var create7 = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());
         create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert

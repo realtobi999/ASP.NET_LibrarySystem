@@ -23,11 +23,13 @@ public class BorrowController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IEmailManager _email;
+    private readonly IWebHostEnvironment _env;
 
-    public BorrowController(IServiceManager service, IEmailManager email)
+    public BorrowController(IServiceManager service, IEmailManager email, IWebHostEnvironment env)
     {
         _service = service;
         _email = email;
+        _env = env;
     }
 
     [HttpGet("api/borrow")]
@@ -68,15 +70,18 @@ public class BorrowController : ControllerBase
         _ = _service.Book.SetAvailable(book, false);
 
         // send confirmation email - FOR PRODUCTION ONLY
-        // var user = await _service.User.Get(createBorrowDto.UserId);
-        // _email.Borrow.SendBorrowBookEmail(new BorrowBookMessageDto{
-        //     UserEmail = user.Email!,
-        //     Username = user.Username!,
-        //     BookTitle = book.Title!,
-        //     BookISBN = book.ISBN!,
-        //     BorrowDueDate = borrow.DueDate.ToString("dd-MM-yyyy")
-        // });
-
+        if (_env.IsProduction())
+        {
+            var user = await _service.User.Get(createBorrowDto.UserId);
+            _email.Borrow.SendBorrowBookEmail(new BorrowBookMessageDto
+            {
+                UserEmail = user.Email!,
+                Username = user.Username!,
+                BookTitle = book.Title!,
+                BookISBN = book.ISBN!,
+                BorrowDueDate = borrow.DueDate.ToString("dd-MM-yyyy")
+            });
+        }
         return Created(string.Format("/api/borrow/{0}", borrow.Id), null);
     }
 
@@ -101,7 +106,7 @@ public class BorrowController : ControllerBase
         {
             throw new BadRequestException($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
         }
-        if (book.IsAvailable) 
+        if (book.IsAvailable)
         {
             throw new ConflictException($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
         }
@@ -113,15 +118,18 @@ public class BorrowController : ControllerBase
         _ = _service.Borrow.SetIsReturned(borrow);
         _ = _service.Book.SetAvailable(book);
 
-
-        // send confirmation email
-        // var user = await _service.User.Get(borrow.UserId); - FOR PRODUCTION ONLY
-        // _email.Borrow.SendReturnBookEmail(new ReturnBookMessageDto{
-        //     UserEmail = user.Email!,
-        //     Username = user.Username!,
-        //     BookTitle = book.Title!,
-        //     BookISBN = book.ISBN!
-        // });
+        // send confirmation email - FOR PRODUCTION ONLY
+        if (_env.IsProduction())
+        {
+            var user = await _service.User.Get(borrow.UserId);
+            _email.Borrow.SendReturnBookEmail(new ReturnBookMessageDto
+            {
+                UserEmail = user.Email!,
+                Username = user.Username!,
+                BookTitle = book.Title!,
+                BookISBN = book.ISBN!
+            });
+        }
 
         return Ok();
     }

@@ -15,21 +15,21 @@ public class BorrowRepository : IBorrowRepository
 
     public void Create(Borrow borrow)
     {
-        _context.Borrow.Add(borrow);
+        _context.Borrows.Add(borrow);
     }
 
     public async Task<Borrow?> Get(Guid id)
     {
-        return await _context.Borrow.FirstOrDefaultAsync(b => b.Id == id);
+        return await _context.Borrows.FirstOrDefaultAsync(b => b.Id == id);
     }
 
     public async Task<Borrow?> Get(Guid bookId, Guid userId)
     {
-        return await _context.Borrow.FirstOrDefaultAsync(b => b.UserId == userId && b.BookId == bookId);
+        return await _context.Borrows.FirstOrDefaultAsync(b => b.UserId == userId && b.BookId == bookId);
     }
 
     public async Task<IEnumerable<Borrow>> GetAll()
     {
-        return await _context.Borrow.OrderBy(b => b.BorrowDate).ToListAsync();
+        return await _context.Borrows.OrderBy(b => b.BorrowDate).ToListAsync();
     }
 }

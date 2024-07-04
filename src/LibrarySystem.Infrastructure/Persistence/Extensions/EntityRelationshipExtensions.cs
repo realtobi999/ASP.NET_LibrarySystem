@@ -6,6 +6,23 @@ namespace LibrarySystem.Infrastructure.Persistence.Extensions;
 
 public static class EntityRelationshipExtensions
 {
+    public static void ConfigureWishlistBookRelationship(this ModelBuilder builder)
+    {
+        // configure many-to-many relationship between Wishlist and Book
+        builder.Entity<WishlistBook>()
+            .HasKey(wb => new { wb.WishlistId, wb.BookId });
+
+        builder.Entity<WishlistBook>()
+            .HasOne(wb => wb.Wishlist)
+            .WithMany(w => w.WishlistBooks)
+            .HasForeignKey(wb => wb.WishlistId);
+
+        builder.Entity<WishlistBook>()
+            .HasOne(wb => wb.Book)
+            .WithMany()
+            .HasForeignKey(wb => wb.BookId);   
+    }
+
     public static void ConfigureBookAuthorRelationship(this ModelBuilder builder)
     {
         // configure many-to-many relationship between Book and Author

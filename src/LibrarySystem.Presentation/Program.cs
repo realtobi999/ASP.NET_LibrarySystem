@@ -5,7 +5,6 @@ using LibrarySystem.Domain.Interfaces.Emails;
 using LibrarySystem.Domain.Interfaces.Utilities;
 using LibrarySystem.EmailService;
 using LibrarySystem.Infrastructure.Factories;
-using LibrarySystem.Infrastructure.Messages;
 using LibrarySystem.Presentation.Extensions;
 
 public class Program

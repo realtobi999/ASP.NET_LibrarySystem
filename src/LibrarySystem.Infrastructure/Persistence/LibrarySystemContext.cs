@@ -16,6 +16,8 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
     public DbSet<User> Users { get; set; }
     public DbSet<Employee> Employee { get; set; }
     public DbSet<Borrow> Borrow { get; set; }
+    public DbSet<Wishlist> Wishlists { get; set; }
+    public DbSet<WishlistBook> WishlistBooks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,5 +34,6 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
         modelBuilder.ConfigureBookAuthorRelationship();
         modelBuilder.ConfigureBookGenreRelationship();
         modelBuilder.ConfigureBookReviewsRelationShip();
+        modelBuilder.ConfigureWishlistBookRelationship();
     }
 }

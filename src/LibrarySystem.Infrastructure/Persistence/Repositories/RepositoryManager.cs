@@ -27,7 +27,9 @@ public class RepositoryManager : IRepositoryManager
 
     public IBookReviewRepository BookReview => _factory.CreateBookReviewRepository();
 
-    private IBaseRepository _baseRepository => _factory.CreateBaseRepository();
+    public IWishlistRepository Wishlist => _factory.CreateWishlistRepository(); 
+
+    private IBaseRepository _baseRepository => _factory.CreateBaseRepository(); // rename the property to Base
 
     public Task<int> SaveAsync()
     {

@@ -5,7 +5,7 @@ using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Books;
 
-public class BookAssociations : IBookAssociations
+public class BookAssociations : IBookAssociations // refactor - too much responsibility
 {
     private readonly IRepositoryManager _repository;
 

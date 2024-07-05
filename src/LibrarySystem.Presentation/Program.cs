@@ -1,6 +1,7 @@
 using System.Net.Mail;
 using LibrarySystem.Application.Core.Factories;
 using LibrarySystem.Application.Services.Books;
+using LibrarySystem.Application.Services.Wishlists;
 using LibrarySystem.Domain.Interfaces.Emails;
 using LibrarySystem.Domain.Interfaces.Utilities;
 using LibrarySystem.EmailService;
@@ -38,6 +39,8 @@ public class Program
 
 
             builder.Services.AddScoped<IBookAssociations, BookAssociations>();
+            builder.Services.AddScoped<IWishlistAssociations, WishlistAssociations>();
+            
             // user authorization
             builder.Services.AddAuthorization(options =>
             {

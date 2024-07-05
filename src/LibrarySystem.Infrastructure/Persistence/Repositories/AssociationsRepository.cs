@@ -14,21 +14,26 @@ public class AssociationsRepository : IAssociationsRepository
 
     public void CreateBookAuthor(BookAuthor bookAuthor)
     {
-        _context.BookAuthor.Add(bookAuthor);
+        _context.BookAuthors.Add(bookAuthor);
     }
 
     public void CreateBookGenre(BookGenre bookGenre)
     {
-        _context.BookGenre.Add(bookGenre);
+        _context.BookGenres.Add(bookGenre);
+    }
+
+    public void CreateWishlistBook(WishlistBook wishlistBook)
+    {
+        _context.WishlistBooks.Add(wishlistBook);
     }
 
     public void RemoveBookAuthor(BookAuthor bookAuthor)
     {
-        _context.BookAuthor.Remove(bookAuthor);
+        _context.BookAuthors.Remove(bookAuthor);
     }
 
     public void RemoveBookGenre(BookGenre bookGenre)
     {
-        _context.BookGenre.Remove(bookGenre);
+        _context.BookGenres.Remove(bookGenre);
     }
 }

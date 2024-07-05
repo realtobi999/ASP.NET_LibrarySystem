@@ -10,5 +10,6 @@ public interface IRepositoryFactory
     IAssociationsRepository CreateAssociationsRepository();
     IBorrowRepository CreateBorrowRepository();
     IBookReviewRepository CreateBookReviewRepository();
+    IWishlistRepository CreateWishlistRepository();
     IBaseRepository CreateBaseRepository();
 }

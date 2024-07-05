@@ -58,4 +58,9 @@ public class RepositoryFactory : IRepositoryFactory
     {
         return new BookReviewRepository(_context);
     }
+
+    public IWishlistRepository CreateWishlistRepository()
+    {
+        return new WishlistRepository(_context);
+    }
 }

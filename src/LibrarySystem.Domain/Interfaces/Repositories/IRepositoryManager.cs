@@ -10,5 +10,6 @@ public interface IRepositoryManager
     IBookRepository Book { get; }
     IBorrowRepository Borrow { get; }
     IBookReviewRepository BookReview { get; }
+    IWishlistRepository Wishlist { get ;}
     Task<int> SaveAsync(); 
 }

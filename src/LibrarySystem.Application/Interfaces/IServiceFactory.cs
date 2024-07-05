@@ -11,4 +11,5 @@ public interface IServiceFactory
     IBookService CreateBookService();
     IBorrowService CreateBorrowService();
     IBookReviewService CreateBookReviewService();
+    IWishlistService CreateWishlistService();
 }

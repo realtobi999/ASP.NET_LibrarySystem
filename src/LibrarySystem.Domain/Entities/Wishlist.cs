@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities.Relationships;
 
 namespace LibrarySystem.Domain.Entities;
@@ -19,4 +20,18 @@ public class Wishlist
 
     public User? User { get; set; }
     public ICollection<WishlistBook> WishlistBooks { get; set; } = [];
+
+    public WishlistDto ToDto()
+    {
+        var books = this.WishlistBooks.Where(wb => wb.Book is not null)
+                                      .Select(wb => wb.Book!.ToDto())
+                                      .ToList();
+        return new WishlistDto
+        {
+            Id = this.Id,
+            UserId = this.UserId,
+            Name = this.Name,
+            Books = books,
+        };
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Wishlists;
@@ -33,6 +33,13 @@ public class WishlistService : IWishlistService
 
         _repository.Wishlist.Create(wishlist);
         await _repository.SaveAsync();
+
+        return wishlist;
+    }
+
+    public async Task<Wishlist> Get(Guid id)
+    {
+        var wishlist = await _repository.Wishlist.Get(id) ?? throw new WishlistNotFoundException(id);
 
         return wishlist;
     }

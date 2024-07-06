@@ -20,6 +20,8 @@ public class WishlistRepository : IWishlistRepository
 
     public Task<Wishlist?> Get(Guid id)
     {
-        return _context.Wishlists.FirstOrDefaultAsync(w => w.Id == id);
+        return _context.Wishlists.Include(w => w.WishlistBooks)
+                                    .ThenInclude(w => w.Book)
+                                 .FirstOrDefaultAsync(w => w.Id == id);
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Net.Http.Headers;
-using LibrarySystem.Domain.Entities;
+﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Infrastructure.Persistence.Repositories;
@@ -26,32 +26,37 @@ public class BookRepository : IBookRepository
 
     public async Task<Book?> Get(Guid id, bool withRelations = true)
     {
-        return await GetBooksQuery(withRelations).SingleOrDefaultAsync(b => b.Id == id);
+        var book = _context.Books.AsQueryable();
+
+        if (withRelations)
+        {
+            book = book.IncludeBookRelations();
+        }
+
+        return await book.SingleOrDefaultAsync(b => b.Id == id);
     }
 
     public async Task<IEnumerable<Book>> GetAll(bool withRelations = true)
     {
-        return await GetBooksQuery(withRelations).ToListAsync();
+        var books = _context.Books.AsQueryable();
+
+        if (withRelations)
+        {
+            books = books.IncludeBookRelations();
+        }
+
+        return await books.ToListAsync();
     }
 
     public async Task<Book?> Get(string isbn, bool withRelations = true)
     {
-        return await GetBooksQuery(withRelations).SingleOrDefaultAsync(b => b.ISBN == isbn);
-    }
+        var book = _context.Books.AsQueryable();
 
-    private IQueryable<Book> GetBooksQuery(bool includeRelations = true)
-    {
-        var query = _context.Books.AsQueryable();
-
-        if (includeRelations)
+        if (withRelations)
         {
-            query = query.Include(b => b.BookAuthors)
-                             .ThenInclude(ba => ba.Author)
-                         .Include(b => b.BookGenres)
-                            .ThenInclude(bg => bg.Genre)
-                         .Include(b => b.BookReviews);
+            book = book.IncludeBookRelations();
         }
 
-        return query;
+        return await book.SingleOrDefaultAsync(b => b.ISBN == isbn);
     }
 }

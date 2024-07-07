@@ -51,8 +51,8 @@ public class UserService : IUserService
 
     public async Task<bool> Login(LoginUserDto loginUserDto)
     {
-        var email = loginUserDto.Email ?? throw new ArgumentNullException("The email must be set.");
-        var password = loginUserDto.Password ?? throw new ArgumentNullException("The password must be set."); 
+        var email = loginUserDto.Email ?? throw new NullReferenceException("The email must be set.");
+        var password = loginUserDto.Password ?? throw new NullReferenceException("The password must be set."); 
 
         var user = await _repository.User.Get(email) ?? throw new NotFoundException($"The user with email {email} doesnt exist.");
 
@@ -64,9 +64,9 @@ public class UserService : IUserService
         var user = new User
         {
             Id = registerUserDto.Id ?? Guid.NewGuid(),
-            Username = registerUserDto.Username ?? throw new ArgumentNullException("The username must be set."),
-            Email = registerUserDto.Email ?? throw new ArgumentNullException("The email must be set."),
-            Password = _hasher.Hash(registerUserDto.Password ?? throw new ArgumentNullException("The password must be set."))
+            Username = registerUserDto.Username ?? throw new NullReferenceException("The username must be set."),
+            Email = registerUserDto.Email ?? throw new NullReferenceException("The email must be set."),
+            Password = _hasher.Hash(registerUserDto.Password ?? throw new NullReferenceException("The password must be set."))
         };
 
         _repository.User.Create(user);

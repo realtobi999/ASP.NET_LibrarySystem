@@ -28,7 +28,7 @@ public class WishlistService : IWishlistService
             Name = createWishlistDto.Name
         };
 
-        var bookIds = createWishlistDto.BookIds ?? throw new ArgumentNullException("Atleast one book must be assigned.");
+        var bookIds = createWishlistDto.BookIds ?? throw new NullReferenceException("Atleast one book must be assigned.");
 
         // handle books
         await _associations.AssignBooks(bookIds, wishlist);

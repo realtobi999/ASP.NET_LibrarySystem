@@ -34,8 +34,8 @@ public class BookService : IBookService
             CoverPicture = createBookDto.CoverPicture,
         };
 
-        var authorIds = createBookDto.AuthorIds ?? throw new ArgumentNullException("Atleast one author must be assigned.");
-        var genreIds = createBookDto.GenreIds ?? throw new ArgumentNullException("Atleast one genre must be assigned.");
+        var authorIds = createBookDto.AuthorIds ?? throw new NullReferenceException("Atleast one author must be assigned.");
+        var genreIds = createBookDto.GenreIds ?? throw new NullReferenceException("Atleast one genre must be assigned.");
 
         // handle authors
         await _associations.AssignAuthors(authorIds, book);

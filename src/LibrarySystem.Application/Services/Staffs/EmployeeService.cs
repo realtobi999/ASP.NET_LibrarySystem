@@ -30,8 +30,8 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> Login(LoginEmployeeDto loginEmployeeDto)
     {
-        var email = loginEmployeeDto.Email ?? throw new ArgumentNullException("The email must be set.");
-        var password = loginEmployeeDto.Password ?? throw new ArgumentNullException("The password must be set."); 
+        var email = loginEmployeeDto.Email ?? throw new NullReferenceException("The email must be set.");
+        var password = loginEmployeeDto.Password ?? throw new NullReferenceException("The password must be set."); 
 
         var employee = await _repository.Employee.Get(email) ?? throw new NotFoundException($"The Employee with email {email} doesnt exist.");
 
@@ -43,9 +43,9 @@ public class EmployeeService : IEmployeeService
         var employee = new Employee
         {
             Id = registerEmployeeDto.Id ?? Guid.NewGuid(),
-            Name = registerEmployeeDto.Name ?? throw new ArgumentNullException("The name must be set."),
-            Email = registerEmployeeDto.Email ?? throw new ArgumentNullException("The email must be set."),
-            Password = _hasher.Hash(registerEmployeeDto.Password ?? throw new ArgumentNullException("The password must be set.")),
+            Name = registerEmployeeDto.Name ?? throw new NullReferenceException("The name must be set."),
+            Email = registerEmployeeDto.Email ?? throw new NullReferenceException("The email must be set."),
+            Password = _hasher.Hash(registerEmployeeDto.Password ?? throw new NullReferenceException("The password must be set.")),
         };
 
         _repository.Employee.Create(employee);

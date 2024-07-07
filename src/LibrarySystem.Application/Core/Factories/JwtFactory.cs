@@ -12,11 +12,11 @@ public class JwtFactory
 
         if (string.IsNullOrEmpty(issuer))
         {
-            throw new ArgumentNullException(nameof(issuer), "JWT Issuer configuration is missing");
+            throw new NullReferenceException("JWT Issuer configuration is missing");
         }
         if (string.IsNullOrEmpty(key))
         {
-            throw new ArgumentNullException(nameof(key), "JWT Key configuration is missing");
+            throw new NullReferenceException("JWT Key configuration is missing");
         }
 
         return new Jwt(issuer, key);

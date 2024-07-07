@@ -21,7 +21,7 @@ public class GenreService : IGenreService
         var genre = new Genre
         {
             Id = createGenreDto.Id ?? Guid.NewGuid(),
-            Name = createGenreDto.Name ?? throw new ArgumentNullException("The name must be set.")
+            Name = createGenreDto.Name ?? throw new NullReferenceException("The name must be set.")
         };
 
         _repository.Genre.Create(genre);

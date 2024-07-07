@@ -63,23 +63,17 @@ public class BookReviewService : IBookReviewService
     public async Task<int> Update(Guid id, UpdateBookReviewDto updateBookReviewDto)
     {
         var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id);
-        var newText = updateBookReviewDto.Text;
-
-        if (newText.IsNullOrEmpty())
-        {
-            review.Text = newText;
-        }
-
-        return await _repository.SaveAsync();
+        
+        return await this.Update(review, updateBookReviewDto);
     }
 
     public async Task<int> Update(BookReview bookReview, UpdateBookReviewDto updateBookReviewDto)
     {
-       var newText = updateBookReviewDto.Text;
+       var text = updateBookReviewDto.Text;
 
-        if (!newText.IsNullOrEmpty())
+        if (!text.IsNullOrEmpty())
         {
-            bookReview.Text = newText;
+            bookReview.Text = text;
         }
 
         return await _repository.SaveAsync();

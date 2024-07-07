@@ -32,7 +32,6 @@ public class AuthorService : IAuthorService
     }
     public async Task<Author> Create(CreateAuthorDto createAuthorDto)
     {
-        var picture = createAuthorDto.ProfilePicture;
         var author = new Author
         {
             Id = createAuthorDto.Id ?? Guid.NewGuid(),
@@ -40,6 +39,8 @@ public class AuthorService : IAuthorService
             Description = createAuthorDto.Description ?? throw new ArgumentNullException("The description must be set."),
             Birthday = createAuthorDto.Birthday.ToUniversalTime(),
         };
+        
+        var picture = createAuthorDto.ProfilePicture;
 
         // if the picture isn't null convert it into byte array and save to the author entity
         if (!picture.IsNullOrEmpty())

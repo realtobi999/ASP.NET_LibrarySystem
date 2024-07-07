@@ -91,32 +91,18 @@ public class BorrowController : ControllerBase
         var borrow = await _service.Borrow.Get(borrowId);
         var book = await _service.Book.Get(borrow.BookId);
 
-        // extract the content of the JWT token payload
-        var jwtToken = Jwt.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
-        var userIdFromToken = Jwt.ParseFromPayload(jwtToken, "UserId");
-        var role = Jwt.ParseFromPayload(jwtToken, ClaimTypes.Role);
+        var token = Jwt.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
 
         // match the user ID of the borrow and from the request
-        if (borrow.UserId.ToString() != userIdFromToken)
+        if (borrow.UserId.ToString() != Jwt.ParseFromPayload(token, "UserId"))
         {
             throw new NotAuthorizedException("You are not authorized to return this book.");
         }
 
-        if (borrow.IsReturned)
-        {
-            throw new BadRequestException($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
-        }
-        if (book.IsAvailable)
-        {
-            throw new ConflictException($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
-        }
-        if (DateTimeOffset.UtcNow > borrow.DueDate && role != "Employee") // this role check enables the librarians to return the book even if it's past due
-        {
-            throw new ConflictException($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
-        }
+        var affected = await _service.Borrow.Return(borrow, book, token);
 
-        _ = _service.Borrow.SetIsReturned(borrow);
-        _ = _service.Book.SetAvailable(book);
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
 
         // send confirmation email - FOR PRODUCTION ONLY
         if (_env.IsProduction())

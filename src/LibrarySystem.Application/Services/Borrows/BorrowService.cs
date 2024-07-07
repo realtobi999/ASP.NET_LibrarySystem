@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Interfaces.Services;
+﻿using System.Security.Claims;
+using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
@@ -63,16 +64,33 @@ public class BorrowService : IBorrowService
         return borrows;
     }
 
-    public async Task<int> SetIsReturned(Borrow borrow)
+    public async Task<int> Return(Borrow borrow, string jwt)
     {
-        borrow.IsReturned = true;
-
-        return await _repository.SaveAsync();
+        var book = await _repository.Book.Get(borrow.BookId) ?? throw new BookNotFoundException(borrow.BookId);
+        
+        return await this.Return(borrow, book, jwt);
     }
 
-    public async Task<int> SetIsReturned(Borrow borrow, bool returned)
+    public async Task<int> Return(Borrow borrow, Book book, string jwt)
     {
-        borrow.IsReturned = returned;
+        var role = Jwt.ParseFromPayload(jwt, ClaimTypes.Role);
+
+        if (borrow.IsReturned)
+        {
+            throw new BadRequestException($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
+        }
+        if (book.IsAvailable)
+        {
+            throw new ConflictException($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
+        }
+        if (DateTimeOffset.UtcNow > borrow.DueDate && role != "Employee") // this role check enables the librarians to return the book even if it's past due
+        {
+            throw new ConflictException($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
+        }
+
+        // set the book to available and the borrow status to returned
+        book.IsAvailable = true;
+        borrow.IsReturned = true;
 
         return await _repository.SaveAsync();
     }

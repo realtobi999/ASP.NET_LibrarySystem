@@ -29,10 +29,10 @@ public class RepositoryManager : IRepositoryManager
 
     public IWishlistRepository Wishlist => _factory.CreateWishlistRepository(); 
 
-    private IBaseRepository _baseRepository => _factory.CreateBaseRepository(); // rename the property to Base
+    private IBaseRepository _base => _factory.CreateBaseRepository(); 
 
     public Task<int> SaveAsync()
     {
-        return _baseRepository.SaveAsync();
+        return _base.SaveAsync();
     }
 }

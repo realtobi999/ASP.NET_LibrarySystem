@@ -15,7 +15,15 @@ public class WishlistAssociations : IWishlistAssociations
         _repository = repository;
     }
 
-    public async Task AssignBooksAsync(IEnumerable<Guid> booksIds, Wishlist wishlist)
+    public void CleanBooks(Wishlist wishlist)
+    {
+        foreach (var wishlistBook in wishlist.WishlistBooks)
+        {
+            _repository.Associations.RemoveWishlistBook(wishlistBook);
+        }
+    }
+
+    public async Task AssignBooks(IEnumerable<Guid> booksIds, Wishlist wishlist)
     {
         if (booksIds.IsNullOrEmpty()) throw new ArgumentNullException(nameof(booksIds));
 

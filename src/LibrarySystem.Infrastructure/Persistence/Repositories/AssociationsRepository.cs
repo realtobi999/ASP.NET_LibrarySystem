@@ -36,4 +36,9 @@ public class AssociationsRepository : IAssociationsRepository
     {
         _context.BookGenres.Remove(bookGenre);
     }
+
+    public void RemoveWishlistBook(WishlistBook wishlistBook)
+    {
+        _context.WishlistBooks.Remove(wishlistBook);
+    }
 }

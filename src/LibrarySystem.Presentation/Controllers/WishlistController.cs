@@ -3,6 +3,7 @@ using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Wishlists;
+using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,9 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /**
 
+GET     /api/wishlist/{wishlist_id}
 POST    /api/wishlist
+PUT     /api/wishlist/{wishlist_id}
 
 **/
 public class WishlistController : ControllerBase
@@ -43,5 +46,23 @@ public class WishlistController : ControllerBase
         var wishlist = await _service.Wishlist.Create(createWishlistDto);
 
         return Created(string.Format("/api/wishlist/{0}", wishlist.Id), null);
+    }
+
+    [Authorize(Policy = "User")]
+    [HttpPut("api/wishlist/{wishlistId:guid}")]
+    public async Task<IActionResult> UpdateWishlist(Guid wishlistId, [FromBody] UpdateWishlistDto updateWishlistDto)
+    {
+        var wishlist = await _service.Wishlist.Get(wishlistId);
+
+        // verify that the request user id matches the user id of the wishlist
+        if (Jwt.ParseFromPayload(Jwt.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
+            throw new NotAuthorizedException("Not Authorized!");
+
+        var affected = await _service.Wishlist.Update(wishlist, updateWishlistDto);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();
     }
 }

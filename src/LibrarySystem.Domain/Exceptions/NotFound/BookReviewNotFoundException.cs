@@ -1,6 +1,4 @@
-﻿using LibrarySystem.Domain.Exceptions;
-
-namespace LibrarySystem.Domain.Exceptions.NotFound;
+﻿namespace LibrarySystem.Domain.Exceptions.NotFound;
 
 public class BookReviewNotFoundException(Guid Id) : NotFoundException($"The review with: {Id} doesnt exist.")
 {

@@ -49,7 +49,7 @@ public class AuthControllerTests
         var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<LoginUserResponseDto>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<LoginUserResponseDto>() ?? throw new NullReferenceException();
 
         content.UserDto!.Id.Should().Be(user.Id);
         content.Token.Should().NotBeNull();
@@ -130,7 +130,7 @@ public class AuthControllerTests
         var response = await client.PostAsJsonAsync("/api/auth/employee/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<LoginEmployeeResponseDto>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<LoginEmployeeResponseDto>() ?? throw new NullReferenceException();
         
         content.EmployeeDto!.Id.Should().Be(employee.Id);
         content.Token.Should().NotBeNull();

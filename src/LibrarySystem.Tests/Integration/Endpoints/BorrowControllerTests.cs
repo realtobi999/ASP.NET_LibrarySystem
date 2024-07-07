@@ -67,7 +67,7 @@ public class BorrowControllerTests
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(book.Id);
         content.IsAvailable.Should().Be(false);
     }
@@ -101,7 +101,7 @@ public class BorrowControllerTests
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(book.Id);
         content.IsAvailable.Should().Be(false);
 
@@ -151,7 +151,7 @@ public class BorrowControllerTests
         var response = await client.GetAsync(string.Format("/api/borrow?limit={0}&offset={1}", limit, offset));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<BorrowDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<BorrowDto>>() ?? throw new NullReferenceException();
         content.Count.Should().Be(limit);
         content.ElementAt(0).Id.Should().Be(borrow2.Id);
     }
@@ -198,7 +198,7 @@ public class BorrowControllerTests
         var response = await client.GetAsync(string.Format("/api/borrow?userId={0}", user1.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<BorrowDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<BorrowDto>>() ?? throw new NullReferenceException();
         content.Count.Should().Be(1);
         content.ElementAt(0).Id.Should().Be(borrow1.Id);
     }
@@ -230,7 +230,7 @@ public class BorrowControllerTests
         var response = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(borrow.Id);
     }
 
@@ -272,13 +272,13 @@ public class BorrowControllerTests
         // get the book and borrow and check if the availability and IsReturned status is correct
         var get1 = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content1.Id.Should().Be(book.Id);
         content1.IsAvailable.Should().Be(false);
 
         var get2 = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        var content2 = await get2.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new DeserializationException();
+        var content2 = await get2.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
         content2.Id.Should().Be(borrow.Id);
         content2.IsReturned.Should().Be(false);
 
@@ -289,13 +289,13 @@ public class BorrowControllerTests
         // get the book and borrow and check if the availability and IsReturned status is correct
         var get3 = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        var content3 = await get3.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content3 = await get3.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content3.Id.Should().Be(book.Id);
         content3.IsAvailable.Should().Be(true);
 
         var get4 = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
         get4.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        var content4 = await get4.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new DeserializationException();
+        var content4 = await get4.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
         content4.Id.Should().Be(borrow.Id);
         content4.IsReturned.Should().Be(true);
     }

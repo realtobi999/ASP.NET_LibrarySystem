@@ -40,7 +40,7 @@ public class EmployeeControllerTests
         var response = await client.GetAsync(string.Format("/api/employee?limit={0}&offset={1}", limit, offset));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<EmployeeDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<EmployeeDto>>() ?? throw new NullReferenceException();
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().Be(employee2.ToDto());
     }
@@ -65,7 +65,7 @@ public class EmployeeControllerTests
         var response1 = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));
         response1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response1.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new DeserializationException();
+        var content = await response1.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
         content.Should().Be(employee.ToDto());
 
         var response2 = await client.GetAsync(string.Format("/api/employee/{0}", Guid.NewGuid()));
@@ -110,7 +110,7 @@ public class EmployeeControllerTests
         var get = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var updatedEmployee = await get.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new DeserializationException();
+        var updatedEmployee = await get.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
         updatedEmployee.Id.Should().Be(employee.Id);
         updatedEmployee.Name.Should().Be(updateDto.Name);
         updatedEmployee.Email.Should().Be(updateDto.Email);

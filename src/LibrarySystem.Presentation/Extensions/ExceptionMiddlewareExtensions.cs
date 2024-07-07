@@ -2,6 +2,8 @@
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.BadRequest;
+using LibrarySystem.Domain.Exceptions.NotFound;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace LibrarySystem.Presentation.Extensions;

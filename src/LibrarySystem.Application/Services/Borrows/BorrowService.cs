@@ -3,6 +3,8 @@ using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.BadRequest;
+using LibrarySystem.Domain.Exceptions.NotFound;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Borrows;

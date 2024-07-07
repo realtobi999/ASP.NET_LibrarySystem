@@ -165,7 +165,7 @@ public class BookReviewControllerTests
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(book.Id);
         content.Reviews.Count.Should().Be(1);
         content.Reviews.ElementAt(0).Id.Should().Be(review.Id);

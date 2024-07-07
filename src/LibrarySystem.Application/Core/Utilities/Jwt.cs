@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.BadRequest;
 using LibrarySystem.Domain.Interfaces.Utilities;
 using Microsoft.IdentityModel.Tokens;
 

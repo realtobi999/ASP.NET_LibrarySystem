@@ -39,7 +39,7 @@ public class AuthorControllerTests
         var response = await client.GetAsync(string.Format("/api/author?limit={0}&offset={1}", limit, offset));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<AuthorDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<AuthorDto>>() ?? throw new NullReferenceException();
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().Be(author2.ToDto());
     }
@@ -86,7 +86,7 @@ public class AuthorControllerTests
         var get2 = await client.GetAsync(string.Format("/api/author/{0}", Guid.NewGuid()));
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
 
-        var content = await get1.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new DeserializationException();
+        var content = await get1.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
         content.Should().Be(author.ToDto());
     }
 
@@ -120,7 +120,7 @@ public class AuthorControllerTests
         var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new DeserializationException(); 
+        var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException(); 
         content.Id.Should().Be(author.Id);
         content.Name.Should().Be(updateDto.Name);
         content.Description.Should().Be(updateDto.Description);

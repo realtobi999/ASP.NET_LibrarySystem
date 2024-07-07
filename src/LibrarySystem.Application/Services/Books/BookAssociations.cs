@@ -1,11 +1,11 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Entities.Relationships;
-using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.NotFound;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Books;
 
-public class BookAssociations : IBookAssociations // refactor - too much responsibility
+public class BookAssociations : IBookAssociations 
 {
     private readonly IRepositoryManager _repository;
 

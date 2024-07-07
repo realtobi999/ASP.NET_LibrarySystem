@@ -95,7 +95,7 @@ public class BookControllerTests
         var response = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(book.Id);
         content.Authors.Count.Should().Be(2);
         content.Authors.ElementAt(0).Should().BeEquivalentTo(author1.ToDto());
@@ -135,7 +135,7 @@ public class BookControllerTests
         var response = await client.GetAsync(string.Format("/api/book?limit={0}&offset={1}", limit, offset));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
         content.Count.Should().Be(limit);
         content.ElementAt(0).Id.Should().Be(book2.Id);
     }
@@ -190,7 +190,7 @@ public class BookControllerTests
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(book.Id);
         content.Title.Should().Be(updateDto.Title);
         content.IsAvailable.Should().Be(false);
@@ -242,7 +242,7 @@ public class BookControllerTests
         var response = await client.GetAsync(string.Format("/api/book/isbn/{0}", book.ISBN));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(book.Id);
         content.ISBN.Should().Be(book.ISBN);
     }
@@ -286,7 +286,7 @@ public class BookControllerTests
         var response = await client.GetAsync(string.Format("/api/book?authorId={0}", author1.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(2);
         content.ElementAt(0).Id.Should().Be(book1.Id);
@@ -332,7 +332,7 @@ public class BookControllerTests
         var response = await client.GetAsync(string.Format("/api/book?genreId={0}", genre1.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(2);
         content.ElementAt(0).Id.Should().Be(book1.Id);
@@ -378,7 +378,7 @@ public class BookControllerTests
         var response = await client.GetAsync(string.Format("/api/book?genreId={0}&authorId={1}", genre1.Id, author1.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(1);
         content.ElementAt(0).Id.Should().Be(book2.Id);
@@ -416,7 +416,7 @@ public class BookControllerTests
         var response = await client.GetAsync(string.Format("/api/book/search/{0}", "tes"));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(2);
         content.ElementAt(0).Id.Should().Be(book1.Id);
@@ -464,7 +464,7 @@ public class BookControllerTests
         var get1 = await client.GetAsync(string.Format("/api/book/{0}?withRelations=false", book1.Id));
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content1.Id.Should().Be(book1.Id);
         content1.Authors.Count.Should().Be(0);
         content1.Genres.Count.Should().Be(0);
@@ -473,7 +473,7 @@ public class BookControllerTests
         var get2 = await client.GetAsync(string.Format("/api/book/isbn/{0}?withRelations=false", book1.ISBN));
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content2 = await get2.Content.ReadFromJsonAsync<BookDto>() ?? throw new DeserializationException();
+        var content2 = await get2.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content2.ISBN.Should().Be(book1.ISBN);
         content2.Authors.Count.Should().Be(0);
         content2.Genres.Count.Should().Be(0);
@@ -482,7 +482,7 @@ public class BookControllerTests
         var get3 = await client.GetAsync("/api/book?withRelations=false&limit=1");
         get3.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content3 = await get3.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new DeserializationException();
+        var content3 = await get3.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
         content3.Count.Should().Be(1);
         content3.ElementAt(0).Id.Should().Be(book1.Id);
         content3.ElementAt(0).Authors.Count.Should().Be(0);

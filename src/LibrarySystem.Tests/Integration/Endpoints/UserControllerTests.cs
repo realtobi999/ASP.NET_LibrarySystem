@@ -34,7 +34,7 @@ public class UserControllerTests
         var response = await client.GetAsync(string.Format("/api/user?limit={0}&offset={1}", limit, offset));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException();
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().Be(user2.ToDto());
     }
@@ -53,7 +53,7 @@ public class UserControllerTests
         var response = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
         content.Should().Be(user.ToDto());
     }
 
@@ -88,7 +88,7 @@ public class UserControllerTests
         var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new DeserializationException();
+        var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
         newUser.Id.Should().Be(user.Id); 
         newUser.Username.Should().Be(updateDto.Username);
         newUser.Email.Should().Be(updateDto.Email);

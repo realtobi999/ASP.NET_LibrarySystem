@@ -1,8 +1,7 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.NotFound;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.IdentityModel.Tokens;
 

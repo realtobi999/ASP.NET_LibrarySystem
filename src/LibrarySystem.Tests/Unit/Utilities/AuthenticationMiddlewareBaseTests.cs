@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.BadRequest;
 using LibrarySystem.Presentation.Middlewares;
 using Microsoft.AspNetCore.Http;
 

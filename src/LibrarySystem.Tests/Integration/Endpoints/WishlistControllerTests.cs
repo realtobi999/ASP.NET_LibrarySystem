@@ -89,7 +89,7 @@ public class WishlistControllerTests
         var response = await client.GetAsync(string.Format("/api/wishlist/{0}", wishlist.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);        
 
-        var content = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(wishlist.Id);
         content.Books.Count().Should().Be(3);
     }
@@ -140,7 +140,7 @@ public class WishlistControllerTests
         var get1 = await client.GetAsync(string.Format("/api/wishlist/{0}", wishlist.Id));
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);        
 
-        var content = await get1.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new DeserializationException();
+        var content = await get1.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
         content.Books.Count().Should().Be(1);
         content.Books.ElementAt(0).Id.Should().Be(book1.Id);
     }

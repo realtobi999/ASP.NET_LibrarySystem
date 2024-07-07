@@ -4,7 +4,7 @@ using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.BadRequest;
 using LibrarySystem.Tests;
 using LibrarySystem.Tests.Integration.Extensions;
 

@@ -50,7 +50,7 @@ public class GenreControllerTests
         var response = await client.GetAsync(string.Format("/api/genre/{0}", genre.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<GenreDto>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<GenreDto>() ?? throw new NullReferenceException();
         content.Should().BeEquivalentTo(genre.ToDto());
 
         // test for 404
@@ -88,7 +88,7 @@ public class GenreControllerTests
         var response = await client.GetAsync(string.Format("/api/genre?limit={0}&offset={1}", limit, offset));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<List<GenreDto>>() ?? throw new DeserializationException();
+        var content = await response.Content.ReadFromJsonAsync<List<GenreDto>>() ?? throw new NullReferenceException();
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().BeEquivalentTo(genre2.ToDto());
         content.ElementAt(1).Should().BeEquivalentTo(genre3.ToDto());
@@ -121,7 +121,7 @@ public class GenreControllerTests
         var get = await client.GetAsync(string.Format("/api/genre/{0}", genre.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await get.Content.ReadFromJsonAsync<GenreDto>() ?? throw new DeserializationException();
+        var content = await get.Content.ReadFromJsonAsync<GenreDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(genre.Id);
         content.Name.Should().Be(updateDto.Name);
     }

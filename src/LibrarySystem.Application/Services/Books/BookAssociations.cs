@@ -14,10 +14,8 @@ public class BookAssociations : IBookAssociations // refactor - too much respons
         _repository = repository;
     }
 
-    public async Task AssignAuthorsAsync(IEnumerable<Guid> authorIds, Book book)
+    public async Task AssignAuthors(IEnumerable<Guid> authorIds, Book book)
     {
-        if (authorIds == null) throw new ArgumentNullException(nameof(authorIds));
-
         var tasks = authorIds.Select(async authorId =>
         {
             var author = await _repository.Author.Get(authorId) ?? throw new AuthorNotFoundException(authorId);
@@ -33,10 +31,8 @@ public class BookAssociations : IBookAssociations // refactor - too much respons
         await Task.WhenAll(tasks);
     }
 
-    public async Task AssignGenresAsync(IEnumerable<Guid> genreIds, Book book)
+    public async Task AssignGenres(IEnumerable<Guid> genreIds, Book book)
     {
-        if (genreIds == null) throw new ArgumentNullException(nameof(genreIds));
-
         var tasks = genreIds.Select(async genreId =>
         {
             var genre = await _repository.Genre.Get(genreId) ?? throw new GenreNotFoundException(genreId);

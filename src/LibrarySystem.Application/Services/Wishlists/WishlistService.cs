@@ -65,6 +65,7 @@ public class WishlistService : IWishlistService
         if (!bookIds.IsNullOrEmpty())
         {
             _associations.CleanBooks(wishlist);
+            
             await _associations.AssignBooks(bookIds!, wishlist);
         }
 

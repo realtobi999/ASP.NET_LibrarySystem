@@ -67,7 +67,7 @@ public class BorrowController : ControllerBase
 
         // set the book unavailable
         var book = await _service.Book.Get(borrow.BookId);
-        _ = _service.Book.SetAvailable(book, false);
+        _ = _service.Book.SetAvailability(book, false);
 
         // send confirmation email - FOR PRODUCTION ONLY
         if (_env.IsProduction())

@@ -37,10 +37,10 @@ public class BookService : IBookService
         var genreIds = createBookDto.GenreIds ?? throw new ArgumentNullException("Atleast one genre must be assigned.");
 
         // handle authors
-        await _associations.AssignAuthorsAsync(authorIds, book);
+        await _associations.AssignAuthors(authorIds, book);
 
         // handle genres
-        await _associations.AssignGenresAsync(genreIds, book);
+        await _associations.AssignGenres(genreIds, book);
 
         // create book and save changes
         _repository.Book.Create(book);
@@ -107,7 +107,6 @@ public class BookService : IBookService
         {
             book.PublishedDate = published;
         }
-
         if (!picture.IsNullOrEmpty())
         {
             book.CoverPicture = picture;
@@ -117,14 +116,14 @@ public class BookService : IBookService
             _associations.CleanAuthors(book);
 
             // Handle authors
-            await _associations.AssignAuthorsAsync(authors.Select(a => a.Id), book);
+            await _associations.AssignAuthors(authors.Select(a => a.Id), book);
         }
         if (genres.Count != 0)
         {
             _associations.CleanGenres(book);
 
             // Handle genres
-            await _associations.AssignGenresAsync(genres.Select(g => g.Id), book);
+            await _associations.AssignGenres(genres.Select(g => g.Id), book);
         }
         if (availability != 0)
         {
@@ -142,7 +141,7 @@ public class BookService : IBookService
         return await _repository.SaveAsync();
     }
 
-    public async Task<int> SetAvailable(Book book, bool availability)
+    public async Task<int> SetAvailability(Book book, bool availability)
     {
         book.IsAvailable = availability;
         

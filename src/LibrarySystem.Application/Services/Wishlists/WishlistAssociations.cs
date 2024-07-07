@@ -25,8 +25,6 @@ public class WishlistAssociations : IWishlistAssociations
 
     public async Task AssignBooks(IEnumerable<Guid> booksIds, Wishlist wishlist)
     {
-        if (booksIds.IsNullOrEmpty()) throw new ArgumentNullException(nameof(booksIds));
-
         var task = booksIds.Select(async bookId => 
         {
             var book = await _repository.Book.Get(bookId) ?? throw new BookNotFoundException(bookId);

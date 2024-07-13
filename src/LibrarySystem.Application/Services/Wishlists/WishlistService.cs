@@ -39,6 +39,21 @@ public class WishlistService : IWishlistService
         return wishlist;
     }
 
+    public async Task<int> Delete(Guid id)
+    {
+        var wishlist = await _repository.Wishlist.Get(id) ?? throw new WishlistNotFoundException(id);
+
+        return await this.Delete(wishlist);
+    }
+
+    public async Task<int> Delete(Wishlist wishlist)
+    {
+        _associations.CleanBooks(wishlist);
+        _repository.Wishlist.Delete(wishlist);
+
+        return await _repository.SaveAsync();
+    }
+
     public async Task<Wishlist> Get(Guid id)
     {
         var wishlist = await _repository.Wishlist.Get(id) ?? throw new WishlistNotFoundException(id);

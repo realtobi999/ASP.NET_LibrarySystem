@@ -6,4 +6,5 @@ public interface IWishlistRepository
 {
     Task<Wishlist?> Get(Guid id);
     void Create(Wishlist wishlist);
+    void Delete(Wishlist wishlist);
 }

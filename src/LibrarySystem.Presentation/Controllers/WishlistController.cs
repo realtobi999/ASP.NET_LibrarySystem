@@ -15,6 +15,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/wishlist/{wishlist_id}
 POST    /api/wishlist
 PUT     /api/wishlist/{wishlist_id}
+DELETE  /api/wishlist/{wishlist_id}
 
 **/
 public class WishlistController : ControllerBase
@@ -59,6 +60,24 @@ public class WishlistController : ControllerBase
             throw new NotAuthorizedException("Not Authorized!");
 
         var affected = await _service.Wishlist.Update(wishlist, updateWishlistDto);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();
+    }
+
+    [Authorize(Policy = "User")]
+    [HttpDelete("api/wishlist/{wishlistId:guid}")]
+    public async Task<IActionResult> DeleteWishlist(Guid wishlistId)
+    {
+        var wishlist = await _service.Wishlist.Get(wishlistId);
+
+        // verify that the request user id matches the user id of the wishlist
+        if (Jwt.ParseFromPayload(Jwt.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
+            throw new NotAuthorizedException("Not Authorized!");
+
+        var affected = await _service.Wishlist.Delete(wishlist);
 
         if (affected == 0)
             throw new ZeroRowsAffectedException();

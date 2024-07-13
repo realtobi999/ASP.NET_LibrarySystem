@@ -18,6 +18,11 @@ public class WishlistRepository : IWishlistRepository
         _context.Wishlists.Add(wishlist);
     }
 
+    public void Delete(Wishlist wishlist)
+    {
+        _context.Wishlists.Remove(wishlist);
+    }
+
     public Task<Wishlist?> Get(Guid id)
     {
         return _context.Wishlists.Include(w => w.WishlistBooks)

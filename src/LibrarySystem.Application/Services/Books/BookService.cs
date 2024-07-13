@@ -53,6 +53,9 @@ public class BookService : IBookService
     public async Task<int> Delete(Guid id)
     {
         var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
+        
+        _associations.CleanAuthors(book);
+        _associations.CleanGenres(book);
 
         _repository.Book.Delete(book);
         return await _repository.SaveAsync();

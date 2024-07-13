@@ -71,18 +71,14 @@ public class WishlistService : IWishlistService
     public async Task<int> Update(Wishlist wishlist, UpdateWishlistDto updateWishlistDto)
     {
         var name = updateWishlistDto.Name;
-        var bookIds = updateWishlistDto.BookIds;
 
         if (!name.IsNullOrEmpty())
         {
             wishlist.Name = name;
         }
-        if (!bookIds.IsNullOrEmpty())
-        {
-            _associations.CleanBooks(wishlist);
-            
-            await _associations.AssignBooks(bookIds!, wishlist);
-        }
+
+        _associations.CleanBooks(wishlist); 
+        await _associations.AssignBooks(updateWishlistDto.BookIds!, wishlist);
 
         return await _repository.SaveAsync();
     }

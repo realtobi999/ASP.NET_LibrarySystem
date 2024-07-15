@@ -2,7 +2,7 @@
 
 ## Summary
 
-- This is a **DEMO API** project for a library system.
+- This is a **REST DEMO API** project for a library system.
 - There is ***35*** endpoints in total, with over ***55*** **unit and integration** tests
 - Uses a **PostgreSQL** database with **Entity Framework**
 - **JWT** authentication and authorization - (User, Employee, Admin policies)

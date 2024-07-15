@@ -181,7 +181,7 @@ public class BookControllerTests
             Title = "test_test_test",
             Authors = [author1.ToDto(), author2.ToDto(), author3.ToDto()],
             Genres = [genre3.ToDto()],
-            Availability = -1,
+            Availability = false,
         };
 
         var response = await client.PutAsJsonAsync(string.Format("/api/book/{0}", book.Id), updateDto);

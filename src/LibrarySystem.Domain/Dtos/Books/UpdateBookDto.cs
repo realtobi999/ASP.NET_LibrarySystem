@@ -8,7 +8,7 @@ public record class UpdateBookDto
     public string? Title { get; set; }
     public string? Description { get; set; }
     public int PagesCount { get; set; } 
-    public int Availability { get; set; }
+    public bool? Availability { get; set; }
     public DateTimeOffset PublishedDate { get; set; }
     public string? CoverPicture { get; set; }
     public List<AuthorDto> Authors { get; set; } = [];

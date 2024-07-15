@@ -22,7 +22,7 @@ public record class CreateBookDto
     public DateTimeOffset PublishedDate { get; set; }
 
     [Required]
-    public bool Available { get; set; }
+    public bool? Available { get; set; }
 
     [Required]
     public IEnumerable<Guid>? GenreIds { get; set; }

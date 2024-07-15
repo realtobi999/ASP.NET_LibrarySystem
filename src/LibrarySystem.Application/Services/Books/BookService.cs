@@ -30,9 +30,14 @@ public class BookService : IBookService
             Description = createBookDto.Description,
             PagesCount = createBookDto.PagesCount,
             PublishedDate = createBookDto.PublishedDate,
-            IsAvailable = createBookDto.Available,
             CoverPicture = createBookDto.CoverPicture,
         };
+
+        var availability = createBookDto.Available;
+        if (availability is not null)
+        {
+            book.IsAvailable = (bool)availability; 
+        }
 
         var authorIds = createBookDto.AuthorIds ?? throw new NullReferenceException("Atleast one author must be assigned.");
         var genreIds = createBookDto.GenreIds ?? throw new NullReferenceException("Atleast one genre must be assigned.");
@@ -129,10 +134,9 @@ public class BookService : IBookService
             // Handle genres
             await _associations.AssignGenres(genres.Select(g => g.Id), book);
         }
-        if (availability != 0)
+        if (availability is not null)
         {
-            if (availability == 1) book.IsAvailable = true;
-            if (availability == -1) book.IsAvailable = false;
+            book.IsAvailable = (bool)availability;
         }
 
         return await _repository.SaveAsync();

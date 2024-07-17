@@ -1,12 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Exceptions.BadRequest;
 using LibrarySystem.Domain.Interfaces.Utilities;
 using Microsoft.IdentityModel.Tokens;
 
-namespace LibrarySystem.Application.Services;
+namespace LibrarySystem.Application.Core.Utilities;
 
 public class Jwt : IJwt
 {
@@ -45,13 +44,13 @@ public class Jwt : IJwt
 
     public string Generate(IEnumerable<Claim> claims)
     {
-        var key = Encoding.ASCII.GetBytes(this.Key);
+        var key = Encoding.ASCII.GetBytes(Key);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddMinutes(30),
-            Issuer = this.Issuer,
-            Audience = this.Issuer,
+            Issuer = Issuer,
+            Audience = Issuer,
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
@@ -71,7 +70,7 @@ public class Jwt : IJwt
 
     public static string? ParseFromPayload(string token, string key)
     {
-        var payload = Jwt.ParsePayload(token);
+        var payload = ParsePayload(token);
 
         return payload.FirstOrDefault(c => c.Type.Equals(key, StringComparison.CurrentCultureIgnoreCase))?.Value;
     }

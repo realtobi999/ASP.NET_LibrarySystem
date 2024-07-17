@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
-using LibrarySystem.Application.Services;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
@@ -9,6 +8,7 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Application.Core.Utilities;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 

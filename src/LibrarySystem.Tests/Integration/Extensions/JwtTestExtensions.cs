@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Services;
+﻿using LibrarySystem.Application.Core.Utilities;
 using Microsoft.Extensions.Configuration;
 
 namespace LibrarySystem.Tests.Integration.Extensions;

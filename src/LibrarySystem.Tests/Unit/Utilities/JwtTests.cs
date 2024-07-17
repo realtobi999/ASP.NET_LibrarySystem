@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using FluentAssertions;
-using LibrarySystem.Application.Services;
+using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.BadRequest;
 using LibrarySystem.Tests;

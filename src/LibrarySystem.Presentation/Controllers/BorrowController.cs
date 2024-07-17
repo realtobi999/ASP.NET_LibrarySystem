@@ -91,10 +91,10 @@ public class BorrowController : ControllerBase
         var borrow = await _service.Borrow.Get(borrowId);
         var book = await _service.Book.Get(borrow.BookId);
 
-        var token = Jwt.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
+        var token = JwtUtils.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
 
         // match the user ID of the borrow and from the request
-        if (borrow.UserId.ToString() != Jwt.ParseFromPayload(token, "UserId"))
+        if (borrow.UserId.ToString() != JwtUtils.ParseFromPayload(token, "UserId"))
         {
             throw new NotAuthorizedException("You are not authorized to return this book.");
         }

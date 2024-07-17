@@ -34,7 +34,7 @@ public class WishlistController : ControllerBase
         var wishlist = await _service.Wishlist.Get(wishlistId);
 
         // verify that the request user id matches the user id of the wishlist
-        if (Jwt.ParseFromPayload(Jwt.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
+        if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
             throw new NotAuthorizedException("Not Authorized!");
 
         return Ok(wishlist.ToDto());    
@@ -56,7 +56,7 @@ public class WishlistController : ControllerBase
         var wishlist = await _service.Wishlist.Get(wishlistId);
 
         // verify that the request user id matches the user id of the wishlist
-        if (Jwt.ParseFromPayload(Jwt.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
+        if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
             throw new NotAuthorizedException("Not Authorized!");
 
         var affected = await _service.Wishlist.Update(wishlist, updateWishlistDto);
@@ -74,7 +74,7 @@ public class WishlistController : ControllerBase
         var wishlist = await _service.Wishlist.Get(wishlistId);
 
         // verify that the request user id matches the user id of the wishlist
-        if (Jwt.ParseFromPayload(Jwt.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
+        if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
             throw new NotAuthorizedException("Not Authorized!");
 
         var affected = await _service.Wishlist.Delete(wishlist);

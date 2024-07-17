@@ -45,7 +45,7 @@ public class JwtTests
         ]);
         token.Should().NotBeNull();
 
-        var payload = Jwt.ParsePayload(token);
+        var payload = JwtUtils.ParsePayload(token);
         payload.Count().Should().BeGreaterThan(0);
         payload.ElementAt(0).Type.Should().Be("AccountId");
         payload.ElementAt(0).Value.Should().Be(user.Id.ToString());
@@ -55,10 +55,10 @@ public class JwtTests
     public void Jwt_Parse_ValidationWorks()
     {
         // act & assert
-        Assert.Throws<BadRequestException>(() => { Jwt.Parse(""); });
-        Assert.Throws<BadRequestException>(() => { Jwt.Parse("Bearer"); });
-        Assert.Throws<BadRequestException>(() => { Jwt.Parse("Bearer "); });
-        Assert.Throws<BadRequestException>(() => { Jwt.Parse("TOKEN"); });
+        Assert.Throws<BadRequestException>(() => { JwtUtils.Parse(""); });
+        Assert.Throws<BadRequestException>(() => { JwtUtils.Parse("Bearer"); });
+        Assert.Throws<BadRequestException>(() => { JwtUtils.Parse("Bearer "); });
+        Assert.Throws<BadRequestException>(() => { JwtUtils.Parse("TOKEN"); });
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class JwtTests
         token.Should().NotBeNull();
 
         // act & assert
-        Jwt.Parse(string.Format("Bearer {0}", token)).Should().Be(token);
+        JwtUtils.Parse(string.Format("Bearer {0}", token)).Should().Be(token);
     }
 
     [Fact]
@@ -96,10 +96,10 @@ public class JwtTests
         token.Should().NotBeNull();
 
         // act & assert
-        Jwt.ParseFromPayload(token, "AccountId").Should().Be(user.Id.ToString());
-        Jwt.ParseFromPayload(token, "ACCOUNTID").Should().Be(user.Id.ToString());
-        Jwt.ParseFromPayload(token, "accountid").Should().Be(user.Id.ToString());
+        JwtUtils.ParseFromPayload(token, "AccountId").Should().Be(user.Id.ToString());
+        JwtUtils.ParseFromPayload(token, "ACCOUNTID").Should().Be(user.Id.ToString());
+        JwtUtils.ParseFromPayload(token, "accountid").Should().Be(user.Id.ToString());
 
-        Jwt.ParseFromPayload(token, "account_id").Should().BeNull();
+        JwtUtils.ParseFromPayload(token, "account_id").Should().BeNull();
     }
 }

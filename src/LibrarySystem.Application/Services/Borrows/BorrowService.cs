@@ -76,7 +76,7 @@ public class BorrowService : IBorrowService
 
     public async Task<int> Return(Borrow borrow, Book book, string jwt)
     {
-        var role = Jwt.ParseFromPayload(jwt, ClaimTypes.Role);
+        var role = JwtUtils.ParseFromPayload(jwt, ClaimTypes.Role);
 
         if (borrow.IsReturned)
         {

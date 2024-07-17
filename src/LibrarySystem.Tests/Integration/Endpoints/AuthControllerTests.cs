@@ -54,7 +54,7 @@ public class AuthControllerTests
         content.UserDto!.Id.Should().Be(user.Id);
         content.Token.Should().NotBeNull();
 
-        var tokenPayload = Jwt.ParsePayload(content.Token!);
+        var tokenPayload = JwtUtils.ParsePayload(content.Token!);
         tokenPayload.Count().Should().BeGreaterThan(2);
         tokenPayload.ElementAt(0).Type.Should().Be("UserId");
         tokenPayload.ElementAt(0).Value.Should().Be(user.Id.ToString());
@@ -135,7 +135,7 @@ public class AuthControllerTests
         content.EmployeeDto!.Id.Should().Be(employee.Id);
         content.Token.Should().NotBeNull();
 
-        var tokenPayload = Jwt.ParsePayload(content.Token!);
+        var tokenPayload = JwtUtils.ParsePayload(content.Token!);
         tokenPayload.Count().Should().BeGreaterThan(2);
         tokenPayload.ElementAt(0).Type.Should().Be("EmployeeId");
         tokenPayload.ElementAt(0).Value.Should().Be(employee.Id.ToString());

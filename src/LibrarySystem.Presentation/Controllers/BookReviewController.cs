@@ -42,7 +42,7 @@ public class BookReviewController : ControllerBase
         var review = await _service.BookReview.Get(reviewId); 
 
         // verify that the request user id matches the user id of the review
-        if (Jwt.ParseFromPayload(Jwt.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
+        if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
             throw new NotAuthorizedException("Not Authorized!");
 
         var affected = await _service.BookReview.Delete(review);
@@ -60,7 +60,7 @@ public class BookReviewController : ControllerBase
         var review = await _service.BookReview.Get(reviewId); 
 
         // verify that the request user id matches the user id of the review
-        if (Jwt.ParseFromPayload(Jwt.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
+        if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
             throw new NotAuthorizedException("Not Authorized!");
 
         var affected = await _service.BookReview.Update(review, updateBookReviewDto);

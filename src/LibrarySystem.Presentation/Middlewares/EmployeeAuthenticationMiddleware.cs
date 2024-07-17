@@ -23,8 +23,8 @@ public class EmployeeAuthenticationMiddleware : AuthenticationMiddlewareBase
         }
 
         // parse the jwt token from the request header and get the token
-        var token = Jwt.Parse(context.Request.Headers.Authorization);
-        var tokenEmployeeId = Jwt.ParseFromPayload(token, "EmployeeId");
+        var token = JwtUtils.Parse(context.Request.Headers.Authorization);
+        var tokenEmployeeId = JwtUtils.ParseFromPayload(token, "EmployeeId");
 
         // try to parse the token from the request - first from route parameter, then from json body
         var requestEmployeeId = await ExtractKeyFromRouteOrBodyAsync(context, "EmployeeId");

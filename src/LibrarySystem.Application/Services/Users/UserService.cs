@@ -82,14 +82,8 @@ public class UserService : IUserService
         var email = updateUserDto.Email;
         var username = updateUserDto.Username;
 
-        if (!email.IsNullOrEmpty())
-        {
-            user.Email = email;
-        }
-        if (!username.IsNullOrEmpty())
-        {
-            user.Username = username;
-        }
+        user.Email = email;
+        user.Username = username;
 
         return await _repository.SaveAsync();
     }

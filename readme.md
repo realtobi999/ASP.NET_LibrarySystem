@@ -135,4 +135,4 @@ This project utilizes a **Clean Architecture** paradigm. Which is very widely kn
 
 ## Notes
 
-In this project i learned a lot about ASP.NET and specifically about API's. I've implemented various authentication middlewares and authorization policies, implemented the clean architecture paradigm, got better at writing integration tests, learned how to implement an **EMAIL** service and how to use the Razor Engine for custom email HTML. I've also got better at writing bussiness logic and implemented various features.
+In this project i learned a lot about ASP.NET and specifically about API's. I've implemented various authentication middlewares and authorization policies, implemented the clean architecture design, got better at writing integration tests, learned how to implement an **EMAIL** service and how to use the Razor Engine for custom email HTML. I've also got better at writing bussiness logic and implemented various features.

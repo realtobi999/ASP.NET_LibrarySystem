@@ -75,14 +75,8 @@ public class EmployeeService : IEmployeeService
         var name = updateEmployeeDto.Name;
         var email = updateEmployeeDto.Email;
 
-        if (!email.IsNullOrEmpty())
-        {
-            employee.Email = email;
-        }
-        if (!name.IsNullOrEmpty())
-        {
-            employee.Name = name;
-        }
+        employee.Email = email;
+        employee.Name = name;
 
         return await _repository.SaveAsync();
     }

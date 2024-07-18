@@ -3,7 +3,6 @@ using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.NotFound;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Genres;
 
@@ -59,7 +58,7 @@ public class GenreService : IGenreService
         var name = updateGenreDto.Name;
 
         genre.Name = name;
-        
+
         return await _repository.SaveAsync();
     }
 }

@@ -9,7 +9,7 @@ public record class CreateWishlistDto
     [Required]
     public Guid UserId { get; set; }
 
-    [Required]
+    [Required, MaxLength(55)]
     public string? Name { get; set; }
     
     [Required]

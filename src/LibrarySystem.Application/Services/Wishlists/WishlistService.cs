@@ -1,5 +1,4 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.NotFound;
@@ -71,14 +70,15 @@ public class WishlistService : IWishlistService
     public async Task<int> Update(Wishlist wishlist, UpdateWishlistDto updateWishlistDto)
     {
         var name = updateWishlistDto.Name;
+        var books = updateWishlistDto.BookIds;
 
-        if (!name.IsNullOrEmpty())
+        wishlist.Name = name;
+
+        if (books is not null)
         {
-            wishlist.Name = name;
+            _associations.CleanBooks(wishlist); 
+            await _associations.AssignBooks(books, wishlist);
         }
-
-        _associations.CleanBooks(wishlist); 
-        await _associations.AssignBooks(updateWishlistDto.BookIds!, wishlist);
 
         return await _repository.SaveAsync();
     }

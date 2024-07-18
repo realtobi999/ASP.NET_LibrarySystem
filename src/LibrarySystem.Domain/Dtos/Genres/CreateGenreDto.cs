@@ -7,6 +7,6 @@ public record class CreateGenreDto
 {
     public Guid? Id { get; set; }
     
-    [Required]
+    [Required, MaxLength(55)]
     public string? Name { get; set; }
 }

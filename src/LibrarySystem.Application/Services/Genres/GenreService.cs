@@ -58,11 +58,8 @@ public class GenreService : IGenreService
 
         var name = updateGenreDto.Name;
 
-        if (!name.IsNullOrEmpty())
-        {
-            genre.Name = name;
-        }
-
+        genre.Name = name;
+        
         return await _repository.SaveAsync();
     }
 }

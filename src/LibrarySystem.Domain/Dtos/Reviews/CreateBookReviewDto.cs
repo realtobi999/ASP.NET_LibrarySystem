@@ -12,9 +12,9 @@ public record class CreateBookReviewDto
     [Required]
     public Guid UserId { get; set; }
 
-    [Required]
+    [Required, Range(0,10)]
     public double Rating { get; set; }
 
-    [Required]
+    [Required, MaxLength(555)]
     public string? Text { get; set; }
 }

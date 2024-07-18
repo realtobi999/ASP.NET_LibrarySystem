@@ -70,11 +70,10 @@ public class BookReviewService : IBookReviewService
     public async Task<int> Update(BookReview bookReview, UpdateBookReviewDto updateBookReviewDto)
     {
        var text = updateBookReviewDto.Text;
+       var rating = updateBookReviewDto.Rating;
 
-        if (!text.IsNullOrEmpty())
-        {
-            bookReview.Text = text;
-        }
+        bookReview.Text = text;
+        bookReview.Rating = rating;
 
         return await _repository.SaveAsync();
     }

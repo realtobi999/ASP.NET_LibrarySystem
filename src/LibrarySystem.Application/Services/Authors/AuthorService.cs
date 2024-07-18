@@ -62,18 +62,10 @@ public class AuthorService : IAuthorService
         var birthday = updateAuthorDto.Birthday;
         var picture = updateAuthorDto.ProfilePicture;
 
-        if (!name.IsNullOrEmpty())
-        {
-            author.Name = name;
-        }
-        if (!description.IsNullOrEmpty())
-        {
-            author.Description = description;
-        }
-        if (birthday != DateTimeOffset.MinValue)
-        {
-            author.Birthday = birthday;
-        }
+        author.Name = name;
+        author.Description = description;
+        author.Birthday = birthday;
+
         if (!picture.IsNullOrEmpty())
         {
             author.ProfilePicture = Convert.FromBase64String(picture!);    

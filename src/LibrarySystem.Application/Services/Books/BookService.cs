@@ -100,43 +100,32 @@ public class BookService : IBookService
         var authors = updateBookDto.Authors;
         var genres = updateBookDto.Genres;
 
-        if (!title.IsNullOrEmpty())
+        book.Title = title;
+        book.Description = description;
+        book.PagesCount = pages;
+        book.PublishedDate = published;
+            
+        if (availability is not null)
         {
-            book.Title = title;
-        }
-        if (!description.IsNullOrEmpty())
-        {
-            book.Description = description;
-        }
-        if (pages > 0)
-        {
-            book.PagesCount = pages;
-        }
-        if (published != DateTimeOffset.MinValue)
-        {
-            book.PublishedDate = published;
+            book.IsAvailable = (bool)availability;
         }
         if (!picture.IsNullOrEmpty())
         {
             book.CoverPicture = picture;
         }
-        if (authors.Count != 0)
+        if (authors is not null)
         {
             _associations.CleanAuthors(book);
 
             // Handle authors
             await _associations.AssignAuthors(authors.Select(a => a.Id), book);
         }
-        if (genres.Count != 0)
+        if (genres is not null)
         {
             _associations.CleanGenres(book);
 
             // Handle genres
             await _associations.AssignGenres(genres.Select(g => g.Id), book);
-        }
-        if (availability is not null)
-        {
-            book.IsAvailable = (bool)availability;
         }
 
         return await _repository.SaveAsync();

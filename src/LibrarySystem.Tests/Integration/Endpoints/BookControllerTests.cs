@@ -179,9 +179,12 @@ public class BookControllerTests
         var updateDto = new UpdateBookDto
         {
             Title = "test_test_test",
+            Description = "test_test_test",
+            PagesCount = 12,
             Authors = [author1.ToDto(), author2.ToDto(), author3.ToDto()],
-            Genres = [genre3.ToDto()],
+            Genres = [],
             Availability = false,
+            PublishedDate = DateTimeOffset.Now,
         };
 
         var response = await client.PutAsJsonAsync(string.Format("/api/book/{0}", book.Id), updateDto);
@@ -193,11 +196,12 @@ public class BookControllerTests
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(book.Id);
         content.Title.Should().Be(updateDto.Title);
+        content.Description.Should().Be(updateDto.Description);
+        content.PublishedDate.Should().Be(updateDto.PublishedDate);
         content.IsAvailable.Should().Be(false);
         content.Authors.Count.Should().Be(3);
         content.Authors.ElementAt(2).Should().BeEquivalentTo(author3.ToDto());
-        content.Genres.Count.Should().Be(1);
-        content.Genres.ElementAt(0).Should().BeEquivalentTo(genre3.ToDto());
+        content.Genres.Count.Should().Be(0);
     }
 
     [Fact]

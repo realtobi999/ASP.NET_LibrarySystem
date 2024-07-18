@@ -9,13 +9,13 @@ public record class CreateBookDto
     [Required]
     public string? ISBN { get; set; }
 
-    [Required]
+    [Required, MaxLength(55)]
     public string? Title { get; set; }
 
-    [Required]
+    [Required, MaxLength(555)]
     public string? Description { get; set; }
 
-    [Required]
+    [Required, Range(0,10000)]
     public int PagesCount { get; set; } 
 
     [Required]
@@ -24,10 +24,10 @@ public record class CreateBookDto
     [Required]
     public bool? Available { get; set; }
 
-    [Required]
+    [Required, MaxLength(15)]
     public IEnumerable<Guid>? GenreIds { get; set; }
 
-    [Required]
+    [Required, MaxLength(15)]
     public IEnumerable<Guid>? AuthorIds { get; set; }
     
     public string? CoverPicture { get; set; }

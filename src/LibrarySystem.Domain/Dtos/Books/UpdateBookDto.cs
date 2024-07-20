@@ -21,7 +21,6 @@ public record class UpdateBookDto
     [Required]
     public DateTimeOffset PublishedDate { get; set; }
 
-    public string? CoverPicture { get; set; }
     public List<AuthorDto>? Authors { get; set; }
     public List<GenreDto>? Genres { get; set; } 
 }

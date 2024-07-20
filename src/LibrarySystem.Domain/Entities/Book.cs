@@ -29,8 +29,8 @@ public class Book
     [Required, Column("available")]
     public bool IsAvailable { get; set; }
 
-    [Required, Column("cover_photo")]
-    public string? CoverPicture { get; set; }
+    [Column("cover_photos")]
+    public List<byte[]>? CoverPictures { get; set; }
 
     // relationships
 
@@ -54,7 +54,7 @@ public class Book
 
         var reviews = this.BookReviews.Select(br => br.ToDto())
                                       .ToList();
-                                      
+
         return new BookDto
         {
             Id = this.Id,
@@ -64,7 +64,7 @@ public class Book
             PagesCount = this.PagesCount,
             PublishedDate = this.PublishedDate,
             IsAvailable = this.IsAvailable,
-            CoverPicture = this.CoverPicture,
+            CoverPictures = this.CoverPictures?.ToList(), 
             Authors = authors,
             Genres = genres,
             Reviews = reviews,

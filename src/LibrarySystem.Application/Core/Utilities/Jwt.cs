@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using LibrarySystem.Domain.Exceptions.BadRequest;
 using LibrarySystem.Domain.Interfaces.Utilities;
 using Microsoft.IdentityModel.Tokens;
 

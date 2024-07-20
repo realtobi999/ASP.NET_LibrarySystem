@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Books;
@@ -491,5 +492,44 @@ public class BookControllerTests
         content3.ElementAt(0).Id.Should().Be(book1.Id);
         content3.ElementAt(0).Authors.Count.Should().Be(0);
         content3.ElementAt(0).Genres.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public async void BookController_UploadPhotos_Returns200AndPhotosUploaded()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var book = new Book().WithFakeData();
+        var token = JwtTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var photo1 = new ByteArrayContent([1, 2, 3, 4]);
+        photo1.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+        var photo2 = new ByteArrayContent([5, 6, 7, 8]);
+        photo2.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+
+        var formData = new MultipartFormDataContent
+        {
+            { photo1, "photos", "photo1.jpg" },
+            { photo2, "photos", "photo2.jpg" }
+        };
+
+        // act & assert
+        var response = await client.PatchAsync(string.Format("/api/book/{0}/photos/upload", book.Id), formData);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
+
+        content.Id.Should().Be(book.Id);
+        content.CoverPictures?.Count.Should().Be(2);
     }
 }

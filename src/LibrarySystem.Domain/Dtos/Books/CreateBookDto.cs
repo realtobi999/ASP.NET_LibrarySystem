@@ -29,6 +29,4 @@ public record class CreateBookDto
 
     [Required, MaxLength(15)]
     public IEnumerable<Guid>? AuthorIds { get; set; }
-    
-    public string? CoverPicture { get; set; }
 }

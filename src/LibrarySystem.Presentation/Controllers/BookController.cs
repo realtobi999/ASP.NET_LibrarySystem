@@ -1,6 +1,8 @@
-﻿using LibrarySystem.Application.Interfaces;
+﻿using LibrarySystem.Application.Core.Extensions;
+using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Exceptions;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +17,7 @@ GET     /api/book/{book_id} params: withRelations
 GET     /api/book/isbn/{isbn} params: withRelations
 GET     /api/book/search/{query} params: limit, offset, authorId, genreId, withRelations
 POST    /api/book
+PATCH   /api/book/photos/upload
 PUT     /api/book/{book_id}
 DELETE  /api/book/{book_id}
 
@@ -117,6 +120,24 @@ public class BookController : ControllerBase
         if (affected == 0)
             throw new ZeroRowsAffectedException();
 
+        return Ok();
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpPatch("api/book/{bookId:guid}/photos/upload")] 
+    public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection photos)
+    {
+        var bytes = new List<byte[]>();
+        foreach (var photo in photos.Files)
+        {
+            bytes.Add(await photo.GetBytes());
+        }
+
+        var affected = await _service.Book.SetCoverPictures(bookId, bytes);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+        
         return Ok();
     }
 }

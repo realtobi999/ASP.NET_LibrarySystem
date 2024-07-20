@@ -1,11 +1,9 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Exceptions.NotFound;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Books;
 
@@ -30,13 +28,12 @@ public class BookService : IBookService
             Description = createBookDto.Description,
             PagesCount = createBookDto.PagesCount,
             PublishedDate = createBookDto.PublishedDate,
-            CoverPicture = createBookDto.CoverPicture,
         };
 
         var availability = createBookDto.Available;
         if (availability is not null)
         {
-            book.IsAvailable = (bool)availability; 
+            book.IsAvailable = (bool)availability;
         }
 
         var authorIds = createBookDto.AuthorIds ?? throw new NullReferenceException("Atleast one author must be assigned.");
@@ -58,7 +55,7 @@ public class BookService : IBookService
     public async Task<int> Delete(Guid id)
     {
         var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
-        
+
         _associations.CleanAuthors(book);
         _associations.CleanGenres(book);
 
@@ -84,7 +81,7 @@ public class BookService : IBookService
     {
         var book = await _repository.Book.Get(isbn, withRelations) ?? throw new NotFoundException($"The book with isbn: {isbn} doesnt exist.");
 
-        return book; 
+        return book;
     }
 
     public async Task<int> Update(Guid id, UpdateBookDto updateBookDto)
@@ -96,7 +93,6 @@ public class BookService : IBookService
         var description = updateBookDto.Description;
         var pages = updateBookDto.PagesCount;
         var published = updateBookDto.PublishedDate;
-        var picture = updateBookDto.CoverPicture;
         var authors = updateBookDto.Authors;
         var genres = updateBookDto.Genres;
 
@@ -104,14 +100,10 @@ public class BookService : IBookService
         book.Description = description;
         book.PagesCount = pages;
         book.PublishedDate = published;
-            
+
         if (availability is not null)
         {
             book.IsAvailable = (bool)availability;
-        }
-        if (!picture.IsNullOrEmpty())
-        {
-            book.CoverPicture = picture;
         }
         if (authors is not null)
         {
@@ -134,14 +126,23 @@ public class BookService : IBookService
     public async Task<int> SetAvailable(Book book)
     {
         book.IsAvailable = true;
-        
+
         return await _repository.SaveAsync();
     }
 
     public async Task<int> SetAvailability(Book book, bool availability)
     {
         book.IsAvailable = availability;
-        
+
+        return await _repository.SaveAsync();
+    }
+
+    public async Task<int> SetCoverPictures(Guid id, IEnumerable<byte[]> pictures)
+    {
+        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
+
+        book.CoverPictures = pictures.ToList();
+
         return await _repository.SaveAsync();
     }
 }

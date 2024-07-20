@@ -29,16 +29,14 @@ public class Book
     [Required, Column("available")]
     public bool IsAvailable { get; set; }
 
-    [Column("cover_photos")]
-    public List<byte[]>? CoverPictures { get; set; }
 
     // relationships
-
+    [JsonIgnore]
+    public ICollection<Picture> CoverPictures { get; set; } = [];
     [JsonIgnore]
     public ICollection<BookAuthor> BookAuthors { get; set; } = [];
     [JsonIgnore]
     public ICollection<BookGenre> BookGenres { get; set; } = [];
-
     [JsonIgnore]
     public ICollection<BookReview> BookReviews { get; set; } = [];
 
@@ -64,7 +62,7 @@ public class Book
             PagesCount = this.PagesCount,
             PublishedDate = this.PublishedDate,
             IsAvailable = this.IsAvailable,
-            CoverPictures = this.CoverPictures?.ToList(), 
+            CoverPictures = [.. this.CoverPictures],
             Authors = authors,
             Genres = genres,
             Reviews = reviews,

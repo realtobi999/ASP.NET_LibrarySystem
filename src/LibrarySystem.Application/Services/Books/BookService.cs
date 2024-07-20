@@ -136,13 +136,4 @@ public class BookService : IBookService
 
         return await _repository.SaveAsync();
     }
-
-    public async Task<int> SetCoverPictures(Guid id, IEnumerable<byte[]> pictures)
-    {
-        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
-
-        book.CoverPictures = pictures.ToList();
-
-        return await _repository.SaveAsync();
-    }
 }

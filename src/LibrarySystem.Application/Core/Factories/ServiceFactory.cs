@@ -5,6 +5,7 @@ using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Application.Services.Borrows;
 using LibrarySystem.Application.Services.Employees;
 using LibrarySystem.Application.Services.Genres;
+using LibrarySystem.Application.Services.Pictures;
 using LibrarySystem.Application.Services.Reviews;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Application.Services.Wishlists;
@@ -56,6 +57,11 @@ public class ServiceFactory : IServiceFactory
     public IGenreService CreateGenreService()
     {
         return new GenreService(_repository);
+    }
+
+    public IPictureService CreatePictureService()
+    {
+        return new PictureService(_repository);
     }
 
     public IUserService CreateUserService()

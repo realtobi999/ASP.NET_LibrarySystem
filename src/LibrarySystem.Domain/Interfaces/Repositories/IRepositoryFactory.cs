@@ -11,5 +11,6 @@ public interface IRepositoryFactory
     IBorrowRepository CreateBorrowRepository();
     IBookReviewRepository CreateBookReviewRepository();
     IWishlistRepository CreateWishlistRepository();
+    IPictureRepository CreatePictureRepository();
     IBaseRepository CreateBaseRepository();
 }

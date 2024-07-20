@@ -63,4 +63,9 @@ public class RepositoryFactory : IRepositoryFactory
     {
         return new WishlistRepository(_context);
     }
+
+    public IPictureRepository CreatePictureRepository()
+    {
+        return new PictureRepository(_context); 
+    }
 }

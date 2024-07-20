@@ -12,4 +12,5 @@ public interface IServiceManager
     IBorrowService Borrow { get; }
     IBookReviewService BookReview { get; }
     IWishlistService Wishlist { get; }
+    IPictureService Picture  { get; }
 }

@@ -1,11 +1,13 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Books;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Pkcs;
 
 namespace LibrarySystem.Presentation.Controllers;
 
@@ -125,18 +127,20 @@ public class BookController : ControllerBase
 
     [Authorize(Policy = "Employee")]
     [HttpPatch("api/book/{bookId:guid}/photos/upload")] 
-    public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection photos)
+    public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection files)
     {
-        var bytes = new List<byte[]>();
-        foreach (var photo in photos.Files)
+        var pictures = await _service.Picture.Extract(files);
+
+        // assign the id to the pictures and push them to the database
+        foreach (var picture in pictures)
         {
-            bytes.Add(await photo.GetBytes());
+            picture.BookId = bookId;
+
+            var affected1 = await _service.Picture.Create(picture);
+
+            if (affected1 == 0)
+                throw new ZeroRowsAffectedException();
         }
-
-        var affected = await _service.Book.SetCoverPictures(bookId, bytes);
-
-        if (affected == 0)
-            throw new ZeroRowsAffectedException();
         
         return Ok();
     }

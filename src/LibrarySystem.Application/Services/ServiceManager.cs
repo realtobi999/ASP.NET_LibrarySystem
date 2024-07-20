@@ -26,5 +26,7 @@ public class ServiceManager : IServiceManager
 
     public IBookReviewService BookReview => _factory.CreateBookReviewService();
 
-    public IWishlistService Wishlist => _factory.CreateWishlistService(); 
+    public IWishlistService Wishlist => _factory.CreateWishlistService();
+
+    public IPictureService Picture =>  _factory.CreatePictureService();
 }

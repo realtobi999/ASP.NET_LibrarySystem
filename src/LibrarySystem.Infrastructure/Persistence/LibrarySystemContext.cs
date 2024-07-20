@@ -18,6 +18,7 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
     public DbSet<Borrow> Borrows { get; set; }
     public DbSet<Wishlist> Wishlists { get; set; }
     public DbSet<WishlistBook> WishlistBooks { get; set; }
+    public DbSet<Picture> Pictures { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

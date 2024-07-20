@@ -27,7 +27,9 @@ public class RepositoryManager : IRepositoryManager
 
     public IBookReviewRepository BookReview => _factory.CreateBookReviewRepository();
 
-    public IWishlistRepository Wishlist => _factory.CreateWishlistRepository(); 
+    public IWishlistRepository Wishlist => _factory.CreateWishlistRepository();
+
+    public IPictureRepository Picture => _factory.CreatePictureRepository();
 
     private IBaseRepository _base => _factory.CreateBaseRepository(); 
 

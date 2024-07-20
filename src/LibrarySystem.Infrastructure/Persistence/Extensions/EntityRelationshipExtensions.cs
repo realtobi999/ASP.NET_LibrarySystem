@@ -1,6 +1,7 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Entities.Relationships;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LibrarySystem.Infrastructure.Persistence.Extensions;
 
@@ -63,6 +64,17 @@ public static class EntityRelationshipExtensions
         builder.Entity<Book>()
             .HasMany(b => b.BookReviews)
             .WithOne(br => br.Book)
-            .HasForeignKey(br => br.BookId);
+            .HasForeignKey(br => br.BookId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    public static void ConfigureBookPictureRelationship(this ModelBuilder builder)
+    {
+        // configure one-to-many relationship between Book and Picture
+        builder.Entity<Book>()
+            .HasMany(b => b.CoverPictures)
+            .WithOne(p => p.Book)
+            .HasForeignKey(p => p.BookId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

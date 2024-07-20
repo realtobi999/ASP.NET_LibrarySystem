@@ -33,7 +33,7 @@ public class BookRepository : IBookRepository
             book = book.IncludeBookRelations();
         }
 
-        return await book.SingleOrDefaultAsync(b => b.Id == id);
+        return await book.Include(b => b.CoverPictures).SingleOrDefaultAsync(b => b.Id == id);
     }
 
     public async Task<IEnumerable<Book>> GetAll(bool withRelations = true)
@@ -45,7 +45,7 @@ public class BookRepository : IBookRepository
             books = books.IncludeBookRelations();
         }
 
-        return await books.ToListAsync();
+        return await books.Include(b => b.CoverPictures).ToListAsync();
     }
 
     public async Task<Book?> Get(string isbn, bool withRelations = true)
@@ -57,6 +57,6 @@ public class BookRepository : IBookRepository
             book = book.IncludeBookRelations();
         }
 
-        return await book.SingleOrDefaultAsync(b => b.ISBN == isbn);
+        return await book.Include(b => b.CoverPictures).SingleOrDefaultAsync(b => b.ISBN == isbn);
     }
 }

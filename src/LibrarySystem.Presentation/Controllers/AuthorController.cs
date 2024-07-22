@@ -95,11 +95,8 @@ public class AuthorController : ControllerBase
         // delete any previous associated photo
         _repository.Picture.DeleteWhere(p => p.EntityId == authorId  && p.EntityType == PictureEntityType.Author);
 
-        // assign the id and type to the picture
-        picture.EntityId = authorId;
-        picture.EntityType = PictureEntityType.Author;
-
-        var affected = await _service.Picture.Create(picture);
+        // assign the id to the pictures and push them to the database
+        var affected = await _service.Picture.CreateWithEntity(picture, authorId, PictureEntityType.Author);
 
         if (affected == 0)
             throw new ZeroRowsAffectedException();

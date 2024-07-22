@@ -132,16 +132,10 @@ public class BookController : ControllerBase
         var pictures = await _service.Picture.Extract(files);
 
         // assign the id to the pictures and push them to the database
-        foreach (var picture in pictures)
-        {
-            picture.EntityId = bookId;
-            picture.EntityType = PictureEntityType.Book;
+        var affected = await _service.Picture.BulkCreateWithEntity(pictures, bookId, PictureEntityType.Book); 
 
-            var affected = await _service.Picture.Create(picture);
-
-            if (affected == 0)
-                throw new ZeroRowsAffectedException();
-        }
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
         
         return Ok();
     }
@@ -156,16 +150,10 @@ public class BookController : ControllerBase
         _repository.Picture.DeleteWhere(p => p.EntityId == bookId && p.EntityType == PictureEntityType.Book);
 
         // assign the id to the pictures and push them to the database
-        foreach (var picture in pictures)
-        {
-            picture.EntityId = bookId;
-            picture.EntityType = PictureEntityType.Book;
+        var affected = await _service.Picture.BulkCreateWithEntity(pictures, bookId, PictureEntityType.Book); 
 
-            var affected = await _service.Picture.Create(picture);
-
-            if (affected == 0)
-                throw new ZeroRowsAffectedException();
-        }
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
         
         return Ok();
     }

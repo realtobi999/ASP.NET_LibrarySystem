@@ -1,6 +1,8 @@
 ﻿using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Authors;
+using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,18 +14,20 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/author param: offset, limit
 GET     /api/author/{author_id}
 POST    /api/author
+POST    /api/author/{author_id}/photos/upload
 PUT     /api/author/{author_id}
-PATCH   /api/author/{author_id}/photos/upload
 DELETE  /api/author/{author_id}
 
 */
 public class AuthorController : ControllerBase
 {
     private readonly IServiceManager _service;
+    private readonly IRepositoryManager _repository;
 
-    public AuthorController(IServiceManager service)
+    public AuthorController(IServiceManager service, IRepositoryManager repository)
     {
         _service = service;
+        _repository = repository;
     }
 
     [Authorize(Policy = "Employee")]
@@ -80,5 +84,26 @@ public class AuthorController : ControllerBase
             throw new ZeroRowsAffectedException();
 
         return Ok();
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpPatch("api/author/{authorId:guid}/photos/upload")]
+    public async Task<IActionResult> UploadPhotos(Guid authorId, IFormFile file)
+    {
+        var picture = await _service.Picture.Extract(file);
+
+        // delete any previous associated photo
+        _repository.Picture.DeleteWhere(p => p.EntityId == authorId  && p.EntityType == PictureEntityType.Author);
+
+        // assign the id and type to the picture
+        picture.EntityId = authorId;
+        picture.EntityType = PictureEntityType.Author;
+
+        var affected = await _service.Picture.Create(picture);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();    
     }
 }

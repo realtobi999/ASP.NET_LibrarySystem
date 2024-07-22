@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LibrarySystem.Domain.Enums;
 
 namespace LibrarySystem.Domain.Entities;
 
@@ -9,7 +10,10 @@ public class Picture
     public Guid Id { get; set; }
 
     [Required, Column("book_id")]
-    public Guid BookId { get; set; }
+    public Guid EntityId { get; set; }
+
+    [Required, Column("entity_type")]
+    public PictureEntityType EntityType { get; set; }
 
     [Required, Column("name")]
     public string? FileName { get; set; }
@@ -23,4 +27,5 @@ public class Picture
     // relationships
     
     public Book? Book { get; set; }
+    public Author? Author { get; set; }
 }

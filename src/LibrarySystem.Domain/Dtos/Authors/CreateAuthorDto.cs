@@ -14,6 +14,4 @@ public record class CreateAuthorDto
 
     [Required]
     public DateTimeOffset Birthday { get; set; }
-
-    public string? ProfilePicture { get; set; }
 }

@@ -2,7 +2,7 @@
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
 
-namespace LibrarySystem.Tests;
+namespace LibrarySystem.Tests.Integration.Extensions;
 
 public static class AuthorTestExtensions
 {
@@ -25,7 +25,6 @@ public static class AuthorTestExtensions
             Name = author.Name,
             Description = author.Description,
             Birthday = author.Birthday,
-            ProfilePicture = Convert.ToBase64String(author.ProfilePicture ?? Array.Empty<byte>()) // Convert byte[] to base64 string
         };
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace LibrarySystem.Domain.Dtos.Authors;
+﻿using LibrarySystem.Domain.Entities;
+
+namespace LibrarySystem.Domain.Dtos.Authors;
 
 public record class AuthorDto
 {
@@ -10,5 +12,5 @@ public record class AuthorDto
 
     public DateTimeOffset Birthday { get; set; }
 
-    public string? ProfilePicture { get; set; }
+    public Picture? ProfilePicture { get; set; }
 }

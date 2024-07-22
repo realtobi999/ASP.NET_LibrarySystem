@@ -12,6 +12,4 @@ public class UpdateAuthorDto
 
     [Required]
     public DateTimeOffset Birthday { get; set; }
-
-    public string? ProfilePicture { get; set; }
 }

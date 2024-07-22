@@ -27,15 +27,20 @@ public class PictureService : IPictureService
         var pictures = new List<Picture>();
         foreach (var file in files.Files)
         {
-            pictures.Add(new Picture
-            {
-                Id = Guid.NewGuid(),
-                FileContent = await file.GetBytes(),
-                FileName = file.FileName,
-                MimeType = file.ContentType,
-            });
+            pictures.Add(await this.Extract(file));
         }
 
         return pictures;
+    }
+
+    public async Task<Picture> Extract(IFormFile file)
+    {
+        return new Picture
+        {
+            Id = Guid.NewGuid(),
+            FileContent = await file.GetBytes(),
+            FileName = file.FileName,
+            MimeType = file.ContentType,
+        };
     }
 }

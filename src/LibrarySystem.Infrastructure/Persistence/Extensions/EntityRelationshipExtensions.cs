@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Entities.Relationships;
+using LibrarySystem.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -21,7 +22,7 @@ public static class EntityRelationshipExtensions
         builder.Entity<WishlistBook>()
             .HasOne(wb => wb.Book)
             .WithMany()
-            .HasForeignKey(wb => wb.BookId);   
+            .HasForeignKey(wb => wb.BookId);
     }
 
     public static void ConfigureBookAuthorRelationship(this ModelBuilder builder)
@@ -68,13 +69,27 @@ public static class EntityRelationshipExtensions
             .OnDelete(DeleteBehavior.Cascade);
     }
 
-    public static void ConfigureBookPictureRelationship(this ModelBuilder builder)
-    {
-        // configure one-to-many relationship between Book and Picture
-        builder.Entity<Book>()
-            .HasMany(b => b.CoverPictures)
-            .WithOne(p => p.Book)
-            .HasForeignKey(p => p.BookId)
+    public static void ConfigurePictureRelationships(this ModelBuilder builder)
+  {
+        // Configure one-to-one relationship between Author and Picture
+        builder.Entity<Picture>()
+            .HasOne(p => p.Author)
+            .WithOne(a => a.ProfilePicture)
+            .HasForeignKey<Picture>(p => p.EntityId)
+            .HasPrincipalKey<Author>(a => a.Id)
             .OnDelete(DeleteBehavior.Cascade);
-    }
+
+        // Configure one-to-many relationship between Book and Picture
+        builder.Entity<Picture>()
+            .HasOne(p => p.Book)
+            .WithMany(b => b.CoverPictures)
+            .HasForeignKey(p => p.EntityId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Discriminator for entity type
+        builder.Entity<Picture>()
+            .HasDiscriminator<PictureEntityType>("entity_type")
+            .HasValue<Picture>(PictureEntityType.Book)
+            .HasValue<Picture>(PictureEntityType.Author);
+    } 
 }

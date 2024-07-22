@@ -1,15 +1,11 @@
-﻿using LibrarySystem.Application.Core.Extensions;
-using LibrarySystem.Application.Interfaces;
+﻿using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Books;
-using LibrarySystem.Domain.Entities;
+using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Asn1.Pkcs;
-
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController] 
@@ -138,7 +134,8 @@ public class BookController : ControllerBase
         // assign the id to the pictures and push them to the database
         foreach (var picture in pictures)
         {
-            picture.BookId = bookId;
+            picture.EntityId = bookId;
+            picture.EntityType = PictureEntityType.Book;
 
             var affected = await _service.Picture.Create(picture);
 
@@ -156,13 +153,13 @@ public class BookController : ControllerBase
         var pictures = await _service.Picture.Extract(files);
 
         // delete all previous saved pictures
-        _repository.Picture.DeleteWhere(p => p.BookId == bookId);
-        await _repository.SaveAsync();
+        _repository.Picture.DeleteWhere(p => p.EntityId == bookId && p.EntityType == PictureEntityType.Book);
 
         // assign the id to the pictures and push them to the database
         foreach (var picture in pictures)
         {
-            picture.BookId = bookId;
+            picture.EntityId = bookId;
+            picture.EntityType = PictureEntityType.Book;
 
             var affected = await _service.Picture.Create(picture);
 

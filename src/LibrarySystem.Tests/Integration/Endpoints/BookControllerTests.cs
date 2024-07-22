@@ -517,7 +517,7 @@ public class BookControllerTests
         var formData = new MultipartFormDataContent
         {
             { photo1, "files", "photo1.jpg" },
-            { photo2, "file", "photo2.jpg" }
+            { photo2, "files", "photo2.jpg" }
         };
 
         // act & assert

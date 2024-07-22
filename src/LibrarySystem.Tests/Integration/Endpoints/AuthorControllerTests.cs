@@ -1,9 +1,9 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -111,7 +111,6 @@ public class AuthorControllerTests
             Name = "test",
             Description = "test_test_test",
             Birthday = DateTimeOffset.UtcNow.AddDays(2),
-            ProfilePicture = Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 }) // imagine this is the encoded string
         };
 
         var response = await client.PutAsJsonAsync(string.Format("/api/author/{0}", author.Id), updateDto);
@@ -125,7 +124,6 @@ public class AuthorControllerTests
         content.Name.Should().Be(updateDto.Name);
         content.Description.Should().Be(updateDto.Description);
         content.Birthday.Should().Be(updateDto.Birthday);
-        content.ProfilePicture.Should().Be(updateDto.ProfilePicture);
     }
 
     [Fact]
@@ -149,5 +147,43 @@ public class AuthorControllerTests
 
         var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async void AuthorController_UploadPhotos_Returns200AndIsUploaded()
+    {
+         // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var author = new Author().WithFakeData();
+        var token = JwtTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var photo1 = new ByteArrayContent([1, 2, 3, 4]);
+        photo1.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+        var photo2 = new ByteArrayContent([5, 6, 7, 8]);
+        photo2.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+
+        var formData = new MultipartFormDataContent
+        {
+            { photo1, "file", "photo1.jpg" },
+        };
+
+        // act & assert
+        var response = await client.PatchAsync(string.Format("/api/author/{0}/photos/upload", author.Id), formData);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
+
+        content.Id.Should().Be(author.Id);
+        content.ProfilePicture?.FileName.Should().Be("photo1.jpg");
     }
 }

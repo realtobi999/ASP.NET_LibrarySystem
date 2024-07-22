@@ -39,14 +39,6 @@ public class AuthorService : IAuthorService
             Birthday = createAuthorDto.Birthday.ToUniversalTime(),
         };
         
-        var picture = createAuthorDto.ProfilePicture;
-
-        // if the picture isn't null convert it into byte array and save to the author entity
-        if (!picture.IsNullOrEmpty())
-        {
-            author.ProfilePicture = Convert.FromBase64String(picture!);    
-        }
-
         _repository.Author.Create(author);
         await _repository.SaveAsync();
 
@@ -60,16 +52,10 @@ public class AuthorService : IAuthorService
         var name = updateAuthorDto.Name;
         var description = updateAuthorDto.Description;
         var birthday = updateAuthorDto.Birthday;
-        var picture = updateAuthorDto.ProfilePicture;
 
         author.Name = name;
         author.Description = description;
         author.Birthday = birthday;
-
-        if (!picture.IsNullOrEmpty())
-        {
-            author.ProfilePicture = Convert.FromBase64String(picture!);    
-        }
 
         return await _repository.SaveAsync();
     }

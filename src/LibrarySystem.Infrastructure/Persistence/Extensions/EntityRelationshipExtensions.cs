@@ -74,7 +74,7 @@ public static class EntityRelationshipExtensions
         // configure one-to-one relationship between Author and Picture
         builder.Entity<Picture>()
             .HasOne(p => p.Author)
-            .WithOne(a => a.ProfilePicture)
+            .WithOne(a => a.Picture)
             .HasForeignKey<Picture>(p => p.EntityId)
             .HasPrincipalKey<Author>(a => a.Id)
             .OnDelete(DeleteBehavior.Cascade);

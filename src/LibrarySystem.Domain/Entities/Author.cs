@@ -22,7 +22,7 @@ public class Author
     // relationships
     
     [JsonIgnore]
-    public Picture? ProfilePicture { get; set; }
+    public Picture? Picture { get; set; }
 
     public AuthorDto ToDto()
     {
@@ -32,7 +32,7 @@ public class Author
             Name = this.Name,
             Description = this.Description,
             Birthday = this.Birthday,
-            ProfilePicture = this.ProfilePicture,
+            Picture = this.Picture,
         };
     }
 }

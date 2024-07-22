@@ -12,5 +12,5 @@ public record class AuthorDto
 
     public DateTimeOffset Birthday { get; set; }
 
-    public Picture? ProfilePicture { get; set; }
+    public Picture? Picture { get; set; }
 }

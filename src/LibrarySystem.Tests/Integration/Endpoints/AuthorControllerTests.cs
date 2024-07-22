@@ -184,6 +184,6 @@ public class AuthorControllerTests
         var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
 
         content.Id.Should().Be(author.Id);
-        content.ProfilePicture?.FileName.Should().Be("photo1.jpg");
+        content.Picture?.FileName.Should().Be("photo1.jpg");
     }
 }

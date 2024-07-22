@@ -516,12 +516,12 @@ public class BookControllerTests
 
         var formData = new MultipartFormDataContent
         {
-            { photo1, "photos", "photo1.jpg" },
-            { photo2, "photos", "photo2.jpg" }
+            { photo1, "files", "photo1.jpg" },
+            { photo2, "file", "photo2.jpg" }
         };
 
         // act & assert
-        var response = await client.PatchAsync(string.Format("/api/book/{0}/photos/upload", book.Id), formData);
+        var response = await client.PostAsync(string.Format("/api/book/{0}/photos/upload", book.Id), formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
@@ -531,5 +531,61 @@ public class BookControllerTests
 
         content.Id.Should().Be(book.Id);
         content.CoverPictures?.Count.Should().Be(2);
+    }
+
+    [Fact]
+    public async void BookController_UpdatePhoto_Returns200AndPhotosAreUpdated()
+    {
+        // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var book = new Book().WithFakeData();
+        var token = JwtTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var photo1content = new byte[]{1, 2, 3, 4};
+        var photo1 = new ByteArrayContent(photo1content);
+        photo1.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+        var photo2content = new byte[]{5, 6, 7, 8}; 
+        var photo2 = new ByteArrayContent(photo2content);
+        photo2.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+        var photo3content = new byte[]{12, 6, 11, 8};
+        var photo3 = new ByteArrayContent(photo3content);
+        photo3.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+
+
+        var formData1 = new MultipartFormDataContent
+        {
+            { photo1, "files", "photo1.jpg" },
+            { photo2, "files", "photo2.jpg" }
+        };
+
+        var create2 = await client.PostAsync(string.Format("/api/book/{0}/photos/upload", book.Id), formData1);
+        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        // act & assert
+        var formData2 = new MultipartFormDataContent
+        {
+            { photo2, "files", "photo2.jpg" },
+            { photo3, "files", "photo3.jpg"},
+        };
+
+        var response = await client.PatchAsync(string.Format("/api/book/{0}/photos/update", book.Id), formData2);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
+
+        content.Id.Should().Be(book.Id);
+        content.CoverPictures?.Count.Should().Be(2);
+        content.CoverPictures?.ElementAt(0).FileName.Should().BeOneOf("photo2.jpg", "photo3.jpg");
+        content.CoverPictures?.ElementAt(1).FileName.Should().BeOneOf("photo2.jpg", "photo3.jpg");
     }
 }

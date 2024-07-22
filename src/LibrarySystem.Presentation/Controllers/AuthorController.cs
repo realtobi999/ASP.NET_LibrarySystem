@@ -1,11 +1,10 @@
 ﻿using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LibrarySystem.Presentation;
+namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
 /*
@@ -14,6 +13,8 @@ GET     /api/author param: offset, limit
 GET     /api/author/{author_id}
 POST    /api/author
 PUT     /api/author/{author_id}
+PATCH   /api/author/{author_id}/photos/upload
+DELETE  /api/author/{author_id}
 
 */
 public class AuthorController : ControllerBase

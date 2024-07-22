@@ -3,6 +3,7 @@ using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,8 @@ GET     /api/book/{book_id} params: withRelations
 GET     /api/book/isbn/{isbn} params: withRelations
 GET     /api/book/search/{query} params: limit, offset, authorId, genreId, withRelations
 POST    /api/book
-PATCH   /api/book/photos/upload
+POST    /api/book/{book_id}/photos/upload
+PATCH   /api/book/{book_id}/photos/update
 PUT     /api/book/{book_id}
 DELETE  /api/book/{book_id}
 
@@ -27,10 +29,12 @@ DELETE  /api/book/{book_id}
 public class BookController : ControllerBase
 {
     private readonly IServiceManager _service;
+    private readonly IRepositoryManager _repository;
 
-    public BookController(IServiceManager service)
+    public BookController(IServiceManager service, IRepositoryManager repository)
     {
         _service = service;
+        _repository = repository;
     }
 
     [HttpGet("api/book")]
@@ -126,7 +130,7 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPatch("api/book/{bookId:guid}/photos/upload")] 
+    [HttpPost("api/book/{bookId:guid}/photos/upload")] 
     public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection files)
     {
         var pictures = await _service.Picture.Extract(files);
@@ -136,9 +140,33 @@ public class BookController : ControllerBase
         {
             picture.BookId = bookId;
 
-            var affected1 = await _service.Picture.Create(picture);
+            var affected = await _service.Picture.Create(picture);
 
-            if (affected1 == 0)
+            if (affected == 0)
+                throw new ZeroRowsAffectedException();
+        }
+        
+        return Ok();
+    }
+
+    [Authorize(Policy = "Employee")]
+    [HttpPatch("api/book/{bookId:guid}/photos/update")] 
+    public async Task<IActionResult> UpdatePhotos(Guid bookId, IFormCollection files)
+    {
+        var pictures = await _service.Picture.Extract(files);
+
+        // delete all previous saved pictures
+        _repository.Picture.DeleteWhere(p => p.BookId == bookId);
+        await _repository.SaveAsync();
+
+        // assign the id to the pictures and push them to the database
+        foreach (var picture in pictures)
+        {
+            picture.BookId = bookId;
+
+            var affected = await _service.Picture.Create(picture);
+
+            if (affected == 0)
                 throw new ZeroRowsAffectedException();
         }
         

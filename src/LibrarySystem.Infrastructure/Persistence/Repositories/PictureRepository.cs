@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Linq.Expressions;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
@@ -15,11 +16,16 @@ public class PictureRepository : IPictureRepository
 
     public void Create(Picture picture)
     {
-        _context.Add(picture);
+        _context.Pictures.Add(picture);
     }
 
     public void Delete(Picture picture)
     {
-        _context.Remove(picture);
+        _context.Pictures.Remove(picture);
+    }
+
+    public void DeleteWhere(Expression<Func<Picture, bool>> expression)
+    {
+        _context.Pictures.RemoveRange(_context.Pictures.Where(expression));
     }
 }

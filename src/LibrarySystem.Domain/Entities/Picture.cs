@@ -28,4 +28,5 @@ public class Picture
     
     public Book? Book { get; set; }
     public Author? Author { get; set; }
+    public User? User { get; set; }
 }

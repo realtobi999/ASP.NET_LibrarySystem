@@ -20,6 +20,7 @@ public class Author
     public DateTimeOffset Birthday { get; set; }
 
     // relationships
+    
     [JsonIgnore]
     public Picture? ProfilePicture { get; set; }
 

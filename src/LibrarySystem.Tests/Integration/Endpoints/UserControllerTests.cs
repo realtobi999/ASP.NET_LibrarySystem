@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Users;
@@ -116,6 +117,44 @@ public class UserControllerTests
 
         var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async void UserController_UploadPhotos_Returns200AndIsUploaded()
+    {
+         // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var user = new User().WithFakeData();
+        var token = JwtTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+
+        var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        var photo1 = new ByteArrayContent([1, 2, 3, 4]);
+        photo1.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+        var photo2 = new ByteArrayContent([5, 6, 7, 8]);
+        photo2.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+
+        var formData = new MultipartFormDataContent
+        {
+            { photo1, "file", "photo1.jpg" },
+        };
+
+        // act & assert
+        var response = await client.PatchAsync(string.Format("/api/user/{0}/photos/upload", user.Id), formData);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
+        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
+
+        content.Id.Should().Be(user.Id);
+        content.ProfilePicture?.FileName.Should().Be("photo1.jpg");
     }
 
 }

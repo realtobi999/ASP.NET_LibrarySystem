@@ -3,5 +3,6 @@
 public enum PictureEntityType
 {
     Book = 0,
-    Author = 1
+    Author = 1,
+    User = 2,
 }

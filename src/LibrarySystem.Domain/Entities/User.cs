@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Users;
 
 namespace LibrarySystem.Domain.Entities;
@@ -18,6 +19,11 @@ public class User
     [Required, Column("password")]
     public string? Password { get; set; }
 
+    // relationships
+
+    [JsonIgnore]
+    public Picture? ProfilePicture { get; set; }
+
     public UserDto ToDto()
     {
         return new UserDto
@@ -25,6 +31,7 @@ public class User
             Id = this.Id,
             Username = this.Username,
             Email = this.Email,
+            ProfilePicture = this.ProfilePicture
         };
     }
 }

@@ -70,8 +70,8 @@ public static class EntityRelationshipExtensions
     }
 
     public static void ConfigurePictureRelationships(this ModelBuilder builder)
-  {
-        // Configure one-to-one relationship between Author and Picture
+    {
+        // configure one-to-one relationship between Author and Picture
         builder.Entity<Picture>()
             .HasOne(p => p.Author)
             .WithOne(a => a.ProfilePicture)
@@ -79,17 +79,26 @@ public static class EntityRelationshipExtensions
             .HasPrincipalKey<Author>(a => a.Id)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Configure one-to-many relationship between Book and Picture
+        // configure one-to-one relationship between User and Picture
+        builder.Entity<Picture>()
+            .HasOne(p => p.User)
+            .WithOne(a => a.ProfilePicture)
+            .HasForeignKey<Picture>(p => p.EntityId)
+            .HasPrincipalKey<User>(a => a.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // configure one-to-many relationship between Book and Picture
         builder.Entity<Picture>()
             .HasOne(p => p.Book)
             .WithMany(b => b.CoverPictures)
             .HasForeignKey(p => p.EntityId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Discriminator for entity type
+        // discriminator for entity type
         builder.Entity<Picture>()
             .HasDiscriminator<PictureEntityType>("entity_type")
             .HasValue<Picture>(PictureEntityType.Book)
-            .HasValue<Picture>(PictureEntityType.Author);
-    } 
+            .HasValue<Picture>(PictureEntityType.Author)
+            .HasValue<Picture>(PictureEntityType.User);
+    }
 }

@@ -86,7 +86,15 @@ public static class EntityRelationshipExtensions
             .HasForeignKey<Picture>(p => p.EntityId)
             .HasPrincipalKey<User>(a => a.Id)
             .OnDelete(DeleteBehavior.Cascade);
-
+            
+        // configure one-to-one relationship between Employee and Picture
+        builder.Entity<Picture>()
+            .HasOne(p => p.Employee)
+            .WithOne(a => a.Picture)
+            .HasForeignKey<Picture>(p => p.EntityId)
+            .HasPrincipalKey<Employee>(a => a.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+            
         // configure one-to-many relationship between Book and Picture
         builder.Entity<Picture>()
             .HasOne(p => p.Book)
@@ -99,6 +107,7 @@ public static class EntityRelationshipExtensions
             .HasDiscriminator<PictureEntityType>("entity_type")
             .HasValue<Picture>(PictureEntityType.Book)
             .HasValue<Picture>(PictureEntityType.Author)
-            .HasValue<Picture>(PictureEntityType.User);
+            .HasValue<Picture>(PictureEntityType.User)
+            .HasValue<Picture>(PictureEntityType.Employee);
     }
 }

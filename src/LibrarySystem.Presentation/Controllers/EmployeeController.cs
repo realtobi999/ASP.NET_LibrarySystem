@@ -1,7 +1,9 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Employees;
+using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,16 +15,19 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/employee params: offset, limit
 GET     /api/employee/{employee_id}
 PUT     /api/employee/{employee_id}
+PATCH   /api/employee/{employee_id}/photos/upload
 DELETE  /api/employee/{employee_id}
 
 */
 public class EmployeeController : ControllerBase
 {
     private readonly IServiceManager _service;
+    private readonly IRepositoryManager _repository;
 
-    public EmployeeController(IServiceManager service)
+    public EmployeeController(IServiceManager service, IRepositoryManager repository)
     {
         _service = service;
+        _repository = repository;
     }
 
     [HttpGet("api/employee")]
@@ -68,4 +73,21 @@ public class EmployeeController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Policy = "Employee")]
+    [HttpPatch("api/employee/{employeeId:guid}/photos/upload")]
+    public async Task<IActionResult> UploadPhotos(Guid employeeId, IFormFile file)
+    {
+        var picture = await _service.Picture.Extract(file);
+
+        // delete any previous associated photo
+        _repository.Picture.DeleteWhere(p => p.EntityId == employeeId  && p.EntityType == PictureEntityType.Employee);
+
+        // assign the id to the pictures and push them to the database
+        var affected = await _service.Picture.CreateWithEntity(picture, employeeId, PictureEntityType.Employee);
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
+
+        return Ok();    
+    }
 }

@@ -4,7 +4,6 @@ using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -156,5 +155,4 @@ public class UserControllerTests
         content.Id.Should().Be(user.Id);
         content.ProfilePicture?.FileName.Should().Be("photo1.jpg");
     }
-
 }

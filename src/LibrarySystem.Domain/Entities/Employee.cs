@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Employees;
 
 namespace LibrarySystem.Domain.Entities;
@@ -18,6 +19,11 @@ public class Employee
     [Required, Column("password")]
     public string? Password { get; set; }
 
+    // relationships
+    
+    [JsonIgnore]
+    public Picture? Picture { get; set; }
+
     public EmployeeDto ToDto()
     {
         return new EmployeeDto
@@ -25,6 +31,7 @@ public class Employee
             Id = this.Id,
             Name = this.Name,
             Email = this.Email,
+            Picture = this.Picture
         };
     }
 }

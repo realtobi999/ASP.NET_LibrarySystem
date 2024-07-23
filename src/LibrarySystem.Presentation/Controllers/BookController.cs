@@ -145,12 +145,13 @@ public class BookController : ControllerBase
     public async Task<IActionResult> UpdatePhotos(Guid bookId, IFormCollection files)
     {
         var pictures = await _service.Picture.Extract(files);
+        var book = await _service.Book.Get(bookId); // validate if book exists
 
         // delete all previous saved pictures
-        _repository.Picture.DeleteWhere(p => p.EntityId == bookId && p.EntityType == PictureEntityType.Book);
+        _repository.Picture.DeleteWhere(p => p.EntityId == book.Id && p.EntityType == PictureEntityType.Book);
 
         // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.BulkCreateWithEntity(pictures, bookId, PictureEntityType.Book); 
+        var affected = await _service.Picture.BulkCreateWithEntity(pictures, book.Id, PictureEntityType.Book); 
 
         if (affected == 0)
             throw new ZeroRowsAffectedException();

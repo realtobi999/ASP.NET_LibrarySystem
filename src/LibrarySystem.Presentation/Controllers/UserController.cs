@@ -80,12 +80,13 @@ public class UserController : ControllerBase
     public async Task<IActionResult> UploadPhotos(Guid userId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);
+        var user = await _service.User.Get(userId); // validate if user exists
 
         // delete any previous associated photo
-        _repository.Picture.DeleteWhere(p => p.EntityId == userId  && p.EntityType == PictureEntityType.User);
+        _repository.Picture.DeleteWhere(p => p.EntityId == user.Id  && p.EntityType == PictureEntityType.User);
 
         // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.CreateWithEntity(picture, userId, PictureEntityType.User);
+        var affected = await _service.Picture.CreateWithEntity(picture, user.Id, PictureEntityType.User);
 
         if (affected == 0)
             throw new ZeroRowsAffectedException();

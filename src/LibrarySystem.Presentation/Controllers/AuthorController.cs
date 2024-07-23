@@ -91,12 +91,13 @@ public class AuthorController : ControllerBase
     public async Task<IActionResult> UploadPhotos(Guid authorId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);
+        var author = await _service.Author.Get(authorId); // validates if the author exists
 
         // delete any previous associated photo
-        _repository.Picture.DeleteWhere(p => p.EntityId == authorId  && p.EntityType == PictureEntityType.Author);
+        _repository.Picture.DeleteWhere(p => p.EntityId == author.Id  && p.EntityType == PictureEntityType.Author);
 
         // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.CreateWithEntity(picture, authorId, PictureEntityType.Author);
+        var affected = await _service.Picture.CreateWithEntity(picture, author.Id, PictureEntityType.Author);
 
         if (affected == 0)
             throw new ZeroRowsAffectedException();

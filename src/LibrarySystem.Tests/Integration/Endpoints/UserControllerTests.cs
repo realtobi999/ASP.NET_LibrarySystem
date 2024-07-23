@@ -144,7 +144,7 @@ public class UserControllerTests
         };
 
         // act & assert
-        var response = await client.PatchAsync(string.Format("/api/user/{0}/photos/upload", user.Id), formData);
+        var response = await client.PutAsync(string.Format("/api/user/{0}/photos", user.Id), formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));

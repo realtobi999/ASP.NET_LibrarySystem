@@ -521,7 +521,7 @@ public class BookControllerTests
         };
 
         // act & assert
-        var response = await client.PostAsync(string.Format("/api/book/{0}/photos/upload", book.Id), formData);
+        var response = await client.PutAsync(string.Format("/api/book/{0}/photos", book.Id), formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
@@ -534,7 +534,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_UpdatePhoto_Returns200AndPhotosAreUpdated()
+    public async void BookController_UploadPhoto_Returns200AndPhotosAreUpdated()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -565,7 +565,7 @@ public class BookControllerTests
             { photo2, "files", "photo2.jpg" }
         };
 
-        var create2 = await client.PostAsync(string.Format("/api/book/{0}/photos/upload", book.Id), formData1);
+        var create2 = await client.PutAsync(string.Format("/api/book/{0}/photos", book.Id), formData1);
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         // act & assert
@@ -575,7 +575,7 @@ public class BookControllerTests
             { photo3, "files", "photo3.jpg"},
         };
 
-        var response = await client.PatchAsync(string.Format("/api/book/{0}/photos/update", book.Id), formData2);
+        var response = await client.PutAsync(string.Format("/api/book/{0}/photos", book.Id), formData2);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));

@@ -184,7 +184,7 @@ public class EmployeeControllerTests
         };
 
         // act & assert
-        var response = await client.PatchAsync(string.Format("/api/employee/{0}/photos/upload", employee.Id), formData);
+        var response = await client.PutAsync(string.Format("/api/employee/{0}/photos", employee.Id), formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));

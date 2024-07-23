@@ -14,7 +14,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/author param: offset, limit
 GET     /api/author/{author_id}
 POST    /api/author
-POST    /api/author/{author_id}/photos/upload
+PUT     /api/author/{author_id}/photos
 PUT     /api/author/{author_id}
 DELETE  /api/author/{author_id}
 
@@ -87,7 +87,7 @@ public class AuthorController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPatch("api/author/{authorId:guid}/photos/upload")]
+    [HttpPut("api/author/{authorId:guid}/photos")]
     public async Task<IActionResult> UploadPhotos(Guid authorId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);

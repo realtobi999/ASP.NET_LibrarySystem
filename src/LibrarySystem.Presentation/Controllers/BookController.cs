@@ -16,8 +16,7 @@ GET     /api/book/{book_id} params: withRelations
 GET     /api/book/isbn/{isbn} params: withRelations
 GET     /api/book/search/{query} params: limit, offset, authorId, genreId, withRelations
 POST    /api/book
-POST    /api/book/{book_id}/photos/upload
-PATCH   /api/book/{book_id}/photos/update
+PUT     /api/book/{book_id}/photos
 PUT     /api/book/{book_id}
 DELETE  /api/book/{book_id}
 
@@ -126,23 +125,8 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPost("api/book/{bookId:guid}/photos/upload")] 
+    [HttpPut("api/book/{bookId:guid}/photos")] 
     public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection files)
-    {
-        var pictures = await _service.Picture.Extract(files);
-
-        // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.BulkCreateWithEntity(pictures, bookId, PictureEntityType.Book); 
-
-        if (affected == 0)
-            throw new ZeroRowsAffectedException();
-        
-        return Ok();
-    }
-
-    [Authorize(Policy = "Employee")]
-    [HttpPatch("api/book/{bookId:guid}/photos/update")] 
-    public async Task<IActionResult> UpdatePhotos(Guid bookId, IFormCollection files)
     {
         var pictures = await _service.Picture.Extract(files);
         var book = await _service.Book.Get(bookId); // validate if book exists

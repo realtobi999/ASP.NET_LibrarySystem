@@ -175,7 +175,7 @@ public class AuthorControllerTests
         };
 
         // act & assert
-        var response = await client.PatchAsync(string.Format("/api/author/{0}/photos/upload", author.Id), formData);
+        var response = await client.PutAsync(string.Format("/api/author/{0}/photos", author.Id), formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));

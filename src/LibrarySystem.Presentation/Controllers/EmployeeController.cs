@@ -15,7 +15,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/employee params: offset, limit
 GET     /api/employee/{employee_id}
 PUT     /api/employee/{employee_id}
-PATCH   /api/employee/{employee_id}/photos/upload
+PUT     /api/employee/{employee_id}/photos
 DELETE  /api/employee/{employee_id}
 
 */
@@ -74,7 +74,7 @@ public class EmployeeController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPatch("api/employee/{employeeId:guid}/photos/upload")]
+    [HttpPut("api/employee/{employeeId:guid}/photos")]
     public async Task<IActionResult> UploadPhotos(Guid employeeId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);

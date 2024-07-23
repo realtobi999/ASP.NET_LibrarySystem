@@ -75,7 +75,7 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [Authorize(Policy = "Employee")]
+    [Authorize(Policy = "User")]
     [HttpPatch("api/user/{userId:guid}/photos/upload")]
     public async Task<IActionResult> UploadPhotos(Guid userId, IFormFile file)
     {

@@ -125,7 +125,7 @@ public class UserControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var token = JwtTestExtensions.Create().Generate([
-            new Claim(ClaimTypes.Role, "Employee")
+            new Claim(ClaimTypes.Role, "User")
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));

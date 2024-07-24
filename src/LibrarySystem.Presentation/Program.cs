@@ -19,7 +19,7 @@ public class Program
             builder.Services.AddControllers();
 
             builder.Services.ConfigureCors();
-            builder.Services.ConfigureDbContext(builder.Configuration);
+            builder.Services.ConfigureDbContext(builder.Configuration.GetConnectionString("LibrarySystem"));
 
             // services
             builder.Services.ConfigureRepositoryManager();

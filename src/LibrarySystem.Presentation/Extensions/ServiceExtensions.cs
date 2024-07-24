@@ -29,11 +29,16 @@ public static class ServiceExtensions
         });
     }
 
-    public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureDbContext(this IServiceCollection services, string? connection)
     {
         services.AddDbContext<LibrarySystemContext>(options =>
         {
-            options.UseNpgsql(configuration.GetConnectionString("LibrarySystem"));
+            options.UseNpgsql(
+                connection, 
+                options => 
+                {
+                    options.EnableRetryOnFailure(maxRetryCount: 3);
+                });
         });
     }
 

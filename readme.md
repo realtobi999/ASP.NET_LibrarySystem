@@ -87,6 +87,8 @@ dotnet run
 
 ### What About Tests?
 
+---
+
 I love to hear that you care about that! It's simple if you got the app running successfull just run this command in the **root** folder:
 
 ``` bash

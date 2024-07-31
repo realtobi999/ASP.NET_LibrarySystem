@@ -4,6 +4,7 @@
 
 - **[Summary](#summary)**
 - **[How To Build?](#how-to-build)**
+  - **[What About Tests?](#what-about-tests)**
 - **[Endpoints Overview](#endpoints-overview)**
 - **[Test Overview](#tests-overview)**
   - **[Integration Tests](#integration-tests)**
@@ -68,17 +69,33 @@ After that open ***appsettings.json*** in your favorite editor and modify the se
 }
 ```
 
-After that you can finally go back to the root folder and run the project:
+After that you can finally go back to the **root** folder and run the project:
 
 ``` bash
 cd ../.. && make run
 ```
 
-OR run it directly from the presentation layer:
+**OR** run it directly from the presentation layer:
 
 ``` bash
 dotnet run
 ```
+
+**Expected Output:**
+
+![successful_build](./doc/sucessful_build.png)
+
+### What About Tests?
+
+I love to hear that you care about that! It's simple if you got the app running successfull just run this command in the **root** folder:
+
+``` bash
+make test
+```
+
+**Expected Output:**
+
+![passed_tests](./doc/passed_tests.png)
 
 ## Endpoints Overview
 

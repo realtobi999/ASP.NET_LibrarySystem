@@ -73,9 +73,9 @@ dotnet run
 
 In total there is about **35+** endpoints
 
-![swagger.gif](swagger.gif)
+![swagger.gif](./doc/swagger.gif)
 
-**Check out each endpoint in detail [here.](endpoints.md)**
+**Check out each endpoint in detail [here.](./doc/endpoints.md)**
 
 ## Tests Overview
 

@@ -9,6 +9,7 @@
 # User-specific files
 *.rsuser
 .vscode
+doc/helper.md
 *.suo
 *.user
 *.userosscache

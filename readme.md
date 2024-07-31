@@ -1,5 +1,16 @@
 # Library System API
 
+## Table of Contents
+
+- **[Summary](#summary)**
+- **[How To Build?](#how-to-build)**
+- **[Endpoints Overview](#endpoints-overview)**
+- **[Test Overview](#tests-overview)**
+  - **[Integration Tests](#integration-tests)**
+  - **[Unit Tests](#unit-tests)**
+- **[Architecture Overview](#architecture-overview)**
+- **[Notes](#notes)**
+
 ## Summary
 
 - This is a **REST DEMO API** project for a library system.
@@ -81,7 +92,7 @@ In total there is about **35+** endpoints
 
 In total there is about **55+** tests, both **integration** and **unit** tests. I've tried to cover most edge cases with the integration tests.
 
-**Integration Tests:**
+### **Integration Tests:**
 
 ``` bash
 .
@@ -113,7 +124,7 @@ In total there is about **55+** tests, both **integration** and **unit** tests. 
 
 The Extensions folder is for helper extension methods that come in handy during testing. Server folder is where the testing server is defined.
 
-**Unit Tests:**
+### **Unit Tests:**
 
 ```bash
 .

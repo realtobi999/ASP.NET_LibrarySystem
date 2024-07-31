@@ -1,5 +1,9 @@
 # Endpoints
 
+## Table of Contents
+
+- **[Auth Endpoints](#auth-endpoints)**
+
 ## Auth Endpoints
 
 ### `POST - /api/auth/register`

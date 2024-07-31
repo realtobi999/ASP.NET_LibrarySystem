@@ -4,7 +4,7 @@
 
 - **[Summary](#summary)**
 - **[How To Build?](#how-to-build)**
-  - **[What About Tests?](#what-about-tests)**
+- **[How To Run Tests?](#how-to-run-tests)**
 - **[Endpoints Overview](#endpoints-overview)**
 - **[Test Overview](#tests-overview)**
   - **[Integration Tests](#integration-tests)**
@@ -85,9 +85,7 @@ dotnet run
 
 ![successful_build](./doc/sucessful_build.png)
 
-### What About Tests?
-
----
+## How To Run Tests?
 
 I love to hear that you care about that! It's simple if you got the app running successfull just run this command in the **root** folder:
 

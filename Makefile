@@ -7,4 +7,4 @@ build:
 	cd src && dotnet build
 
 run:
-	cd src && dotnet run
+	cd src/LibrarySystem.Presentation && dotnet run

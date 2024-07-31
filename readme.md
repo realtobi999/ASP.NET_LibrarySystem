@@ -13,19 +13,24 @@
 
 ## How To Build?
 
-Clone the git repo into the desired folder like this:
+You will need to have installed:
+
+- **Dotnet SDK 8.0.107** and higher
+- **Postgres**
+
+After that clone the git repo into the desired folder like this:
 
 ``` bash
 git clone https://github.com/realtobi999/ASP.NET_LibrarySystem.git
 ```
 
-Open the cloned folder and type the following command:
+Open the cloned folder and navigate to the presentation layer of the project:
 
-``` bash
-make run
+```bash
+cd src/LibrarySystem.Presentation
 ```
 
-This will build and automatically run the code. After that adjust the settings in ***appsettings.json*** like so:
+After that open ***appsettings.json*** in your favorite editor and modify the settings as such:
 
 ```json
 {
@@ -50,6 +55,18 @@ This will build and automatically run the code. After that adjust the settings i
     "Password": "YOUR_PASSWORD"
   }
 }
+```
+
+After that you can finally go back to the root folder and run the project:
+
+``` bash
+cd ../.. && make run
+```
+
+OR run it directly from the presentation layer:
+
+``` bash
+dotnet run
 ```
 
 ## Endpoints Overview

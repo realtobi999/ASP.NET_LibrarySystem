@@ -5,3 +5,6 @@ test:
 
 build:
 	cd src && dotnet build
+
+run:
+	cd src && dotnet run

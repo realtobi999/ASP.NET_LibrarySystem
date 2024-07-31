@@ -11,6 +11,47 @@
 - Features **searching** and **querying** with various filters
 - Features **Email Notifications** on some endpoints.
 
+## How To Build?
+
+Clone the git repo into the desired folder like this:
+
+``` bash
+git clone https://github.com/realtobi999/ASP.NET_LibrarySystem.git
+```
+
+Open the cloned folder and type the following command:
+
+``` bash
+make run
+```
+
+This will build and automatically run the code. After that adjust the settings in ***appsettings.json*** like so:
+
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "LibrarySystem": "Host=YOUR_HOST;Username=YOUR_USERNAME;Password=YOUR_PASSWORD;Database=YOUR_DATABASE_NAME"
+  },
+  "Jwt": {
+    "Key": "YOUR_KEY",
+    "Issuer": "YOUR_ISSUER"
+  },
+  "SMTP": {
+    "Host": "YOUR_HOST",
+    "Port": "YOUR_POST",
+    "Username": "YOUR_USERNAME",
+    "Password": "YOUR_PASSWORD"
+  }
+}
+```
+
 ## Endpoints Overview
 
 In total there is about **35+** endpoints

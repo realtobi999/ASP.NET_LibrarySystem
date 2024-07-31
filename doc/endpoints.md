@@ -3,6 +3,10 @@
 ## Table of Contents
 
 - **[Auth Endpoints](#auth-endpoints)**
+  - **[POST - /api/auth/register](#post---apiauthregister)**
+  - **[POST - /api/auth/login](#post---apiauthlogin)**
+  - **[POST - /api/auth/employee/register](#post---apiauthemployeeregister)**
+  - **[POST - /api/auth/employee/login](#post---apiauthemployeelogin)**
 
 ## Auth Endpoints
 

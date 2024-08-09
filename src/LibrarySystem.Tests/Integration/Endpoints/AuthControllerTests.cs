@@ -9,6 +9,7 @@ using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
 using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Application.Core.Utilities;
+using LibrarySystem.Presentation;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 

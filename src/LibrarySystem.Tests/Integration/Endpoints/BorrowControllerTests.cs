@@ -5,6 +5,7 @@ using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
 

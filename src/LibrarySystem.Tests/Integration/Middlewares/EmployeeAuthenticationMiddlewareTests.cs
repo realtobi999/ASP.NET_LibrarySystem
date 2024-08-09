@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
 

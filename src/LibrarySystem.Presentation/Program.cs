@@ -8,6 +8,8 @@ using LibrarySystem.EmailService;
 using LibrarySystem.Infrastructure.Factories;
 using LibrarySystem.Presentation.Extensions;
 
+namespace LibrarySystem.Presentation;
+
 public class Program
 {
     private static void Main(string[] args)
@@ -32,7 +34,7 @@ public class Program
 
             // email clients
             var SMPT = SmtpFactory.CreateInstance(builder.Configuration);
-            builder.Services.AddSingleton<SmtpClient>(p => SMPT);
+            builder.Services.AddSingleton(p => SMPT);
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.ConfigureMessageBuilders();
             builder.Services.ConfigureEmailManager();
@@ -40,7 +42,7 @@ public class Program
 
             builder.Services.AddScoped<IBookAssociations, BookAssociations>();
             builder.Services.AddScoped<IWishlistAssociations, WishlistAssociations>();
-            
+
             // user authorization
             builder.Services.AddAuthorization(options =>
             {

@@ -6,6 +6,7 @@ using LibrarySystem.Domain.Dtos.Messages;
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
 

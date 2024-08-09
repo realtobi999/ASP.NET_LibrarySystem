@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Genres;
-using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

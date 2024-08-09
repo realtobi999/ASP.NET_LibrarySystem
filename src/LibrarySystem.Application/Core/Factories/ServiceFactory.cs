@@ -9,8 +9,8 @@ using LibrarySystem.Application.Services.Pictures;
 using LibrarySystem.Application.Services.Reviews;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Application.Services.Wishlists;
+using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Domain.Interfaces.Utilities;
 
 namespace LibrarySystem.Application.Core.Factories;
 

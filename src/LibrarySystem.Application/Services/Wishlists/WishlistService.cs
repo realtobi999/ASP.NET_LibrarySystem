@@ -1,9 +1,9 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions.NotFound;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace LibrarySystem.Application.Services.Wishlists;
 
@@ -40,7 +40,7 @@ public class WishlistService : IWishlistService
 
     public async Task<int> Delete(Guid id)
     {
-        var wishlist = await _repository.Wishlist.Get(id) ?? throw new WishlistNotFoundException(id);
+        var wishlist = await this.Get(id);
 
         return await this.Delete(wishlist);
     }
@@ -55,14 +55,14 @@ public class WishlistService : IWishlistService
 
     public async Task<Wishlist> Get(Guid id)
     {
-        var wishlist = await _repository.Wishlist.Get(id) ?? throw new WishlistNotFoundException(id);
+        var wishlist = await _repository.Wishlist.Get(id) ?? throw new NotFound404Exception(nameof(Wishlist), id);
 
         return wishlist;
     }
 
     public async Task<int> Update(Guid id, UpdateWishlistDto updateWishlistDto)
     {
-        var wishlist = await _repository.Wishlist.Get(id) ?? throw new WishlistNotFoundException(id);
+        var wishlist = await this.Get(id);
 
         return await this.Update(wishlist, updateWishlistDto);
     }

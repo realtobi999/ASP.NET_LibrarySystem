@@ -2,6 +2,7 @@
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

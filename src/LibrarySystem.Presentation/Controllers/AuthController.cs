@@ -4,7 +4,8 @@ using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Dtos.Users;
-using LibrarySystem.Domain.Interfaces.Utilities;
+using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,7 +45,7 @@ public class AuthController : ControllerBase
         var authorized = await _service.User.Login(loginUserDto);
         if (!authorized)
         {
-            throw new NotAuthorizedException("These credentials are invalid.");
+            throw new NotAuthorized401Exception();
         }
 
         var user = await _service.User.Get(loginUserDto.Email!);
@@ -76,7 +77,7 @@ public class AuthController : ControllerBase
         var authorized = await _service.Employee.Login(loginEmployeeDto);
         if (!authorized)
         {
-            throw new NotAuthorizedException("These credentials are invalid.");
+            throw new NotAuthorized401Exception();
         }
 
         var employee = await _service.Employee.Get(loginEmployeeDto.Email!);

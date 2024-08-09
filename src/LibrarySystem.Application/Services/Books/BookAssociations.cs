@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Entities.Relationships;
-using LibrarySystem.Domain.Exceptions.NotFound;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Books;
@@ -18,7 +18,7 @@ public class BookAssociations : IBookAssociations
     {
         var tasks = authorIds.Select(async authorId =>
         {
-            var author = await _repository.Author.Get(authorId) ?? throw new AuthorNotFoundException(authorId);
+            var author = await _repository.Author.Get(authorId) ?? throw new NotFound404Exception(nameof(Author), authorId);
             _repository.Associations.CreateBookAuthor(new BookAuthor
             {
                 BookId = book.Id,
@@ -35,7 +35,7 @@ public class BookAssociations : IBookAssociations
     {
         var tasks = genreIds.Select(async genreId =>
         {
-            var genre = await _repository.Genre.Get(genreId) ?? throw new GenreNotFoundException(genreId);
+            var genre = await _repository.Genre.Get(genreId) ?? throw new NotFound404Exception(nameof(Genre), genreId);
             _repository.Associations.CreateBookGenre(new BookGenre
             {
                 BookId = book.Id,

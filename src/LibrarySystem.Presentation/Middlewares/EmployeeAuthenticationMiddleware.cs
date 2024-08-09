@@ -1,6 +1,7 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain;
+using LibrarySystem.Domain.Exceptions.HTTP;
 
 namespace LibrarySystem.Presentation.Middlewares;
 
@@ -32,7 +33,7 @@ public class EmployeeAuthenticationMiddleware : AuthenticationMiddlewareBase
         // validate that the id from the token matches the id from the route or body
         if (tokenEmployeeId != requestEmployeeId)
         {
-            throw new NotAuthorizedException("Not Authorized!");
+            throw new NotAuthorized401Exception();
         }
 
         await _next(context);

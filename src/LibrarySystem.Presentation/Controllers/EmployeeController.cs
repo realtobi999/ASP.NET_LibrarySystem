@@ -3,6 +3,7 @@ using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

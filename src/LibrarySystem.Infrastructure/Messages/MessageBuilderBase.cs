@@ -1,9 +1,6 @@
 ﻿using System.Net.Mail;
 using LibrarySystem.Application.Core.Extensions;
-using LibrarySystem.Domain;
-using LibrarySystem.Domain.Exceptions;
-using LibrarySystem.Domain.Exceptions.NotFound;
-using LibrarySystem.Domain.Interfaces;
+using LibrarySystem.Domain.Exceptions.Common;
 using Microsoft.Extensions.Configuration;
 using RazorLight;
 
@@ -38,7 +35,7 @@ public abstract class MessageBuilderBase
 
         if (!File.Exists(filePath))
         {
-            throw new HtmlTemplateNotFoundException(filePath);
+            throw new HtmlTemplateMissingException(filePath);
         }
 
         var html = File.ReadAllText(filePath);

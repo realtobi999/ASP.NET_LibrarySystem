@@ -3,9 +3,7 @@ using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
-using LibrarySystem.Domain.Exceptions.BadRequest;
-using LibrarySystem.Domain.Exceptions.NotFound;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Borrows;
@@ -21,13 +19,13 @@ public class BorrowService : IBorrowService
 
     public async Task<Borrow> Create(CreateBorrowDto createBorrowDto)
     {
-        var book = await _repository.Book.Get(createBorrowDto.BookId) ?? throw new BookNotFoundException(createBorrowDto.BookId);
+        var book = await _repository.Book.Get(createBorrowDto.BookId) ?? throw new NotFound404Exception(nameof(Book), createBorrowDto.BookId);
         if (!book.IsAvailable) // if the book is already borrowed throw an exception
         {
-            throw new ConflictException($"The book with id: {book.Id} is already borrowed.");
+            throw new Conflict409Exception($"The book with id: {book.Id} is already borrowed.");
         }
 
-        var user = await _repository.User.Get(createBorrowDto.UserId) ?? throw new UserNotFoundException(createBorrowDto.UserId);
+        var user = await _repository.User.Get(createBorrowDto.UserId) ?? throw new NotFound404Exception(nameof(User), createBorrowDto.UserId);
 
         // create the new borrow instance
         var borrow = new Borrow
@@ -48,14 +46,14 @@ public class BorrowService : IBorrowService
 
     public async Task<Borrow> Get(Guid id)
     {
-        var borrow = await _repository.Borrow.Get(id) ?? throw new BorrowNotFoundException(id);
+        var borrow = await _repository.Borrow.Get(id) ?? throw new NotFound404Exception(nameof(Borrow), id);
 
         return borrow;
     }
 
     public async Task<Borrow> Get(Guid bookId, Guid userId)
     {
-        var borrow = await _repository.Borrow.Get(bookId, userId) ?? throw new NotFoundException("The book with these ID's doesnt exist.");
+        var borrow = await _repository.Borrow.Get(bookId, userId) ?? throw new NotFound404Exception(nameof(Borrow), $"bookId: {bookId}", $"userId: {userId}");
 
         return borrow;
     }
@@ -69,7 +67,7 @@ public class BorrowService : IBorrowService
 
     public async Task<int> Return(Borrow borrow, string jwt)
     {
-        var book = await _repository.Book.Get(borrow.BookId) ?? throw new BookNotFoundException(borrow.BookId);
+        var book = await _repository.Book.Get(borrow.BookId) ?? throw new NotFound404Exception(nameof(Book), borrow.BookId);
         
         return await this.Return(borrow, book, jwt);
     }
@@ -80,15 +78,15 @@ public class BorrowService : IBorrowService
 
         if (borrow.IsReturned)
         {
-            throw new BadRequestException($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
+            throw new BadRequest400Exception($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
         }
         if (book.IsAvailable)
         {
-            throw new ConflictException($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
+            throw new Conflict409Exception($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
         }
         if (DateTimeOffset.UtcNow > borrow.DueDate && role != "Employee") // this role check enables the librarians to return the book even if it's past due
         {
-            throw new ConflictException($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
+            throw new Conflict409Exception($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
         }
 
         // set the book to available and the borrow status to returned

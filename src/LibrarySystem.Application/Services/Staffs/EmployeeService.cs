@@ -1,12 +1,9 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
-using LibrarySystem.Domain.Exceptions.NotFound;
+using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Domain.Interfaces.Utilities;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Employees;
 
@@ -23,7 +20,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<Employee> Get(string email)
     {
-        var employee = await _repository.Employee.Get(email) ?? throw new NotFoundException($"The Employee with email {email} doesnt exist.");
+        var employee = await _repository.Employee.Get(email) ?? throw new NotFound404Exception(nameof(Employee), email);
 
         return employee;
     }
@@ -33,7 +30,7 @@ public class EmployeeService : IEmployeeService
         var email = loginEmployeeDto.Email ?? throw new NullReferenceException("The email must be set.");
         var password = loginEmployeeDto.Password ?? throw new NullReferenceException("The password must be set."); 
 
-        var employee = await _repository.Employee.Get(email) ?? throw new NotFoundException($"The Employee with email {email} doesnt exist.");
+        var employee = await this.Get(email);
 
         return _hasher.Compare(password, employee.Password!);
     }
@@ -43,8 +40,8 @@ public class EmployeeService : IEmployeeService
         var employee = new Employee
         {
             Id = registerEmployeeDto.Id ?? Guid.NewGuid(),
-            Name = registerEmployeeDto.Name ?? throw new NullReferenceException("The name must be set."),
-            Email = registerEmployeeDto.Email ?? throw new NullReferenceException("The email must be set."),
+            Name = registerEmployeeDto.Name,
+            Email = registerEmployeeDto.Email,
             Password = _hasher.Hash(registerEmployeeDto.Password ?? throw new NullReferenceException("The password must be set.")),
         };
 
@@ -63,14 +60,14 @@ public class EmployeeService : IEmployeeService
 
     public async Task<Employee> Get(Guid id)
     {
-        var employee = await _repository.Employee.Get(id) ?? throw new EmployeeNotFoundException(id);
+        var employee = await _repository.Employee.Get(id) ?? throw new NotFound404Exception(nameof(Employee), id);
 
         return employee;
     }
 
     public async Task<int> Update(Guid id, UpdateEmployeeDto updateEmployeeDto)
     {
-        var employee = await _repository.Employee.Get(id) ?? throw new EmployeeNotFoundException(id);
+        var employee = await this.Get(id);
 
         var name = updateEmployeeDto.Name;
         var email = updateEmployeeDto.Email;
@@ -83,7 +80,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<int> Delete(Guid id)
     {
-        var employee = await _repository.Employee.Get(id) ?? throw new EmployeeNotFoundException(id);
+        var employee = await this.Get(id);
 
         _repository.Employee.Delete(employee);
         return await _repository.SaveAsync();

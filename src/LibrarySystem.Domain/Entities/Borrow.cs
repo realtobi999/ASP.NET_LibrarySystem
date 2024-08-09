@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LibrarySystem.Domain.Dtos.Borrows;
-using LibrarySystem.Domain.Interfaces.Utilities;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 

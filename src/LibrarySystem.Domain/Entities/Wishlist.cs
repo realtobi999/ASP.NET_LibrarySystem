@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities.Relationships;
-using LibrarySystem.Domain.Interfaces.Utilities;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 

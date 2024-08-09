@@ -4,7 +4,7 @@ using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions.BadRequest;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Tests;
 using LibrarySystem.Tests.Integration.Extensions;
 
@@ -55,10 +55,10 @@ public class JwtTests
     public void Jwt_Parse_ValidationWorks()
     {
         // act & assert
-        Assert.Throws<BadRequestException>(() => { JwtUtils.Parse(""); });
-        Assert.Throws<BadRequestException>(() => { JwtUtils.Parse("Bearer"); });
-        Assert.Throws<BadRequestException>(() => { JwtUtils.Parse("Bearer "); });
-        Assert.Throws<BadRequestException>(() => { JwtUtils.Parse("TOKEN"); });
+        Assert.Throws<BadRequest400Exception>(() => { JwtUtils.Parse(""); });
+        Assert.Throws<BadRequest400Exception>(() => { JwtUtils.Parse("Bearer"); });
+        Assert.Throws<BadRequest400Exception>(() => { JwtUtils.Parse("Bearer "); });
+        Assert.Throws<BadRequest400Exception>(() => { JwtUtils.Parse("TOKEN"); });
     }
 
     [Fact]

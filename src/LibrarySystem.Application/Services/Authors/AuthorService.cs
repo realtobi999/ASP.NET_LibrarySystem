@@ -1,9 +1,8 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions.NotFound;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Authors;
 
@@ -18,7 +17,7 @@ public class AuthorService : IAuthorService
 
     public async Task<Author> Get(Guid id)
     {
-        var author = await _repository.Author.Get(id) ?? throw new AuthorNotFoundException(id);
+        var author = await _repository.Author.Get(id) ?? throw new NotFound404Exception(nameof(Author), id);
 
         return author;
     }
@@ -47,7 +46,7 @@ public class AuthorService : IAuthorService
 
     public async Task<int> Update(Guid id, UpdateAuthorDto updateAuthorDto)
     {
-        var author = await _repository.Author.Get(id) ?? throw new AuthorNotFoundException(id);
+        var author = await this.Get(id);
 
         var name = updateAuthorDto.Name;
         var description = updateAuthorDto.Description;
@@ -62,7 +61,7 @@ public class AuthorService : IAuthorService
 
     public async Task<int> Delete(Guid id)
     {
-        var author = await _repository.Author.Get(id) ?? throw new AuthorNotFoundException(id);
+        var author = await this.Get(id);
 
         _repository.Author.Delete(author);
         return await _repository.SaveAsync();

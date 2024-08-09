@@ -4,6 +4,8 @@ using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +37,7 @@ public class WishlistController : ControllerBase
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
-            throw new NotAuthorizedException("Not Authorized!");
+            throw new NotAuthorized401Exception();
 
         return Ok(wishlist.ToDto());    
     }
@@ -57,7 +59,7 @@ public class WishlistController : ControllerBase
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
-            throw new NotAuthorizedException("Not Authorized!");
+            throw new NotAuthorized401Exception();
 
         var affected = await _service.Wishlist.Update(wishlist, updateWishlistDto);
 
@@ -75,7 +77,7 @@ public class WishlistController : ControllerBase
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
-            throw new NotAuthorizedException("Not Authorized!");
+            throw new NotAuthorized401Exception();
 
         var affected = await _service.Wishlist.Delete(wishlist);
 

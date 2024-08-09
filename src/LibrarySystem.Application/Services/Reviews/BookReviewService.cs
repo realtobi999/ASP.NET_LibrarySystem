@@ -1,10 +1,8 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
-using LibrarySystem.Domain.Exceptions.NotFound;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Application.Services.Reviews;
 
@@ -19,8 +17,8 @@ public class BookReviewService : IBookReviewService
 
     public async Task<BookReview> Create(CreateBookReviewDto createBookReviewDto)
     {
-        var user = await _repository.User.Get(createBookReviewDto.UserId) ?? throw new UserNotFoundException(createBookReviewDto.UserId);
-        var book = await _repository.Book.Get(createBookReviewDto.BookId) ?? throw new BookNotFoundException(createBookReviewDto.BookId);
+        var user = await _repository.User.Get(createBookReviewDto.UserId) ?? throw new NotFound404Exception(nameof(User), createBookReviewDto.UserId);
+        var book = await _repository.Book.Get(createBookReviewDto.BookId) ?? throw new NotFound404Exception(nameof(Book), createBookReviewDto.BookId);
 
         var review = new BookReview
         {
@@ -40,7 +38,7 @@ public class BookReviewService : IBookReviewService
 
     public async Task<int> Delete(Guid id)
     {
-        var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id);
+        var review = await this.Get(id);
 
         _repository.BookReview.Delete(review);
         return await _repository.SaveAsync();
@@ -55,14 +53,14 @@ public class BookReviewService : IBookReviewService
 
     public async Task<BookReview> Get(Guid id)
     {
-        var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id);
+        var review = await _repository.BookReview.Get(id) ?? throw new NotFound404Exception(nameof(BookReview), id);
 
         return review;
     }
 
     public async Task<int> Update(Guid id, UpdateBookReviewDto updateBookReviewDto)
     {
-        var review = await _repository.BookReview.Get(id) ?? throw new BookReviewNotFoundException(id);
+        var review = await this.Get(id);
         
         return await this.Update(review, updateBookReviewDto);
     }

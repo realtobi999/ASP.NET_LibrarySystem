@@ -1,9 +1,9 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Reviews;
-using LibrarySystem.Domain.Exceptions;
+using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,7 +43,7 @@ public class BookReviewController : ControllerBase
 
         // verify that the request user id matches the user id of the review
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
-            throw new NotAuthorizedException("Not Authorized!");
+            throw new NotAuthorized401Exception();
 
         var affected = await _service.BookReview.Delete(review);
         
@@ -61,7 +61,7 @@ public class BookReviewController : ControllerBase
 
         // verify that the request user id matches the user id of the review
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
-            throw new NotAuthorizedException("Not Authorized!");
+            throw new NotAuthorized401Exception();
 
         var affected = await _service.BookReview.Update(review, updateBookReviewDto);
         

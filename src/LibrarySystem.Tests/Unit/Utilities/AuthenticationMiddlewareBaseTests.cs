@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using LibrarySystem.Domain.Exceptions.BadRequest;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Presentation.Middlewares;
 using Microsoft.AspNetCore.Http;
 
@@ -47,7 +47,7 @@ public class AuthenticationMiddlewareBaseTests : AuthenticationMiddlewareBase
         context.Request.ContentType = "application/json";
 
         // act & assert 
-        await Assert.ThrowsAsync<BadRequestException>(async () =>
+        await Assert.ThrowsAsync<BadRequest400Exception>(async () =>
         {
             await ExtractKeyFromRouteOrBodyAsync(context, "UserId");
         });

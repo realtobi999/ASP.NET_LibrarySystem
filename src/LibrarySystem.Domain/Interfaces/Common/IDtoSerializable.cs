@@ -1,4 +1,4 @@
-namespace LibrarySystem.Domain.Interfaces.Utilities;
+namespace LibrarySystem.Domain.Interfaces.Common;
 
 public interface IDtoSerializable<out Dto> : IDtoSerializable
 {

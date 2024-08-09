@@ -2,12 +2,14 @@ using System.Net.Mail;
 using LibrarySystem.Application.Core.Factories;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Application.Services.Wishlists;
+using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails;
-using LibrarySystem.Domain.Interfaces.Utilities;
 using LibrarySystem.EmailService;
 using LibrarySystem.Infrastructure.Factories;
 using LibrarySystem.Presentation.Extensions;
+using LibrarySystem.Presentation.Middlewares;
 using LibrarySystem.Presentation.Middlewares.Filters;
+using LibrarySystem.Presentation.Middlewares.Handlers;
 
 namespace LibrarySystem.Presentation;
 
@@ -18,6 +20,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         {
             var config = builder.Configuration;
+
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -47,12 +50,13 @@ public class Program
                             .AddPolicy("User", policy => policy.RequireRole("User")) // user authorization
                             .AddPolicy("Employee", policy => policy.RequireRole("Employee")) // employee authorization
                             .AddPolicy("Admin", policy => policy.RequireRole("Admin")); // admin authorization
+            builder.Services.AddExceptionHandler<CustomExceptionHandler>();
         }
 
         // application pipeline
         var app = builder.Build();
         {
-            app.ConfigureExceptionHandler();
+            app.UseExceptionHandler(opt => {});
 
             if (app.Environment.IsDevelopment())
             {
@@ -67,8 +71,8 @@ public class Program
             app.UseAuthorization();
 
             // custom middlewares
-            app.UseUserAuthentication();
-            app.UseEmployeeAuthentication();
+            app.UseMiddleware<UserAuthenticationMiddleware>();
+            app.UseMiddleware<EmployeeAuthenticationMiddleware>();
 
             app.MapControllers();
             app.Run();

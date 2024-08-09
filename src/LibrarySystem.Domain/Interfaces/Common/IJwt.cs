@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace LibrarySystem.Domain.Interfaces.Utilities;
+namespace LibrarySystem.Domain.Interfaces.Common;
 
 public interface IJwt
 {

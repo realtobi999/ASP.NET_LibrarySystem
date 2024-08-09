@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Users;
-using LibrarySystem.Domain.Interfaces.Utilities;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 

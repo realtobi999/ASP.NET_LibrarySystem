@@ -10,9 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 using LibrarySystem.Application.Core.Emails;
 using LibrarySystem.Application.Core.Factories;
 using LibrarySystem.Domain.Interfaces.Emails;
-using LibrarySystem.Domain.Interfaces.Utilities;
 using LibrarySystem.Infrastructure.Persistence.Repositories;
 using LibrarySystem.Infrastructure.Persistence;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Presentation.Extensions;
 

@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Entities.Relationships;
-using LibrarySystem.Domain.Exceptions.NotFound;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Wishlists;
@@ -26,7 +26,7 @@ public class WishlistAssociations : IWishlistAssociations
     {
         var task = booksIds.Select(async bookId => 
         {
-            var book = await _repository.Book.Get(bookId) ?? throw new BookNotFoundException(bookId);
+            var book = await _repository.Book.Get(bookId) ?? throw new NotFound404Exception(nameof(Book), bookId);
             _repository.Associations.CreateWishlistBook(new WishlistBook
             {
                 Wishlist = wishlist,

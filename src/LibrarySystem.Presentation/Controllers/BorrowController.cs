@@ -1,11 +1,9 @@
-﻿using System.Security.Claims;
-using LibrarySystem.Application.Core.Utilities;
+﻿using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Dtos.Messages;
-using LibrarySystem.Domain.Exceptions;
-using LibrarySystem.Domain.Interfaces;
+using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
@@ -96,7 +94,7 @@ public class BorrowController : ControllerBase
         // match the user ID of the borrow and from the request
         if (borrow.UserId.ToString() != JwtUtils.ParseFromPayload(token, "UserId"))
         {
-            throw new NotAuthorizedException("You are not authorized to return this book.");
+            throw new NotAuthorized401Exception();
         }
 
         var affected = await _service.Borrow.Return(borrow, book, token);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities.Relationships;
-using LibrarySystem.Domain.Interfaces.Utilities;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 

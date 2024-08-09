@@ -1,8 +1,7 @@
 ﻿using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
-using LibrarySystem.Domain.Exceptions.NotFound;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Services.Books;
@@ -54,7 +53,7 @@ public class BookService : IBookService
 
     public async Task<int> Delete(Guid id)
     {
-        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
+        var book = await this.Get(id);
 
         _associations.CleanAuthors(book);
         _associations.CleanGenres(book);
@@ -65,7 +64,7 @@ public class BookService : IBookService
 
     public async Task<Book> Get(Guid id, bool withRelations = true)
     {
-        var book = await _repository.Book.Get(id, withRelations) ?? throw new BookNotFoundException(id);
+        var book = await _repository.Book.Get(id, withRelations) ?? throw new NotFound404Exception(nameof(Book), id);
 
         return book;
     }
@@ -79,14 +78,14 @@ public class BookService : IBookService
 
     public async Task<Book> Get(string isbn, bool withRelations = true)
     {
-        var book = await _repository.Book.Get(isbn, withRelations) ?? throw new NotFoundException($"The book with isbn: {isbn} doesnt exist.");
+        var book = await _repository.Book.Get(isbn, withRelations) ?? throw new NotFound404Exception(nameof(Book), $"ISBN {isbn}"); 
 
         return book;
     }
 
     public async Task<int> Update(Guid id, UpdateBookDto updateBookDto)
     {
-        var book = await _repository.Book.Get(id) ?? throw new BookNotFoundException(id);
+        var book = await this.Get(id);
 
         var title = updateBookDto.Title;
         var availability = updateBookDto.Availability;

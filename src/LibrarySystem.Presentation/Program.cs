@@ -17,52 +17,36 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         {
+            var config = builder.Configuration;
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddControllers(opt => {
+            builder.Services.ConfigureCors();
+            builder.Services.AddControllers(opt =>
+            {
                 opt.Filters.Add<CustomDtoSerializationFilter>();
             });
 
-            builder.Services.ConfigureCors();
-            builder.Services.ConfigureDbContext(builder.Configuration.GetConnectionString("LibrarySystem"));
+            builder.Services.ConfigureDbContext(config.GetConnectionString("LibrarySystem"));
 
             // services
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
-
-            var jwt = JwtFactory.CreateInstance(builder.Configuration);
-            builder.Services.AddSingleton<IJwt>(p => jwt);
+            builder.Services.AddScoped<IBookAssociations, BookAssociations>();
+            builder.Services.AddScoped<IWishlistAssociations, WishlistAssociations>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-            builder.Services.ConfigureJwtAuthentication(jwt);
 
             // email clients
-            var SMPT = SmtpFactory.CreateInstance(builder.Configuration);
-            builder.Services.AddSingleton(p => SMPT);
+            builder.Services.AddSingleton(p => SmtpFactory.CreateInstance(config));
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.ConfigureMessageBuilders();
             builder.Services.ConfigureEmailManager();
 
-
-            builder.Services.AddScoped<IBookAssociations, BookAssociations>();
-            builder.Services.AddScoped<IWishlistAssociations, WishlistAssociations>();
-
-            // user authorization
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("User", policy => policy.RequireRole("User"));
-            });
-
-            // employee authorization
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Employee", policy => policy.RequireRole("Employee"));
-            });
-
-            // admin authorization
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-            });
+            builder.Services.ConfigureJwtAuthentication(config); 
+            builder.Services.AddAuthorizationBuilder()
+                            .AddPolicy("User", policy => policy.RequireRole("User")) // user authorization
+                            .AddPolicy("Employee", policy => policy.RequireRole("Employee")) // employee authorization
+                            .AddPolicy("Admin", policy => policy.RequireRole("Admin")); // admin authorization
         }
 
         // application pipeline

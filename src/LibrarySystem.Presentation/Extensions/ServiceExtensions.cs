@@ -34,8 +34,8 @@ public static class ServiceExtensions
         services.AddDbContext<LibrarySystemContext>(options =>
         {
             options.UseNpgsql(
-                connection, 
-                options => 
+                connection,
+                options =>
                 {
                     options.EnableRetryOnFailure(maxRetryCount: 3);
                 });
@@ -54,8 +54,12 @@ public static class ServiceExtensions
         services.AddScoped<IRepositoryManager, RepositoryManager>();
     }
 
-    public static void ConfigureJwtAuthentication(this IServiceCollection services, IJwt jwt)
+    public static void ConfigureJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
+        var jwt = JwtFactory.CreateInstance(configuration);
+        
+        services.AddSingleton<IJwt>(p => jwt);
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -81,5 +85,5 @@ public static class ServiceExtensions
     {
         services.AddScoped<IEmailFactory, EmailFactory>();
         services.AddScoped<IEmailManager, EmailManager>();
-    } 
+    }
 }

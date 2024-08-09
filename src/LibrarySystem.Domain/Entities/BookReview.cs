@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LibrarySystem.Domain.Dtos.Reviews;
+using LibrarySystem.Domain.Interfaces.Utilities;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class BookReview
+public class BookReview : IDtoSerializable<BookReviewDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }

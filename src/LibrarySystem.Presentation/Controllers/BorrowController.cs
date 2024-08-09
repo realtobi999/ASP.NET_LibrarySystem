@@ -49,7 +49,7 @@ public class BorrowController : ControllerBase
         if (limit > 0)
             borrows = borrows.Take(limit);
 
-        return Ok(borrows.Select(b => b.ToDto()));
+        return Ok(borrows);
     }
 
     [HttpGet("api/borrow/{borrowId:guid}")]
@@ -57,7 +57,7 @@ public class BorrowController : ControllerBase
     {
         var borrow = await _service.Borrow.Get(borrowId);
 
-        return Ok(borrow.ToDto());
+        return Ok(borrow);
     }
 
     [HttpPost("api/borrow")]

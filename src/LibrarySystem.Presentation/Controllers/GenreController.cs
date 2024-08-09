@@ -36,7 +36,7 @@ public class GenreController : ControllerBase
         if (limit > 0)
             genres = genres.Take(limit);
 
-        return Ok(genres.Select(g => g.ToDto()));
+        return Ok(genres);
     }    
 
     [Authorize(Policy = "Employee")]
@@ -45,7 +45,7 @@ public class GenreController : ControllerBase
     {
         var genre = await _service.Genre.Get(genreId);
 
-        return Ok(genre.ToDto());
+        return Ok(genre);
     }
 
     [Authorize(Policy = "Employee")]

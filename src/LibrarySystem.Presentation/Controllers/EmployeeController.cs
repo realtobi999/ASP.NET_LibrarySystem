@@ -40,7 +40,7 @@ public class EmployeeController : ControllerBase
         if (limit > 0)
             employees = employees.Take(limit);
 
-        return Ok(employees.Select(e => e.ToDto()));
+        return Ok(employees);
     }
 
     [HttpGet("api/employee/{employeeId:guid}")]
@@ -48,7 +48,7 @@ public class EmployeeController : ControllerBase
     {
         var employee = await _service.Employee.Get(employeeId);
 
-        return Ok(employee.ToDto());
+        return Ok(employee);
     }
 
     [Authorize(Policy = "Employee"), EmployeeAuth]

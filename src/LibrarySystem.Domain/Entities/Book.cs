@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities.Relationships;
+using LibrarySystem.Domain.Interfaces.Utilities;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Book
+public class Book : IDtoSerializable<BookDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }

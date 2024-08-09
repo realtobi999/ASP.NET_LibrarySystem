@@ -2,10 +2,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities.Relationships;
+using LibrarySystem.Domain.Interfaces.Utilities;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Wishlist
+public class Wishlist : IDtoSerializable<WishlistDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }

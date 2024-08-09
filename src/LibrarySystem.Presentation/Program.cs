@@ -7,6 +7,7 @@ using LibrarySystem.Domain.Interfaces.Utilities;
 using LibrarySystem.EmailService;
 using LibrarySystem.Infrastructure.Factories;
 using LibrarySystem.Presentation.Extensions;
+using LibrarySystem.Presentation.Middlewares.Filters;
 
 namespace LibrarySystem.Presentation;
 
@@ -18,7 +19,9 @@ public class Program
         {
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(opt => {
+                opt.Filters.Add<CustomDtoSerializationFilter>();
+            });
 
             builder.Services.ConfigureCors();
             builder.Services.ConfigureDbContext(builder.Configuration.GetConnectionString("LibrarySystem"));

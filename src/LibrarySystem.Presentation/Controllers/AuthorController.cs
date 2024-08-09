@@ -41,7 +41,7 @@ public class AuthorController : ControllerBase
         if (limit > 0)
             authors = authors.Take(limit);
 
-        return Ok(authors.Select(a => a.ToDto()));
+        return Ok(authors);
     }
 
     [Authorize(Policy = "Employee")]
@@ -50,7 +50,7 @@ public class AuthorController : ControllerBase
     {
         var author = await _service.Author.Get(authorId);
 
-        return Ok(author.ToDto());
+        return Ok(author);
     }
 
     [Authorize(Policy = "Employee")]

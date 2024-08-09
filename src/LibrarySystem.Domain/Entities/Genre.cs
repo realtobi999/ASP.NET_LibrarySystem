@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LibrarySystem.Domain.Dtos.Genres;
+using LibrarySystem.Domain.Interfaces.Utilities;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Genre
+public class Genre : IDtoSerializable<GenreDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }

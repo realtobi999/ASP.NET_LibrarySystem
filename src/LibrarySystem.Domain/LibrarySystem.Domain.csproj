@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Interfaces/Emails/" />
-    <Folder Include="Interfaces/Utilities/" />
   </ItemGroup>
 
 </Project>

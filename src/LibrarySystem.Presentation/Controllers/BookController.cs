@@ -49,7 +49,7 @@ public class BookController : ControllerBase
         if (limit > 0)
             books = books.Take(limit).ToList(); 
 
-        return Ok(books.Select(b => b.ToDto()));
+        return Ok(books);
     }
 
     [HttpGet("api/book/search/{query}")]
@@ -72,7 +72,7 @@ public class BookController : ControllerBase
         if (limit > 0)
             books = books.Take(limit).ToList(); 
 
-        return Ok(books.Select(b => b.ToDto()));
+        return Ok(books);
     }
 
     [HttpGet("api/book/{bookId:guid}")]
@@ -80,7 +80,7 @@ public class BookController : ControllerBase
     {
         var book = await _service.Book.Get(bookId, withRelations);
 
-        return Ok(book.ToDto());
+        return Ok(book);
     }
 
     [HttpGet("api/book/isbn/{isbn}")]
@@ -88,7 +88,7 @@ public class BookController : ControllerBase
     {
         var book = await _service.Book.Get(isbn, withRelations);
 
-        return Ok(book.ToDto());
+        return Ok(book);
     }
 
     [Authorize(Policy = "Employee")]

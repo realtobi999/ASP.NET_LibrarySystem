@@ -2,10 +2,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Authors;
+using LibrarySystem.Domain.Interfaces.Utilities;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Author
+public class Author : IDtoSerializable<AuthorDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }

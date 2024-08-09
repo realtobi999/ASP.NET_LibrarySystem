@@ -2,10 +2,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Employees;
+using LibrarySystem.Domain.Interfaces.Utilities;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Employee
+public class Employee : IDtoSerializable<EmployeeDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }

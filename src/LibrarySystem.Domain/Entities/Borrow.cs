@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LibrarySystem.Domain.Dtos.Borrows;
+using LibrarySystem.Domain.Interfaces.Utilities;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Borrow
+public class Borrow : IDtoSerializable<BorrowDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }

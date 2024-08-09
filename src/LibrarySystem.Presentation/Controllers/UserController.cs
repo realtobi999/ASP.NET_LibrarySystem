@@ -40,7 +40,7 @@ public class UserController : ControllerBase
         if (limit > 0)
             users = users.Take(limit); 
 
-        return Ok(users.Select(u => u.ToDto()));
+        return Ok(users);
     }
 
     [HttpGet("api/user/{userId:guid}")]
@@ -48,7 +48,7 @@ public class UserController : ControllerBase
     {
         var user = await _service.User.Get(userId);
 
-        return Ok(user.ToDto());
+        return Ok(user);
     }
 
     [Authorize(Policy = "User"), UserAuth]

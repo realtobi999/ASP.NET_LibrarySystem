@@ -54,6 +54,8 @@ public class UserControllerTests
         var response = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
+        var test = await response.Content.ReadAsStringAsync();
+
         var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
         content.Should().Be(user.ToDto());
     }

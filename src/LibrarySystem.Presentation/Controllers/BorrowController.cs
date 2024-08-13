@@ -80,7 +80,7 @@ public class BorrowController : ControllerBase
                 BorrowDueDate = borrow.DueDate.ToString("dd-MM-yyyy")
             });
         }
-        return Created(string.Format("/api/borrow/{0}", borrow.Id), null);
+        return Created($"/api/borrow/{borrow.Id}", null);
     }
 
     [HttpPut("api/borrow/{borrowId:guid}/return")]

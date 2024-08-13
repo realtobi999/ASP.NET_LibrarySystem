@@ -31,7 +31,7 @@ public abstract class MessageBuilderBase
 
     protected static string AttachHtml(string fileName, object model)
     {
-        var filePath = string.Format("{0}/LibrarySystem.Infrastructure/Messages/Html/{1}", DirectoryExtensions.GetProjectSourceDirectory(), fileName);
+        var filePath = $"{DirectoryExtensions.GetProjectSourceDirectory()}/LibrarySystem.Infrastructure/Messages/Html/{fileName}";
 
         if (!File.Exists(filePath))
         {

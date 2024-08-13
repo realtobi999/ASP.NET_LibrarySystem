@@ -48,7 +48,7 @@ public class WishlistController : ControllerBase
     {
         var wishlist = await _service.Wishlist.Create(createWishlistDto);
 
-        return Created(string.Format("/api/wishlist/{0}", wishlist.Id), null);
+        return Created($"/api/wishlist/{wishlist.Id}", null);
     }
 
     [Authorize(Policy = "User")]

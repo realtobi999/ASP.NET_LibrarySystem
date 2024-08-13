@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
     {
         var user = await _service.User.Create(registerUserDto);
 
-        return Created(string.Format("/api/user/{0}", user.Id), null);
+        return Created($"/api/user/{user.Id}", null);
     }
 
     [HttpPost("api/auth/login")]
@@ -67,7 +67,7 @@ public class AuthController : ControllerBase
     {
         var employee = await _service.Employee.Create(registerEmployeeDto);
 
-        return Created(string.Format("/api/employee/{0}", employee.Id), null);
+        return Created($"/api/employee/{employee.Id}", null);
     }
 
 

@@ -4,7 +4,6 @@ using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -25,7 +24,7 @@ public class BorrowControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -38,7 +37,7 @@ public class BorrowControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-        header.Should().Equal(string.Format("/api/borrow/{0}", borrow.Id));
+        header.Should().Equal($"/api/borrow/{borrow.Id}");
     }
 
     [Fact]
@@ -53,7 +52,7 @@ public class BorrowControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -65,7 +64,7 @@ public class BorrowControllerTests
         var response = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
@@ -87,7 +86,7 @@ public class BorrowControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -99,7 +98,7 @@ public class BorrowControllerTests
         var create3 = await client.PostAsJsonAsync("/api/borrow", borrow1.ToCreateBorrowDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
@@ -126,7 +125,7 @@ public class BorrowControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -149,7 +148,7 @@ public class BorrowControllerTests
         var limit = 2;
         var offset = 1;
 
-        var response = await client.GetAsync(string.Format("/api/borrow?limit={0}&offset={1}", limit, offset));
+        var response = await client.GetAsync($"/api/borrow?limit={limit}&offset={offset}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BorrowDto>>() ?? throw new NullReferenceException();
@@ -174,7 +173,7 @@ public class BorrowControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user1.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -196,7 +195,7 @@ public class BorrowControllerTests
         create8.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/borrow?userId={0}", user1.Id));
+        var response = await client.GetAsync($"/api/borrow?userId={user1.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BorrowDto>>() ?? throw new NullReferenceException();
@@ -216,7 +215,7 @@ public class BorrowControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -228,7 +227,7 @@ public class BorrowControllerTests
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
+        var response = await client.GetAsync($"/api/borrow/{borrow.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
@@ -248,7 +247,7 @@ public class BorrowControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -266,35 +265,35 @@ public class BorrowControllerTests
             new Claim("UserId", user.Id.ToString()),
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         // act & assert
 
         // get the book and borrow and check if the availability and IsReturned status is correct
-        var get1 = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get1 = await client.GetAsync($"/api/book/{book.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content1.Id.Should().Be(book.Id);
         content1.IsAvailable.Should().Be(false);
 
-        var get2 = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
+        var get2 = await client.GetAsync($"/api/borrow/{borrow.Id}");
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         var content2 = await get2.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
         content2.Id.Should().Be(borrow.Id);
         content2.IsReturned.Should().Be(false);
 
         // return the book
-        var response = await client.PutAsJsonAsync(string.Format("/api/borrow/{0}/return", borrow.Id), 0);
+        var response = await client.PutAsJsonAsync($"/api/borrow/{borrow.Id}/return", 0);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         // get the book and borrow and check if the availability and IsReturned status is correct
-        var get3 = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get3 = await client.GetAsync($"/api/book/{book.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         var content3 = await get3.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
         content3.Id.Should().Be(book.Id);
         content3.IsAvailable.Should().Be(true);
 
-        var get4 = await client.GetAsync(string.Format("/api/borrow/{0}", borrow.Id));
+        var get4 = await client.GetAsync($"/api/borrow/{borrow.Id}");
         get4.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         var content4 = await get4.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
         content4.Id.Should().Be(borrow.Id);

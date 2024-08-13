@@ -54,7 +54,7 @@ public class GenreController : ControllerBase
     {
         var genre = await _service.Genre.Create(createGenreDto);
 
-        return Created(string.Format("/api/genre/{0}", genre.Id), null);
+        return Created($"/api/genre/{genre.Id}", null);
     }
 
     [Authorize(Policy = "Employee")]

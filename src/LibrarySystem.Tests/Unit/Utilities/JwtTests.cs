@@ -77,7 +77,7 @@ public class JwtTests
         token.Should().NotBeNull();
 
         // act & assert
-        JwtUtils.Parse(string.Format("Bearer {0}", token)).Should().Be(token);
+        JwtUtils.Parse($"Bearer {token}").Should().Be(token);
     }
 
     [Fact]

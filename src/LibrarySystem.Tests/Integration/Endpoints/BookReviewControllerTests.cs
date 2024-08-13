@@ -2,10 +2,8 @@
 using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Books;
-using LibrarySystem.Domain.Dtos.Messages;
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -26,7 +24,7 @@ public class BookReviewControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -39,7 +37,7 @@ public class BookReviewControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());
@@ -58,7 +56,7 @@ public class BookReviewControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -71,13 +69,13 @@ public class BookReviewControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var create3 = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.DeleteAsync(string.Format("/api/review/{0}", review.Id));
+        var response = await client.DeleteAsync($"/api/review/{review.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
 
@@ -93,7 +91,7 @@ public class BookReviewControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -106,7 +104,7 @@ public class BookReviewControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var create3 = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -118,9 +116,9 @@ public class BookReviewControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token3));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token3}");
 
-        var response = await client.DeleteAsync(string.Format("/api/review/{0}", review.Id));
+        var response = await client.DeleteAsync($"/api/review/{review.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
     }
 
@@ -136,7 +134,7 @@ public class BookReviewControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -149,7 +147,7 @@ public class BookReviewControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var create3 = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -160,10 +158,10 @@ public class BookReviewControllerTests
             Text = "Test_Test_Test"
         };
 
-        var response = await client.PutAsJsonAsync(string.Format("/api/review/{0}", review.Id), updateBookReviewDto);
+        var response = await client.PutAsJsonAsync($"/api/review/{review.Id}", updateBookReviewDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();

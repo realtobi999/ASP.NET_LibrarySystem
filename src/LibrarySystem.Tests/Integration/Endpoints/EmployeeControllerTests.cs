@@ -4,7 +4,6 @@ using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -26,7 +25,7 @@ public class EmployeeControllerTests
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/employee/register", employee1.ToRegisterEmployeeDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -39,7 +38,7 @@ public class EmployeeControllerTests
         var limit = 2;
         var offset = 1;
 
-        var response = await client.GetAsync(string.Format("/api/employee?limit={0}&offset={1}", limit, offset));
+        var response = await client.GetAsync($"/api/employee?limit={limit}&offset={offset}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<EmployeeDto>>() ?? throw new NullReferenceException();
@@ -58,19 +57,19 @@ public class EmployeeControllerTests
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response1 = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));
+        var response1 = await client.GetAsync($"/api/employee/{employee.Id}");
         response1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response1.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
         content.Should().Be(employee.ToDto());
 
-        var response2 = await client.GetAsync(string.Format("/api/employee/{0}", Guid.NewGuid()));
+        var response2 = await client.GetAsync($"/api/employee/{Guid.NewGuid()}");
         response2.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
@@ -85,7 +84,7 @@ public class EmployeeControllerTests
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -97,7 +96,7 @@ public class EmployeeControllerTests
             new Claim("EmployeeId", employee.Id.ToString()),
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         // act & assert
         var updateDto = new UpdateEmployeeDto
@@ -106,10 +105,10 @@ public class EmployeeControllerTests
             Email = "test@test.com"
         };
 
-        var response = await client.PutAsJsonAsync(string.Format("api/employee/{0}", employee.Id), updateDto);
+        var response = await client.PutAsJsonAsync($"api/employee/{employee.Id}", updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));
+        var get = await client.GetAsync($"/api/employee/{employee.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var updatedEmployee = await get.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
@@ -129,7 +128,7 @@ public class EmployeeControllerTests
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -141,13 +140,13 @@ public class EmployeeControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         // act & assert
-        var response = await client.DeleteAsync(string.Format("/api/employee/{0}", employee.Id));
+        var response = await client.DeleteAsync($"/api/employee/{employee.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));
+        var get = await client.GetAsync($"/api/employee/{employee.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
@@ -161,7 +160,7 @@ public class EmployeeControllerTests
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -172,7 +171,7 @@ public class EmployeeControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var photo1 = new ByteArrayContent([1, 2, 3, 4]);
         photo1.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
@@ -185,10 +184,10 @@ public class EmployeeControllerTests
         };
 
         // act & assert
-        var response = await client.PutAsync(string.Format("/api/employee/{0}/photos", employee.Id), formData);
+        var response = await client.PutAsync($"/api/employee/{employee.Id}/photos", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/employee/{0}", employee.Id));
+        var get = await client.GetAsync($"/api/employee/{employee.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();

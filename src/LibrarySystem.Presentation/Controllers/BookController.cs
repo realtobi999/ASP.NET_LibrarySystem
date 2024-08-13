@@ -97,7 +97,7 @@ public class BookController : ControllerBase
     {
         var book = await _service.Book.Create(createBookDto);
 
-        return Created(string.Format("/api/book/{0}", book.Id), null);
+        return Created($"/api/book/{book.Id}", null);
     }
 
     [Authorize(Policy = "Employee")]

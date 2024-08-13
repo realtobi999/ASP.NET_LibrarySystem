@@ -23,7 +23,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
@@ -44,7 +44,7 @@ public class BookControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-        header.Should().Equal(string.Format("/api/book/{0}", book.Id));
+        header.Should().Equal($"/api/book/{book.Id}");
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
@@ -88,13 +88,13 @@ public class BookControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var create7 = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());
         create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var response = await client.GetAsync($"/api/book/{book.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
@@ -121,7 +121,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create5 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -134,7 +134,7 @@ public class BookControllerTests
         var limit = 2;
         var offset = 1;
 
-        var response = await client.GetAsync(string.Format("/api/book?limit={0}&offset={1}", limit, offset));
+        var response = await client.GetAsync($"/api/book?limit={limit}&offset={offset}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
@@ -152,7 +152,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
@@ -189,10 +189,10 @@ public class BookControllerTests
             PublishedDate = DateTimeOffset.Now,
         };
 
-        var response = await client.PutAsJsonAsync(string.Format("/api/book/{0}", book.Id), updateDto);
+        var response = await client.PutAsJsonAsync($"/api/book/{book.Id}", updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
@@ -216,16 +216,16 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create5 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.DeleteAsync(string.Format("/api/book/{0}", book.Id));
+        var response = await client.DeleteAsync($"/api/book/{book.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
@@ -239,13 +239,13 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create5 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/book/isbn/{0}", book.ISBN));
+        var response = await client.GetAsync($"/api/book/isbn/{book.ISBN}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
@@ -265,7 +265,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
@@ -289,7 +289,7 @@ public class BookControllerTests
         create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/book?authorId={0}", author1.Id));
+        var response = await client.GetAsync($"/api/book?authorId={author1.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
@@ -311,7 +311,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
@@ -335,7 +335,7 @@ public class BookControllerTests
         create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/book?genreId={0}", genre1.Id));
+        var response = await client.GetAsync($"/api/book?genreId={genre1.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
@@ -357,7 +357,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
@@ -381,7 +381,7 @@ public class BookControllerTests
         create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/book?genreId={0}&authorId={1}", genre1.Id, author1.Id));
+        var response = await client.GetAsync($"/api/book?genreId={genre1.Id}&authorId={author1.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
@@ -409,7 +409,7 @@ public class BookControllerTests
         book3.Title = "_";
         book3.Description = "_";
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create5 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -419,7 +419,7 @@ public class BookControllerTests
         create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/book/search/{0}", "tes"));
+        var response = await client.GetAsync($"/api/book/search/{"tes"}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
@@ -441,8 +441,8 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
-
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+        
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
         var genre1 = new Genre().WithFakeData();
@@ -467,7 +467,7 @@ public class BookControllerTests
         // act & assert
 
         // GET api/book/{book_id} ENDPOINT
-        var get1 = await client.GetAsync(string.Format("/api/book/{0}?withRelations=false", book1.Id));
+        var get1 = await client.GetAsync($"/api/book/{book1.Id}?withRelations=false");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
@@ -476,7 +476,7 @@ public class BookControllerTests
         content1.Genres.Count.Should().Be(0);
 
         // GET api/book/isbn/{ISBN} ENDPOINT
-        var get2 = await client.GetAsync(string.Format("/api/book/isbn/{0}?withRelations=false", book1.ISBN));
+        var get2 = await client.GetAsync($"/api/book/isbn/{book1.ISBN}?withRelations=false");
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content2 = await get2.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
@@ -505,7 +505,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -522,10 +522,10 @@ public class BookControllerTests
         };
 
         // act & assert
-        var response = await client.PutAsync(string.Format("/api/book/{0}/photos", book.Id), formData);
+        var response = await client.PutAsync($"/api/book/{book.Id}/photos", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
@@ -544,7 +544,7 @@ public class BookControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -566,7 +566,7 @@ public class BookControllerTests
             { photo2, "files", "photo2.jpg" }
         };
 
-        var create2 = await client.PutAsync(string.Format("/api/book/{0}/photos", book.Id), formData1);
+        var create2 = await client.PutAsync($"/api/book/{book.Id}/photos", formData1);
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         // act & assert
@@ -576,10 +576,10 @@ public class BookControllerTests
             { photo3, "files", "photo3.jpg"},
         };
 
-        var response = await client.PutAsync(string.Format("/api/book/{0}/photos", book.Id), formData2);
+        var response = await client.PutAsync($"/api/book/{book.Id}/photos", formData2);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/book/{0}", book.Id));
+        var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();

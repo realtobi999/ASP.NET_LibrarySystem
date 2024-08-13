@@ -60,7 +60,7 @@ public class AuthorController : ControllerBase
     {
         var author = await _service.Author.Create(createAuthorDto);
 
-        return Created(string.Format("/api/author/{0}", author.Id), null);
+        return Created($"/api/author/{author.Id}", null);
     }
 
     [Authorize(Policy = "Employee")]

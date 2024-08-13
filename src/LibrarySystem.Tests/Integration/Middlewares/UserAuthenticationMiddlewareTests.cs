@@ -31,13 +31,13 @@ public class UserAuthenticationMiddlewareTests
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // authenticate as the user1
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
-        var response1 = await client.DeleteAsync(string.Format("/api/user/{0}", user2.Id)); // try to delete the other user, authenticated as the first
+        var response1 = await client.DeleteAsync($"/api/user/{user2.Id}"); // try to delete the other user, authenticated as the first
         response1.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
 
-        var response2 = await client.DeleteAsync(string.Format("/api/user/{0}", user1.Id));
+        var response2 = await client.DeleteAsync($"/api/user/{user1.Id}");
         response2.StatusCode.Should().NotBe(System.Net.HttpStatusCode.Unauthorized);
     }
 
@@ -52,7 +52,7 @@ public class UserAuthenticationMiddlewareTests
             new Claim("UserId", user.Id.ToString()),
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/review", new CreateBookReviewDto{

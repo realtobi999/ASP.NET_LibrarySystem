@@ -3,7 +3,6 @@ using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -22,14 +21,14 @@ public class GenreControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-        header.Should().Equal(string.Format("/api/genre/{0}", genre.Id));
+        header.Should().Equal($"/api/genre/{genre.Id}");
     }
 
     [Fact]
@@ -42,20 +41,20 @@ public class GenreControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/genre/{0}", genre.Id));
+        var response = await client.GetAsync($"/api/genre/{genre.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<GenreDto>() ?? throw new NullReferenceException();
         content.Should().BeEquivalentTo(genre.ToDto());
 
         // test for 404
-        var get = await client.GetAsync(string.Format("/api/genre/{0}", Guid.NewGuid()));
+        var get = await client.GetAsync($"/api/genre/{Guid.NewGuid()}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
@@ -71,7 +70,7 @@ public class GenreControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -86,7 +85,7 @@ public class GenreControllerTests
         var limit = 2;
         var offset = 1;
 
-        var response = await client.GetAsync(string.Format("/api/genre?limit={0}&offset={1}", limit, offset));
+        var response = await client.GetAsync($"/api/genre?limit={limit}&offset={offset}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<GenreDto>>() ?? throw new NullReferenceException();
@@ -105,7 +104,7 @@ public class GenreControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -116,10 +115,10 @@ public class GenreControllerTests
             Name = "test",
         };
 
-        var response = await client.PutAsJsonAsync(string.Format("/api/genre/{0}", genre.Id), updateDto);
+        var response = await client.PutAsJsonAsync($"/api/genre/{genre.Id}", updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/genre/{0}", genre.Id));
+        var get = await client.GetAsync($"/api/genre/{genre.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<GenreDto>() ?? throw new NullReferenceException();
@@ -137,16 +136,16 @@ public class GenreControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.DeleteAsync(string.Format("/api/genre/{0}", genre.Id));
+        var response = await client.DeleteAsync($"/api/genre/{genre.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/genre/{0}", genre.Id));
+        var get = await client.GetAsync($"/api/genre/{genre.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 }

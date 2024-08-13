@@ -24,7 +24,7 @@ public class AuthorControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/author", author1.ToCreateAuthorDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -37,7 +37,7 @@ public class AuthorControllerTests
         var limit = 2;
         var offset = 1;
 
-        var response = await client.GetAsync(string.Format("/api/author?limit={0}&offset={1}", limit, offset));
+        var response = await client.GetAsync($"/api/author?limit={limit}&offset={offset}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<AuthorDto>>() ?? throw new NullReferenceException();
@@ -55,14 +55,14 @@ public class AuthorControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-        header.Should().Equal(string.Format("/api/author/{0}", author.Id));
+        header.Should().Equal($"/api/author/{author.Id}");
     }
 
     [Fact]
@@ -75,16 +75,16 @@ public class AuthorControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
  
         // act & assert
-        var get1 = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
+        var get1 = await client.GetAsync($"/api/author/{author.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get2 = await client.GetAsync(string.Format("/api/author/{0}", Guid.NewGuid()));
+        var get2 = await client.GetAsync($"/api/author/{Guid.NewGuid()}");
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
 
         var content = await get1.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
@@ -101,7 +101,7 @@ public class AuthorControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -114,10 +114,10 @@ public class AuthorControllerTests
             Birthday = DateTimeOffset.UtcNow.AddDays(2),
         };
 
-        var response = await client.PutAsJsonAsync(string.Format("/api/author/{0}", author.Id), updateDto);
+        var response = await client.PutAsJsonAsync($"/api/author/{author.Id}", updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
+        var get = await client.GetAsync($"/api/author/{author.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException(); 
@@ -137,16 +137,16 @@ public class AuthorControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.DeleteAsync(string.Format("/api/author/{0}", author.Id));
+        var response = await client.DeleteAsync($"/api/author/{author.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
+        var get = await client.GetAsync($"/api/author/{author.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
@@ -160,7 +160,7 @@ public class AuthorControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -176,10 +176,10 @@ public class AuthorControllerTests
         };
 
         // act & assert
-        var response = await client.PutAsync(string.Format("/api/author/{0}/photos", author.Id), formData);
+        var response = await client.PutAsync($"/api/author/{author.Id}/photos", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/author/{0}", author.Id));
+        var get = await client.GetAsync($"/api/author/{author.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();

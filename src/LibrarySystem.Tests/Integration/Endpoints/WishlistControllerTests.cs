@@ -1,10 +1,8 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using FluentAssertions;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -27,7 +25,7 @@ public class WishlistControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create5 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -42,14 +40,14 @@ public class WishlistControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         // act & assert
         var response = await client.PostAsJsonAsync("api/wishlist", wishlist.ToCreateWishlistDto([book1.Id, book2.Id, book3.Id]));
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-        header.Should().Equal(string.Format("/api/wishlist/{0}", wishlist.Id));
+        header.Should().Equal($"/api/wishlist/{wishlist.Id}");
     }
 
     [Fact]
@@ -66,7 +64,7 @@ public class WishlistControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -81,13 +79,13 @@ public class WishlistControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var create4 = await client.PostAsJsonAsync("api/wishlist", wishlist.ToCreateWishlistDto([book1.Id, book2.Id, book3.Id]));
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/wishlist/{0}", wishlist.Id));
+        var response = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);        
 
         var content = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
@@ -109,7 +107,7 @@ public class WishlistControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -124,7 +122,7 @@ public class WishlistControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var create4 = await client.PostAsJsonAsync("api/wishlist", wishlist.ToCreateWishlistDto([book1.Id, book2.Id, book3.Id]));
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -135,10 +133,10 @@ public class WishlistControllerTests
             Name = "test_test_test",
             BookIds = [book1.Id],
         };
-        var response = await client.PutAsJsonAsync(string.Format("/api/wishlist/{0}", wishlist.Id), updateDto);
+        var response = await client.PutAsJsonAsync($"/api/wishlist/{wishlist.Id}", updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get1 = await client.GetAsync(string.Format("/api/wishlist/{0}", wishlist.Id));
+        var get1 = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);        
 
         var content = await get1.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
@@ -160,7 +158,7 @@ public class WishlistControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -175,16 +173,16 @@ public class WishlistControllerTests
         ]);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var create4 = await client.PostAsJsonAsync("/api/wishlist", wishlist.ToCreateWishlistDto([book1.Id, book2.Id, book3.Id]));
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.DeleteAsync(string.Format("/api/wishlist/{0}", wishlist.Id));
+        var response = await client.DeleteAsync($"/api/wishlist/{wishlist.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get1 = await client.GetAsync(string.Format("/api/wishlist/{0}", wishlist.Id));
+        var get1 = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);        
     }
 }

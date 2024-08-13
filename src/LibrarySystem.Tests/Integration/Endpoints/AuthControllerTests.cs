@@ -27,7 +27,7 @@ public class AuthControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-        header.Should().Equal(string.Format("/api/user/{0}", user.Id));
+        header.Should().Equal($"/api/user/{user.Id}");
     }
 
     [Fact]
@@ -94,14 +94,14 @@ public class AuthControllerTests
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
-        header.Should().Equal(string.Format("/api/employee/{0}", employee.Id));
+        header.Should().Equal($"/api/employee/{employee.Id}");
     }
 
     [Fact]
@@ -114,7 +114,7 @@ public class AuthControllerTests
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);

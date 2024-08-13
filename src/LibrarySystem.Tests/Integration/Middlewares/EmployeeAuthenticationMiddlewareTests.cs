@@ -22,7 +22,7 @@ public class EmployeeAuthenticationMiddlewareTests
             new Claim(ClaimTypes.Role, "Admin")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token1));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/employee/register", employee1.ToRegisterEmployeeDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -37,13 +37,13 @@ public class EmployeeAuthenticationMiddlewareTests
             new Claim("EmployeeId", employee1.Id.ToString()),
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token2));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         // act & assert
-        var response1 = await client.DeleteAsync(string.Format("/api/employee/{0}", employee2.Id));
+        var response1 = await client.DeleteAsync($"/api/employee/{employee2.Id}");
         response1.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
 
-        var response2 = await client.DeleteAsync(string.Format("/api/employee/{0}", employee1.Id));
+        var response2 = await client.DeleteAsync($"/api/employee/{employee1.Id}");
         response2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
 }

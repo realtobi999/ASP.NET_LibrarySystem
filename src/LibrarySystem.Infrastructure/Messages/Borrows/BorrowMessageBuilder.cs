@@ -11,7 +11,7 @@ public class BorrowMessageBuilder(IConfiguration configuration) : MessageBuilder
     {
         var message = BuildBaseMessage(dto.UserEmail);
 
-        message.Subject = string.Format("{0} - Successfully borrowed!", dto.BookTitle);
+        message.Subject = $"{dto.BookTitle} - Successfully borrowed!";
         message.Body = AttachHtml("book_borrow_message.html", dto);
 
         return message;
@@ -21,7 +21,7 @@ public class BorrowMessageBuilder(IConfiguration configuration) : MessageBuilder
     {
         var message = BuildBaseMessage(dto.UserEmail);
 
-        message.Subject = string.Format("{0} - Successfully returned!", dto.BookTitle);
+        message.Subject = $"{dto.BookTitle} - Successfully returned!";
         message.Body = AttachHtml("book_return_message.html", dto);
 
         return message;

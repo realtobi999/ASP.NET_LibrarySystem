@@ -32,7 +32,7 @@ public class UserControllerTests
         var limit = 2;
         var offset = 1;
 
-        var response = await client.GetAsync(string.Format("/api/user?limit={0}&offset={1}", limit, offset));
+        var response = await client.GetAsync($"/api/user?limit={limit}&offset={offset}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException();
@@ -51,7 +51,7 @@ public class UserControllerTests
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
+        var response = await client.GetAsync($"/api/user/{user.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var test = await response.Content.ReadAsStringAsync();
@@ -74,7 +74,7 @@ public class UserControllerTests
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
         var updateDto = new UpdateUserDto
@@ -83,12 +83,12 @@ public class UserControllerTests
             Email = "test@test.com",
         };
 
-        var response = await client.PutAsJsonAsync(string.Format("/api/user/{0}", user.Id), updateDto); 
+        var response = await client.PutAsJsonAsync($"/api/user/{user.Id}", updateDto); 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         client.DefaultRequestHeaders.Remove("Authorization");
 
-        var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
+        var get = await client.GetAsync($"/api/user/{user.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
@@ -111,13 +111,13 @@ public class UserControllerTests
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
-        var response = await client.DeleteAsync(string.Format("/api/user/{0}", user.Id));
+        var response = await client.DeleteAsync($"/api/user/{user.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
+        var get = await client.GetAsync($"/api/user/{user.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
@@ -131,7 +131,7 @@ public class UserControllerTests
             new Claim(ClaimTypes.Role, "User")
         ]);
 
-        client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -147,10 +147,10 @@ public class UserControllerTests
         };
 
         // act & assert
-        var response = await client.PutAsync(string.Format("/api/user/{0}/photos", user.Id), formData);
+        var response = await client.PutAsync($"/api/user/{user.Id}/photos", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var get = await client.GetAsync(string.Format("/api/user/{0}", user.Id));
+        var get = await client.GetAsync($"/api/user/{user.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();

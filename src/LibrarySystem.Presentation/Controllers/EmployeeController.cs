@@ -1,4 +1,5 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
+using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Enums;
@@ -36,12 +37,7 @@ public class EmployeeController : ControllerBase
     {
         var employees = await _service.Employee.GetAll();
 
-        if (offset > 0)
-            employees = employees.Skip(offset);
-        if (limit > 0)
-            employees = employees.Take(limit);
-
-        return Ok(employees);
+        return Ok(employees.Paginate(offset, limit));
     }
 
     [HttpGet("api/employee/{employeeId:guid}")]

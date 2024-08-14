@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Interfaces;
+﻿using LibrarySystem.Application.Core.Extensions;
+using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions;
@@ -37,12 +38,7 @@ public class AuthorController : ControllerBase
     {
         var authors = await _service.Author.GetAll();
 
-        if (offset > 0)
-            authors = authors.Skip(offset);
-        if (limit > 0)
-            authors = authors.Take(limit);
-
-        return Ok(authors);
+        return Ok(authors.Paginate(offset, limit));
     }
 
     [Authorize(Policy = "Employee")]

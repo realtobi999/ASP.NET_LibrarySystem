@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Interfaces;
+﻿using LibrarySystem.Application.Core.Extensions;
+using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Exceptions.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -31,12 +32,7 @@ public class GenreController : ControllerBase
     {
         var genres = await _service.Genre.GetAll();
         
-        if (offset > 0)
-            genres = genres.Skip(offset);
-        if (limit > 0)
-            genres = genres.Take(limit);
-
-        return Ok(genres);
+        return Ok(genres.Paginate(offset, limit));
     }    
 
     [Authorize(Policy = "Employee")]

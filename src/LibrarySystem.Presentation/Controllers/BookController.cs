@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Interfaces;
+﻿using LibrarySystem.Application.Core.Extensions;
+using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions.Common;
@@ -33,27 +34,8 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("api/book")]
-    public async Task<IActionResult> GetBooks(int limit, int offset, Guid authorId, Guid genreId, bool withRelations = true)
-    {
-        var books = await _service.Book.GetAll(withRelations);         
-
-        if (authorId != Guid.Empty)
-            books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId)); 
-
-        if (genreId != Guid.Empty)
-            books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreId));    
-
-        if (offset > 0)
-            books = books.Skip(offset).ToList();
-            
-        if (limit > 0)
-            books = books.Take(limit).ToList(); 
-
-        return Ok(books);
-    }
-
     [HttpGet("api/book/search/{query}")]
-    public async Task<IActionResult> SearchBooks(int limit, int offset, Guid authorId, Guid genreId, string query, bool withRelations = true)
+    public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId, bool withRelations = true)
     {
         var books = await _service.Book.GetAll(withRelations);         
 
@@ -64,15 +46,9 @@ public class BookController : ControllerBase
             books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreId));    
 
         if (!query.IsNullOrEmpty())
-            books = books.Where(b => b.Title!.Contains(query) || b.Description!.Contains(query));    
+            books = books.Where(b => b.Title!.Contains(query!) || b.Description!.Contains(query!));    
 
-        if (offset > 0)
-            books = books.Skip(offset).ToList();
-
-        if (limit > 0)
-            books = books.Take(limit).ToList(); 
-
-        return Ok(books);
+        return Ok(books.Paginate(offset, limit));
     }
 
     [HttpGet("api/book/{bookId:guid}")]

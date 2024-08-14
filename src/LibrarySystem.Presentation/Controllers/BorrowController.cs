@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Core.Utilities;
+﻿using LibrarySystem.Application.Core.Extensions;
+using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Dtos.Messages;
@@ -41,13 +42,7 @@ public class BorrowController : ControllerBase
         if (active)
             borrows = borrows.Where(b => !b.IsReturned);
 
-        if (offset > 0)
-            borrows = borrows.Skip(offset);
-
-        if (limit > 0)
-            borrows = borrows.Take(limit);
-
-        return Ok(borrows);
+        return Ok(borrows.Paginate(offset, limit));
     }
 
     [HttpGet("api/borrow/{borrowId:guid}")]

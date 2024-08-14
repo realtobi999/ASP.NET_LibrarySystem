@@ -1,4 +1,5 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
+using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Enums;
@@ -35,12 +36,7 @@ public class UserController : ControllerBase
     {
         var users = await _service.User.GetAll();
 
-        if (offset > 0)
-            users = users.Skip(offset);
-        if (limit > 0)
-            users = users.Take(limit); 
-
-        return Ok(users);
+        return Ok(users.Paginate(offset, limit));
     }
 
     [HttpGet("api/user/{userId:guid}")]

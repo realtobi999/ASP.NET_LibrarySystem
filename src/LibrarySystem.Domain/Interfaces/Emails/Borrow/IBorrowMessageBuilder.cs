@@ -1,7 +1,7 @@
 ﻿using System.Net.Mail;
 using LibrarySystem.Domain.Dtos.Messages;
 
-namespace LibrarySystem.Domain.Interfaces.Emails;
+namespace LibrarySystem.Domain.Interfaces.Emails.Borrow;
 
 public interface IBorrowMessageBuilder
 {

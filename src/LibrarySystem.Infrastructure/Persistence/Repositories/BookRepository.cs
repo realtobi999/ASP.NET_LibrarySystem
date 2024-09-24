@@ -36,7 +36,7 @@ public class BookRepository : IBookRepository
         return await book.Include(b => b.CoverPictures).SingleOrDefaultAsync(b => b.Id == id);
     }
 
-    public async Task<IEnumerable<Book>> GetAll(bool withRelations = true)
+    public async Task<IEnumerable<Book>> Index(bool withRelations = true)
     {
         var books = _context.Books.AsQueryable();
 

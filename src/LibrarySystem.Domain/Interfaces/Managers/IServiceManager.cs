@@ -1,6 +1,6 @@
-﻿using LibrarySystem.Application.Interfaces.Services;
+﻿using LibrarySystem.Domain.Interfaces.Services;
 
-namespace LibrarySystem.Application.Interfaces;
+namespace LibrarySystem.Domain.Interfaces.Managers;
 
 public interface IServiceManager
 {

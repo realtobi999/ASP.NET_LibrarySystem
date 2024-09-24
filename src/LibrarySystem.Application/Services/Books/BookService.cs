@@ -1,8 +1,8 @@
-﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Domain.Dtos.Books;
+﻿using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services.Books;
 
@@ -69,9 +69,9 @@ public class BookService : IBookService
         return book;
     }
 
-    public async Task<IEnumerable<Book>> GetAll(bool withRelations = true)
+    public async Task<IEnumerable<Book>> Index(bool withRelations = true)
     {
-        var books = await _repository.Book.GetAll(withRelations);
+        var books = await _repository.Book.Index(withRelations);
 
         return books;
     }

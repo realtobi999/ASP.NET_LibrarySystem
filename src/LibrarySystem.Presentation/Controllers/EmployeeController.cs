@@ -1,9 +1,9 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Extensions;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +34,7 @@ public class EmployeeController : ControllerBase
     [HttpGet("api/employee")]
     public async Task<IActionResult> GetEmployees(int limit, int offset)
     {
-        var employees = await _service.Employee.GetAll();
+        var employees = await _service.Employee.Index();
 
         return Ok(employees.Paginate(offset, limit));
     }

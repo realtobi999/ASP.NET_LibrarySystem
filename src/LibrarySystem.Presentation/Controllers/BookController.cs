@@ -1,8 +1,8 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +37,7 @@ public class BookController : ControllerBase
     [HttpGet("api/book/search/{query}")]
     public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId, bool withRelations = true)
     {
-        var books = await _service.Book.GetAll(withRelations);
+        var books = await _service.Book.Index(withRelations);
 
         if (authorId != Guid.Empty)
         {

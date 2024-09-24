@@ -1,9 +1,9 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

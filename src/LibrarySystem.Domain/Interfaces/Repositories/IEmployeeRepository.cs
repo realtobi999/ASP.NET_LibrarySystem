@@ -4,7 +4,7 @@ namespace LibrarySystem.Domain.Interfaces.Repositories;
 
 public interface IEmployeeRepository
 {
-    Task<IEnumerable<Employee>> GetAll();
+    Task<IEnumerable<Employee>> Index();
     void Create(Employee employee);
     Task<Employee?> Get(string email);
     Task<Employee?> Get(Guid id);

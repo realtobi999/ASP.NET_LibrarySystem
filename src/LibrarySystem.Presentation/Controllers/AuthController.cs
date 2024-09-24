@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
+using LibrarySystem.Domain.Interfaces.Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

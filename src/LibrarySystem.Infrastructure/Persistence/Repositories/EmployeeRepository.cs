@@ -33,7 +33,7 @@ public class EmployeeRepository : IEmployeeRepository
         return await _context.Employees.FirstOrDefaultAsync(s => s.Id == id);
     }
 
-    public async Task<IEnumerable<Employee>> GetAll()
+    public async Task<IEnumerable<Employee>> Index()
     {
         return await _context.Employees.ToListAsync();
     }

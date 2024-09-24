@@ -1,7 +1,7 @@
 ﻿using LibrarySystem.Application.Core.Emails;
-using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Application.Interfaces.Emails;
 using LibrarySystem.Domain.Interfaces.Emails;
+using LibrarySystem.Domain.Interfaces.Emails.Borrow;
+using LibrarySystem.Domain.Interfaces.Factories;
 
 namespace LibrarySystem.Application.Core.Factories;
 

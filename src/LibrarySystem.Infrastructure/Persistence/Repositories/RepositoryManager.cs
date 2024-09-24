@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Domain.Interfaces.Repositories;
+﻿using LibrarySystem.Domain.Interfaces.Factories;
+using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Infrastructure.Persistence.Repositories;
 

@@ -9,10 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using LibrarySystem.Application.Core.Emails;
 using LibrarySystem.Application.Core.Factories;
-using LibrarySystem.Domain.Interfaces.Emails;
 using LibrarySystem.Infrastructure.Persistence.Repositories;
 using LibrarySystem.Infrastructure.Persistence;
 using LibrarySystem.Domain.Interfaces.Common;
+using LibrarySystem.Domain.Interfaces.Emails.Borrow;
+using LibrarySystem.Domain.Interfaces.Factories;
+using LibrarySystem.Domain.Interfaces.Managers;
 
 namespace LibrarySystem.Presentation.Extensions;
 

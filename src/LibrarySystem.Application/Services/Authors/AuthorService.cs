@@ -1,8 +1,8 @@
-﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Domain.Dtos.Authors;
+﻿using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services.Authors;
 
@@ -22,9 +22,9 @@ public class AuthorService : IAuthorService
         return author;
     }
 
-    public async Task<IEnumerable<Author>> GetAll()
+    public async Task<IEnumerable<Author>> Index()
     {
-        var authors = await _repository.Author.GetAll();
+        var authors = await _repository.Author.Index();
 
         return authors;
     }

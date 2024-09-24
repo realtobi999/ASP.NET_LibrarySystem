@@ -1,7 +1,7 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Interfaces.Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +30,7 @@ public class GenreController : ControllerBase
     [HttpGet("api/genre")]
     public async Task<IActionResult> GetGenres(int limit, int offset)
     {
-        var genres = await _service.Genre.GetAll();
+        var genres = await _service.Genre.Index();
 
         return Ok(genres.Paginate(offset, limit));
     }

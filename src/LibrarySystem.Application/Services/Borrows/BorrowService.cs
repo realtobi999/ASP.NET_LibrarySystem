@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Application.Interfaces.Services;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services.Borrows;
 
@@ -58,9 +58,9 @@ public class BorrowService : IBorrowService
         return borrow;
     }
 
-    public async Task<IEnumerable<Borrow>> GetAll()
+    public async Task<IEnumerable<Borrow>> Index()
     {
-        var borrows = await _repository.Borrow.GetAll();
+        var borrows = await _repository.Borrow.Index();
 
         return borrows;
     }

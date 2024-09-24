@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Interfaces.Emails;
+﻿using LibrarySystem.Domain.Interfaces.Emails.Borrow;
 
 namespace LibrarySystem.Application.Interfaces;
 

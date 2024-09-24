@@ -18,7 +18,7 @@ public class AuthorRepository : IAuthorRepository
         return await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<IEnumerable<Author>> GetAll()
+    public async Task<IEnumerable<Author>> Index()
     {
         return await _context.Authors.ToListAsync();
     }

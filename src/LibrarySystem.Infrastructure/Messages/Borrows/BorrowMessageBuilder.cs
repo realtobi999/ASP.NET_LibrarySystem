@@ -1,6 +1,6 @@
 ﻿using System.Net.Mail;
 using LibrarySystem.Domain.Dtos.Messages;
-using LibrarySystem.Domain.Interfaces.Emails;
+using LibrarySystem.Domain.Interfaces.Emails.Borrow;
 using Microsoft.Extensions.Configuration;
 
 namespace LibrarySystem.Infrastructure.Messages.Borrows;

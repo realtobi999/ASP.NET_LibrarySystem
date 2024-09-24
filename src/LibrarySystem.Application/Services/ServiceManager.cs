@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Application.Interfaces.Services;
+using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services;
 

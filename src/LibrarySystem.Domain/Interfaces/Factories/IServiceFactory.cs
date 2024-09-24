@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Interfaces.Services;
+﻿using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Interfaces;
 

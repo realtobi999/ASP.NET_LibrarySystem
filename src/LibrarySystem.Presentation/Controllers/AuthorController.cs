@@ -1,8 +1,8 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +35,7 @@ public class AuthorController : ControllerBase
     [HttpGet("api/author")]
     public async Task<IActionResult> GetAuthors(int limit, int offset)
     {
-        var authors = await _service.Author.GetAll();
+        var authors = await _service.Author.Index();
 
         return Ok(authors.Paginate(offset, limit));
     }

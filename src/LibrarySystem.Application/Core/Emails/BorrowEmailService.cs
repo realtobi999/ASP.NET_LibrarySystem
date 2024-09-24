@@ -1,6 +1,6 @@
-﻿using LibrarySystem.Application.Interfaces.Emails;
-using LibrarySystem.Domain.Dtos.Messages;
+﻿using LibrarySystem.Domain.Dtos.Messages;
 using LibrarySystem.Domain.Interfaces.Emails;
+using LibrarySystem.Domain.Interfaces.Emails.Borrow;
 
 namespace LibrarySystem.Application.Core.Emails;
 

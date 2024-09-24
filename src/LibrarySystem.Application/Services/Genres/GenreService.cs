@@ -1,8 +1,8 @@
-﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Domain.Dtos.Genres;
+﻿using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services.Genres;
 
@@ -44,9 +44,9 @@ public class GenreService : IGenreService
         return genre;
     }
 
-    public async Task<IEnumerable<Genre>> GetAll()
+    public async Task<IEnumerable<Genre>> Index()
     {
-        var genres = await _repository.Genre.GetAll();
+        var genres = await _repository.Genre.Index();
 
         return genres;
     }

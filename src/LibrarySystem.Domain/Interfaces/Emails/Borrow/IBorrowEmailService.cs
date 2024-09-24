@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Domain.Dtos.Messages;
 
-namespace LibrarySystem.Application.Interfaces.Emails;
+namespace LibrarySystem.Domain.Interfaces.Emails.Borrow;
 
 public interface IBorrowEmailService
 {

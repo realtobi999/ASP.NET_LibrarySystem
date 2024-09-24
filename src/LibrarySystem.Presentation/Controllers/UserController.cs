@@ -1,9 +1,9 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Extensions;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +34,7 @@ public class UserController : ControllerBase
     [HttpGet("api/user")]
     public async Task<IActionResult> GetUsers(int limit, int offset)
     {
-        var users = await _service.User.GetAll();
+        var users = await _service.User.Index();
 
         return Ok(users.Paginate(offset, limit));
     }

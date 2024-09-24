@@ -28,7 +28,7 @@ public class BorrowRepository : IBorrowRepository
         return await _context.Borrows.FirstOrDefaultAsync(b => b.UserId == userId && b.BookId == bookId);
     }
 
-    public async Task<IEnumerable<Borrow>> GetAll()
+    public async Task<IEnumerable<Borrow>> Index()
     {
         return await _context.Borrows.OrderBy(b => b.BorrowDate).ToListAsync();
     }

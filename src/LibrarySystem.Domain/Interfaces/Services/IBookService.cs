@@ -1,11 +1,11 @@
 ﻿using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
 
-namespace LibrarySystem.Application.Interfaces.Services;
+namespace LibrarySystem.Domain.Interfaces.Services;
 
 public interface IBookService
 {
-    Task<IEnumerable<Book>> GetAll(bool withRelations = true);
+    Task<IEnumerable<Book>> Index(bool withRelations = true);
     Task<Book> Get(Guid id, bool withRelations = true);
     Task<Book> Get(string isbn, bool withRelations = true);
     Task<Book> Create(CreateBookDto createBookDto);

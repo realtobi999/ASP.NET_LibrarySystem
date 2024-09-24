@@ -5,6 +5,7 @@ using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Dtos.Messages;
 using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Managers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
@@ -34,7 +35,7 @@ public class BorrowController : ControllerBase
     [HttpGet("api/borrow")]
     public async Task<IActionResult> GetBorrows(int limit, int offset, Guid userId, bool active)
     {
-        var borrows = await _service.Borrow.GetAll();
+        var borrows = await _service.Borrow.Index();
 
         if (userId != Guid.Empty)
         {

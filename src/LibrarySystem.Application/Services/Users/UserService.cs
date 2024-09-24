@@ -1,9 +1,9 @@
-﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Domain.Dtos.Users;
+﻿using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services.Users;
 
@@ -40,9 +40,9 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<IEnumerable<User>> Index()
     {
-        var users = await _repository.User.GetAll();
+        var users = await _repository.User.Index();
 
         return users;
     }

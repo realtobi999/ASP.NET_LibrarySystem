@@ -2,7 +2,7 @@
 using LibrarySystem.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 
-namespace LibrarySystem.Application.Interfaces.Services;
+namespace LibrarySystem.Domain.Interfaces.Services;
 
 public interface IPictureService
 {

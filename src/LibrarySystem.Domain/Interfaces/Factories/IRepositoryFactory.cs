@@ -1,4 +1,6 @@
-﻿namespace LibrarySystem.Domain.Interfaces.Repositories;
+﻿using LibrarySystem.Domain.Interfaces.Repositories;
+
+namespace LibrarySystem.Domain.Interfaces.Factories;
 
 public interface IRepositoryFactory
 {

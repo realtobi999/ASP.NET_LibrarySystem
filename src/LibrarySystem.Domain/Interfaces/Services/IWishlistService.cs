@@ -1,7 +1,7 @@
 ﻿using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
 
-namespace LibrarySystem.Application.Interfaces.Services;
+namespace LibrarySystem.Domain.Interfaces.Services;
 
 public interface IWishlistService
 {

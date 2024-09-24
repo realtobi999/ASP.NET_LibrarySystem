@@ -1,9 +1,9 @@
-﻿using LibrarySystem.Application.Interfaces.Services;
-using LibrarySystem.Domain.Dtos.Employees;
+﻿using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services.Employees;
 
@@ -51,9 +51,9 @@ public class EmployeeService : IEmployeeService
         return employee;
     }
 
-    public Task<IEnumerable<Employee>> GetAll()
+    public Task<IEnumerable<Employee>> Index()
     {
-        var employees = _repository.Employee.GetAll();
+        var employees = _repository.Employee.Index();
 
         return employees;
     }

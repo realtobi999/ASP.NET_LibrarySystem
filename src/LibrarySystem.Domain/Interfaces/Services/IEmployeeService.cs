@@ -1,11 +1,11 @@
 ﻿using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Entities;
 
-namespace LibrarySystem.Application.Interfaces.Services;
+namespace LibrarySystem.Domain.Interfaces.Services;
 
 public interface IEmployeeService
 {
-    Task<IEnumerable<Employee>> GetAll();
+    Task<IEnumerable<Employee>> Index();
     Task<Employee> Get(Guid id);
     Task<Employee> Get(string email);
     Task<Employee> Create(RegisterEmployeeDto registerEmployeeDto);

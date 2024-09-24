@@ -1,8 +1,5 @@
-﻿using System.Text.Json.Nodes;
-using LibrarySystem.Application.Core.Attributes;
+﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Domain;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Exceptions.HTTP;
 
 namespace LibrarySystem.Presentation.Middlewares;

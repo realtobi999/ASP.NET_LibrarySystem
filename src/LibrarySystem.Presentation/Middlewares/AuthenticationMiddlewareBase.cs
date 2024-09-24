@@ -22,7 +22,9 @@ public abstract class AuthenticationMiddlewareBase
                                         .Value?.ToString();
 
                 if (requestUserId is null)
+                {
                     throw new BadRequest400Exception($"{key} is missing in both the route and the body.");
+                }
 
                 // Reset the request body stream position for further processing
                 context.Request.Body = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(requestBody));

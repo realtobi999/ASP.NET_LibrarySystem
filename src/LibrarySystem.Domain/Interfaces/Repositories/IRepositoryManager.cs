@@ -10,7 +10,7 @@ public interface IRepositoryManager
     IBookRepository Book { get; }
     IBorrowRepository Borrow { get; }
     IBookReviewRepository BookReview { get; }
-    IWishlistRepository Wishlist { get;}
+    IWishlistRepository Wishlist { get; }
     IPictureRepository Picture { get; }
-    Task<int> SaveAsync(); 
+    Task<int> SaveAsync();
 }

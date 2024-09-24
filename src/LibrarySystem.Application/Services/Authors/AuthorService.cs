@@ -37,7 +37,7 @@ public class AuthorService : IAuthorService
             Description = createAuthorDto.Description ?? throw new NullReferenceException("The description must be set."),
             Birthday = createAuthorDto.Birthday.ToUniversalTime(),
         };
-        
+
         _repository.Author.Create(author);
         await _repository.SaveAsync();
 

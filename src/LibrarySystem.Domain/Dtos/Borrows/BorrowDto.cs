@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace LibrarySystem.Domain.Dtos.Borrows;
+﻿namespace LibrarySystem.Domain.Dtos.Borrows;
 
 public class BorrowDto
 {

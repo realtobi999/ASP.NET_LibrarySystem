@@ -15,8 +15,8 @@ public record class CreateBookDto
     [Required, MaxLength(555)]
     public string? Description { get; set; }
 
-    [Required, Range(0,10000)]
-    public int PagesCount { get; set; } 
+    [Required, Range(0, 10000)]
+    public int PagesCount { get; set; }
 
     [Required]
     public DateTimeOffset PublishedDate { get; set; }

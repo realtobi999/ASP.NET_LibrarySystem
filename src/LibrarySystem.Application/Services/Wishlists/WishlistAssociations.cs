@@ -24,7 +24,7 @@ public class WishlistAssociations : IWishlistAssociations
 
     public async Task AssignBooks(IEnumerable<Guid> booksIds, Wishlist wishlist)
     {
-        var task = booksIds.Select(async bookId => 
+        var task = booksIds.Select(async bookId =>
         {
             var book = await _repository.Book.Get(bookId) ?? throw new NotFound404Exception(nameof(Book), bookId);
             _repository.Associations.CreateWishlistBook(new WishlistBook
@@ -34,7 +34,7 @@ public class WishlistAssociations : IWishlistAssociations
                 Book = book,
                 BookId = book.Id
             });
-        });  
+        });
 
         await Task.WhenAll(task);
     }

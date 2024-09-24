@@ -7,7 +7,6 @@ using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Presentation;
 
@@ -84,7 +83,7 @@ public class AuthControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
     }
 
-    [Fact]    
+    [Fact]
     public async void AuthController_RegisterEmployee_Returns201AndLocationHeader()
     {
         // prepare
@@ -132,7 +131,7 @@ public class AuthControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<LoginEmployeeResponseDto>() ?? throw new NullReferenceException();
-        
+
         content.EmployeeDto!.Id.Should().Be(employee.Id);
         content.Token.Should().NotBeNull();
 

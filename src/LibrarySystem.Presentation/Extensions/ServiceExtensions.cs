@@ -57,7 +57,7 @@ public static class ServiceExtensions
     public static void ConfigureJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var jwt = JwtFactory.CreateInstance(configuration);
-        
+
         services.AddSingleton<IJwt>(p => jwt);
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -35,9 +35,9 @@ public class PictureService : IPictureService
 
     public Task<int> BulkCreateWithEntity(IEnumerable<Picture> pictures, Guid entityId, PictureEntityType entityType)
     {
-       pictures.ToList().ForEach(p => { p.EntityId = entityId; p.EntityType = entityType; });
+        pictures.ToList().ForEach(p => { p.EntityId = entityId; p.EntityType = entityType; });
 
-       return this.BulkCreate(pictures);
+        return this.BulkCreate(pictures);
     }
 
     public async Task<IEnumerable<Picture>> Extract(IFormCollection files)

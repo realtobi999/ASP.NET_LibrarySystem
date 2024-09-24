@@ -21,7 +21,7 @@ public class Employee : IDtoSerializable<EmployeeDto>
     public string? Password { get; set; }
 
     // relationships
-    
+
     [JsonIgnore]
     public Picture? Picture { get; set; }
 

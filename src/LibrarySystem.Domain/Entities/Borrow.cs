@@ -24,7 +24,7 @@ public class Borrow : IDtoSerializable<BorrowDto>
 
     [Required, Column]
     public bool IsReturned { get; set; }
-    
+
     public BorrowDto ToDto()
     {
         return new BorrowDto

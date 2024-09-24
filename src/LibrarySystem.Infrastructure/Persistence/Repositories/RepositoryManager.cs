@@ -31,7 +31,7 @@ public class RepositoryManager : IRepositoryManager
 
     public IPictureRepository Picture => _factory.CreatePictureRepository();
 
-    private IBaseRepository _base => _factory.CreateBaseRepository(); 
+    private IBaseRepository _base => _factory.CreateBaseRepository();
 
     public Task<int> SaveAsync()
     {

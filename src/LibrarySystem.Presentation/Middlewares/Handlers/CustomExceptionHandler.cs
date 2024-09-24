@@ -9,7 +9,7 @@ public class CustomExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken token)
     {
-        var error =  new ErrorMessage
+        var error = new ErrorMessage
         {
             Type = exception.GetType().Name,
             Instance = $"{context.Request.Method} {context.Request.Path}"

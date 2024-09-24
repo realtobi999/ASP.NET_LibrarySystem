@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 namespace LibrarySystem.Presentation.Controllers;
 
-[ApiController] 
+[ApiController]
 /*
 
 GET     /api/book params: limit, offset, authorId, genreId, withRelations
@@ -37,16 +37,22 @@ public class BookController : ControllerBase
     [HttpGet("api/book/search/{query}")]
     public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId, bool withRelations = true)
     {
-        var books = await _service.Book.GetAll(withRelations);         
+        var books = await _service.Book.GetAll(withRelations);
 
         if (authorId != Guid.Empty)
-            books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId)); 
+        {
+            books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId));
+        }
 
         if (genreId != Guid.Empty)
-            books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreId));    
+        {
+            books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreId));
+        }
 
         if (!query.IsNullOrEmpty())
-            books = books.Where(b => b.Title!.Contains(query!) || b.Description!.Contains(query!));    
+        {
+            books = books.Where(b => b.Title!.Contains(query!) || b.Description!.Contains(query!));
+        }
 
         return Ok(books.Paginate(offset, limit));
     }
@@ -83,7 +89,9 @@ public class BookController : ControllerBase
         var affected = await _service.Book.Update(bookId, updateBookDto);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }
@@ -95,13 +103,15 @@ public class BookController : ControllerBase
         var affected = await _service.Book.Delete(bookId);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/book/{bookId:guid}/photos")] 
+    [HttpPut("api/book/{bookId:guid}/photos")]
     public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection files)
     {
         var pictures = await _service.Picture.Extract(files);
@@ -111,11 +121,13 @@ public class BookController : ControllerBase
         _repository.Picture.DeleteWhere(p => p.EntityId == book.Id && p.EntityType == PictureEntityType.Book);
 
         // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.BulkCreateWithEntity(pictures, book.Id, PictureEntityType.Book); 
+        var affected = await _service.Picture.BulkCreateWithEntity(pictures, book.Id, PictureEntityType.Book);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
-        
+        }
+
         return Ok();
     }
 }

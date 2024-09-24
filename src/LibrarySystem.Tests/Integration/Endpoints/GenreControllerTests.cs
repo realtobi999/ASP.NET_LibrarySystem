@@ -77,7 +77,7 @@ public class GenreControllerTests
 
         var create2 = await client.PostAsJsonAsync("/api/genre", genre2.ToCreateGenreDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
- 
+
         var create3 = await client.PostAsJsonAsync("/api/genre", genre3.ToCreateGenreDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 

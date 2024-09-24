@@ -8,6 +8,6 @@ public interface IAssociationsRepository
     void CreateBookGenre(BookGenre bookGenre);
     void RemoveBookAuthor(BookAuthor bookAuthor);
     void RemoveBookGenre(BookGenre bookGenre);
-    void CreateWishlistBook(WishlistBook wishlistBook); 
+    void CreateWishlistBook(WishlistBook wishlistBook);
     void RemoveWishlistBook(WishlistBook wishlistBook);
 }

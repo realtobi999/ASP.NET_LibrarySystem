@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Dtos.Users;

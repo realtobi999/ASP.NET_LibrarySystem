@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Application.Services.Books;
 
-public interface IBookAssociations 
+public interface IBookAssociations
 {
     public Task AssignAuthors(IEnumerable<Guid> authorIds, Book book);
     public Task AssignGenres(IEnumerable<Guid> genreIds, Book book);

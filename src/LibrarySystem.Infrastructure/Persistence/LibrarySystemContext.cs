@@ -36,6 +36,6 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
         modelBuilder.ConfigureBookGenreRelationship();
         modelBuilder.ConfigureBookReviewsRelationShip();
         modelBuilder.ConfigureWishlistBookRelationship();
-        modelBuilder.ConfigurePictureRelationships(); 
+        modelBuilder.ConfigurePictureRelationships();
     }
 }

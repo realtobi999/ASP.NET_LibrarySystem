@@ -25,7 +25,7 @@ public static class WishlistTestExtensions
             Id = wishlist.Id,
             UserId = wishlist.UserId,
             Name = wishlist.Name,
-            BookIds = bookIds 
+            BookIds = bookIds
         };
     }
 }

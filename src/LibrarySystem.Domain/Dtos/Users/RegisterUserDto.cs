@@ -5,7 +5,7 @@ namespace LibrarySystem.Domain.Dtos.Users;
 public record class RegisterUserDto
 {
     public Guid? Id { get; set; }
-    
+
     [Required, MaxLength(55)]
     public string? Username { get; set; }
 

@@ -86,7 +86,7 @@ public class WishlistControllerTests
 
         // act & assert
         var response = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);        
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(wishlist.Id);
@@ -137,7 +137,7 @@ public class WishlistControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get1 = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
-        get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);        
+        get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get1.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
         content.Books.Count().Should().Be(1);
@@ -183,6 +183,6 @@ public class WishlistControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var get1 = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
-        get1.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);        
+        get1.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 }

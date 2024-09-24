@@ -28,5 +28,5 @@ public class ServiceManager : IServiceManager
 
     public IWishlistService Wishlist => _factory.CreateWishlistService();
 
-    public IPictureService Picture =>  _factory.CreatePictureService();
+    public IPictureService Picture => _factory.CreatePictureService();
 }

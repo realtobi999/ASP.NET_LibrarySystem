@@ -39,16 +39,20 @@ public class BookReviewController : ControllerBase
     [HttpDelete("api/review/{reviewId:guid}")]
     public async Task<IActionResult> DeleteBookReview(Guid reviewId)
     {
-        var review = await _service.BookReview.Get(reviewId); 
+        var review = await _service.BookReview.Get(reviewId);
 
         // verify that the request user id matches the user id of the review
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
+        {
             throw new NotAuthorized401Exception();
+        }
 
         var affected = await _service.BookReview.Delete(review);
-        
+
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }
@@ -57,16 +61,20 @@ public class BookReviewController : ControllerBase
     [HttpPut("api/review/{reviewId:guid}")]
     public async Task<IActionResult> UpdateBookReview(Guid reviewId, UpdateBookReviewDto updateBookReviewDto)
     {
-        var review = await _service.BookReview.Get(reviewId); 
+        var review = await _service.BookReview.Get(reviewId);
 
         // verify that the request user id matches the user id of the review
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != review.UserId.ToString())
+        {
             throw new NotAuthorized401Exception();
+        }
 
         var affected = await _service.BookReview.Update(review, updateBookReviewDto);
-        
+
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }

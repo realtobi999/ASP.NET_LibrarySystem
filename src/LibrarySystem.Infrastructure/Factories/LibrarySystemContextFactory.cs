@@ -14,7 +14,7 @@ public class LibrarySystemContextFactory : IDesignTimeDbContextFactory<LibrarySy
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
                 .Build();
-              
+
         var builder = new DbContextOptionsBuilder<LibrarySystemContext>().UseNpgsql(configuration.GetConnectionString("LibrarySystem"));
 
         return new LibrarySystemContext(builder.Options);

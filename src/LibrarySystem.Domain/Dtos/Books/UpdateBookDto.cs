@@ -12,8 +12,8 @@ public record class UpdateBookDto
     [Required, MaxLength(555)]
     public string? Description { get; set; }
 
-    [Required, Range(0,10000)]
-    public int PagesCount { get; set; } 
+    [Required, Range(0, 10000)]
+    public int PagesCount { get; set; }
 
     [Required]
     public bool? Availability { get; set; }
@@ -22,5 +22,5 @@ public record class UpdateBookDto
     public DateTimeOffset PublishedDate { get; set; }
 
     public List<AuthorDto>? Authors { get; set; }
-    public List<GenreDto>? Genres { get; set; } 
+    public List<GenreDto>? Genres { get; set; }
 }

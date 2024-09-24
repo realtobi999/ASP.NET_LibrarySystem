@@ -9,6 +9,6 @@ public interface IWishlistService
     Task<Wishlist> Create(CreateWishlistDto createWishlistDto);
     Task<int> Update(Guid id, UpdateWishlistDto updateWishlistDto);
     Task<int> Update(Wishlist wishlist, UpdateWishlistDto updateWishlistDto);
-    Task <int> Delete(Guid id);
+    Task<int> Delete(Guid id);
     Task<int> Delete(Wishlist wishlist);
 }

@@ -2,7 +2,6 @@
 using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LibrarySystem.Infrastructure.Persistence.Extensions;
 
@@ -86,7 +85,7 @@ public static class EntityRelationshipExtensions
             .HasForeignKey<Picture>(p => p.EntityId)
             .HasPrincipalKey<User>(a => a.Id)
             .OnDelete(DeleteBehavior.Cascade);
-            
+
         // configure one-to-one relationship between Employee and Picture
         builder.Entity<Picture>()
             .HasOne(p => p.Employee)
@@ -94,7 +93,7 @@ public static class EntityRelationshipExtensions
             .HasForeignKey<Picture>(p => p.EntityId)
             .HasPrincipalKey<Employee>(a => a.Id)
             .OnDelete(DeleteBehavior.Cascade);
-            
+
         // configure one-to-many relationship between Book and Picture
         builder.Entity<Picture>()
             .HasOne(p => p.Book)

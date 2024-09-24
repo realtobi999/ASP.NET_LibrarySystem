@@ -31,9 +31,9 @@ public class GenreController : ControllerBase
     public async Task<IActionResult> GetGenres(int limit, int offset)
     {
         var genres = await _service.Genre.GetAll();
-        
+
         return Ok(genres.Paginate(offset, limit));
-    }    
+    }
 
     [Authorize(Policy = "Employee")]
     [HttpGet("api/genre/{genreId:guid}")]
@@ -60,10 +60,12 @@ public class GenreController : ControllerBase
         var affected = await _service.Genre.Update(genreId, updateGenreDto);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
-    } 
+    }
 
     [Authorize(Policy = "Employee")]
     [HttpDelete("api/genre/{genreId:guid}")]
@@ -72,8 +74,10 @@ public class GenreController : ControllerBase
         var affected = await _service.Genre.Delete(genreId);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
-    } 
+    }
 }

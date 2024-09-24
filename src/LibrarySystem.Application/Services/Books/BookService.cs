@@ -78,7 +78,7 @@ public class BookService : IBookService
 
     public async Task<Book> Get(string isbn, bool withRelations = true)
     {
-        var book = await _repository.Book.Get(isbn, withRelations) ?? throw new NotFound404Exception(nameof(Book), $"ISBN {isbn}"); 
+        var book = await _repository.Book.Get(isbn, withRelations) ?? throw new NotFound404Exception(nameof(Book), $"ISBN {isbn}");
 
         return book;
     }

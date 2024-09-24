@@ -3,7 +3,6 @@ using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace LibrarySystem.Application.Services.Wishlists;
 
@@ -76,7 +75,7 @@ public class WishlistService : IWishlistService
 
         if (books is not null)
         {
-            _associations.CleanBooks(wishlist); 
+            _associations.CleanBooks(wishlist);
             await _associations.AssignBooks(books, wishlist);
         }
 

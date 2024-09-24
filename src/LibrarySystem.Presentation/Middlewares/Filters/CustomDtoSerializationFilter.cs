@@ -21,7 +21,7 @@ public class CustomDtoSerializationFilter : IAsyncResultFilter
         {
             objectResult.Value = serializableObjectCollection.Select(item => item.ToDto());
         }
-        
+
         await next();
     }
 }

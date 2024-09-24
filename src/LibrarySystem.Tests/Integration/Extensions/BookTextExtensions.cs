@@ -13,7 +13,7 @@ public static class BookTestExtensions
         .RuleFor(b => b.Description, f => f.Lorem.Paragraph())
         .RuleFor(b => b.PagesCount, f => f.Random.Int(100, 1000))
         .RuleFor(b => b.PublishedDate, f => f.Date.PastOffset())
-        .RuleFor(b => b.IsAvailable , true);
+        .RuleFor(b => b.IsAvailable, true);
 
     public static Book WithFakeData(this Book book)
     {

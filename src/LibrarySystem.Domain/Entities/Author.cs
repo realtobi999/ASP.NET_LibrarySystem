@@ -21,7 +21,7 @@ public class Author : IDtoSerializable<AuthorDto>
     public DateTimeOffset Birthday { get; set; }
 
     // relationships
-    
+
     [JsonIgnore]
     public Picture? Picture { get; set; }
 

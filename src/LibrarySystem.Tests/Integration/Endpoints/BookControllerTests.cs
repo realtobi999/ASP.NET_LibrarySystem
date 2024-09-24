@@ -4,7 +4,6 @@ using System.Security.Claims;
 using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
@@ -442,7 +441,7 @@ public class BookControllerTests
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-        
+
         var author1 = new Author().WithFakeData();
         var author2 = new Author().WithFakeData();
         var genre1 = new Genre().WithFakeData();
@@ -549,13 +548,13 @@ public class BookControllerTests
         var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var photo1content = new byte[]{1, 2, 3, 4};
+        var photo1content = new byte[] { 1, 2, 3, 4 };
         var photo1 = new ByteArrayContent(photo1content);
         photo1.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-        var photo2content = new byte[]{5, 6, 7, 8}; 
+        var photo2content = new byte[] { 5, 6, 7, 8 };
         var photo2 = new ByteArrayContent(photo2content);
         photo2.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-        var photo3content = new byte[]{12, 6, 11, 8};
+        var photo3content = new byte[] { 12, 6, 11, 8 };
         var photo3 = new ByteArrayContent(photo3content);
         photo3.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
 

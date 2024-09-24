@@ -20,7 +20,7 @@ public class UserService : IUserService
 
     public async Task<int> Delete(Guid id)
     {
-        var user = await this.Get(id); 
+        var user = await this.Get(id);
 
         _repository.User.Delete(user);
         return await _repository.SaveAsync();
@@ -50,7 +50,7 @@ public class UserService : IUserService
     public async Task<bool> Login(LoginUserDto loginUserDto)
     {
         var email = loginUserDto.Email ?? throw new NullReferenceException("The email must be set.");
-        var password = loginUserDto.Password ?? throw new NullReferenceException("The password must be set."); 
+        var password = loginUserDto.Password ?? throw new NullReferenceException("The password must be set.");
 
         var user = await this.Get(email);
 

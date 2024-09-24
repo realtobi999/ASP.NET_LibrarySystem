@@ -11,7 +11,7 @@ public record class CreateWishlistDto
 
     [Required, MaxLength(55)]
     public string? Name { get; set; }
-    
+
     [Required]
     public IEnumerable<Guid>? BookIds { get; set; }
 }

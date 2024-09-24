@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Domain.Entities.Relationships;
 

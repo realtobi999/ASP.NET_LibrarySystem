@@ -1,6 +1,5 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Exceptions.HTTP;
 
 namespace LibrarySystem.Presentation.Middlewares;

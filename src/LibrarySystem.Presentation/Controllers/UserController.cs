@@ -54,7 +54,9 @@ public class UserController : ControllerBase
         var affected = await _service.User.Update(userId, updateUserDto);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }
@@ -66,7 +68,9 @@ public class UserController : ControllerBase
         var affected = await _service.User.Delete(userId);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }
@@ -79,14 +83,16 @@ public class UserController : ControllerBase
         var user = await _service.User.Get(userId); // validate if user exists
 
         // delete any previous associated photo
-        _repository.Picture.DeleteWhere(p => p.EntityId == user.Id  && p.EntityType == PictureEntityType.User);
+        _repository.Picture.DeleteWhere(p => p.EntityId == user.Id && p.EntityType == PictureEntityType.User);
 
         // assign the id to the pictures and push them to the database
         var affected = await _service.Picture.CreateWithEntity(picture, user.Id, PictureEntityType.User);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
-        return Ok();    
+        return Ok();
     }
 }

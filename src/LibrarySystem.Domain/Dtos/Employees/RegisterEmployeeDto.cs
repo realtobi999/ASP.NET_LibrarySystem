@@ -5,7 +5,7 @@ namespace LibrarySystem.Domain.Dtos.Employees;
 public record class RegisterEmployeeDto
 {
     public Guid? Id { get; set; }
-    
+
     [Required, MaxLength(55)]
     public string? Name { get; set; }
 

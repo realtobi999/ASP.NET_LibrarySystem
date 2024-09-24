@@ -15,7 +15,7 @@ public static class BookReviewTestExtensions
     public static BookReview WithFakeData(this BookReview bookReview, Book book, User user)
     {
         var review = _bookReviewFaker.Generate();
-        
+
         review.BookId = book.Id;
         review.UserId = user.Id;
 

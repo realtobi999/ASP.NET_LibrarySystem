@@ -16,7 +16,7 @@ public class BookReview : IDtoSerializable<BookReviewDto>
     [Required, Column("user_id")]
     public Guid UserId { get; set; }
 
-    [Required, Range(0,10), Column("rating")]
+    [Required, Range(0, 10), Column("rating")]
     public double Rating { get; set; }
 
     [Required, Column("text")]
@@ -38,7 +38,7 @@ public class BookReview : IDtoSerializable<BookReviewDto>
             UserId = this.UserId,
             Rating = this.Rating,
             Text = this.Text,
-            CreatedAt = this.CreatedAt       
+            CreatedAt = this.CreatedAt
         };
     }
 }

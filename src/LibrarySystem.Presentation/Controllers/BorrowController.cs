@@ -37,10 +37,14 @@ public class BorrowController : ControllerBase
         var borrows = await _service.Borrow.GetAll();
 
         if (userId != Guid.Empty)
+        {
             borrows = borrows.Where(b => b.UserId == userId);
+        }
 
         if (active)
+        {
             borrows = borrows.Where(b => !b.IsReturned);
+        }
 
         return Ok(borrows.Paginate(offset, limit));
     }
@@ -95,7 +99,9 @@ public class BorrowController : ControllerBase
         var affected = await _service.Borrow.Return(borrow, book, token);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         // send confirmation email - FOR PRODUCTION ONLY
         if (_env.IsProduction())

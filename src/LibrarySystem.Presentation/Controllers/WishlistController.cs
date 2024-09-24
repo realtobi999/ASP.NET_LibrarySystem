@@ -1,9 +1,7 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Dtos.Wishlists;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using Microsoft.AspNetCore.Authorization;
@@ -37,9 +35,11 @@ public class WishlistController : ControllerBase
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
+        {
             throw new NotAuthorized401Exception();
+        }
 
-        return Ok(wishlist.ToDto());    
+        return Ok(wishlist.ToDto());
     }
 
     [Authorize(Policy = "User"), UserAuth]
@@ -59,12 +59,16 @@ public class WishlistController : ControllerBase
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
+        {
             throw new NotAuthorized401Exception();
+        }
 
         var affected = await _service.Wishlist.Update(wishlist, updateWishlistDto);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }
@@ -77,12 +81,16 @@ public class WishlistController : ControllerBase
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
+        {
             throw new NotAuthorized401Exception();
+        }
 
         var affected = await _service.Wishlist.Delete(wishlist);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }

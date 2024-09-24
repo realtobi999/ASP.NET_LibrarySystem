@@ -1,5 +1,4 @@
-﻿using LibrarySystem.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LibrarySystem.Tests.Integration.Server;

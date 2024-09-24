@@ -153,12 +153,12 @@ public class EmployeeControllerTests
     [Fact]
     public async void EmployeeController_UploadPhotos_Returns200AndIsUploaded()
     {
-         // prepare
+        // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var employee = new Employee().WithFakeData();
-                var token1 = JwtTestExtensions.Create().Generate([
-            new Claim(ClaimTypes.Role, "Admin")
-        ]);
+        var token1 = JwtTestExtensions.Create().Generate([
+    new Claim(ClaimTypes.Role, "Admin")
+]);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 

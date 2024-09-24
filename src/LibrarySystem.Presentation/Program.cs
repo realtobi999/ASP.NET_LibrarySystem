@@ -1,5 +1,3 @@
-using System.Net.Mail;
-using LibrarySystem.Application.Core.Factories;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Application.Services.Wishlists;
 using LibrarySystem.Domain.Interfaces.Common;
@@ -45,7 +43,7 @@ public class Program
             builder.Services.ConfigureMessageBuilders();
             builder.Services.ConfigureEmailManager();
 
-            builder.Services.ConfigureJwtAuthentication(config); 
+            builder.Services.ConfigureJwtAuthentication(config);
             builder.Services.AddAuthorizationBuilder()
                             .AddPolicy("User", policy => policy.RequireRole("User")) // user authorization
                             .AddPolicy("Employee", policy => policy.RequireRole("Employee")) // employee authorization
@@ -56,7 +54,7 @@ public class Program
         // application pipeline
         var app = builder.Build();
         {
-            app.UseExceptionHandler(opt => {});
+            app.UseExceptionHandler(opt => { });
 
             if (app.Environment.IsDevelopment())
             {

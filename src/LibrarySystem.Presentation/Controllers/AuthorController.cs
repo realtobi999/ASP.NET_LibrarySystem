@@ -2,7 +2,6 @@
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Enums;
-using LibrarySystem.Domain.Exceptions;
 using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -66,7 +65,9 @@ public class AuthorController : ControllerBase
         var affected = await _service.Author.Update(authorId, updateAuthorDto);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }
@@ -78,7 +79,9 @@ public class AuthorController : ControllerBase
         var affected = await _service.Author.Delete(authorId);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
         return Ok();
     }
@@ -91,14 +94,16 @@ public class AuthorController : ControllerBase
         var author = await _service.Author.Get(authorId); // validates if the author exists
 
         // delete any previous associated photo
-        _repository.Picture.DeleteWhere(p => p.EntityId == author.Id  && p.EntityType == PictureEntityType.Author);
+        _repository.Picture.DeleteWhere(p => p.EntityId == author.Id && p.EntityType == PictureEntityType.Author);
 
         // assign the id to the pictures and push them to the database
         var affected = await _service.Picture.CreateWithEntity(picture, author.Id, PictureEntityType.Author);
 
         if (affected == 0)
+        {
             throw new ZeroRowsAffectedException();
+        }
 
-        return Ok();    
+        return Ok();
     }
 }

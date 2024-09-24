@@ -28,7 +28,7 @@ public class EmployeeService : IEmployeeService
     public async Task<bool> Login(LoginEmployeeDto loginEmployeeDto)
     {
         var email = loginEmployeeDto.Email ?? throw new NullReferenceException("The email must be set.");
-        var password = loginEmployeeDto.Password ?? throw new NullReferenceException("The password must be set."); 
+        var password = loginEmployeeDto.Password ?? throw new NullReferenceException("The password must be set.");
 
         var employee = await this.Get(email);
 

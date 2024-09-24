@@ -31,7 +31,7 @@ public class GenreService : IGenreService
 
     public async Task<int> Delete(Guid id)
     {
-        var genre = await this.Get(id);    
+        var genre = await this.Get(id);
 
         _repository.Genre.Delete(genre);
         return await _repository.SaveAsync();
@@ -46,14 +46,14 @@ public class GenreService : IGenreService
 
     public async Task<IEnumerable<Genre>> GetAll()
     {
-       var genres = await _repository.Genre.GetAll();
+        var genres = await _repository.Genre.GetAll();
 
-       return genres; 
+        return genres;
     }
 
     public async Task<int> Update(Guid id, UpdateGenreDto updateGenreDto)
     {
-        var genre = await this.Get(id); 
+        var genre = await this.Get(id);
 
         var name = updateGenreDto.Name;
 

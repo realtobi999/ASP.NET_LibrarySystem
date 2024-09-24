@@ -55,7 +55,8 @@ public class UserAuthenticationMiddlewareTests
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
-        var response = await client.PostAsJsonAsync("/api/review", new CreateBookReviewDto{
+        var response = await client.PostAsJsonAsync("/api/review", new CreateBookReviewDto
+        {
             Id = Guid.Empty,
             BookId = Guid.Empty,
             UserId = Guid.NewGuid(), // insert bad id

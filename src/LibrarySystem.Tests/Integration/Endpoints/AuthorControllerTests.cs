@@ -31,7 +31,7 @@ public class AuthorControllerTests
         var create2 = await client.PostAsJsonAsync("/api/author", author2.ToCreateAuthorDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/author", author3.ToCreateAuthorDto());
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);      
+        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
         var limit = 2;
@@ -79,7 +79,7 @@ public class AuthorControllerTests
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
- 
+
         // act & assert
         var get1 = await client.GetAsync($"/api/author/{author.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -120,7 +120,7 @@ public class AuthorControllerTests
         var get = await client.GetAsync($"/api/author/{author.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException(); 
+        var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(author.Id);
         content.Name.Should().Be(updateDto.Name);
         content.Description.Should().Be(updateDto.Description);

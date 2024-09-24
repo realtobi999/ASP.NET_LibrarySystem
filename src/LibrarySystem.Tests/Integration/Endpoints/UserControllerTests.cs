@@ -83,7 +83,7 @@ public class UserControllerTests
             Email = "test@test.com",
         };
 
-        var response = await client.PutAsJsonAsync($"/api/user/{user.Id}", updateDto); 
+        var response = await client.PutAsJsonAsync($"/api/user/{user.Id}", updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         client.DefaultRequestHeaders.Remove("Authorization");
@@ -92,7 +92,7 @@ public class UserControllerTests
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
-        newUser.Id.Should().Be(user.Id); 
+        newUser.Id.Should().Be(user.Id);
         newUser.Username.Should().Be(updateDto.Username);
         newUser.Email.Should().Be(updateDto.Email);
     }
@@ -124,7 +124,7 @@ public class UserControllerTests
     [Fact]
     public async void UserController_UploadPhotos_Returns200AndIsUploaded()
     {
-         // prepare
+        // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var token = JwtTestExtensions.Create().Generate([

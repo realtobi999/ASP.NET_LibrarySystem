@@ -61,14 +61,14 @@ public class BookReviewService : IBookReviewService
     public async Task<int> Update(Guid id, UpdateBookReviewDto updateBookReviewDto)
     {
         var review = await this.Get(id);
-        
+
         return await this.Update(review, updateBookReviewDto);
     }
 
     public async Task<int> Update(BookReview bookReview, UpdateBookReviewDto updateBookReviewDto)
     {
-       var text = updateBookReviewDto.Text;
-       var rating = updateBookReviewDto.Rating;
+        var text = updateBookReviewDto.Text;
+        var rating = updateBookReviewDto.Rating;
 
         bookReview.Text = text;
         bookReview.Rating = rating;

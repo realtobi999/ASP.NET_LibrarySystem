@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using LibrarySystem.Domain.Interfaces.Common;
 
@@ -10,6 +9,6 @@ public class Conflict409Exception : Exception, IHttpException
     {
     }
 
-    public int StatusCode => (int) HttpStatusCode.Conflict; 
-    public string Title => "Conflict"; 
+    public int StatusCode => (int)HttpStatusCode.Conflict;
+    public string Title => "Conflict";
 }

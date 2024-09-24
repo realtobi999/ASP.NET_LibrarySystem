@@ -68,7 +68,7 @@ public class BorrowService : IBorrowService
     public async Task<int> Return(Borrow borrow, string jwt)
     {
         var book = await _repository.Book.Get(borrow.BookId) ?? throw new NotFound404Exception(nameof(Book), borrow.BookId);
-        
+
         return await this.Return(borrow, book, jwt);
     }
 

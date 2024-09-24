@@ -1,5 +1,4 @@
-﻿using LibrarySystem.Domain.Interfaces;
-using LibrarySystem.Domain.Interfaces.Repositories;
+﻿using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Infrastructure.Persistence;
 using LibrarySystem.Infrastructure.Persistence.Repositories;
 
@@ -46,7 +45,7 @@ public class RepositoryFactory : IRepositoryFactory
 
     public IBaseRepository CreateBaseRepository()
     {
-        return new BaseRepository(_context);    
+        return new BaseRepository(_context);
     }
 
     public IUserRepository CreateUserRepository()
@@ -66,6 +65,6 @@ public class RepositoryFactory : IRepositoryFactory
 
     public IPictureRepository CreatePictureRepository()
     {
-        return new PictureRepository(_context); 
+        return new PictureRepository(_context);
     }
 }

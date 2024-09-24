@@ -22,7 +22,7 @@ public class Book : IDtoSerializable<BookDto>
     public string? Description { get; set; }
 
     [Required, Column("pages_count")]
-    public int PagesCount { get; set; } 
+    public int PagesCount { get; set; }
 
     [Required, Column("published_at")]
     public DateTimeOffset PublishedDate { get; set; }
@@ -68,5 +68,5 @@ public class Book : IDtoSerializable<BookDto>
             Genres = genres,
             Reviews = reviews,
         };
-    } 
+    }
 }

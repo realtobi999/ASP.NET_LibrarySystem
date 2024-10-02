@@ -8,12 +8,10 @@ namespace LibrarySystem.Application.Services.Books;
 public class BookService : IBookService
 {
     private readonly IRepositoryManager _repository;
-    private readonly IBookAssociations _associations;
 
-    public BookService(IRepositoryManager repository, IBookAssociations associations)
+    public BookService(IRepositoryManager repository)
     {
         _repository = repository;
-        _associations = associations;
     }
 
     public async Task CreateAsync(Book book)

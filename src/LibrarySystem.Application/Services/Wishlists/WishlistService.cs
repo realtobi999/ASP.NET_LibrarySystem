@@ -8,12 +8,10 @@ namespace LibrarySystem.Application.Services.Wishlists;
 public class WishlistService : IWishlistService
 {
     private readonly IRepositoryManager _repository;
-    private readonly IWishlistAssociations _associations;
 
-    public WishlistService(IRepositoryManager repository, IWishlistAssociations associations)
+    public WishlistService(IRepositoryManager repository)
     {
         _repository = repository;
-        _associations = associations;
     }
 
     public async Task CreateAsync(Wishlist wishlist)

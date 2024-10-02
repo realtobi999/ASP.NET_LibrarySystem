@@ -18,15 +18,11 @@ public class ServiceFactory : IServiceFactory
 {
     private readonly IRepositoryManager _repository;
     private readonly IHasher _hasher;
-    private readonly IBookAssociations _bookAssociations;
-    private readonly IWishlistAssociations _wishlistAssociations;
 
-    public ServiceFactory(IRepositoryManager repository, IHasher hasher, IBookAssociations bookAssociations, IWishlistAssociations wishlistAssociations)
+    public ServiceFactory(IRepositoryManager repository, IHasher hasher)
     {
         _repository = repository;
         _hasher = hasher;
-        _bookAssociations = bookAssociations;
-        _wishlistAssociations = wishlistAssociations;
     }
 
     public IAuthorService CreateAuthorService()
@@ -41,7 +37,7 @@ public class ServiceFactory : IServiceFactory
 
     public IBookService CreateBookService()
     {
-        return new BookService(_repository, _bookAssociations);
+        return new BookService(_repository);
     }
 
     public IBorrowService CreateBorrowService()
@@ -71,6 +67,6 @@ public class ServiceFactory : IServiceFactory
 
     public IWishlistService CreateWishlistService()
     {
-        return new WishlistService(_repository, _wishlistAssociations);
+        return new WishlistService(_repository);
     }
 }

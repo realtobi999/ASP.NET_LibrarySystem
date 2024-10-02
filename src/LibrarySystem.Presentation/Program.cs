@@ -32,9 +32,6 @@ public class Program
             // services
             builder.Services.ConfigureFactories();
             builder.Services.ConfigureManagers();
-
-            builder.Services.AddScoped<IBookAssociations, BookAssociations>();
-            builder.Services.AddScoped<IWishlistAssociations, WishlistAssociations>();
             builder.Services.AddScoped<IHasher, Hasher>();
 
             // email client

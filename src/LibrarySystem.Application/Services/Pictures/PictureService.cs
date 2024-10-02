@@ -16,28 +16,28 @@ public class PictureService : IPictureService
         _repository = repository;
     }
 
-    public async Task<int> Create(Picture picture)
+    public async Task Create(Picture picture)
     {
         _repository.Picture.Create(picture);
 
-        return await _repository.SaveAsync();
+        await _repository.SaveSafelyAsync();
     }
 
-    public async Task<int> BulkCreate(IEnumerable<Picture> pictures)
+    public async Task BulkCreate(IEnumerable<Picture> pictures)
     {
         foreach (var picture in pictures)
         {
             _repository.Picture.Create(picture);
         }
 
-        return await _repository.SaveAsync();
+        await _repository.SaveSafelyAsync();
     }
 
-    public Task<int> BulkCreateWithEntity(IEnumerable<Picture> pictures, Guid entityId, PictureEntityType entityType)
+    public async Task BulkCreateWithEntity(IEnumerable<Picture> pictures, Guid entityId, PictureEntityType entityType)
     {
         pictures.ToList().ForEach(p => { p.EntityId = entityId; p.EntityType = entityType; });
 
-        return this.BulkCreate(pictures);
+        await this.BulkCreate(pictures);
     }
 
     public async Task<IEnumerable<Picture>> Extract(IFormCollection files)
@@ -62,11 +62,11 @@ public class PictureService : IPictureService
         };
     }
 
-    public Task<int> CreateWithEntity(Picture picture, Guid entityId, PictureEntityType entityType)
+    public async Task CreateWithEntity(Picture picture, Guid entityId, PictureEntityType entityType)
     {
         picture.EntityId = entityId;
         picture.EntityType = entityType;
 
-        return this.Create(picture);
+        await this.Create(picture);
     }
 }

@@ -7,7 +7,7 @@ using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Book : IDtoSerializable<BookDto>
+public class Book : IDtoSerialization<BookDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }
@@ -30,8 +30,8 @@ public class Book : IDtoSerializable<BookDto>
     [Required, Column("available")]
     public bool IsAvailable { get; set; }
 
-
     // relationships
+
     [JsonIgnore]
     public ICollection<Picture> CoverPictures { get; set; } = [];
     [JsonIgnore]
@@ -41,6 +41,7 @@ public class Book : IDtoSerializable<BookDto>
     [JsonIgnore]
     public ICollection<BookReview> BookReviews { get; set; } = [];
 
+    /// <inheritdoc/>
     public BookDto ToDto()
     {
         var authors = this.BookAuthors.Where(ba => ba.Author is not null)

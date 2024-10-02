@@ -1,7 +1,7 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Genres;
-using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,17 +20,19 @@ DELETE  /api/genre/{genre_id}
 public class GenreController : ControllerBase
 {
     private readonly IServiceManager _service;
+    private readonly IGenreMapper _mapper;
 
-    public GenreController(IServiceManager service)
+    public GenreController(IServiceManager service, IGenreMapper mapper)
     {
         _service = service;
+        _mapper = mapper;
     }
 
     [Authorize(Policy = "Employee")]
     [HttpGet("api/genre")]
     public async Task<IActionResult> GetGenres(int limit, int offset)
     {
-        var genres = await _service.Genre.Index();
+        var genres = await _service.Genre.IndexAsync();
 
         return Ok(genres.Paginate(offset, limit));
     }
@@ -39,7 +41,7 @@ public class GenreController : ControllerBase
     [HttpGet("api/genre/{genreId:guid}")]
     public async Task<IActionResult> GetGenre(Guid genreId)
     {
-        var genre = await _service.Genre.Get(genreId);
+        var genre = await _service.Genre.GetAsync(genreId);
 
         return Ok(genre);
     }
@@ -48,7 +50,9 @@ public class GenreController : ControllerBase
     [HttpPost("api/genre")]
     public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDto createGenreDto)
     {
-        var genre = await _service.Genre.Create(createGenreDto);
+        var genre = _mapper.CreateFromDto(createGenreDto);
+
+        await _service.Genre.CreateAsync(genre);
 
         return Created($"/api/genre/{genre.Id}", null);
     }
@@ -57,27 +61,23 @@ public class GenreController : ControllerBase
     [HttpPut("api/genre/{genreId:guid}")]
     public async Task<IActionResult> UpdateGenre(Guid genreId, [FromBody] UpdateGenreDto updateGenreDto)
     {
-        var affected = await _service.Genre.Update(genreId, updateGenreDto);
+        var genre = await _service.Genre.GetAsync(genreId);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        _mapper.UpdateFromDto(genre, updateGenreDto);
 
-        return Ok();
+        await _service.Genre.UpdateAsync(genre);
+
+        return NoContent();
     }
 
     [Authorize(Policy = "Employee")]
     [HttpDelete("api/genre/{genreId:guid}")]
     public async Task<IActionResult> DeleteGenre(Guid genreId)
     {
-        var affected = await _service.Genre.Delete(genreId);
+        var genre = await _service.Genre.GetAsync(genreId);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        await _service.Genre.DeleteAsync(genre);
 
-        return Ok();
+        return NoContent();
     }
 }

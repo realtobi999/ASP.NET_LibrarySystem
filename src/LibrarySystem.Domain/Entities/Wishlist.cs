@@ -6,7 +6,7 @@ using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Wishlist : IDtoSerializable<WishlistDto>
+public class Wishlist : IDtoSerialization<WishlistDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }
@@ -22,6 +22,7 @@ public class Wishlist : IDtoSerializable<WishlistDto>
     public User? User { get; set; }
     public ICollection<WishlistBook> WishlistBooks { get; set; } = [];
 
+    /// <inheritdoc/>
     public WishlistDto ToDto()
     {
         var books = this.WishlistBooks.Where(wb => wb.Book is not null)

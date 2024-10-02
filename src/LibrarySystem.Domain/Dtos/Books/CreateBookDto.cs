@@ -4,29 +4,29 @@ namespace LibrarySystem.Domain.Dtos.Books;
 
 public record class CreateBookDto
 {
-    public Guid? Id { get; set; }
+    public Guid? Id { get; init; }
 
     [Required]
-    public string? ISBN { get; set; }
+    public string? ISBN { get; init; }
 
     [Required, MaxLength(55)]
-    public string? Title { get; set; }
+    public string? Title { get; init; }
 
     [Required, MaxLength(555)]
-    public string? Description { get; set; }
+    public string? Description { get; init; }
 
     [Required, Range(0, 10000)]
-    public int PagesCount { get; set; }
+    public int PagesCount { get; init; }
 
     [Required]
-    public DateTimeOffset PublishedDate { get; set; }
+    public DateTimeOffset PublishedDate { get; init; }
 
     [Required]
-    public bool? Available { get; set; }
+    public bool? Available { get; init; }
 
     [Required, MaxLength(15)]
-    public IEnumerable<Guid>? GenreIds { get; set; }
+    public IEnumerable<Guid>? GenreIds { get; init; }
 
     [Required, MaxLength(15)]
-    public IEnumerable<Guid>? AuthorIds { get; set; }
+    public IEnumerable<Guid>? AuthorIds { get; init; }
 }

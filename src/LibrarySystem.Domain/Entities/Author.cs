@@ -6,7 +6,7 @@ using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Author : IDtoSerializable<AuthorDto>
+public class Author : IDtoSerialization<AuthorDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }
@@ -25,6 +25,7 @@ public class Author : IDtoSerializable<AuthorDto>
     [JsonIgnore]
     public Picture? Picture { get; set; }
 
+    /// <inheritdoc/>
     public AuthorDto ToDto()
     {
         return new AuthorDto

@@ -2,10 +2,10 @@
 
 public class BorrowDto
 {
-    public Guid Id { get; set; }
-    public Guid BookId { get; set; }
-    public Guid UserId { get; set; }
-    public DateTimeOffset BorrowDate { get; set; }
-    public DateTimeOffset DueDate { get; set; }
-    public bool IsReturned { get; set; }
+    public Guid Id { get; init; }
+    public Guid BookId { get; init; }
+    public Guid UserId { get; init; }
+    public DateTimeOffset BorrowDate { get; init; }
+    public DateTimeOffset DueDate { get; init; }
+    public bool IsReturned { get; init; }
 }

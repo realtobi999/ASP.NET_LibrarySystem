@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Domain.Interfaces.Factories;
+﻿using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Infrastructure.Persistence.Repositories;
@@ -6,10 +7,14 @@ namespace LibrarySystem.Infrastructure.Persistence.Repositories;
 public class RepositoryManager : IRepositoryManager
 {
     private readonly IRepositoryFactory _factory;
+    private readonly LibrarySystemContext _context;
 
-    public RepositoryManager(IRepositoryFactory factory)
+    // TODO: implement lazy loading
+
+    public RepositoryManager(IRepositoryFactory factory, LibrarySystemContext context)
     {
         _factory = factory;
+        _context = context;
     }
 
     public IUserRepository User => _factory.CreateUserRepository();
@@ -32,10 +37,16 @@ public class RepositoryManager : IRepositoryManager
 
     public IPictureRepository Picture => _factory.CreatePictureRepository();
 
-    private IBaseRepository _base => _factory.CreateBaseRepository();
-
-    public Task<int> SaveAsync()
+    public async Task<int> SaveAsync()
     {
-        return _base.SaveAsync();
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task SaveSafelyAsync()
+    {
+        var affected = await this.SaveAsync();
+
+        if (affected == 0)
+            throw new ZeroRowsAffectedException();
     }
 }

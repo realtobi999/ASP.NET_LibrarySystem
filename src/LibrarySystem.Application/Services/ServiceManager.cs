@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Interfaces;
+﻿using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Services;
 
@@ -7,6 +7,9 @@ namespace LibrarySystem.Application.Services;
 public class ServiceManager : IServiceManager
 {
     private readonly IServiceFactory _factory;
+
+
+    // TODO: Implement lazy loading
 
     public ServiceManager(IServiceFactory factory)
     {

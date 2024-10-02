@@ -2,11 +2,9 @@
 
 namespace LibrarySystem.Domain.Interfaces.Repositories;
 
-public interface IBookRepository
+public interface IBookRepository : IBaseRepository<Book>
 {
-    Task<IEnumerable<Book>> Index(bool withRelations = true);
-    Task<Book?> Get(Guid id, bool withRelations = true);
-    Task<Book?> Get(string isbn, bool withRelations = true);
-    void Create(Book book);
-    void Delete(Book book);
+    Book? Get(Guid id);
+    Task<Book?> GetAsync(Guid id);
+    Task<Book?> GetAsync(string isbn);
 }

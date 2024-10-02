@@ -13,4 +13,9 @@ public interface IRepositoryManager
     IWishlistRepository Wishlist { get; }
     IPictureRepository Picture { get; }
     Task<int> SaveAsync();
+
+    /// <summary>
+    /// Performs a check of how many rows were affected, if zero throws an <c>ZeroRowsAffectedException</c>.
+    /// </summary>
+    Task SaveSafelyAsync();
 }

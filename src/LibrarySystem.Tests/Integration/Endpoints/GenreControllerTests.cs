@@ -1,10 +1,9 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
@@ -12,7 +11,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class GenreControllerTests
 {
     [Fact]
-    public async void GenreController_CreateGenre_Returns201AndLocationHeader()
+    public async void CreateGenre_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -32,7 +31,7 @@ public class GenreControllerTests
     }
 
     [Fact]
-    public async void GenreController_GetGenre_Returns201AndCorrectGenre()
+    public async void GetGenre_Returns201AndCorrectGenre()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -59,7 +58,7 @@ public class GenreControllerTests
     }
 
     [Fact]
-    public async void GenreController_GetGenres_Returns200AndLimitAndOffsetWorks()
+    public async void GetGenres_Returns200AndLimitAndOffsetWorks()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -95,7 +94,7 @@ public class GenreControllerTests
     }
 
     [Fact]
-    public async void GenreController_UpdateGenre_Returns200AndUpdatesTheRecord()
+    public async void UpdateGenre_Returns204AndUpdatesTheRecord()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -116,7 +115,7 @@ public class GenreControllerTests
         };
 
         var response = await client.PutAsJsonAsync($"/api/genre/{genre.Id}", updateDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/genre/{genre.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -127,7 +126,7 @@ public class GenreControllerTests
     }
 
     [Fact]
-    public async void GenreController_DeleteGenre_Returns200AndIsDeleted()
+    public async void DeleteGenre_Returns204AndIsDeleted()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -143,7 +142,7 @@ public class GenreControllerTests
 
         // act & assert
         var response = await client.DeleteAsync($"/api/genre/{genre.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/genre/{genre.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);

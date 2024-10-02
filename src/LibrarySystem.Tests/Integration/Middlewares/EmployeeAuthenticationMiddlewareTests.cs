@@ -1,9 +1,8 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
@@ -44,6 +43,6 @@ public class EmployeeAuthenticationMiddlewareTests
         response1.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
 
         var response2 = await client.DeleteAsync($"/api/employee/{employee1.Id}");
-        response2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response2.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
     }
 }

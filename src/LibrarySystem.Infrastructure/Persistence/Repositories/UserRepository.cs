@@ -1,40 +1,21 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Infrastructure.Persistence.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    private readonly LibrarySystemContext _context;
-
-    public UserRepository(LibrarySystemContext context)
+    public UserRepository(LibrarySystemContext context) : base(context)
     {
-        _context = context;
     }
 
-    public void Create(User user)
+    public async Task<User?> GetAsync(Guid id)
     {
-        _context.Users.Add(user);
+        return await this.GetAsync(u => u.Id == id);
     }
 
-    public void Delete(User user)
+    public async Task<User?> GetAsync(string email)
     {
-        _context.Users.Remove(user);
-    }
-
-    public async Task<User?> Get(Guid Id)
-    {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Id == Id);
-    }
-
-    public async Task<User?> Get(string Email)
-    {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email == Email);
-    }
-
-    public async Task<IEnumerable<User>> Index()
-    {
-        return await _context.Users.ToListAsync();
+        return await this.GetAsync(u => u.Email == email);
     }
 }

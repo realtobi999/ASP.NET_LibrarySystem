@@ -4,8 +4,8 @@ namespace LibrarySystem.Domain.Dtos.Genres;
 
 public record class CreateGenreDto
 {
-    public Guid? Id { get; set; }
+    public Guid? Id { get; init; }
 
     [Required, MaxLength(55)]
-    public string? Name { get; set; }
+    public string? Name { get; init; }
 }

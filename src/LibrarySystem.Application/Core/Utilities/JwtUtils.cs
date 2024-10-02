@@ -4,7 +4,7 @@ using LibrarySystem.Domain.Exceptions.HTTP;
 
 namespace LibrarySystem.Application.Core.Utilities;
 
-public class JwtUtils
+public static class JwtUtils
 {
     public static string Parse(string? header)
     {
@@ -41,7 +41,6 @@ public class JwtUtils
     {
         var payload = ParsePayload(token);
 
-        return payload.FirstOrDefault(c => c.Type.Equals(key, StringComparison.CurrentCultureIgnoreCase))?.Value;
+        return payload.FirstOrDefault(c => c.Type.Equals(key, StringComparison.OrdinalIgnoreCase))?.Value;
     }
-
 }

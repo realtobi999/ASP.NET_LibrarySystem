@@ -4,13 +4,9 @@ namespace LibrarySystem.Domain.Dtos.Authors;
 
 public record class AuthorDto
 {
-    public Guid Id { get; set; }
-
-    public string? Name { get; set; }
-
-    public string? Description { get; set; }
-
-    public DateTimeOffset Birthday { get; set; }
-
-    public Picture? Picture { get; set; }
+    public Guid Id { get; init; }
+    public string? Name { get; init; }
+    public string? Description { get; init; }
+    public DateTimeOffset Birthday { get; init; }
+    public Picture? Picture { get; init; }
 }

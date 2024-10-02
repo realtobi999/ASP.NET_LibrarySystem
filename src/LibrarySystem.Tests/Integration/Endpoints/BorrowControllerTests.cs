@@ -1,11 +1,10 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
@@ -13,7 +12,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class BorrowControllerTests
 {
     [Fact]
-    public async void BorrowController_CreateBorrow_Returns201AndLocationHeader()
+    public async void CreateBorrow_Returns201AndLocationHeader()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
@@ -41,7 +40,7 @@ public class BorrowControllerTests
     }
 
     [Fact]
-    public async void BorrowController_CreateBorrow_BookIsLabeledAsUnavailable()
+    public async void CreateBorrow_BookIsLabeledAsUnavailable()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
@@ -73,7 +72,7 @@ public class BorrowControllerTests
     }
 
     [Fact]
-    public async void BorrowController_CreateBorrow_Returns409WhenTryingToBorrowUnavailableBook()
+    public async void CreateBorrow_Returns409WhenTryingToBorrowUnavailableBook()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
@@ -106,11 +105,11 @@ public class BorrowControllerTests
         content.IsAvailable.Should().Be(false);
 
         var response = await client.PostAsJsonAsync("/api/borrow", borrow2.ToCreateBorrowDto());
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Conflict);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
     }
 
     [Fact]
-    public async void BorrowController_GetBorrows_Returns200AndLimitOffsetWorks()
+    public async void GetBorrows_Returns200AndLimitOffsetWorks()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
@@ -157,7 +156,7 @@ public class BorrowControllerTests
     }
 
     [Fact]
-    public async void BorrowController_GetBorrows_Returns200AndFilteringByUserIdWorks()
+    public async void GetBorrows_Returns200AndFilteringByUserIdWorks()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user1 = new User().WithFakeData();
@@ -204,7 +203,7 @@ public class BorrowControllerTests
     }
 
     [Fact]
-    public async void BorrowController_GetBorrow_Returns200AndCorrectBorrowRecord()
+    public async void GetBorrow_Returns200AndCorrectBorrowRecord()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
@@ -235,7 +234,7 @@ public class BorrowControllerTests
     }
 
     [Fact]
-    public async void BorrowController_ReturnBorrow_Returns200AndWorksCorrectly()
+    public async void ReturnBorrow_Returns204AndWorksCorrectly()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -284,7 +283,7 @@ public class BorrowControllerTests
 
         // return the book
         var response = await client.PutAsJsonAsync($"/api/borrow/{borrow.Id}/return", 0);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         // get the book and borrow and check if the availability and IsReturned status is correct
         var get3 = await client.GetAsync($"/api/book/{book.Id}");

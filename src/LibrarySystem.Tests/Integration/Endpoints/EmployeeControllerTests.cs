@@ -1,11 +1,10 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
@@ -13,7 +12,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class EmployeeControllerTests
 {
     [Fact]
-    public async void EmployeeController_GetEmployees_Returns200AndLimitAndOffsetWorks()
+    public async void GetEmployees_Returns200AndLimitAndOffsetWorks()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -47,7 +46,7 @@ public class EmployeeControllerTests
     }
 
     [Fact]
-    public async void EmployeeController_GetEmployee_Returns200AndEmployee()
+    public async void GetEmployee_Returns200AndEmployee()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -74,7 +73,7 @@ public class EmployeeControllerTests
     }
 
     [Fact]
-    public async void EmployeeController_UpdateEmployee_Returns200AndEmployeeIsUpdated()
+    public async void UpdateEmployee_Returns204AndEmployeeIsUpdated()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -106,7 +105,7 @@ public class EmployeeControllerTests
         };
 
         var response = await client.PutAsJsonAsync($"api/employee/{employee.Id}", updateDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/employee/{employee.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -118,7 +117,7 @@ public class EmployeeControllerTests
     }
 
     [Fact]
-    public async void EmployeeController_UpdateEmployee_Returns200AndEmployeeIsDeleted()
+    public async void UpdateEmployee_Returns204AndEmployeeIsDeleted()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -144,14 +143,14 @@ public class EmployeeControllerTests
 
         // act & assert
         var response = await client.DeleteAsync($"/api/employee/{employee.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/employee/{employee.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public async void EmployeeController_UploadPhotos_Returns200AndIsUploaded()
+    public async void UploadPhotos_Returns204AndIsUploaded()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -185,7 +184,7 @@ public class EmployeeControllerTests
 
         // act & assert
         var response = await client.PutAsync($"/api/employee/{employee.Id}/photos", formData);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/employee/{employee.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

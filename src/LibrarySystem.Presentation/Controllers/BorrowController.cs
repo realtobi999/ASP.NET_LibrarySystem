@@ -2,10 +2,10 @@
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Borrows;
-using LibrarySystem.Domain.Dtos.Messages;
-using LibrarySystem.Domain.Exceptions.Common;
+using LibrarySystem.Domain.Dtos.Email.Messages;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
@@ -24,22 +24,24 @@ public class BorrowController : ControllerBase
     private readonly IServiceManager _service;
     private readonly IEmailManager _email;
     private readonly IWebHostEnvironment _env;
+    private readonly IBorrowMapper _mapper;
 
-    public BorrowController(IServiceManager service, IEmailManager email, IWebHostEnvironment env)
+    public BorrowController(IServiceManager service, IEmailManager email, IWebHostEnvironment env, IBorrowMapper mapper)
     {
         _service = service;
         _email = email;
         _env = env;
+        _mapper = mapper;
     }
 
     [HttpGet("api/borrow")]
     public async Task<IActionResult> GetBorrows(int limit, int offset, Guid userId, bool active)
     {
-        var borrows = await _service.Borrow.Index();
+        var borrows = await _service.Borrow.IndexAsync();
 
-        if (userId != Guid.Empty)
         {
-            borrows = borrows.Where(b => b.UserId == userId);
+            if (userId != Guid.Empty)
+                borrows = borrows.Where(b => b.UserId == userId);
         }
 
         if (active)
@@ -53,7 +55,7 @@ public class BorrowController : ControllerBase
     [HttpGet("api/borrow/{borrowId:guid}")]
     public async Task<IActionResult> GetBorrow(Guid borrowId)
     {
-        var borrow = await _service.Borrow.Get(borrowId);
+        var borrow = await _service.Borrow.GetAsync(borrowId);
 
         return Ok(borrow);
     }
@@ -61,16 +63,18 @@ public class BorrowController : ControllerBase
     [HttpPost("api/borrow")]
     public async Task<IActionResult> CreateBorrow([FromBody] CreateBorrowDto createBorrowDto)
     {
-        var borrow = await _service.Borrow.Create(createBorrowDto);
+        var borrow = _mapper.CreateFromDto(createBorrowDto);
+
+        await _service.Borrow.CreateAsync(borrow);
 
         // set the book unavailable
-        var book = await _service.Book.Get(borrow.BookId);
-        _ = _service.Book.SetAvailability(book, false);
+        var book = await _service.Book.GetAsync(borrow.BookId);
+        await _service.Book.SetAvailability(book, false);
 
         // send confirmation email - FOR PRODUCTION ONLY
         if (_env.IsProduction())
         {
-            var user = await _service.User.Get(createBorrowDto.UserId);
+            var user = await _service.User.GetAsync(createBorrowDto.UserId);
             _email.Borrow.SendBorrowBookEmail(new BorrowBookMessageDto
             {
                 UserEmail = user.Email!,
@@ -86,8 +90,8 @@ public class BorrowController : ControllerBase
     [HttpPut("api/borrow/{borrowId:guid}/return")]
     public async Task<IActionResult> ReturnBorrow(Guid borrowId)
     {
-        var borrow = await _service.Borrow.Get(borrowId);
-        var book = await _service.Book.Get(borrow.BookId);
+        var borrow = await _service.Borrow.GetAsync(borrowId);
+        var book = await _service.Book.GetAsync(borrow.BookId);
 
         var token = JwtUtils.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
 
@@ -97,17 +101,12 @@ public class BorrowController : ControllerBase
             throw new NotAuthorized401Exception();
         }
 
-        var affected = await _service.Borrow.Return(borrow, book, token);
-
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        await _service.Borrow.ReturnAsync(borrow, book, token);
 
         // send confirmation email - FOR PRODUCTION ONLY
         if (_env.IsProduction())
         {
-            var user = await _service.User.Get(borrow.UserId);
+            var user = await _service.User.GetAsync(borrow.UserId);
             _email.Borrow.SendReturnBookEmail(new ReturnBookMessageDto
             {
                 UserEmail = user.Email!,
@@ -117,6 +116,6 @@ public class BorrowController : ControllerBase
             });
         }
 
-        return Ok();
+        return NoContent();
     }
 }

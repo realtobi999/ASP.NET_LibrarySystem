@@ -4,29 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Infrastructure.Persistence.Repositories;
 
-public class WishlistRepository : IWishlistRepository
+public class WishlistRepository : BaseRepository<Wishlist>, IWishlistRepository
 {
-    private readonly LibrarySystemContext _context;
-
-    public WishlistRepository(LibrarySystemContext context)
+    public WishlistRepository(LibrarySystemContext context) : base(context)
     {
-        _context = context;
     }
 
-    public void Create(Wishlist wishlist)
+    public async Task<Wishlist?> GetAsync(Guid id)
     {
-        _context.Wishlists.Add(wishlist);
+        return await this.GetAsync(w => w.Id == id);
     }
 
-    public void Delete(Wishlist wishlist)
+    protected override IQueryable<Wishlist> GetQueryable()
     {
-        _context.Wishlists.Remove(wishlist);
-    }
-
-    public Task<Wishlist?> Get(Guid id)
-    {
-        return _context.Wishlists.Include(w => w.WishlistBooks)
-                                    .ThenInclude(w => w.Book)
-                                 .FirstOrDefaultAsync(w => w.Id == id);
+        return base.GetQueryable()
+                   .Include(w => w.WishlistBooks)
+                    .ThenInclude(w => w.Book);
     }
 }

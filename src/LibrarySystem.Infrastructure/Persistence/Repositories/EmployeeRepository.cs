@@ -1,40 +1,21 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Infrastructure.Persistence.Repositories;
 
-public class EmployeeRepository : IEmployeeRepository
+public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
 {
-    private readonly LibrarySystemContext _context;
-
-    public EmployeeRepository(LibrarySystemContext context)
+    public EmployeeRepository(LibrarySystemContext context) : base(context)
     {
-        _context = context;
     }
 
-    public void Create(Employee employee)
+    public async Task<Employee?> GetAsync(string email)
     {
-        _context.Employees.Add(employee);
+        return await this.GetAsync(e => e.Email == email);
     }
 
-    public void Delete(Employee employee)
+    public async Task<Employee?> GetAsync(Guid id)
     {
-        _context.Employees.Remove(employee);
-    }
-
-    public async Task<Employee?> Get(string email)
-    {
-        return await _context.Employees.FirstOrDefaultAsync(s => s.Email == email);
-    }
-
-    public async Task<Employee?> Get(Guid id)
-    {
-        return await _context.Employees.FirstOrDefaultAsync(s => s.Id == id);
-    }
-
-    public async Task<IEnumerable<Employee>> Index()
-    {
-        return await _context.Employees.ToListAsync();
+        return await this.GetAsync(e => e.Id == id);
     }
 }

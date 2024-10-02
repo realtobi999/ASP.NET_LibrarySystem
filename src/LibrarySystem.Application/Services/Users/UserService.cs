@@ -10,79 +10,63 @@ namespace LibrarySystem.Application.Services.Users;
 public class UserService : IUserService
 {
     private readonly IRepositoryManager _repository;
-    private readonly IPasswordHasher _hasher;
+    private readonly IHasher _hasher;
 
-    public UserService(IRepositoryManager repository, IPasswordHasher hasher)
+    public UserService(IRepositoryManager repository, IHasher hasher)
     {
         _repository = repository;
         _hasher = hasher;
     }
 
-    public async Task<int> Delete(Guid id)
+    public async Task DeleteAsync(User user)
     {
-        var user = await this.Get(id);
-
+        // delete user and save changes
         _repository.User.Delete(user);
-        return await _repository.SaveAsync();
+        await _repository.SaveSafelyAsync();
     }
 
-    public async Task<User> Get(Guid id)
+    public async Task<User> GetAsync(Guid id)
     {
-        var user = await _repository.User.Get(id) ?? throw new NotFound404Exception(nameof(User), id);
+        var user = await _repository.User.GetAsync(id) ?? throw new NotFound404Exception(nameof(User), id);
 
         return user;
     }
 
-    public async Task<User> Get(string email)
+    public async Task<User> GetAsync(string email)
     {
-        var user = await _repository.User.Get(email) ?? throw new NotFound404Exception(nameof(User), email);
+        var user = await _repository.User.GetAsync(email) ?? throw new NotFound404Exception(nameof(User), email);
 
         return user;
     }
 
-    public async Task<IEnumerable<User>> Index()
+    public async Task<IEnumerable<User>> IndexAsync()
     {
-        var users = await _repository.User.Index();
+        var users = await _repository.User.IndexAsync();
 
         return users;
     }
 
-    public async Task<bool> Login(LoginUserDto loginUserDto)
+    public async Task<bool> AuthAsync(LoginUserDto loginUserDto)
     {
         var email = loginUserDto.Email ?? throw new NullReferenceException("The email must be set.");
         var password = loginUserDto.Password ?? throw new NullReferenceException("The password must be set.");
 
-        var user = await this.Get(email);
+        var user = await this.GetAsync(email);
 
         return _hasher.Compare(password, user.Password!);
     }
 
-    public async Task<User> Create(RegisterUserDto registerUserDto)
+    public async Task CreateAsync(User user)
     {
-        var user = new User
-        {
-            Id = registerUserDto.Id ?? Guid.NewGuid(),
-            Username = registerUserDto.Username ?? throw new NullReferenceException("The username must be set."),
-            Email = registerUserDto.Email ?? throw new NullReferenceException("The email must be set."),
-            Password = _hasher.Hash(registerUserDto.Password ?? throw new NullReferenceException("The password must be set."))
-        };
-
+        // create user and save changes
         _repository.User.Create(user);
-        await _repository.SaveAsync();
-
-        return user;
+        await _repository.SaveSafelyAsync();
     }
 
-    public async Task<int> Update(Guid id, UpdateUserDto updateUserDto)
+    public async Task UpdateAsync(User user)
     {
-        var user = await this.Get(id);
-
-        var email = updateUserDto.Email;
-        var username = updateUserDto.Username;
-
-        user.Email = email;
-        user.Username = username;
-
-        return await _repository.SaveAsync();
+        // update user and save changes
+        _repository.User.Update(user);
+        await _repository.SaveSafelyAsync();
     }
 }

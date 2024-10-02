@@ -5,7 +5,7 @@ using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Borrow : IDtoSerializable<BorrowDto>
+public class Borrow : IDtoSerialization<BorrowDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }
@@ -25,6 +25,7 @@ public class Borrow : IDtoSerializable<BorrowDto>
     [Required, Column]
     public bool IsReturned { get; set; }
 
+    /// <inheritdoc/>
     public BorrowDto ToDto()
     {
         return new BorrowDto

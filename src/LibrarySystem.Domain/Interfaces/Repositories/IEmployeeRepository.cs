@@ -2,11 +2,8 @@
 
 namespace LibrarySystem.Domain.Interfaces.Repositories;
 
-public interface IEmployeeRepository
+public interface IEmployeeRepository : IBaseRepository<Employee>
 {
-    Task<IEnumerable<Employee>> Index();
-    void Create(Employee employee);
-    Task<Employee?> Get(string email);
-    Task<Employee?> Get(Guid id);
-    void Delete(Employee employee);
+    Task<Employee?> GetAsync(string email);
+    Task<Employee?> GetAsync(Guid id);
 }

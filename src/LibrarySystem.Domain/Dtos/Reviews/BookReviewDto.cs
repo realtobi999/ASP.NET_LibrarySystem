@@ -2,10 +2,10 @@
 
 public record class BookReviewDto
 {
-    public Guid Id { get; set; }
-    public Guid BookId { get; set; }
-    public Guid UserId { get; set; }
-    public double Rating { get; set; }
-    public string? Text { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
+    public Guid Id { get; init; }
+    public Guid BookId { get; init; }
+    public Guid UserId { get; init; }
+    public double Rating { get; init; }
+    public string? Text { get; init; }
+    public DateTimeOffset CreatedAt { get; init; }
 }

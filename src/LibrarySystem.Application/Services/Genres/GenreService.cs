@@ -1,5 +1,4 @@
-﻿using LibrarySystem.Domain.Dtos.Genres;
-using LibrarySystem.Domain.Entities;
+﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
@@ -15,50 +14,38 @@ public class GenreService : IGenreService
         _repository = repository;
     }
 
-    public async Task<Genre> Create(CreateGenreDto createGenreDto)
+    public async Task CreateAsync(Genre genre)
     {
-        var genre = new Genre
-        {
-            Id = createGenreDto.Id ?? Guid.NewGuid(),
-            Name = createGenreDto.Name ?? throw new NullReferenceException("The name must be set.")
-        };
-
+        // create genre entity and save changes
         _repository.Genre.Create(genre);
-        await _repository.SaveAsync();
-
-        return genre;
+        await _repository.SaveSafelyAsync();
     }
 
-    public async Task<int> Delete(Guid id)
+    public async Task DeleteAsync(Genre genre)
     {
-        var genre = await this.Get(id);
-
+        // delete genre entity and save changes
         _repository.Genre.Delete(genre);
-        return await _repository.SaveAsync();
+        await _repository.SaveSafelyAsync();
     }
 
-    public async Task<Genre> Get(Guid id)
+    public async Task<Genre> GetAsync(Guid id)
     {
-        var genre = await _repository.Genre.Get(id) ?? throw new NotFound404Exception(nameof(Genre), id);
+        var genre = await _repository.Genre.GetAsync(id) ?? throw new NotFound404Exception(nameof(Genre), id);
 
         return genre;
     }
 
-    public async Task<IEnumerable<Genre>> Index()
+    public async Task<IEnumerable<Genre>> IndexAsync()
     {
-        var genres = await _repository.Genre.Index();
+        var genres = await _repository.Genre.IndexAsync();
 
         return genres;
     }
 
-    public async Task<int> Update(Guid id, UpdateGenreDto updateGenreDto)
+    public async Task UpdateAsync(Genre genre)
     {
-        var genre = await this.Get(id);
-
-        var name = updateGenreDto.Name;
-
-        genre.Name = name;
-
-        return await _repository.SaveAsync();
+        // update genre entity and save changes
+        _repository.Genre.Update(genre);
+        await _repository.SaveSafelyAsync();
     }
 }

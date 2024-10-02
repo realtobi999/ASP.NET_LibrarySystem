@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using LibrarySystem.Application.Core.Utilities;
 
 namespace LibrarySystem.Tests.Unit.Utilities;
 
@@ -8,7 +8,7 @@ public class PasswordHasherTests
     public void PasswordHasher_Hash_Works()
     {
         // prepare
-        var hasher = new PasswordHasher();
+        var hasher = new Hasher();
 
         var password = "TEST_PASSWORD_IN_PLAIN_TEXT";
 
@@ -22,7 +22,7 @@ public class PasswordHasherTests
     public void PasswordHasher_Compare_Works()
     {
         // prepare
-        var hasher = new PasswordHasher();
+        var hasher = new Hasher();
 
         var password1 = "TEST_PASSWORD_IN_PLAIN_TEXT";
         var password2 = "ANOTHER_TEST_PASSWORD";

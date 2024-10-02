@@ -1,19 +1,18 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
-namespace LibrarySystem.Tests;
+namespace LibrarySystem.Tests.Integration.Endpoints;
 
 public class AuthorControllerTests
 {
     [Fact]
-    public async void AuthorController_GetAuthors_Returns200AndCorrectValues()
+    public async void GetAuthors_Returns200AndCorrectValues()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -46,7 +45,7 @@ public class AuthorControllerTests
     }
 
     [Fact]
-    public async void AuthorController_CreateAuthor_Returns201AndLocationHeader()
+    public async void CreateAuthor_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -66,7 +65,7 @@ public class AuthorControllerTests
     }
 
     [Fact]
-    public async void AuthorController_GetAuthor_Returns200AndCorrectAuthor()
+    public async void GetAuthor_Returns200AndCorrectAuthor()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -92,7 +91,7 @@ public class AuthorControllerTests
     }
 
     [Fact]
-    public async void AuthorController_UpdateAuthor_Returns200AndCheckIfTheAuthorIsUpdated()
+    public async void UpdateAuthor_Returns204AndCheckIfTheAuthorIsUpdated()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -115,7 +114,7 @@ public class AuthorControllerTests
         };
 
         var response = await client.PutAsJsonAsync($"/api/author/{author.Id}", updateDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/author/{author.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -128,7 +127,7 @@ public class AuthorControllerTests
     }
 
     [Fact]
-    public async void AuthorController_DeleteAuthor_Returns200AndCheckIfItExists()
+    public async void DeleteAuthor_Returns204AndCheckIfItExists()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -144,14 +143,14 @@ public class AuthorControllerTests
 
         // act & assert
         var response = await client.DeleteAsync($"/api/author/{author.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/author/{author.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public async void AuthorController_UploadPhotos_Returns200AndIsUploaded()
+    public async void UploadPhotos_Returns204AndIsUploaded()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -177,7 +176,7 @@ public class AuthorControllerTests
 
         // act & assert
         var response = await client.PutAsync($"/api/author/{author.Id}/photos", formData);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/author/{author.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

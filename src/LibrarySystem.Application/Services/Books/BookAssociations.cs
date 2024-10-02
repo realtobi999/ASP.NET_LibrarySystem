@@ -14,11 +14,11 @@ public class BookAssociations : IBookAssociations
         _repository = repository;
     }
 
-    public async Task AssignAuthors(IEnumerable<Guid> authorIds, Book book)
+    public void AssignAuthors(IEnumerable<Guid> authorIds, Book book)
     {
-        var tasks = authorIds.Select(async authorId =>
+        foreach (var authorId in authorIds)
         {
-            var author = await _repository.Author.Get(authorId) ?? throw new NotFound404Exception(nameof(Author), authorId);
+            var author = _repository.Author.Get(authorId) ?? throw new NotFound404Exception(nameof(Author), authorId);
             _repository.Associations.CreateBookAuthor(new BookAuthor
             {
                 BookId = book.Id,
@@ -26,16 +26,14 @@ public class BookAssociations : IBookAssociations
                 AuthorId = author.Id,
                 Author = author
             });
-        });
-
-        await Task.WhenAll(tasks);
+        }
     }
 
-    public async Task AssignGenres(IEnumerable<Guid> genreIds, Book book)
+    public void AssignGenres(IEnumerable<Guid> genreIds, Book book)
     {
-        var tasks = genreIds.Select(async genreId =>
+        foreach (var genreId in genreIds)
         {
-            var genre = await _repository.Genre.Get(genreId) ?? throw new NotFound404Exception(nameof(Genre), genreId);
+            var genre = _repository.Genre.Get(genreId) ?? throw new NotFound404Exception(nameof(Genre), genreId);
             _repository.Associations.CreateBookGenre(new BookGenre
             {
                 BookId = book.Id,
@@ -43,9 +41,7 @@ public class BookAssociations : IBookAssociations
                 GenreId = genre.Id,
                 Genre = genre,
             });
-        });
-
-        await Task.WhenAll(tasks);
+        }
     }
 
     public void CleanAuthors(Book book)

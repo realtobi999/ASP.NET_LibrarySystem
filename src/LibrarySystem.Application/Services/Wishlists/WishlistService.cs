@@ -1,5 +1,4 @@
-﻿using LibrarySystem.Domain.Dtos.Wishlists;
-using LibrarySystem.Domain.Entities;
+﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
@@ -17,68 +16,38 @@ public class WishlistService : IWishlistService
         _associations = associations;
     }
 
-    public async Task<Wishlist> Create(CreateWishlistDto createWishlistDto)
+    public async Task CreateAsync(Wishlist wishlist)
     {
-        var wishlist = new Wishlist
-        {
-            Id = createWishlistDto.Id ?? Guid.NewGuid(),
-            UserId = createWishlistDto.UserId,
-            Name = createWishlistDto.Name
-        };
-
-        var bookIds = createWishlistDto.BookIds ?? throw new NullReferenceException("Atleast one book must be assigned.");
-
-        // handle books
-        await _associations.AssignBooks(bookIds, wishlist);
-
+        // create wishlist and save changes
         _repository.Wishlist.Create(wishlist);
-        await _repository.SaveAsync();
-
-        return wishlist;
+        await _repository.SaveSafelyAsync();
     }
 
-    public async Task<int> Delete(Guid id)
+    public async Task DeleteAsync(Wishlist wishlist)
     {
-        var wishlist = await this.Get(id);
-
-        return await this.Delete(wishlist);
-    }
-
-    public async Task<int> Delete(Wishlist wishlist)
-    {
-        _associations.CleanBooks(wishlist);
+        // delete wishlist and save changes
         _repository.Wishlist.Delete(wishlist);
-
-        return await _repository.SaveAsync();
+        await _repository.SaveSafelyAsync();
     }
 
-    public async Task<Wishlist> Get(Guid id)
+    public async Task<Wishlist> GetAsync(Guid id)
     {
-        var wishlist = await _repository.Wishlist.Get(id) ?? throw new NotFound404Exception(nameof(Wishlist), id);
+        var wishlist = await _repository.Wishlist.GetAsync(id) ?? throw new NotFound404Exception(nameof(Wishlist), id);
 
         return wishlist;
     }
 
-    public async Task<int> Update(Guid id, UpdateWishlistDto updateWishlistDto)
+    public async Task<IEnumerable<Wishlist>> IndexAsync()
     {
-        var wishlist = await this.Get(id);
+        var wishlists = await _repository.Wishlist.IndexAsync();
 
-        return await this.Update(wishlist, updateWishlistDto);
+        return wishlists;
     }
 
-    public async Task<int> Update(Wishlist wishlist, UpdateWishlistDto updateWishlistDto)
+    public async Task UpdateAsync(Wishlist wishlist)
     {
-        var name = updateWishlistDto.Name;
-        var books = updateWishlistDto.BookIds;
-
-        wishlist.Name = name;
-
-        if (books is not null)
-        {
-            _associations.CleanBooks(wishlist);
-            await _associations.AssignBooks(books, wishlist);
-        }
-
-        return await _repository.SaveAsync();
+        // update wishlist and save changes
+        _repository.Wishlist.Update(wishlist);
+        await _repository.SaveSafelyAsync();
     }
 }

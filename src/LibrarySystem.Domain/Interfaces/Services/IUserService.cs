@@ -3,13 +3,8 @@ using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Domain.Interfaces.Services;
 
-public interface IUserService
+public interface IUserService : IBaseService<User>
 {
-    Task<IEnumerable<User>> Index();
-    Task<User> Get(Guid id);
-    Task<User> Get(string email);
-    Task<User> Create(RegisterUserDto registerUserDto);
-    Task<bool> Login(LoginUserDto loginUserDto);
-    Task<int> Update(Guid id, UpdateUserDto updateUserDto);
-    Task<int> Delete(Guid id);
+    Task<User> GetAsync(string email);
+    Task<bool> AuthAsync(LoginUserDto loginUserDto);
 }

@@ -1,16 +1,9 @@
-﻿using LibrarySystem.Domain.Dtos.Books;
-using LibrarySystem.Domain.Entities;
+﻿using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Domain.Interfaces.Services;
 
-public interface IBookService
+public interface IBookService : IBaseService<Book>
 {
-    Task<IEnumerable<Book>> Index(bool withRelations = true);
-    Task<Book> Get(Guid id, bool withRelations = true);
-    Task<Book> Get(string isbn, bool withRelations = true);
-    Task<Book> Create(CreateBookDto createBookDto);
-    Task<int> Update(Guid id, UpdateBookDto updateBookDto);
-    Task<int> SetAvailable(Book book);
-    Task<int> SetAvailability(Book book, bool availability);
-    Task<int> Delete(Guid id);
+    Task<Book> GetAsync(string isbn);
+    Task SetAvailability(Book book, bool isAvailable);
 }

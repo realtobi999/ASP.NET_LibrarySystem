@@ -1,21 +1,20 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Tests.Integration.Extensions;
 using LibrarySystem.Tests.Integration.Server;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Helpers;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 
 public class AuthControllerTests
 {
     [Fact]
-    public async void AuthController_RegisterUser_Returns201AndLocationHeader()
+    public async void RegisterUser_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -30,7 +29,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void AuthController_LoginUser_Returns200AndJwtAndUser()
+    public async void LoginUser_Returns200AndJwtAndUser()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -63,7 +62,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void AuthController_LoginUser_Returns401()
+    public async void LoginUser_Returns401()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -84,7 +83,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void AuthController_RegisterEmployee_Returns201AndLocationHeader()
+    public async void RegisterEmployee_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -104,7 +103,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void AuthController_LoginEmployee_Returns201AndJwtAndEmployee()
+    public async void LoginEmployee_Returns201AndJwtAndEmployee()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();

@@ -1,8 +1,8 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Enums;
-using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,18 +26,20 @@ public class BookController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
+    private readonly IBookMapper _mapper;
 
-    public BookController(IServiceManager service, IRepositoryManager repository)
+    public BookController(IServiceManager service, IRepositoryManager repository, IBookMapper mapper)
     {
         _service = service;
         _repository = repository;
+        _mapper = mapper;
     }
 
     [HttpGet("api/book")]
     [HttpGet("api/book/search/{query}")]
-    public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId, bool withRelations = true)
+    public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId)
     {
-        var books = await _service.Book.Index(withRelations);
+        var books = await _service.Book.IndexAsync();
 
         if (authorId != Guid.Empty)
         {
@@ -58,17 +60,17 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("api/book/{bookId:guid}")]
-    public async Task<IActionResult> GetBook(Guid bookId, bool withRelations = true)
+    public async Task<IActionResult> GetBook(Guid bookId)
     {
-        var book = await _service.Book.Get(bookId, withRelations);
+        var book = await _service.Book.GetAsync(bookId);
 
         return Ok(book);
     }
 
     [HttpGet("api/book/isbn/{isbn}")]
-    public async Task<IActionResult> GetBookByIsbn(string isbn, bool withRelations = true)
+    public async Task<IActionResult> GetBookByIsbn(string isbn)
     {
-        var book = await _service.Book.Get(isbn, withRelations);
+        var book = await _service.Book.GetAsync(isbn);
 
         return Ok(book);
     }
@@ -77,7 +79,9 @@ public class BookController : ControllerBase
     [HttpPost("api/book")]
     public async Task<IActionResult> CreateBook([FromBody] CreateBookDto createBookDto)
     {
-        var book = await _service.Book.Create(createBookDto);
+        var book = _mapper.CreateFromDto(createBookDto);
+
+        await _service.Book.CreateAsync(book);
 
         return Created($"/api/book/{book.Id}", null);
     }
@@ -86,28 +90,23 @@ public class BookController : ControllerBase
     [HttpPut("api/book/{bookId:guid}")]
     public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookDto updateBookDto)
     {
-        var affected = await _service.Book.Update(bookId, updateBookDto);
+        var book = await _service.Book.GetAsync(bookId);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        _mapper.UpdateFromDto(book, updateBookDto);
+        await _service.Book.UpdateAsync(book);
 
-        return Ok();
+        return NoContent();
     }
 
     [Authorize(Policy = "Employee")]
     [HttpDelete("api/book/{bookId:guid}")]
     public async Task<IActionResult> DeleteBook(Guid bookId)
     {
-        var affected = await _service.Book.Delete(bookId);
+        var book = await _service.Book.GetAsync(bookId);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        await _service.Book.DeleteAsync(book);
 
-        return Ok();
+        return NoContent();
     }
 
     [Authorize(Policy = "Employee")]
@@ -115,19 +114,14 @@ public class BookController : ControllerBase
     public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection files)
     {
         var pictures = await _service.Picture.Extract(files);
-        var book = await _service.Book.Get(bookId); // validate if book exists
+        var book = await _service.Book.GetAsync(bookId); // validate if book exists
 
         // delete all previous saved pictures
         _repository.Picture.DeleteWhere(p => p.EntityId == book.Id && p.EntityType == PictureEntityType.Book);
 
         // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.BulkCreateWithEntity(pictures, book.Id, PictureEntityType.Book);
+        await _service.Picture.BulkCreateWithEntity(pictures, book.Id, PictureEntityType.Book);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
-
-        return Ok();
+        return NoContent();
     }
 }

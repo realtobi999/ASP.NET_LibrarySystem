@@ -4,11 +4,11 @@ namespace LibrarySystem.Domain.Dtos.Borrows;
 
 public record class CreateBorrowDto
 {
-    public Guid? Id { get; set; }
+    public Guid? Id { get; init; }
 
     [Required]
-    public Guid BookId { get; set; }
+    public Guid BookId { get; init; }
 
     [Required]
-    public Guid UserId { get; set; }
+    public Guid UserId { get; init; }
 }

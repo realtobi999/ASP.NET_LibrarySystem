@@ -22,15 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Integration\Server\" />
-    <Folder Include="Unit/Utilities/" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LibrarySystem.Presentation\LibrarySystem.Presentation.csproj" />
   </ItemGroup>
 

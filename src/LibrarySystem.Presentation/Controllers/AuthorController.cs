@@ -1,8 +1,8 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Enums;
-using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,18 +24,20 @@ public class AuthorController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
+    private readonly IAuthorMapper _mapper;
 
-    public AuthorController(IServiceManager service, IRepositoryManager repository)
+    public AuthorController(IServiceManager service, IRepositoryManager repository, IAuthorMapper mapper)
     {
         _service = service;
         _repository = repository;
+        _mapper = mapper;
     }
 
     [Authorize(Policy = "Employee")]
     [HttpGet("api/author")]
     public async Task<IActionResult> GetAuthors(int limit, int offset)
     {
-        var authors = await _service.Author.Index();
+        var authors = await _service.Author.IndexAsync();
 
         return Ok(authors.Paginate(offset, limit));
     }
@@ -44,7 +46,7 @@ public class AuthorController : ControllerBase
     [HttpGet("api/author/{authorId:guid}")]
     public async Task<IActionResult> GetAuthor(Guid authorId)
     {
-        var author = await _service.Author.Get(authorId);
+        var author = await _service.Author.GetAsync(authorId);
 
         return Ok(author);
     }
@@ -53,7 +55,9 @@ public class AuthorController : ControllerBase
     [HttpPost("api/author")]
     public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorDto createAuthorDto)
     {
-        var author = await _service.Author.Create(createAuthorDto);
+        var author = _mapper.CreateFromDto(createAuthorDto);
+
+        await _service.Author.CreateAsync(author);
 
         return Created($"/api/author/{author.Id}", null);
     }
@@ -62,28 +66,23 @@ public class AuthorController : ControllerBase
     [HttpPut("api/author/{authorId:guid}")]
     public async Task<IActionResult> UpdateAuthor(Guid authorId, [FromBody] UpdateAuthorDto updateAuthorDto)
     {
-        var affected = await _service.Author.Update(authorId, updateAuthorDto);
+        var author = await _service.Author.GetAsync(authorId);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        _mapper.UpdateFromDto(author, updateAuthorDto);
 
-        return Ok();
+        await _service.Author.UpdateAsync(author);
+        return NoContent();
     }
 
     [Authorize(Policy = "Employee")]
     [HttpDelete("api/author/{authorId:guid}")]
     public async Task<IActionResult> DeleteAuthor(Guid authorId)
     {
-        var affected = await _service.Author.Delete(authorId);
+        var author = await _service.Author.GetAsync(authorId);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        await _service.Author.DeleteAsync(author);
 
-        return Ok();
+        return NoContent();
     }
 
     [Authorize(Policy = "Employee")]
@@ -91,19 +90,13 @@ public class AuthorController : ControllerBase
     public async Task<IActionResult> UploadPhotos(Guid authorId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);
-        var author = await _service.Author.Get(authorId); // validates if the author exists
+        var author = await _service.Author.GetAsync(authorId); // validates if the author exists
 
         // delete any previous associated photo
         _repository.Picture.DeleteWhere(p => p.EntityId == author.Id && p.EntityType == PictureEntityType.Author);
 
         // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.CreateWithEntity(picture, author.Id, PictureEntityType.Author);
-
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
-
-        return Ok();
+        await _service.Picture.CreateWithEntity(picture, author.Id, PictureEntityType.Author);
+        return NoContent();
     }
 }

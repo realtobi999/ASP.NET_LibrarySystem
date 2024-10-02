@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Domain.Interfaces.Services;
 
-namespace LibrarySystem.Application.Interfaces;
+namespace LibrarySystem.Domain.Interfaces.Factories;
 
 public interface IServiceFactory
 {

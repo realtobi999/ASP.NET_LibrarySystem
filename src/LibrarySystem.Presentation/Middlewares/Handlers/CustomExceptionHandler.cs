@@ -9,12 +9,6 @@ public class CustomExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken token)
     {
-        var error = new ErrorMessage
-        {
-            Type = exception.GetType().Name,
-            Instance = $"{context.Request.Method} {context.Request.Path}"
-        };
-
         if (exception is IHttpException httpException)
         {
             await HandleHttpException(context, httpException, token);
@@ -27,20 +21,11 @@ public class CustomExceptionHandler : IExceptionHandler
         return false;
     }
 
-    private static ErrorMessage CreateErrorMessage(HttpContext context, Exception exception)
-    {
-        return new ErrorMessage
-        {
-            Type = exception.GetType().Name,
-            Instance = $"{context.Request.Method} {context.Request.Path}"
-        };
-    }
     private static async Task HandleHttpException(HttpContext context, IHttpException exception, CancellationToken token)
     {
         var error = new ErrorMessage
         {
             StatusCode = exception.StatusCode,
-            Type = exception.GetType().Name,
             Title = exception.Title,
             Detail = exception.Message,
             Instance = $"{context.Request.Method} {context.Request.Path}"

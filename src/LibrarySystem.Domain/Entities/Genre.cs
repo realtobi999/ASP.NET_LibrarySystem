@@ -5,7 +5,7 @@ using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class Genre : IDtoSerializable<GenreDto>
+public class Genre : IDtoSerialization<GenreDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }
@@ -13,6 +13,7 @@ public class Genre : IDtoSerializable<GenreDto>
     [Required, Column("name")]
     public string? Name { get; set; }
 
+    /// <inheritdoc/>
     public GenreDto ToDto()
     {
         return new GenreDto

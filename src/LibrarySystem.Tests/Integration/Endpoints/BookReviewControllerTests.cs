@@ -1,11 +1,10 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
@@ -13,7 +12,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class BookReviewControllerTests
 {
     [Fact]
-    public async void BookReviewController_CreateBookReview_Returns201()
+    public async void CreateBookReview_Returns201()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -45,7 +44,7 @@ public class BookReviewControllerTests
     }
 
     [Fact]
-    public async void BookReviewController_DeleteBookReview_Returns200()
+    public async void DeleteBookReview_Returns204()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -76,11 +75,11 @@ public class BookReviewControllerTests
 
         // act & assert
         var response = await client.DeleteAsync($"/api/review/{review.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
     }
 
     [Fact]
-    public async void BookReviewController_DeleteBookReview_Returns401WhenTryingToDeleteOtherUserReview()
+    public async void DeleteBookReview_Returns401WhenTryingToDeleteOtherUserReview()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -123,7 +122,7 @@ public class BookReviewControllerTests
     }
 
     [Fact]
-    public async void BookReviewController_UpdateBookReview_Returns200AndTextIsUpdated()
+    public async void UpdateBookReview_Returns204AndTextIsUpdated()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -159,7 +158,7 @@ public class BookReviewControllerTests
         };
 
         var response = await client.PutAsJsonAsync($"/api/review/{review.Id}", updateBookReviewDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

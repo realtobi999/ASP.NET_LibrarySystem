@@ -3,7 +3,6 @@ using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Application.Services;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Infrastructure.Factories;
-using LibrarySystem.Infrastructure.Messages.Borrows;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +14,9 @@ using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails.Borrow;
 using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Infrastructure.Messages.Builders;
+using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Application.Core.Mappers;
 
 namespace LibrarySystem.Presentation.Extensions;
 
@@ -87,5 +89,17 @@ public static class ServiceExtensions
     {
         services.AddScoped<IEmailFactory, EmailFactory>();
         services.AddScoped<IEmailManager, EmailManager>();
+    }
+
+    public static void ConfigureMappers(this IServiceCollection services)
+    {
+        services.AddScoped<IAuthorMapper, AuthorMapper>();
+        services.AddScoped<IBookMapper, BookMapper>();
+        services.AddScoped<IBookReviewMapper, BookReviewMapper>();
+        services.AddScoped<IBorrowMapper, BorrowMapper>();
+        services.AddScoped<IEmployeeMapper, EmployeeMapper>();
+        services.AddScoped<IGenreMapper, GenreMapper>();
+        services.AddScoped<IUserMapper, UserMapper>();
+        services.AddScoped<IWishlistMapper, WishlistMapper>();
     }
 }

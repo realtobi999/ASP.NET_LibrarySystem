@@ -1,10 +1,9 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
@@ -12,7 +11,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class WishlistControllerTests
 {
     [Fact]
-    public async void WishlistController_CreateWishlist_Returns201AndLocationHeader()
+    public async void CreateWishlist_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -51,7 +50,7 @@ public class WishlistControllerTests
     }
 
     [Fact]
-    public async void WishlistController_GetWishlist_Returns200AndWishlistWithBooksAssigned()
+    public async void GetWishlist_Returns200AndWishlistWithBooksAssigned()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -94,7 +93,7 @@ public class WishlistControllerTests
     }
 
     [Fact]
-    public async void WishlistController_UpdateWishlist_Returns200AndIsUpdated()
+    public async void UpdateWishlist_Returns204AndIsUpdated()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -134,7 +133,7 @@ public class WishlistControllerTests
             BookIds = [book1.Id],
         };
         var response = await client.PutAsJsonAsync($"/api/wishlist/{wishlist.Id}", updateDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get1 = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -145,7 +144,7 @@ public class WishlistControllerTests
     }
 
     [Fact]
-    public async void WishlistController_DeleteWishlist_Returns200AndIsDeleted()
+    public async void DeleteWishlist_Returns204AndIsDeleted()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -180,7 +179,7 @@ public class WishlistControllerTests
 
         // act & assert
         var response = await client.DeleteAsync($"/api/wishlist/{wishlist.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get1 = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);

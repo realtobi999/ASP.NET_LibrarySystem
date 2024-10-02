@@ -1,9 +1,9 @@
+using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Application.Services.Wishlists;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails;
 using LibrarySystem.EmailService;
-using LibrarySystem.Infrastructure.Factories;
 using LibrarySystem.Presentation.Extensions;
 using LibrarySystem.Presentation.Middlewares;
 using LibrarySystem.Presentation.Middlewares.Filters;
@@ -33,9 +33,10 @@ public class Program
             // services
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
+            builder.Services.ConfigureMappers();
             builder.Services.AddScoped<IBookAssociations, BookAssociations>();
             builder.Services.AddScoped<IWishlistAssociations, WishlistAssociations>();
-            builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+            builder.Services.AddScoped<IHasher, Hasher>();
 
             // email clients
             builder.Services.AddSingleton(p => SmtpFactory.CreateInstance(config));

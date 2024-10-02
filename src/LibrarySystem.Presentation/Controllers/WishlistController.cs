@@ -1,9 +1,9 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Dtos.Wishlists;
-using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,17 +21,19 @@ DELETE  /api/wishlist/{wishlist_id}
 public class WishlistController : ControllerBase
 {
     private readonly IServiceManager _service;
+    private readonly IWishlistMapper _mapper;
 
-    public WishlistController(IServiceManager service)
+    public WishlistController(IServiceManager service, IWishlistMapper mapper)
     {
         _service = service;
+        _mapper = mapper;
     }
 
     [Authorize(Policy = "User")]
     [HttpGet("api/wishlist/{wishlistId:guid}")]
     public async Task<IActionResult> GetWishlist(Guid wishlistId)
     {
-        var wishlist = await _service.Wishlist.Get(wishlistId);
+        var wishlist = await _service.Wishlist.GetAsync(wishlistId);
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
@@ -39,14 +41,16 @@ public class WishlistController : ControllerBase
             throw new NotAuthorized401Exception();
         }
 
-        return Ok(wishlist.ToDto());
+        return Ok(wishlist);
     }
 
     [Authorize(Policy = "User"), UserAuth]
     [HttpPost("api/wishlist")]
     public async Task<IActionResult> CreateWishlist([FromBody] CreateWishlistDto createWishlistDto)
     {
-        var wishlist = await _service.Wishlist.Create(createWishlistDto);
+        var wishlist = _mapper.CreateFromDto(createWishlistDto);
+
+        await _service.Wishlist.CreateAsync(wishlist);
 
         return Created($"/api/wishlist/{wishlist.Id}", null);
     }
@@ -55,7 +59,7 @@ public class WishlistController : ControllerBase
     [HttpPut("api/wishlist/{wishlistId:guid}")]
     public async Task<IActionResult> UpdateWishlist(Guid wishlistId, [FromBody] UpdateWishlistDto updateWishlistDto)
     {
-        var wishlist = await _service.Wishlist.Get(wishlistId);
+        var wishlist = await _service.Wishlist.GetAsync(wishlistId);
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
@@ -63,21 +67,17 @@ public class WishlistController : ControllerBase
             throw new NotAuthorized401Exception();
         }
 
-        var affected = await _service.Wishlist.Update(wishlist, updateWishlistDto);
+        _mapper.UpdateFromDto(wishlist, updateWishlistDto);
+        await _service.Wishlist.UpdateAsync(wishlist);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
-
-        return Ok();
+        return NoContent();
     }
 
     [Authorize(Policy = "User")]
     [HttpDelete("api/wishlist/{wishlistId:guid}")]
     public async Task<IActionResult> DeleteWishlist(Guid wishlistId)
     {
-        var wishlist = await _service.Wishlist.Get(wishlistId);
+        var wishlist = await _service.Wishlist.GetAsync(wishlistId);
 
         // verify that the request user id matches the user id of the wishlist
         if (JwtUtils.ParseFromPayload(JwtUtils.Parse(HttpContext.Request.Headers.Authorization), "UserId") != wishlist.UserId.ToString())
@@ -85,13 +85,7 @@ public class WishlistController : ControllerBase
             throw new NotAuthorized401Exception();
         }
 
-        var affected = await _service.Wishlist.Delete(wishlist);
-
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
-
-        return Ok();
+        await _service.Wishlist.DeleteAsync(wishlist);
+        return NoContent();
     }
 }

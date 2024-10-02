@@ -1,5 +1,4 @@
-﻿using LibrarySystem.Application.Interfaces;
-using LibrarySystem.Application.Services.Authors;
+﻿using LibrarySystem.Application.Services.Authors;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Application.Services.Borrows;
 using LibrarySystem.Application.Services.Employees;
@@ -9,6 +8,7 @@ using LibrarySystem.Application.Services.Reviews;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Application.Services.Wishlists;
 using LibrarySystem.Domain.Interfaces.Common;
+using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
 
@@ -17,11 +17,11 @@ namespace LibrarySystem.Application.Core.Factories;
 public class ServiceFactory : IServiceFactory
 {
     private readonly IRepositoryManager _repository;
-    private readonly IPasswordHasher _hasher;
+    private readonly IHasher _hasher;
     private readonly IBookAssociations _bookAssociations;
     private readonly IWishlistAssociations _wishlistAssociations;
 
-    public ServiceFactory(IRepositoryManager repository, IPasswordHasher hasher, IBookAssociations bookAssociations, IWishlistAssociations wishlistAssociations)
+    public ServiceFactory(IRepositoryManager repository, IHasher hasher, IBookAssociations bookAssociations, IWishlistAssociations wishlistAssociations)
     {
         _repository = repository;
         _hasher = hasher;

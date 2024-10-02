@@ -2,11 +2,8 @@
 
 namespace LibrarySystem.Domain.Interfaces.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository : IBaseRepository<User>
 {
-    void Create(User user);
-    Task<User?> Get(Guid Id);
-    Task<User?> Get(string Email);
-    Task<IEnumerable<User>> Index();
-    void Delete(User user);
+    Task<User?> GetAsync(Guid id);
+    Task<User?> GetAsync(string email);
 }

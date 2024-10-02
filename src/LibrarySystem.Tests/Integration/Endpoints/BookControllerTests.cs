@@ -1,19 +1,18 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
-namespace LibrarySystem.Tests;
+namespace LibrarySystem.Tests.Integration.Endpoints;
 
 public class BookControllerTests
 {
     [Fact]
-    public async void BookController_CreateBook_Returns201AndLocationHeader()
+    public async void CreateBook_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -47,7 +46,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_GetBook_Returns200AndBookWithGenresAndAuthorsAndReviews()
+    public async void GetBook_Returns200AndBookWithGenresAndAuthorsAndReviews()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -109,7 +108,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_GetBooks_Returns200AndBooks()
+    public async void GetBooks_Returns200AndBooks()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -142,7 +141,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_UpdateBook_Returns200AndIsUpdated()
+    public async void UpdateBook_Returns204AndIsUpdated()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -182,14 +181,14 @@ public class BookControllerTests
             Title = "test_test_test",
             Description = "test_test_test",
             PagesCount = 12,
-            Authors = [author1.ToDto(), author2.ToDto(), author3.ToDto()],
-            Genres = [],
+            AuthorIds = [author1.Id, author2.Id, author3.Id],
+            GenreIds = [],
             Availability = false,
             PublishedDate = DateTimeOffset.Now,
         };
 
         var response = await client.PutAsJsonAsync($"/api/book/{book.Id}", updateDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -206,7 +205,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_DeleteBook_Returns200AndIsDeleted()
+    public async void DeleteBook_Returns204AndIsDeleted()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -222,14 +221,14 @@ public class BookControllerTests
 
         // act & assert
         var response = await client.DeleteAsync($"/api/book/{book.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public async void BookController_GetBookByIsbn_Returns200AndCorrectBook()
+    public async void GetBookByIsbn_Returns200AndCorrectBook()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -253,7 +252,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_GetBooks_Returns200AndBooksFilteredByAuthor()
+    public async void GetBooks_Returns200AndBooksFilteredByAuthor()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -299,7 +298,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_GetBooks_Returns200AndBooksFilteredByGenre()
+    public async void GetBooks_Returns200AndBooksFilteredByGenre()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -345,7 +344,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_GetBooks_Returns200AndBooksFilteredByGenreAndAuthor()
+    public async void GetBooks_Returns200AndBooksFilteredByGenreAndAuthor()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -390,7 +389,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_SearchBooks_Returns200AndCorrect()
+    public async void SearchBooks_Returns200AndCorrect()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -429,73 +428,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_GetEndpoints_WithoutRelationsFilterWorks()
-    {
-        // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
-        var token = JwtTestExtensions.Create().Generate([
-            new Claim(ClaimTypes.Role, "Employee")
-        ]);
-
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-
-        var author1 = new Author().WithFakeData();
-        var author2 = new Author().WithFakeData();
-        var genre1 = new Genre().WithFakeData();
-        var genre2 = new Genre().WithFakeData();
-
-        var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create2 = await client.PostAsJsonAsync("/api/genre", genre2.ToCreateGenreDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create3 = await client.PostAsJsonAsync("/api/author", author1.ToCreateAuthorDto());
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create4 = await client.PostAsJsonAsync("/api/author", author2.ToCreateAuthorDto());
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
-        var create5 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([author1.Id, author2.Id], [genre1.Id, genre2.Id]));
-        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create6 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([author1.Id, author2.Id], [genre1.Id, genre2.Id]));
-        create6.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create7 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([author2.Id], [genre1.Id, genre2.Id]));
-        create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
-        // act & assert
-
-        // GET api/book/{book_id} ENDPOINT
-        var get1 = await client.GetAsync($"/api/book/{book1.Id}?withRelations=false");
-        get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-
-        var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
-        content1.Id.Should().Be(book1.Id);
-        content1.Authors.Count.Should().Be(0);
-        content1.Genres.Count.Should().Be(0);
-
-        // GET api/book/isbn/{ISBN} ENDPOINT
-        var get2 = await client.GetAsync($"/api/book/isbn/{book1.ISBN}?withRelations=false");
-        get2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-
-        var content2 = await get2.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
-        content2.ISBN.Should().Be(book1.ISBN);
-        content2.Authors.Count.Should().Be(0);
-        content2.Genres.Count.Should().Be(0);
-
-        // GET api/book ENDPOINT
-        var get3 = await client.GetAsync("/api/book?withRelations=false&limit=1");
-        get3.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-
-        var content3 = await get3.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
-        content3.Count.Should().Be(1);
-        content3.ElementAt(0).Id.Should().Be(book1.Id);
-        content3.ElementAt(0).Authors.Count.Should().Be(0);
-        content3.ElementAt(0).Genres.Count.Should().Be(0);
-    }
-
-    [Fact]
-    public async void BookController_UploadPhotos_Returns200AndPhotosUploaded()
+    public async void UploadPhotos_Returns204AndPhotosUploaded()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -522,7 +455,7 @@ public class BookControllerTests
 
         // act & assert
         var response = await client.PutAsync($"/api/book/{book.Id}/photos", formData);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -534,7 +467,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void BookController_UploadPhoto_Returns200AndPhotosAreUpdated()
+    public async void UploadPhoto_Returns204AndPhotosAreUpdated()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -566,7 +499,7 @@ public class BookControllerTests
         };
 
         var create2 = await client.PutAsync($"/api/book/{book.Id}/photos", formData1);
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         // act & assert
         var formData2 = new MultipartFormDataContent
@@ -576,7 +509,7 @@ public class BookControllerTests
         };
 
         var response = await client.PutAsync($"/api/book/{book.Id}/photos", formData2);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/book/{book.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

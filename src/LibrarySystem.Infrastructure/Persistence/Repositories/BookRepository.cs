@@ -1,62 +1,38 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Infrastructure.Persistence.Repositories;
 
-public class BookRepository : IBookRepository
+public class BookRepository : BaseRepository<Book>, IBookRepository
 {
-    private readonly LibrarySystemContext _context;
-
-    public BookRepository(LibrarySystemContext context)
+    public BookRepository(LibrarySystemContext context) : base(context)
     {
-        _context = context;
     }
 
-    public void Create(Book book)
+    public Book? Get(Guid id)
     {
-        _context.Books.Add(book);
+        return _context.Books.FirstOrDefault(b => b.Id == id);
     }
 
-    public void Delete(Book book)
+    public async Task<Book?> GetAsync(Guid id)
     {
-        _context.Books.Remove(book);
+        return await this.GetAsync(b => b.Id == id);
     }
 
-    public async Task<Book?> Get(Guid id, bool withRelations = true)
+    public async Task<Book?> GetAsync(string isbn)
     {
-        var book = _context.Books.AsQueryable();
-
-        if (withRelations)
-        {
-            book = book.IncludeBookRelations();
-        }
-
-        return await book.Include(b => b.CoverPictures).SingleOrDefaultAsync(b => b.Id == id);
+        return await this.GetAsync(b => b.ISBN == isbn);
     }
 
-    public async Task<IEnumerable<Book>> Index(bool withRelations = true)
+    protected override IQueryable<Book> GetQueryable()
     {
-        var books = _context.Books.AsQueryable();
-
-        if (withRelations)
-        {
-            books = books.IncludeBookRelations();
-        }
-
-        return await books.Include(b => b.CoverPictures).ToListAsync();
-    }
-
-    public async Task<Book?> Get(string isbn, bool withRelations = true)
-    {
-        var book = _context.Books.AsQueryable();
-
-        if (withRelations)
-        {
-            book = book.IncludeBookRelations();
-        }
-
-        return await book.Include(b => b.CoverPictures).SingleOrDefaultAsync(b => b.ISBN == isbn);
+        return base.GetQueryable()
+                   .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                   .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                   .Include(b => b.BookReviews)
+                   .Include(b => b.CoverPictures);
     }
 }

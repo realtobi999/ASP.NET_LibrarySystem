@@ -2,9 +2,7 @@
 
 namespace LibrarySystem.Domain.Interfaces.Repositories;
 
-public interface IWishlistRepository
+public interface IWishlistRepository : IBaseRepository<Wishlist>
 {
-    Task<Wishlist?> Get(Guid id);
-    void Create(Wishlist wishlist);
-    void Delete(Wishlist wishlist);
+    Task<Wishlist?> GetAsync(Guid id);
 }

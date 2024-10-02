@@ -13,11 +13,11 @@ public class CustomDtoSerializationFilter : IAsyncResultFilter
     {
         var objectResult = context.Result as ObjectResult;
 
-        if (objectResult?.Value is IDtoSerializable serializableObject) // one entity
+        if (objectResult?.Value is IDtoSerialization serializableObject) // one entity
         {
             objectResult.Value = serializableObject.ToDto();
         }
-        else if (objectResult?.Value is IEnumerable<IDtoSerializable> serializableObjectCollection) // an list, array, ... of entities
+        else if (objectResult?.Value is IEnumerable<IDtoSerialization> serializableObjectCollection) // an list, array, ... of entities
         {
             objectResult.Value = serializableObjectCollection.Select(item => item.ToDto());
         }

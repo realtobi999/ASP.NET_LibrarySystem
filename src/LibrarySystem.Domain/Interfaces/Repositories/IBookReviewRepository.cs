@@ -2,9 +2,7 @@
 
 namespace LibrarySystem.Domain.Interfaces.Repositories;
 
-public interface IBookReviewRepository
+public interface IBookReviewRepository : IBaseRepository<BookReview>
 {
-    Task<BookReview?> Get(Guid id);
-    void Create(BookReview bookReview);
-    void Delete(BookReview bookReview);
+    Task<BookReview?> GetAsync(Guid id);
 }

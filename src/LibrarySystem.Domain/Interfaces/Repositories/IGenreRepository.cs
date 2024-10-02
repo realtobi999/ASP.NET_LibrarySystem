@@ -2,10 +2,8 @@
 
 namespace LibrarySystem.Domain.Interfaces.Repositories;
 
-public interface IGenreRepository
+public interface IGenreRepository : IBaseRepository<Genre>
 {
-    Task<IEnumerable<Genre>> Index();
-    Task<Genre?> Get(Guid id);
-    void Create(Genre genre);
-    void Delete(Genre genre);
+    Task<Genre?> GetAsync(Guid id);
+    Genre? Get(Guid id);
 }

@@ -8,8 +8,8 @@ public interface IPictureService
 {
     Task<IEnumerable<Picture>> Extract(IFormCollection files);
     Task<Picture> Extract(IFormFile file);
-    Task<int> Create(Picture picture);
-    Task<int> CreateWithEntity(Picture picture, Guid entityId, PictureEntityType entityType);
-    Task<int> BulkCreate(IEnumerable<Picture> pictures);
-    Task<int> BulkCreateWithEntity(IEnumerable<Picture> pictures, Guid entityId, PictureEntityType entityType);
+    Task Create(Picture picture);
+    Task CreateWithEntity(Picture picture, Guid entityId, PictureEntityType entityType);
+    Task BulkCreate(IEnumerable<Picture> pictures);
+    Task BulkCreateWithEntity(IEnumerable<Picture> pictures, Guid entityId, PictureEntityType entityType);
 }

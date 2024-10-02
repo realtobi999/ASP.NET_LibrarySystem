@@ -2,11 +2,8 @@
 
 namespace LibrarySystem.Domain.Interfaces.Repositories;
 
-public interface IBorrowRepository
+public interface IBorrowRepository : IBaseRepository<Borrow>
 {
-    Task<IEnumerable<Borrow>> Index();
-
-    Task<Borrow?> Get(Guid id);
-    Task<Borrow?> Get(Guid bookId, Guid userId);
-    void Create(Borrow borrow);
+    Task<Borrow?> GetAsync(Guid id);
+    Task<Borrow?> GetAsync(Guid bookId, Guid userId);
 }

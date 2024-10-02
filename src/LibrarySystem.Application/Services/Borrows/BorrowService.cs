@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -17,62 +16,49 @@ public class BorrowService : IBorrowService
         _repository = repository;
     }
 
-    public async Task<Borrow> Create(CreateBorrowDto createBorrowDto)
+    public async Task CreateAsync(Borrow borrow)
     {
-        var book = await _repository.Book.Get(createBorrowDto.BookId) ?? throw new NotFound404Exception(nameof(Book), createBorrowDto.BookId);
-        if (!book.IsAvailable) // if the book is already borrowed throw an exception
-        {
-            throw new Conflict409Exception($"The book with id: {book.Id} is already borrowed.");
-        }
-
-        var user = await _repository.User.Get(createBorrowDto.UserId) ?? throw new NotFound404Exception(nameof(User), createBorrowDto.UserId);
-
-        // create the new borrow instance
-        var borrow = new Borrow
-        {
-            Id = createBorrowDto.Id ?? Guid.NewGuid(),
-            BookId = book.Id,
-            UserId = user.Id,
-            BorrowDate = DateTimeOffset.UtcNow,
-            DueDate = DateTimeOffset.UtcNow.AddMonths(1),
-            IsReturned = false,
-        };
-
+        // create borrow entity and save changes
         _repository.Borrow.Create(borrow);
-        await _repository.SaveAsync();
+        await _repository.SaveSafelyAsync();
+    }
+
+    public async Task DeleteAsync(Borrow borrow)
+    {
+        // delete borrow entity and save changes
+        _repository.Borrow.Delete(borrow);
+        await _repository.SaveSafelyAsync();
+    }
+
+    public async Task<Borrow> GetAsync(Guid id)
+    {
+        var borrow = await _repository.Borrow.GetAsync(id) ?? throw new NotFound404Exception(nameof(Borrow), id);
 
         return borrow;
     }
 
-    public async Task<Borrow> Get(Guid id)
+    public async Task<Borrow> GetAsync(Guid bookId, Guid userId)
     {
-        var borrow = await _repository.Borrow.Get(id) ?? throw new NotFound404Exception(nameof(Borrow), id);
+        var borrow = await _repository.Borrow.GetAsync(bookId, userId) ?? throw new NotFound404Exception(nameof(Borrow), $"bookId: {bookId}", $"userId: {userId}");
 
         return borrow;
     }
 
-    public async Task<Borrow> Get(Guid bookId, Guid userId)
+    public async Task<IEnumerable<Borrow>> IndexAsync()
     {
-        var borrow = await _repository.Borrow.Get(bookId, userId) ?? throw new NotFound404Exception(nameof(Borrow), $"bookId: {bookId}", $"userId: {userId}");
-
-        return borrow;
-    }
-
-    public async Task<IEnumerable<Borrow>> Index()
-    {
-        var borrows = await _repository.Borrow.Index();
+        var borrows = await _repository.Borrow.IndexAsync();
 
         return borrows;
     }
 
-    public async Task<int> Return(Borrow borrow, string jwt)
+    public async Task ReturnAsync(Borrow borrow, string jwt)
     {
-        var book = await _repository.Book.Get(borrow.BookId) ?? throw new NotFound404Exception(nameof(Book), borrow.BookId);
+        var book = await _repository.Book.GetAsync(borrow.BookId) ?? throw new NotFound404Exception(nameof(Book), borrow.BookId);
 
-        return await this.Return(borrow, book, jwt);
+        await this.ReturnAsync(borrow, book, jwt);
     }
 
-    public async Task<int> Return(Borrow borrow, Book book, string jwt)
+    public async Task ReturnAsync(Borrow borrow, Book book, string jwt)
     {
         var role = JwtUtils.ParseFromPayload(jwt, ClaimTypes.Role);
 
@@ -89,10 +75,20 @@ public class BorrowService : IBorrowService
             throw new Conflict409Exception($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
         }
 
-        // set the book to available and the borrow status to returned
+        // set the book to available and the borrow status to returned, after that update both
         book.IsAvailable = true;
         borrow.IsReturned = true;
 
-        return await _repository.SaveAsync();
+        _repository.Book.Update(book);
+        _repository.Borrow.Update(borrow);
+
+        await _repository.SaveSafelyAsync();
+    }
+
+    public async Task UpdateAsync(Borrow borrow)
+    {
+        // delete borrow entity and save changes
+        _repository.Borrow.Update(borrow);
+        await _repository.SaveSafelyAsync();
     }
 }

@@ -2,8 +2,8 @@
 using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Enums;
-using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +24,19 @@ public class EmployeeController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
+    private readonly IEmployeeMapper _mapper;
 
-    public EmployeeController(IServiceManager service, IRepositoryManager repository)
+    public EmployeeController(IServiceManager service, IRepositoryManager repository, IEmployeeMapper mapper)
     {
         _service = service;
         _repository = repository;
+        _mapper = mapper;
     }
 
     [HttpGet("api/employee")]
     public async Task<IActionResult> GetEmployees(int limit, int offset)
     {
-        var employees = await _service.Employee.Index();
+        var employees = await _service.Employee.IndexAsync();
 
         return Ok(employees.Paginate(offset, limit));
     }
@@ -42,7 +44,7 @@ public class EmployeeController : ControllerBase
     [HttpGet("api/employee/{employeeId:guid}")]
     public async Task<IActionResult> GetEmployee(Guid employeeId)
     {
-        var employee = await _service.Employee.Get(employeeId);
+        var employee = await _service.Employee.GetAsync(employeeId);
 
         return Ok(employee);
     }
@@ -51,26 +53,23 @@ public class EmployeeController : ControllerBase
     [HttpPut("api/employee/{employeeId:guid}")]
     public async Task<IActionResult> UpdateEmployee(Guid employeeId, [FromBody] UpdateEmployeeDto updateEmployeeDto)
     {
-        var affected = await _service.Employee.Update(employeeId, updateEmployeeDto);
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        var employee = await _service.Employee.GetAsync(employeeId);
 
-        return Ok();
+        _mapper.UpdateFromDto(employee, updateEmployeeDto);
+        await _service.Employee.UpdateAsync(employee);
+
+        return NoContent();
     }
 
     [Authorize(Policy = "Employee"), EmployeeAuth]
     [HttpDelete("api/employee/{employeeId:guid}")]
     public async Task<IActionResult> DeleteEmployee(Guid employeeId)
     {
-        var affected = await _service.Employee.Delete(employeeId);
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        var employee = await _service.Employee.GetAsync(employeeId);
 
-        return Ok();
+        await _service.Employee.DeleteAsync(employee);
+
+        return NoContent();
     }
 
     [Authorize(Policy = "Employee")]
@@ -78,19 +77,14 @@ public class EmployeeController : ControllerBase
     public async Task<IActionResult> UploadPhotos(Guid employeeId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);
-        var employee = await _service.Employee.Get(employeeId); // validates if the employee exists
+        var employee = await _service.Employee.GetAsync(employeeId); // validates if the employee exists
 
         // delete any previous associated photo
         _repository.Picture.DeleteWhere(p => p.EntityId == employee.Id && p.EntityType == PictureEntityType.Employee);
 
         // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.CreateWithEntity(picture, employee.Id, PictureEntityType.Employee);
+        await _service.Picture.CreateWithEntity(picture, employee.Id, PictureEntityType.Employee);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
-
-        return Ok();
+        return NoContent();
     }
 }

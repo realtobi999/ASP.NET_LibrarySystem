@@ -2,8 +2,8 @@
 using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Enums;
-using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +24,19 @@ public class UserController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
+    private readonly IUserMapper _mapper;
 
-    public UserController(IServiceManager service, IRepositoryManager repository)
+    public UserController(IServiceManager service, IRepositoryManager repository, IUserMapper mapper)
     {
         _service = service;
         _repository = repository;
+        _mapper = mapper;
     }
 
     [HttpGet("api/user")]
     public async Task<IActionResult> GetUsers(int limit, int offset)
     {
-        var users = await _service.User.Index();
+        var users = await _service.User.IndexAsync();
 
         return Ok(users.Paginate(offset, limit));
     }
@@ -42,7 +44,7 @@ public class UserController : ControllerBase
     [HttpGet("api/user/{userId:guid}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
-        var user = await _service.User.Get(userId);
+        var user = await _service.User.GetAsync(userId);
 
         return Ok(user);
     }
@@ -51,28 +53,23 @@ public class UserController : ControllerBase
     [HttpPut("api/user/{userId:guid}")]
     public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
-        var affected = await _service.User.Update(userId, updateUserDto);
+        var user = await _service.User.GetAsync(userId);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        _mapper.UpdateFromDto(user, updateUserDto);
+        await _service.User.UpdateAsync(user);
 
-        return Ok();
+        return NoContent();
     }
 
     [Authorize(Policy = "User"), UserAuth]
     [HttpDelete("api/user/{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
-        var affected = await _service.User.Delete(userId);
+        var user = await _service.User.GetAsync(userId);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
+        await _service.User.DeleteAsync(user);
 
-        return Ok();
+        return NoContent();
     }
 
     [Authorize(Policy = "User")]
@@ -80,19 +77,14 @@ public class UserController : ControllerBase
     public async Task<IActionResult> UploadPhotos(Guid userId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);
-        var user = await _service.User.Get(userId); // validate if user exists
+        var user = await _service.User.GetAsync(userId); // validate if user exists
 
         // delete any previous associated photo
         _repository.Picture.DeleteWhere(p => p.EntityId == user.Id && p.EntityType == PictureEntityType.User);
 
         // assign the id to the pictures and push them to the database
-        var affected = await _service.Picture.CreateWithEntity(picture, user.Id, PictureEntityType.User);
+        await _service.Picture.CreateWithEntity(picture, user.Id, PictureEntityType.User);
 
-        if (affected == 0)
-        {
-            throw new ZeroRowsAffectedException();
-        }
-
-        return Ok();
+        return NoContent();
     }
 }

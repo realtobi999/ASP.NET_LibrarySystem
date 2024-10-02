@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
 
-public class BookReview : IDtoSerializable<BookReviewDto>
+public class BookReview : IDtoSerialization<BookReviewDto>
 {
     [Required, Column("id")]
     public Guid Id { get; set; }
@@ -27,8 +28,10 @@ public class BookReview : IDtoSerializable<BookReviewDto>
 
     // relationships
 
+    [JsonIgnore]
     public Book? Book { get; set; }
 
+    /// <inheritdoc/>
     public BookReviewDto ToDto()
     {
         return new BookReviewDto

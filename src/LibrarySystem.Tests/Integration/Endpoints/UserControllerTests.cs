@@ -1,11 +1,10 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using FluentAssertions;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
-using LibrarySystem.Tests.Integration.Extensions;
+using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
@@ -61,7 +60,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async void UserController_UpdateUser_Returns200AndIsUpdatedAsync()
+    public async void UserController_UpdateUser_Returns204AndIsUpdatedAsync()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -84,7 +83,7 @@ public class UserControllerTests
         };
 
         var response = await client.PutAsJsonAsync($"/api/user/{user.Id}", updateDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         client.DefaultRequestHeaders.Remove("Authorization");
 
@@ -98,7 +97,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async void UserController_DeleteUser_Returns200AndUserDoesntExistInTheDb()
+    public async void UserController_DeleteUser_Returns204AndUserDoesntExistInTheDb()
     {
         //prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -115,14 +114,14 @@ public class UserControllerTests
 
         // act & assert
         var response = await client.DeleteAsync($"/api/user/{user.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/user/{user.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public async void UserController_UploadPhotos_Returns200AndIsUploaded()
+    public async void UserController_UploadPhotos_Returns204AndIsUploaded()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -148,7 +147,7 @@ public class UserControllerTests
 
         // act & assert
         var response = await client.PutAsync($"/api/user/{user.Id}/photos", formData);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/user/{user.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

@@ -24,9 +24,9 @@ public class BorrowController : ControllerBase
     private readonly IServiceManager _service;
     private readonly IEmailManager _email;
     private readonly IWebHostEnvironment _env;
-    private readonly IBorrowMapper _mapper;
+    private readonly IMapperManager _mapper;
 
-    public BorrowController(IServiceManager service, IEmailManager email, IWebHostEnvironment env, IBorrowMapper mapper)
+    public BorrowController(IServiceManager service, IEmailManager email, IWebHostEnvironment env, IMapperManager mapper)
     {
         _service = service;
         _email = email;
@@ -63,7 +63,7 @@ public class BorrowController : ControllerBase
     [HttpPost("api/borrow")]
     public async Task<IActionResult> CreateBorrow([FromBody] CreateBorrowDto createBorrowDto)
     {
-        var borrow = _mapper.CreateFromDto(createBorrowDto);
+        var borrow = _mapper.Borrow.Map(createBorrowDto);
 
         await _service.Borrow.CreateAsync(borrow);
 

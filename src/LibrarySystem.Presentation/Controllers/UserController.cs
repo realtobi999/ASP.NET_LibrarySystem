@@ -24,13 +24,11 @@ public class UserController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
-    private readonly IUserMapper _mapper;
 
-    public UserController(IServiceManager service, IRepositoryManager repository, IUserMapper mapper)
+    public UserController(IServiceManager service, IRepositoryManager repository)
     {
         _service = service;
         _repository = repository;
-        _mapper = mapper;
     }
 
     [HttpGet("api/user")]
@@ -55,7 +53,7 @@ public class UserController : ControllerBase
     {
         var user = await _service.User.GetAsync(userId);
 
-        _mapper.UpdateFromDto(user, updateUserDto);
+        user.Update(updateUserDto);
         await _service.User.UpdateAsync(user);
 
         return NoContent();

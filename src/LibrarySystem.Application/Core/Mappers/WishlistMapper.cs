@@ -1,20 +1,14 @@
 using LibrarySystem.Application.Services.Wishlists;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Interfaces.Mappers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
-public class WishlistMapper : IWishlistMapper
+public class WishlistMapper : IMapper<Wishlist, CreateWishlistDto>
 {
-    private readonly IWishlistAssociations _associations;
-
-    public WishlistMapper(IWishlistAssociations associations)
-    {
-        _associations = associations;
-    }
-
-    public Wishlist CreateFromDto(CreateWishlistDto dto)
+    public Wishlist Map(CreateWishlistDto dto)
     {
         var wishlist = new Wishlist
         {
@@ -23,25 +17,16 @@ public class WishlistMapper : IWishlistMapper
             Name = dto.Name
         };
 
-        // null check and assign books
-        if (dto.BookIds is not null)
+        // clean previous attached books and assign new
+        foreach (var bookId in dto.BookIds)
         {
-            _associations.AssignBooks(dto.BookIds, wishlist);
+            wishlist.WishlistBooks.Add(new WishlistBook
+            {
+                WishlistId = wishlist.Id,
+                BookId = bookId,
+            });
         }
 
         return wishlist;
-    }
-
-    public void UpdateFromDto(Wishlist wishlist, UpdateWishlistDto dto)
-    {
-        wishlist.Name = dto.Name;
-
-        // check if the update request book property is null, if not clean the previous and assign the new
-        if (dto.BookIds is not null)
-        {
-            _associations.CleanBooks(wishlist);
-
-            _associations.AssignBooks(dto.BookIds, wishlist);
-        }
     }
 }

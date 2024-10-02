@@ -4,9 +4,9 @@ using LibrarySystem.Domain.Interfaces.Mappers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
-public class AuthorMapper : IAuthorMapper
+public class AuthorMapper : IMapper<Author, CreateAuthorDto>
 {
-    public Author CreateFromDto(CreateAuthorDto dto)
+    public Author Map(CreateAuthorDto dto)
     {
         return new Author
         {
@@ -15,12 +15,5 @@ public class AuthorMapper : IAuthorMapper
             Description = dto.Description,
             Birthday = dto.Birthday.ToUniversalTime()
         };
-    }
-
-    public void UpdateFromDto(Author author, UpdateAuthorDto dto)
-    {
-        author.Name = dto.Name;
-        author.Description = dto.Description;
-        author.Birthday = dto.Birthday;
     }
 }

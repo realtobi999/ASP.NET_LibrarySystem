@@ -46,16 +46,18 @@ public static class ServiceExtensions
         });
     }
 
-    public static void ConfigureServiceManager(this IServiceCollection services)
+    public static void ConfigureFactories(this IServiceCollection services)
     {
         services.AddScoped<IServiceFactory, ServiceFactory>();
-        services.AddScoped<IServiceManager, ServiceManager>();
+        services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+        services.AddScoped<IMapperFactory, MapperFactory>();
     }
 
-    public static void ConfigureRepositoryManager(this IServiceCollection services)
+    public static void ConfigureManagers(this IServiceCollection services)
     {
-        services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+        services.AddScoped<IServiceManager, ServiceManager>();
         services.AddScoped<IRepositoryManager, RepositoryManager>();
+        services.AddScoped<IMapperManager, MapperManager>();
     }
 
     public static void ConfigureJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
@@ -89,17 +91,5 @@ public static class ServiceExtensions
     {
         services.AddScoped<IEmailFactory, EmailFactory>();
         services.AddScoped<IEmailManager, EmailManager>();
-    }
-
-    public static void ConfigureMappers(this IServiceCollection services)
-    {
-        services.AddScoped<IAuthorMapper, AuthorMapper>();
-        services.AddScoped<IBookMapper, BookMapper>();
-        services.AddScoped<IBookReviewMapper, BookReviewMapper>();
-        services.AddScoped<IBorrowMapper, BorrowMapper>();
-        services.AddScoped<IEmployeeMapper, EmployeeMapper>();
-        services.AddScoped<IGenreMapper, GenreMapper>();
-        services.AddScoped<IUserMapper, UserMapper>();
-        services.AddScoped<IWishlistMapper, WishlistMapper>();
     }
 }

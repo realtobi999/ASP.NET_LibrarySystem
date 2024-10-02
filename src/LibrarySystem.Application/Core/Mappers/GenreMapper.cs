@@ -4,19 +4,14 @@ using LibrarySystem.Domain.Interfaces.Mappers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
-public class GenreMapper : IGenreMapper
+public class GenreMapper : IMapper<Genre, CreateGenreDto>
 {
-    public Genre CreateFromDto(CreateGenreDto dto)
+    public Genre Map(CreateGenreDto dto)
     {
         return new Genre
         {
             Id = dto.Id ?? Guid.NewGuid(),
             Name = dto.Name,
         };
-    }
-
-    public void UpdateFromDto(Genre genre, UpdateGenreDto dto)
-    {
-        genre.Name = dto.Name;
     }
 }

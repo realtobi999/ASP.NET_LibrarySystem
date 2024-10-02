@@ -36,4 +36,20 @@ public class Wishlist : IDtoSerialization<WishlistDto>
             Books = books,
         };
     }
+
+    public void Update(UpdateWishlistDto dto)
+    {
+        Name = dto.Name;
+
+        // clean previous attached books and assign new
+        WishlistBooks.Clear();
+        foreach (var bookId in dto.BookIds)
+        {
+            WishlistBooks.Add(new WishlistBook
+            {
+                WishlistId = Id,
+                BookId = bookId,
+            });
+        }
+    }
 }

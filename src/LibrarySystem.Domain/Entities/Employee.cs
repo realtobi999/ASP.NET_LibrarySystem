@@ -36,4 +36,10 @@ public class Employee : IDtoSerialization<EmployeeDto>
             Picture = this.Picture
         };
     }
+
+    public void Update(UpdateEmployeeDto dto)
+    {
+        Email = dto.Email;
+        Name = dto.Name;
+    }
 }

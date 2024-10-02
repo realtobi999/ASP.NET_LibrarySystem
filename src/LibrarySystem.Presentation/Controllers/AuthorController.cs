@@ -24,9 +24,9 @@ public class AuthorController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
-    private readonly IAuthorMapper _mapper;
+    private readonly IMapperManager _mapper;
 
-    public AuthorController(IServiceManager service, IRepositoryManager repository, IAuthorMapper mapper)
+    public AuthorController(IServiceManager service, IRepositoryManager repository, IMapperManager mapper)
     {
         _service = service;
         _repository = repository;
@@ -55,7 +55,7 @@ public class AuthorController : ControllerBase
     [HttpPost("api/author")]
     public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorDto createAuthorDto)
     {
-        var author = _mapper.CreateFromDto(createAuthorDto);
+        var author = _mapper.Author.Map(createAuthorDto);
 
         await _service.Author.CreateAsync(author);
 
@@ -68,9 +68,9 @@ public class AuthorController : ControllerBase
     {
         var author = await _service.Author.GetAsync(authorId);
 
-        _mapper.UpdateFromDto(author, updateAuthorDto);
-
+        author.Update(updateAuthorDto);
         await _service.Author.UpdateAsync(author);
+        
         return NoContent();
     }
 

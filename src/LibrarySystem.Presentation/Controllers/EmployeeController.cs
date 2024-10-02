@@ -24,13 +24,11 @@ public class EmployeeController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
-    private readonly IEmployeeMapper _mapper;
 
-    public EmployeeController(IServiceManager service, IRepositoryManager repository, IEmployeeMapper mapper)
+    public EmployeeController(IServiceManager service, IRepositoryManager repository)
     {
         _service = service;
         _repository = repository;
-        _mapper = mapper;
     }
 
     [HttpGet("api/employee")]
@@ -55,7 +53,7 @@ public class EmployeeController : ControllerBase
     {
         var employee = await _service.Employee.GetAsync(employeeId);
 
-        _mapper.UpdateFromDto(employee, updateEmployeeDto);
+        employee.Update(updateEmployeeDto);
         await _service.Employee.UpdateAsync(employee);
 
         return NoContent();

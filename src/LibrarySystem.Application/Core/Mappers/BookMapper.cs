@@ -1,20 +1,13 @@
-using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Interfaces.Mappers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
-public class BookMapper : IBookMapper
+public class BookMapper : IMapper<Book, CreateBookDto>
 {
-    private readonly IBookAssociations _associations;
-
-    public BookMapper(IBookAssociations associations)
-    {
-        _associations = associations;
-    }
-
-    public Book CreateFromDto(CreateBookDto dto)
+    public Book Map(CreateBookDto dto)
     {
         var book = new Book
         {
@@ -26,42 +19,24 @@ public class BookMapper : IBookMapper
             PublishedDate = dto.PublishedDate,
         };
 
-        // null check and assign authors and genres
-        if (dto.AuthorIds is not null)
+        // assign the genre and authors
+        foreach (var genreId in dto.GenreIds)
         {
-            _associations.AssignAuthors(dto.AuthorIds, book);
+            book.BookGenres.Add(new BookGenre
+            {
+                BookId = book.Id,
+                GenreId = genreId,
+            });
         }
-        if (dto.GenreIds is not null)
+        foreach (var authorId in dto.AuthorIds)
         {
-            _associations.AssignGenres(dto.GenreIds, book);
+            book.BookAuthors.Add(new BookAuthor
+            {
+                BookId = book.Id,
+                AuthorId = authorId,
+            });
         }
 
         return book;
-    }
-
-    public void UpdateFromDto(Book book, UpdateBookDto dto)
-    {
-        book.Title = dto.Title;
-        book.Description = dto.Description;
-        book.PagesCount = dto.PagesCount;
-        book.PublishedDate = dto.PublishedDate;
-
-        if (dto.Availability is not null)
-        {
-            book.IsAvailable = (bool)dto.Availability;
-        }
-        // check if the update request authors,genres property is null, if not clean the previous and assign the new
-        if (dto.AuthorIds is not null)
-        {
-            _associations.CleanAuthors(book);
-
-            _associations.AssignAuthors(dto.AuthorIds, book);
-        }
-        if (dto.GenreIds is not null)
-        {
-            _associations.CleanGenres(book);
-
-            _associations.AssignGenres(dto.GenreIds, book);
-        }
     }
 }

@@ -4,9 +4,9 @@ using LibrarySystem.Domain.Interfaces.Mappers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
-public class BorrowMapper : IBorrowMapper
+public class BorrowMapper : IMapper<Borrow, CreateBorrowDto>
 {
-    public Borrow CreateFromDto(CreateBorrowDto dto)
+    public Borrow Map(CreateBorrowDto dto)
     {
         return new Borrow
         {

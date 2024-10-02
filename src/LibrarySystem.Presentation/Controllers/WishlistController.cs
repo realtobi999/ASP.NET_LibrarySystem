@@ -3,7 +3,6 @@ using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,9 +20,9 @@ DELETE  /api/wishlist/{wishlist_id}
 public class WishlistController : ControllerBase
 {
     private readonly IServiceManager _service;
-    private readonly IWishlistMapper _mapper;
+    private readonly IMapperManager _mapper;
 
-    public WishlistController(IServiceManager service, IWishlistMapper mapper)
+    public WishlistController(IServiceManager service, IMapperManager mapper)
     {
         _service = service;
         _mapper = mapper;
@@ -48,7 +47,7 @@ public class WishlistController : ControllerBase
     [HttpPost("api/wishlist")]
     public async Task<IActionResult> CreateWishlist([FromBody] CreateWishlistDto createWishlistDto)
     {
-        var wishlist = _mapper.CreateFromDto(createWishlistDto);
+        var wishlist = _mapper.Wishlist.Map(createWishlistDto);
 
         await _service.Wishlist.CreateAsync(wishlist);
 
@@ -67,7 +66,7 @@ public class WishlistController : ControllerBase
             throw new NotAuthorized401Exception();
         }
 
-        _mapper.UpdateFromDto(wishlist, updateWishlistDto);
+        wishlist.Update(updateWishlistDto);
         await _service.Wishlist.UpdateAsync(wishlist);
 
         return NoContent();

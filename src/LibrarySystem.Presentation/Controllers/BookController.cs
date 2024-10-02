@@ -2,7 +2,6 @@
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +25,9 @@ public class BookController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
-    private readonly IBookMapper _mapper;
+    private readonly IMapperManager _mapper;
 
-    public BookController(IServiceManager service, IRepositoryManager repository, IBookMapper mapper)
+    public BookController(IServiceManager service, IRepositoryManager repository, IMapperManager mapper)
     {
         _service = service;
         _repository = repository;
@@ -79,7 +78,7 @@ public class BookController : ControllerBase
     [HttpPost("api/book")]
     public async Task<IActionResult> CreateBook([FromBody] CreateBookDto createBookDto)
     {
-        var book = _mapper.CreateFromDto(createBookDto);
+        var book = _mapper.Book.Map(createBookDto);
 
         await _service.Book.CreateAsync(book);
 
@@ -92,7 +91,7 @@ public class BookController : ControllerBase
     {
         var book = await _service.Book.GetAsync(bookId);
 
-        _mapper.UpdateFromDto(book, updateBookDto);
+        book.Update(updateBookDto);
         await _service.Book.UpdateAsync(book);
 
         return NoContent();

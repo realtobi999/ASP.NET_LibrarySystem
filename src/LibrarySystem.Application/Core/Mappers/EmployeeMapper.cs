@@ -5,7 +5,7 @@ using LibrarySystem.Domain.Interfaces.Mappers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
-public class EmployeeMapper : IEmployeeMapper
+public class EmployeeMapper : IMapper<Employee, RegisterEmployeeDto>
 {
     private readonly IHasher _hasher;
 
@@ -14,7 +14,7 @@ public class EmployeeMapper : IEmployeeMapper
         _hasher = hasher;
     }
 
-    public Employee CreateFromDto(RegisterEmployeeDto dto)
+    public Employee Map(RegisterEmployeeDto dto)
     {
         return new Employee
         {
@@ -23,11 +23,5 @@ public class EmployeeMapper : IEmployeeMapper
             Email = dto.Email,
             Password = _hasher.Hash(dto.Password ?? throw new NullReferenceException("The password must be set.")),
         };
-    }
-
-    public void UpdateFromDto(Employee employee, UpdateEmployeeDto dto)
-    {
-        employee.Email = dto.Email;
-        employee.Name = dto.Name;
     }
 }

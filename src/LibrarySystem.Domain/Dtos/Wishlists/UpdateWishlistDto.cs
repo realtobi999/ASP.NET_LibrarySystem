@@ -8,5 +8,5 @@ public record class UpdateWishlistDto
     public string? Name { get; init; }
 
     [Required]
-    public IEnumerable<Guid>? BookIds { get; init; }
+    public IEnumerable<Guid> BookIds { get; init; } = [];
 }

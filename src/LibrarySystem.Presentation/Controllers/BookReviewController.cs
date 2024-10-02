@@ -3,7 +3,6 @@ using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,9 +19,9 @@ PUT     /api/review/{review_id}
 public class BookReviewController : ControllerBase
 {
     private readonly IServiceManager _service;
-    private readonly IBookReviewMapper _mapper;
+    private readonly IMapperManager _mapper;
 
-    public BookReviewController(IServiceManager service, IBookReviewMapper mapper)
+    public BookReviewController(IServiceManager service, IMapperManager mapper)
     {
         _service = service;
         _mapper = mapper;
@@ -32,7 +31,7 @@ public class BookReviewController : ControllerBase
     [HttpPost("api/review")]
     public async Task<IActionResult> CreateBookReview([FromBody] CreateBookReviewDto createBookReviewDto)
     {
-        var review = _mapper.CreateFromDto(createBookReviewDto);
+        var review = _mapper.BookReview.Map(createBookReviewDto);
 
         await _service.BookReview.CreateAsync(review);
 
@@ -68,8 +67,7 @@ public class BookReviewController : ControllerBase
             throw new NotAuthorized401Exception();
         }
 
-        _mapper.UpdateFromDto(review, updateBookReviewDto);
-
+        review.Update(updateBookReviewDto);
         await _service.BookReview.UpdateAsync(review);
 
         return NoContent();

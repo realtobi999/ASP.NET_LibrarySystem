@@ -13,5 +13,5 @@ public record class CreateWishlistDto
     public string? Name { get; init; }
 
     [Required]
-    public IEnumerable<Guid>? BookIds { get; init; }
+    public IEnumerable<Guid> BookIds { get; init; } = [];
 }

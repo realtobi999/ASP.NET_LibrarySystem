@@ -44,4 +44,10 @@ public class BookReview : IDtoSerialization<BookReviewDto>
             CreatedAt = this.CreatedAt
         };
     }
+
+    public void Update(UpdateBookReviewDto dto)
+    {
+        Text = dto.Text;
+        Rating = dto.Rating;
+    }
 }

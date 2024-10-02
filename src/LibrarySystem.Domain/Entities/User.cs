@@ -36,4 +36,10 @@ public class User : IDtoSerialization<UserDto>
             ProfilePicture = this.ProfilePicture
         };
     }
+
+    public void Update(UpdateUserDto dto)
+    {
+        Email = dto.Email;
+        Username = dto.Username;
+    }
 }

@@ -15,9 +15,18 @@ using LibrarySystem.Domain.Interfaces.Emails.Borrow;
 using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Infrastructure.Messages.Builders;
-using LibrarySystem.Application.Core.Mappers;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Application.Core.Validators;
+using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Dtos.Reviews;
+using LibrarySystem.Domain.Dtos.Employees;
+using LibrarySystem.Domain.Dtos.Wishlists;
+using LibrarySystem.Domain.Dtos.Authors;
+using LibrarySystem.Domain.Dtos.Borrows;
+using LibrarySystem.Domain.Dtos.Users;
+using LibrarySystem.Domain.Dtos.Genres;
+using LibrarySystem.Domain.Dtos.Books;
+using LibrarySystem.Application.Core.Mappers;
 
 namespace LibrarySystem.Presentation.Extensions;
 
@@ -52,6 +61,7 @@ public static class ServiceExtensions
         services.AddScoped<IServiceFactory, ServiceFactory>();
         services.AddScoped<IRepositoryFactory, RepositoryFactory>();
         services.AddScoped<IMapperFactory, MapperFactory>();
+        services.AddScoped<IValidatorFactory, ValidatorFactory>();
     }
 
     public static void ConfigureManagers(this IServiceCollection services)
@@ -97,7 +107,17 @@ public static class ServiceExtensions
     public static void ConfigureValidators(this IServiceCollection services)
     {
         services.AddScoped<IValidator<Author>, AuthorValidator>();
+    }
 
-        services.AddScoped<IValidatorFactory, ValidatorFactory>();
+    public static void ConfigureMappers(this IServiceCollection services)
+    {
+        services.AddScoped<IMapper<Author, CreateAuthorDto>, AuthorMapper>();
+        services.AddScoped<IMapper<Book, CreateBookDto>, BookMapper>();
+        services.AddScoped<IMapper<BookReview, CreateBookReviewDto>, BookReviewMapper>();
+        services.AddScoped<IMapper<Borrow, CreateBorrowDto>, BorrowMapper>();
+        services.AddScoped<IMapper<Employee, RegisterEmployeeDto>, EmployeeMapper>();
+        services.AddScoped<IMapper<Genre, CreateGenreDto>, GenreMapper>();
+        services.AddScoped<IMapper<User, RegisterUserDto>, UserMapper>();
+        services.AddScoped<IMapper<Wishlist, CreateWishlistDto>, WishlistMapper>();
     }
 }

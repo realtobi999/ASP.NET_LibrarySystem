@@ -30,14 +30,14 @@ public class MapperManager : IMapperManager
     {
         _factory = factory;
 
-        _authorMapper = new(() => _factory.CreateAuthorMapper());
-        _bookMapper = new(() => _factory.CreateBookMapper());
-        _bookReviewMapper = new(() => _factory.CreateBookReviewMapper());
-        _borrowMapper = new(() => _factory.CreateBorrowMapper());
-        _employeeMapper = new(() => _factory.CreateEmployeeMapper());
-        _genreMapper = new(() => _factory.CreateGenreMapper());
-        _userMapper = new(() => _factory.CreateUserMapper());
-        _wishlistMapper = new(() => _factory.CreateWishlistMapper());
+        _authorMapper = new(() => _factory.Initiate<Author, CreateAuthorDto>());
+        _bookMapper = new(() => _factory.Initiate<Book, CreateBookDto>());
+        _bookReviewMapper = new(() => _factory.Initiate<BookReview, CreateBookReviewDto>());
+        _borrowMapper = new(() => _factory.Initiate<Borrow, CreateBorrowDto>());
+        _employeeMapper = new(() => _factory.Initiate<Employee, RegisterEmployeeDto>());
+        _genreMapper = new(() => _factory.Initiate<Genre, CreateGenreDto>());
+        _userMapper = new(() => _factory.Initiate<User, RegisterUserDto>());
+        _wishlistMapper = new(() => _factory.Initiate<Wishlist, CreateWishlistDto>());
     }
 
     public IMapper<Author, CreateAuthorDto> Author => _authorMapper.Value;

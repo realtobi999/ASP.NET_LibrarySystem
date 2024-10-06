@@ -15,8 +15,9 @@ using LibrarySystem.Domain.Interfaces.Emails.Borrow;
 using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Infrastructure.Messages.Builders;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Application.Core.Mappers;
+using LibrarySystem.Domain.Entities;
+using LibrarySystem.Application.Core.Validators;
 
 namespace LibrarySystem.Presentation.Extensions;
 
@@ -91,5 +92,12 @@ public static class ServiceExtensions
     {
         services.AddScoped<IEmailFactory, EmailFactory>();
         services.AddScoped<IEmailManager, EmailManager>();
+    }
+
+    public static void ConfigureValidators(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<Author>, AuthorValidator>();
+
+        services.AddScoped<IValidatorFactory, ValidatorFactory>();
     }
 }

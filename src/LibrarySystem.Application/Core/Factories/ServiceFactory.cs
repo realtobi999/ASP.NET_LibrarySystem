@@ -7,6 +7,7 @@ using LibrarySystem.Application.Services.Pictures;
 using LibrarySystem.Application.Services.Reviews;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Application.Services.Wishlists;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -18,16 +19,18 @@ public class ServiceFactory : IServiceFactory
 {
     private readonly IRepositoryManager _repository;
     private readonly IHasher _hasher;
+    private readonly IValidatorFactory _validatorFactory;
 
-    public ServiceFactory(IRepositoryManager repository, IHasher hasher)
+    public ServiceFactory(IRepositoryManager repository, IHasher hasher, IValidatorFactory validatorFactory)
     {
         _repository = repository;
         _hasher = hasher;
+        _validatorFactory = validatorFactory;
     }
 
     public IAuthorService CreateAuthorService()
     {
-        return new AuthorService(_repository);
+        return new AuthorService(_repository, _validatorFactory.Initiate<Author>());
     }
 
     public IBookReviewService CreateBookReviewService()

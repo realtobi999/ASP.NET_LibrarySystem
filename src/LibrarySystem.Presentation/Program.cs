@@ -32,6 +32,7 @@ public class Program
             // services
             builder.Services.ConfigureFactories();
             builder.Services.ConfigureManagers();
+            builder.Services.ConfigureValidators();
             builder.Services.AddScoped<IHasher, Hasher>();
 
             // email client

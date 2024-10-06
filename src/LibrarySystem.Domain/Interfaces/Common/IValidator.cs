@@ -12,5 +12,5 @@ public interface IValidator<T>
     /// Asynchronously validates an object of type <typeparamref name="T"/>.
     /// </summary>
     /// <returns>A <see cref="ValidationResult"/> indicating the result of the validation.</returns>
-    Task<ValidationResult> ValidateAsync();
+    Task<ValidationResult> ValidateAsync(T entity);
 }

@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
 
@@ -8,10 +9,12 @@ namespace LibrarySystem.Application.Services.Authors;
 public class AuthorService : IAuthorService
 {
     private readonly IRepositoryManager _repository;
+    private readonly IValidator<Author> _validator;
 
-    public AuthorService(IRepositoryManager repository)
+    public AuthorService(IRepositoryManager repository, IValidator<Author> validator)
     {
         _repository = repository;
+        _validator = validator;
     }
 
     public async Task<Author> GetAsync(Guid id)

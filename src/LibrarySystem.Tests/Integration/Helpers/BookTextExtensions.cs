@@ -20,20 +20,6 @@ public static class BookTestExtensions
         return _BookFaker.Generate();
     }
 
-    public static CreateBookDto ToCreateBookDto(this Book book)
-    {
-        return new CreateBookDto
-        {
-            Id = book.Id,
-            ISBN = book.ISBN,
-            Title = book.Title,
-            Description = book.Description,
-            PagesCount = book.PagesCount,
-            PublishedDate = book.PublishedDate,
-            Available = book.IsAvailable,
-        };
-    }
-
     public static CreateBookDto ToCreateBookDto(this Book book, IEnumerable<Guid> authorIds, IEnumerable<Guid> genreIds)
     {
         return new CreateBookDto

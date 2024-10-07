@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
 
@@ -8,14 +9,20 @@ namespace LibrarySystem.Application.Services.Books;
 public class BookService : IBookService
 {
     private readonly IRepositoryManager _repository;
+    private readonly IValidator<Book> _validator;
 
-    public BookService(IRepositoryManager repository)
+    public BookService(IRepositoryManager repository, IValidator<Book> validator)
     {
         _repository = repository;
+        _validator = validator;
     }
 
     public async Task CreateAsync(Book book)
     {
+        // validate
+        var (valid, exception) = await _validator.ValidateAsync(book);
+        if (!valid && exception is not null) throw exception;
+
         // create book and save changes
         _repository.Book.Create(book);
         await _repository.SaveSafelyAsync();
@@ -51,6 +58,10 @@ public class BookService : IBookService
 
     public async Task UpdateAsync(Book book)
     {
+        // validate
+        var (valid, exception) = await _validator.ValidateAsync(book);
+        if (!valid && exception is not null) throw exception;
+
         // update book and save changes
         _repository.Book.Update(book);
         await _repository.SaveSafelyAsync();

@@ -106,7 +106,7 @@ public static class ServiceExtensions
 
     public static void ConfigureValidators(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<Author>, AuthorValidator>();
+        services.AddScoped<IValidator<Book>, BookValidator>();
     }
 
     public static void ConfigureMappers(this IServiceCollection services)

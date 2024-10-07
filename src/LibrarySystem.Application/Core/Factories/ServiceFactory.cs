@@ -30,7 +30,7 @@ public class ServiceFactory : IServiceFactory
 
     public IAuthorService CreateAuthorService()
     {
-        return new AuthorService(_repository, _validatorFactory.Initiate<Author>());
+        return new AuthorService(_repository);
     }
 
     public IBookReviewService CreateBookReviewService()
@@ -40,7 +40,7 @@ public class ServiceFactory : IServiceFactory
 
     public IBookService CreateBookService()
     {
-        return new BookService(_repository);
+        return new BookService(_repository, _validatorFactory.Initiate<Book>());
     }
 
     public IBorrowService CreateBorrowService()

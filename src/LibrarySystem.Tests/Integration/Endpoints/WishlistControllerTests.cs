@@ -26,12 +26,12 @@ public class WishlistControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var create5 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
-        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create6 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([], []));
-        create6.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create7 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([], []));
-        create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create2 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create3 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create4 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
@@ -65,11 +65,11 @@ public class WishlistControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var create1 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
+        var create1 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create2 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create3 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([], []));
+        var create3 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var token2 = JwtTestExtensions.Create().Generate([
@@ -108,11 +108,11 @@ public class WishlistControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var create1 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
+        var create1 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create2 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create3 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([], []));
+        var create3 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var token2 = JwtTestExtensions.Create().Generate([
@@ -159,11 +159,11 @@ public class WishlistControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var create1 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
+        var create1 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create2 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create3 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([], []));
+        var create3 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var token2 = JwtTestExtensions.Create().Generate([

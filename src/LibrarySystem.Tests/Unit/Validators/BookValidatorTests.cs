@@ -24,12 +24,19 @@ public class BookValidatorTests
         // prepare
         var book = new Book().WithFakeData();
         var genre = new Genre().WithFakeData();
+        var author = new Author().WithFakeData();
 
         book.BookGenres = [new (){
             BookId = book.Id,
             Book = book,
             GenreId = genre.Id,
             Genre = genre,
+        }];
+        book.BookAuthors = [new (){
+            BookId = book.Id,
+            Book = book,
+            AuthorId = author.Id,
+            Author = author,
         }];
 
         _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync((Genre?)null); // set the return to null value => emulate that the repository couldn't find this entity

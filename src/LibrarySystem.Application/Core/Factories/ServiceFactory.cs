@@ -35,7 +35,7 @@ public class ServiceFactory : IServiceFactory
 
     public IBookReviewService CreateBookReviewService()
     {
-        return new BookReviewService(_repository);
+        return new BookReviewService(_repository, _validatorFactory.Initiate<BookReview>());
     }
 
     public IBookService CreateBookService()

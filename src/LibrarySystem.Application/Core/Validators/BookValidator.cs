@@ -19,7 +19,7 @@ public class BookValidator : IValidator<Book>
         // validate that the book has at least one genre and author assigned
         if (book.BookAuthors.Count < 1 || book.BookGenres.Count < 1)
         {
-            throw new BadRequest400Exception("A book must have at least one author and one genre assigned.");
+            return (false, new BadRequest400Exception("A book must have at least one author and one genre assigned."));
         }
 
         // validate that the assigned genres exists

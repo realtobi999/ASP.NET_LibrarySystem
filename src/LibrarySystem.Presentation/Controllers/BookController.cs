@@ -16,7 +16,7 @@ GET     /api/book/{book_id} params: withRelations
 GET     /api/book/isbn/{isbn} params: withRelations
 GET     /api/book/search/{query} params: limit, offset, authorId, genreId, withRelations
 POST    /api/book
-PUT     /api/book/{book_id}/photos
+PUT     /api/book/{book_id}/photo
 PUT     /api/book/{book_id}
 DELETE  /api/book/{book_id}
 
@@ -109,7 +109,7 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/book/{bookId:guid}/photos")]
+    [HttpPut("api/book/{bookId:guid}/photo")]
     public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection files)
     {
         var pictures = await _service.Picture.Extract(files);

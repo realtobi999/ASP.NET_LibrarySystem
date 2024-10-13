@@ -87,6 +87,7 @@ public class WishlistControllerTests
         var response = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
+        var test = await response.Content.ReadAsStringAsync();
         var content = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
         content.Id.Should().Be(wishlist.Id);
         content.Books.Count().Should().Be(3);

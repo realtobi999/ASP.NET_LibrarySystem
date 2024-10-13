@@ -3,7 +3,6 @@ using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +15,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/user params: offset, limit
 GET     /api/user/{user_id}
 PUT     /api/user/{user_id}
-PUT     /api/user/{user_id}/photos
+PUT     /api/user/{user_id}/photo
 DELETE  /api/user/{user_id}
 
 */
@@ -71,7 +70,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpPut("api/user/{userId:guid}/photos")]
+    [HttpPut("api/user/{userId:guid}/photo")]
     public async Task<IActionResult> UploadPhotos(Guid userId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);

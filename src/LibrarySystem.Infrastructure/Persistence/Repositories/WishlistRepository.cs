@@ -19,6 +19,19 @@ public class WishlistRepository : BaseRepository<Wishlist>, IWishlistRepository
     {
         return base.GetQueryable()
                    .Include(w => w.WishlistBooks)
-                    .ThenInclude(w => w.Book);
+                       .ThenInclude(wb => wb.Book)
+                       .ThenInclude(b => b!.BookAuthors)
+                           .ThenInclude(ba => ba.Author)
+                   .Include(w => w.WishlistBooks)
+                       .ThenInclude(wb => wb.Book)
+                       .ThenInclude(b => b!.BookGenres)
+                           .ThenInclude(bg => bg.Genre)
+                   .Include(w => w.WishlistBooks)
+                       .ThenInclude(wb => wb.Book)
+                       .ThenInclude(b => b!.BookReviews)
+                   .Include(w => w.WishlistBooks)
+                       .ThenInclude(wb => wb.Book)
+                       .ThenInclude(b => b!.CoverPictures);
     }
+
 }

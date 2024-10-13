@@ -25,6 +25,15 @@ public class User : IDtoSerialization<UserDto>
     [JsonIgnore]
     public Picture? ProfilePicture { get; set; }
 
+    [JsonIgnore]
+    public ICollection<BookReview> BookReviews { get; set; } = [];
+
+    [JsonIgnore]
+    public ICollection<Wishlist> Wishlists { get; set; } = [];
+
+    [JsonIgnore]
+    public ICollection<Borrow> Borrows { get; set; } = [];
+
     /// <inheritdoc/>
     public UserDto ToDto()
     {
@@ -33,7 +42,10 @@ public class User : IDtoSerialization<UserDto>
             Id = this.Id,
             Username = this.Username,
             Email = this.Email,
-            ProfilePicture = this.ProfilePicture
+            ProfilePicture = this.ProfilePicture,
+            Reviews = this.BookReviews.Select(br => br.ToDto()).ToList(),
+            Wishlists = this.Wishlists.Select(w => w.ToDto()).ToList(),
+            Borrows = this.Borrows.Select(b => b.ToDto()).ToList()
         };
     }
 

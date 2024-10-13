@@ -31,6 +31,9 @@ public class BookReview : IDtoSerialization<BookReviewDto>
     [JsonIgnore]
     public Book? Book { get; set; }
 
+    [JsonIgnore]
+    public User? User { get; set; }
+
     /// <inheritdoc/>
     public BookReviewDto ToDto()
     {

@@ -108,6 +108,7 @@ public static class ServiceExtensions
     {
         services.AddScoped<IValidator<Book>, BookValidator>();
         services.AddScoped<IValidator<BookReview>, BookReviewValidator>();
+        services.AddScoped<IValidator<Borrow>, BorrowValidator>();
     }
 
     public static void ConfigureMappers(this IServiceCollection services)

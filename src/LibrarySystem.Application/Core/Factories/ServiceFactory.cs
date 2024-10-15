@@ -45,7 +45,7 @@ public class ServiceFactory : IServiceFactory
 
     public IBorrowService CreateBorrowService()
     {
-        return new BorrowService(_repository);
+        return new BorrowService(_repository, _validatorFactory.Initiate<Borrow>());
     }
 
     public IEmployeeService CreateEmployeeService()

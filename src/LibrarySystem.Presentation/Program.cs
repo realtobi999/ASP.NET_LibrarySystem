@@ -1,6 +1,4 @@
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Application.Services.Books;
-using LibrarySystem.Application.Services.Wishlists;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails;
 using LibrarySystem.EmailService;

@@ -17,7 +17,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow = new Borrow().WithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -45,7 +45,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow = new Borrow().WithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -77,8 +77,8 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book.Id, user.Id);
-        var borrow2 = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow1 = new Borrow().WithFakeData(book, user); 
+        var borrow2 = new Borrow().WithFakeData(book, user); 
 
 
         var token = JwtTestExtensions.Create().Generate([
@@ -117,9 +117,9 @@ public class BorrowControllerTests
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book1.Id, user.Id);
-        var borrow2 = new Borrow().WithFakeData(book2.Id, user.Id);
-        var borrow3 = new Borrow().WithFakeData(book3.Id, user.Id);
+        var borrow1 = new Borrow().WithFakeData(book1, user);
+        var borrow2 = new Borrow().WithFakeData(book2, user);
+        var borrow3 = new Borrow().WithFakeData(book3, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -166,9 +166,9 @@ public class BorrowControllerTests
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book1.Id, user1.Id);
-        var borrow2 = new Borrow().WithFakeData(book2.Id, user2.Id);
-        var borrow3 = new Borrow().WithFakeData(book3.Id, user2.Id);
+        var borrow1 = new Borrow().WithFakeData(book1, user1);
+        var borrow2 = new Borrow().WithFakeData(book2, user2);
+        var borrow3 = new Borrow().WithFakeData(book3, user2);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -210,7 +210,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow = new Borrow().WithFakeData(book, user); 
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -242,7 +242,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow = new Borrow().WithFakeData(book, user); 
 
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")

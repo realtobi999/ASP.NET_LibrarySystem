@@ -2,6 +2,7 @@
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
 
@@ -10,14 +11,20 @@ namespace LibrarySystem.Application.Services.Borrows;
 public class BorrowService : IBorrowService
 {
     private readonly IRepositoryManager _repository;
+    private readonly IValidator<Borrow> _validator;
 
-    public BorrowService(IRepositoryManager repository)
+    public BorrowService(IRepositoryManager repository, IValidator<Borrow> validator)
     {
         _repository = repository;
+        _validator = validator;
     }
 
     public async Task CreateAsync(Borrow borrow)
     {
+        // validate
+        var (valid, exception) = await _validator.ValidateAsync(borrow);
+        if (!valid && exception is not null) throw exception;
+
         // create borrow entity and save changes
         _repository.Borrow.Create(borrow);
         await _repository.SaveSafelyAsync();
@@ -86,6 +93,10 @@ public class BorrowService : IBorrowService
 
     public async Task UpdateAsync(Borrow borrow)
     {
+        // validate
+        var (valid, exception) = await _validator.ValidateAsync(borrow);
+        if (!valid && exception is not null) throw exception;
+        
         // delete borrow entity and save changes
         _repository.Borrow.Update(borrow);
         await _repository.SaveSafelyAsync();

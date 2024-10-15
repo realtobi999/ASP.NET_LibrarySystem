@@ -3,6 +3,7 @@ using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Dtos.Email.Messages;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Mappers;
@@ -101,7 +102,7 @@ public class BorrowController : ControllerBase
             throw new NotAuthorized401Exception();
         }
 
-        await _service.Borrow.ReturnAsync(borrow, book, token);
+        await _service.Borrow.ReturnAsync(borrow, book, token, _service.Book.UpdateAsync);
 
         // send confirmation email - FOR PRODUCTION ONLY
         if (_env.IsProduction())

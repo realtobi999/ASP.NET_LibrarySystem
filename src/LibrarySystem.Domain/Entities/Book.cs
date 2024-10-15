@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities.Relationships;
@@ -102,5 +103,10 @@ public class Book : IDtoSerialization<BookDto>
                 AuthorId = authorId,
             });
         }
+    }
+
+    public void SetIsAvailable(bool isAvailable)
+    {
+        IsAvailable = isAvailable;
     }
 }

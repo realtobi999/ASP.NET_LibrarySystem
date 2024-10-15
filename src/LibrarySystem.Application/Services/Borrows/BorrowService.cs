@@ -51,14 +51,14 @@ public class BorrowService : IBorrowService
         return borrows;
     }
 
-    public async Task ReturnAsync(Borrow borrow, string jwt)
+    public async Task ReturnAsync(Borrow borrow, string jwt, Func<Book, Task> updateBookAsync)
     {
         var book = await _repository.Book.GetAsync(borrow.BookId) ?? throw new NotFound404Exception(nameof(Book), borrow.BookId);
 
-        await this.ReturnAsync(borrow, book, jwt);
+        await this.ReturnAsync(borrow, book, jwt, updateBookAsync);
     }
 
-    public async Task ReturnAsync(Borrow borrow, Book book, string jwt)
+    public async Task ReturnAsync(Borrow borrow, Book book, string jwt, Func<Book, Task> UpdateBookAsync)
     {
         var role = JwtUtils.ParseFromPayload(jwt, ClaimTypes.Role);
 
@@ -76,13 +76,12 @@ public class BorrowService : IBorrowService
         }
 
         // set the book to available and the borrow status to returned, after that update both
-        book.IsAvailable = true;
-        borrow.IsReturned = true;
+        book.SetIsAvailable(true);
+        borrow.SetIsReturned(true);
 
-        _repository.Book.Update(book);
-        _repository.Borrow.Update(borrow);
-
-        await _repository.SaveSafelyAsync();
+        // update both entities
+        await UpdateAsync(borrow);
+        await UpdateBookAsync(book);
     }
 
     public async Task UpdateAsync(Borrow borrow)

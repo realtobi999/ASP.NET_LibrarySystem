@@ -26,6 +26,8 @@ public class Borrow : IDtoSerialization<BorrowDto>
     [Required, Column]
     public bool IsReturned { get; set; }
 
+    // relationships
+
     [JsonIgnore]
     public User? User { get; set; }
     
@@ -41,5 +43,10 @@ public class Borrow : IDtoSerialization<BorrowDto>
             DueDate = this.DueDate,
             IsReturned = this.IsReturned,
         };
+    }
+
+    public void SetIsReturned(bool isReturned)
+    {
+        IsReturned = isReturned;
     }
 }

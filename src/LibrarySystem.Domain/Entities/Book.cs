@@ -87,6 +87,7 @@ public class Book : IDtoSerialization<BookDto>
         // clean previous attached genres, authors and assign new
         BookAuthors.Clear();
         BookGenres.Clear();
+        
         foreach (var genreId in dto.GenreIds)
         {
             BookGenres.Add(new BookGenre

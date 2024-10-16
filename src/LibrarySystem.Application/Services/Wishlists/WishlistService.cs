@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
 
@@ -8,14 +9,20 @@ namespace LibrarySystem.Application.Services.Wishlists;
 public class WishlistService : IWishlistService
 {
     private readonly IRepositoryManager _repository;
+    private readonly IValidator<Wishlist> _validator;
 
-    public WishlistService(IRepositoryManager repository)
+    public WishlistService(IRepositoryManager repository, IValidator<Wishlist> validator)
     {
         _repository = repository;
+        _validator = validator;
     }
 
     public async Task CreateAsync(Wishlist wishlist)
     {
+        // validate
+        var (valid, exception) = await _validator.ValidateAsync(wishlist);
+        if (!valid && exception is not null) throw exception;
+
         // create wishlist and save changes
         _repository.Wishlist.Create(wishlist);
         await _repository.SaveSafelyAsync();
@@ -44,6 +51,10 @@ public class WishlistService : IWishlistService
 
     public async Task UpdateAsync(Wishlist wishlist)
     {
+        // validate
+        var (valid, exception) = await _validator.ValidateAsync(wishlist);
+        if (!valid && exception is not null) throw exception;
+        
         // update wishlist and save changes
         _repository.Wishlist.Update(wishlist);
         await _repository.SaveSafelyAsync();

@@ -24,6 +24,9 @@ public class WishlistControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
+        var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create2 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
@@ -62,6 +65,9 @@ public class WishlistControllerTests
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
+
+        var create5 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
@@ -106,6 +112,9 @@ public class WishlistControllerTests
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
+
+        var create5 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
@@ -157,6 +166,9 @@ public class WishlistControllerTests
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
+
+        var create5 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 

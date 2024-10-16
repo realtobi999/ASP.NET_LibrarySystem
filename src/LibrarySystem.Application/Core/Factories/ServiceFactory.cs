@@ -70,6 +70,6 @@ public class ServiceFactory : IServiceFactory
 
     public IWishlistService CreateWishlistService()
     {
-        return new WishlistService(_repository);
+        return new WishlistService(_repository, _validatorFactory.Initiate<Wishlist>());
     }
 }

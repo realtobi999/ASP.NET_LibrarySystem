@@ -96,7 +96,7 @@ public class BorrowService : IBorrowService
         // validate
         var (valid, exception) = await _validator.ValidateAsync(borrow);
         if (!valid && exception is not null) throw exception;
-        
+
         // delete borrow entity and save changes
         _repository.Borrow.Update(borrow);
         await _repository.SaveSafelyAsync();

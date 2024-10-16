@@ -3,10 +3,8 @@ using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Dtos.Email.Messages;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;

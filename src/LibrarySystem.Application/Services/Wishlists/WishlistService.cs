@@ -54,7 +54,7 @@ public class WishlistService : IWishlistService
         // validate
         var (valid, exception) = await _validator.ValidateAsync(wishlist);
         if (!valid && exception is not null) throw exception;
-        
+
         // update wishlist and save changes
         _repository.Wishlist.Update(wishlist);
         await _repository.SaveSafelyAsync();

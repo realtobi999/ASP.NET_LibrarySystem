@@ -16,7 +16,7 @@ public class MapperFactory : IMapperFactory
     public IMapper<Entity, Dto> Initiate<Entity, Dto>()
     {
         var mapper = _serviceProvider.GetService<IMapper<Entity, Dto>>() ?? throw new Exception($"Mapper for types {typeof(Entity)} and {typeof(Dto)} not found.");
-        
+
         return mapper;
     }
 }

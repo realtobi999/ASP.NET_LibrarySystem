@@ -43,7 +43,7 @@ public class Wishlist : IDtoSerialization<WishlistDto>
 
         // clean previous attached books and assign new
         WishlistBooks.Clear();
-        
+
         foreach (var bookId in dto.BookIds)
         {
             WishlistBooks.Add(new WishlistBook

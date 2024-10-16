@@ -107,7 +107,7 @@ public class BookValidatorTests
         book.BookReviews = [review];
 
         _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync(genre);
-        _repository.Setup(r => r.Author.GetAsync(author.Id)).ReturnsAsync(author); 
+        _repository.Setup(r => r.Author.GetAsync(author.Id)).ReturnsAsync(author);
 
         // act & assert
         var (isValid, exception) = await _validator.ValidateAsync(book);

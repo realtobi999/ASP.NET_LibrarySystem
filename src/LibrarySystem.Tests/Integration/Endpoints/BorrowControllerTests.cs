@@ -77,8 +77,8 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book, user); 
-        var borrow2 = new Borrow().WithFakeData(book, user); 
+        var borrow1 = new Borrow().WithFakeData(book, user);
+        var borrow2 = new Borrow().WithFakeData(book, user);
 
 
         var token = JwtTestExtensions.Create().Generate([
@@ -210,7 +210,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user); 
+        var borrow = new Borrow().WithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -242,7 +242,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user); 
+        var borrow = new Borrow().WithFakeData(book, user);
 
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")

@@ -69,7 +69,7 @@ public class AuthorController : ControllerBase
 
         author.Update(updateAuthorDto);
         await _service.Author.UpdateAsync(author);
-        
+
         return NoContent();
     }
 

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities.Relationships;
@@ -83,11 +82,11 @@ public class Book : IDtoSerialization<BookDto>
         {
             IsAvailable = (bool)dto.Availability;
         }
-        
+
         // clean previous attached genres, authors and assign new
         BookAuthors.Clear();
         BookGenres.Clear();
-        
+
         foreach (var genreId in dto.GenreIds)
         {
             BookGenres.Add(new BookGenre

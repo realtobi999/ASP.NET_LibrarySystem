@@ -14,11 +14,6 @@ public class RepositoryFactory : IRepositoryFactory
         _context = context;
     }
 
-    public IAssociationsRepository CreateAssociationsRepository()
-    {
-        return new AssociationsRepository(_context);
-    }
-
     public IAuthorRepository CreateAuthorRepository()
     {
         return new AuthorRepository(_context);

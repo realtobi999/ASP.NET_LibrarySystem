@@ -1,6 +1,7 @@
 .PHONY: test
 
 test:
+	clear
 	cd src/LibrarySystem.Tests && dotnet test
 
 build:

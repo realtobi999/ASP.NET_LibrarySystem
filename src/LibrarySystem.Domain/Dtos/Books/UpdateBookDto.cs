@@ -20,8 +20,8 @@ public record class UpdateBookDto
     public DateTimeOffset PublishedDate { get; init; }
 
     [Required, MaxLength(15)]
-    public IEnumerable<Guid>? GenreIds { get; init; }
+    public IEnumerable<Guid> GenreIds { get; init; } = [];
 
     [Required, MaxLength(15)]
-    public IEnumerable<Guid>? AuthorIds { get; init; }
+    public IEnumerable<Guid> AuthorIds { get; init; } = [];
 }

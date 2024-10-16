@@ -17,7 +17,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow = new Borrow().WithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -28,7 +28,7 @@ public class BorrowControllerTests
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var create2 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
@@ -45,7 +45,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow = new Borrow().WithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -56,7 +56,7 @@ public class BorrowControllerTests
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var create2 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
@@ -77,8 +77,8 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book.Id, user.Id);
-        var borrow2 = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow1 = new Borrow().WithFakeData(book, user);
+        var borrow2 = new Borrow().WithFakeData(book, user);
 
 
         var token = JwtTestExtensions.Create().Generate([
@@ -90,7 +90,7 @@ public class BorrowControllerTests
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var create2 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
@@ -111,14 +111,15 @@ public class BorrowControllerTests
     [Fact]
     public async void GetBorrows_Returns200AndLimitOffsetWorks()
     {
+        // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book1.Id, user.Id);
-        var borrow2 = new Borrow().WithFakeData(book2.Id, user.Id);
-        var borrow3 = new Borrow().WithFakeData(book3.Id, user.Id);
+        var borrow1 = new Borrow().WithFakeData(book1, user);
+        var borrow2 = new Borrow().WithFakeData(book2, user);
+        var borrow3 = new Borrow().WithFakeData(book3, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -129,11 +130,11 @@ public class BorrowControllerTests
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var create2 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create3 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([], []));
+        var create3 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create4 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([], []));
+        var create4 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var create5 = await client.PostAsJsonAsync("/api/borrow", borrow1.ToCreateBorrowDto());
@@ -158,15 +159,16 @@ public class BorrowControllerTests
     [Fact]
     public async void GetBorrows_Returns200AndFilteringByUserIdWorks()
     {
+        // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user1 = new User().WithFakeData();
         var user2 = new User().WithFakeData();
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();
         var book3 = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book1.Id, user1.Id);
-        var borrow2 = new Borrow().WithFakeData(book2.Id, user2.Id);
-        var borrow3 = new Borrow().WithFakeData(book3.Id, user2.Id);
+        var borrow1 = new Borrow().WithFakeData(book1, user1);
+        var borrow2 = new Borrow().WithFakeData(book2, user2);
+        var borrow3 = new Borrow().WithFakeData(book3, user2);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -179,11 +181,11 @@ public class BorrowControllerTests
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user2.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var create3 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([], []));
+        var create3 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create4 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([], []));
+        var create4 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create5 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([], []));
+        var create5 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var create6 = await client.PostAsJsonAsync("/api/borrow", borrow1.ToCreateBorrowDto());
@@ -208,7 +210,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow = new Borrow().WithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -219,7 +221,7 @@ public class BorrowControllerTests
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var create2 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var create3 = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
@@ -240,7 +242,7 @@ public class BorrowControllerTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = new User().WithFakeData();
         var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book.Id, user.Id);
+        var borrow = new Borrow().WithFakeData(book, user);
 
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -251,7 +253,7 @@ public class BorrowControllerTests
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var create2 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         var create3 = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());

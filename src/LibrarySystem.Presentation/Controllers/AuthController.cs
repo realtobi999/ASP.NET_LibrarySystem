@@ -5,7 +5,6 @@ using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,21 +23,19 @@ public class AuthController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IJwt _jwt;
-    private readonly IUserMapper _uMapper;
-    private readonly IEmployeeMapper _eMapper;
+    private readonly IMapperManager _mapper;
 
-    public AuthController(IServiceManager service, IJwt jwt, IUserMapper uMapper, IEmployeeMapper eMapper)
+    public AuthController(IServiceManager service, IJwt jwt, IMapperManager mapper)
     {
         _service = service;
         _jwt = jwt;
-        _uMapper = uMapper;
-        _eMapper = eMapper;
+        _mapper = mapper;
     }
 
     [HttpPost("api/auth/register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto registerUserDto)
     {
-        var user = _uMapper.CreateFromDto(registerUserDto);
+        var user = _mapper.User.Map(registerUserDto);
 
         await _service.User.CreateAsync(user);
 
@@ -73,7 +70,7 @@ public class AuthController : ControllerBase
     [HttpPost("api/auth/employee/register")]
     public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeDto registerEmployeeDto)
     {
-        var employee = _eMapper.CreateFromDto(registerEmployeeDto);
+        var employee = _mapper.Employee.Map(registerEmployeeDto);
 
         await _service.Employee.CreateAsync(employee);
 

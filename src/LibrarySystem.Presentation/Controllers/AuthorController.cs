@@ -2,7 +2,6 @@
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +14,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/author param: offset, limit
 GET     /api/author/{author_id}
 POST    /api/author
-PUT     /api/author/{author_id}/photos
+PUT     /api/author/{author_id}/photo
 PUT     /api/author/{author_id}
 DELETE  /api/author/{author_id}
 
@@ -24,9 +23,9 @@ public class AuthorController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
-    private readonly IAuthorMapper _mapper;
+    private readonly IMapperManager _mapper;
 
-    public AuthorController(IServiceManager service, IRepositoryManager repository, IAuthorMapper mapper)
+    public AuthorController(IServiceManager service, IRepositoryManager repository, IMapperManager mapper)
     {
         _service = service;
         _repository = repository;
@@ -55,7 +54,7 @@ public class AuthorController : ControllerBase
     [HttpPost("api/author")]
     public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorDto createAuthorDto)
     {
-        var author = _mapper.CreateFromDto(createAuthorDto);
+        var author = _mapper.Author.Map(createAuthorDto);
 
         await _service.Author.CreateAsync(author);
 
@@ -68,9 +67,9 @@ public class AuthorController : ControllerBase
     {
         var author = await _service.Author.GetAsync(authorId);
 
-        _mapper.UpdateFromDto(author, updateAuthorDto);
-
+        author.Update(updateAuthorDto);
         await _service.Author.UpdateAsync(author);
+
         return NoContent();
     }
 
@@ -86,8 +85,8 @@ public class AuthorController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/author/{authorId:guid}/photos")]
-    public async Task<IActionResult> UploadPhotos(Guid authorId, IFormFile file)
+    [HttpPut("api/author/{authorId:guid}/photo")]
+    public async Task<IActionResult> UploadPhoto(Guid authorId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);
         var author = await _service.Author.GetAsync(authorId); // validates if the author exists

@@ -3,7 +3,6 @@ using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +15,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/employee params: offset, limit
 GET     /api/employee/{employee_id}
 PUT     /api/employee/{employee_id}
-PUT     /api/employee/{employee_id}/photos
+PUT     /api/employee/{employee_id}/photo
 DELETE  /api/employee/{employee_id}
 
 */
@@ -24,13 +23,11 @@ public class EmployeeController : ControllerBase
 {
     private readonly IServiceManager _service;
     private readonly IRepositoryManager _repository;
-    private readonly IEmployeeMapper _mapper;
 
-    public EmployeeController(IServiceManager service, IRepositoryManager repository, IEmployeeMapper mapper)
+    public EmployeeController(IServiceManager service, IRepositoryManager repository)
     {
         _service = service;
         _repository = repository;
-        _mapper = mapper;
     }
 
     [HttpGet("api/employee")]
@@ -55,7 +52,7 @@ public class EmployeeController : ControllerBase
     {
         var employee = await _service.Employee.GetAsync(employeeId);
 
-        _mapper.UpdateFromDto(employee, updateEmployeeDto);
+        employee.Update(updateEmployeeDto);
         await _service.Employee.UpdateAsync(employee);
 
         return NoContent();
@@ -73,7 +70,7 @@ public class EmployeeController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/employee/{employeeId:guid}/photos")]
+    [HttpPut("api/employee/{employeeId:guid}/photo")]
     public async Task<IActionResult> UploadPhotos(Guid employeeId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);

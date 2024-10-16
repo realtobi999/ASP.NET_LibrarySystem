@@ -150,7 +150,7 @@ public class AuthorControllerTests
     }
 
     [Fact]
-    public async void UploadPhotos_Returns204AndIsUploaded()
+    public async void UploadPhoto_Returns204AndIsUploaded()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -166,16 +166,13 @@ public class AuthorControllerTests
 
         var photo1 = new ByteArrayContent([1, 2, 3, 4]);
         photo1.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-        var photo2 = new ByteArrayContent([5, 6, 7, 8]);
-        photo2.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-
         var formData = new MultipartFormDataContent
         {
             { photo1, "file", "photo1.jpg" },
         };
 
         // act & assert
-        var response = await client.PutAsync($"/api/author/{author.Id}/photos", formData);
+        var response = await client.PutAsync($"/api/author/{author.Id}/photo", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/author/{author.Id}");
@@ -184,6 +181,7 @@ public class AuthorControllerTests
         var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
 
         content.Id.Should().Be(author.Id);
-        content.Picture?.FileName.Should().Be("photo1.jpg");
+        content.Picture.Should().NotBeNull();
+        content.Picture!.FileName.Should().Be("photo1.jpg");
     }
 }

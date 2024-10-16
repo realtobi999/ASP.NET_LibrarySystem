@@ -1,7 +1,6 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,9 +19,9 @@ DELETE  /api/genre/{genre_id}
 public class GenreController : ControllerBase
 {
     private readonly IServiceManager _service;
-    private readonly IGenreMapper _mapper;
+    private readonly IMapperManager _mapper;
 
-    public GenreController(IServiceManager service, IGenreMapper mapper)
+    public GenreController(IServiceManager service, IMapperManager mapper)
     {
         _service = service;
         _mapper = mapper;
@@ -50,7 +49,7 @@ public class GenreController : ControllerBase
     [HttpPost("api/genre")]
     public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDto createGenreDto)
     {
-        var genre = _mapper.CreateFromDto(createGenreDto);
+        var genre = _mapper.Genre.Map(createGenreDto);
 
         await _service.Genre.CreateAsync(genre);
 
@@ -63,8 +62,7 @@ public class GenreController : ControllerBase
     {
         var genre = await _service.Genre.GetAsync(genreId);
 
-        _mapper.UpdateFromDto(genre, updateGenreDto);
-
+        genre.Update(updateGenreDto);
         await _service.Genre.UpdateAsync(genre);
 
         return NoContent();

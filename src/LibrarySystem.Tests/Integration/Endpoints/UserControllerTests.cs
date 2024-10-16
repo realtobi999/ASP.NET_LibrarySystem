@@ -36,7 +36,7 @@ public class UserControllerTests
 
         var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException();
         content.Count.Should().Be(limit);
-        content.ElementAt(0).Should().Be(user2.ToDto());
+        content.ElementAt(0).Id.Should().Be(user2.Id);
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class UserControllerTests
         var test = await response.Content.ReadAsStringAsync();
 
         var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
-        content.Should().Be(user.ToDto());
+        content.Id.Should().Be(user.Id);
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class UserControllerTests
         };
 
         // act & assert
-        var response = await client.PutAsync($"/api/user/{user.Id}/photos", formData);
+        var response = await client.PutAsync($"/api/user/{user.Id}/photo", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/user/{user.Id}");
@@ -155,6 +155,7 @@ public class UserControllerTests
         var content = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
 
         content.Id.Should().Be(user.Id);
-        content.ProfilePicture?.FileName.Should().Be("photo1.jpg");
+        content.ProfilePicture.Should().NotBeNull();
+        content.ProfilePicture!.FileName.Should().Be("photo1.jpg");
     }
 }

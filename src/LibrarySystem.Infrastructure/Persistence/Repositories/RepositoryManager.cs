@@ -25,8 +25,6 @@ public class RepositoryManager : IRepositoryManager
 
     public IGenreRepository Genre => _factory.CreateGenreRepository();
 
-    public IAssociationsRepository Associations => _factory.CreateAssociationsRepository();
-
     public IBookRepository Book => _factory.CreateBookRepository();
 
     public IBorrowRepository Borrow => _factory.CreateBorrowRepository();

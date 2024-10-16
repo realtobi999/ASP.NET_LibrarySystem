@@ -6,7 +6,6 @@ public interface IRepositoryManager
     IEmployeeRepository Employee { get; }
     IAuthorRepository Author { get; }
     IGenreRepository Genre { get; }
-    IAssociationsRepository Associations { get; }
     IBookRepository Book { get; }
     IBorrowRepository Borrow { get; }
     IBookReviewRepository BookReview { get; }

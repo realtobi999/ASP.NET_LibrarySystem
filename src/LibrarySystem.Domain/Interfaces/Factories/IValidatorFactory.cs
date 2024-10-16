@@ -4,5 +4,5 @@ namespace LibrarySystem.Domain.Interfaces.Factories;
 
 public interface IValidatorFactory
 {
-    IValidator<T> CreateValidator<T>();
+    IValidator<T> Initiate<T>();
 }

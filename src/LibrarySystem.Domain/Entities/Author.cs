@@ -37,4 +37,11 @@ public class Author : IDtoSerialization<AuthorDto>
             Picture = this.Picture,
         };
     }
+
+    public void Update(UpdateAuthorDto dto)
+    {
+        Name = dto.Name;
+        Description = dto.Description;
+        Birthday = dto.Birthday;
+    }
 }

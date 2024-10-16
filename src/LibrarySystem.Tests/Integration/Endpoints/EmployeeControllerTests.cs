@@ -183,7 +183,7 @@ public class EmployeeControllerTests
         };
 
         // act & assert
-        var response = await client.PutAsync($"/api/employee/{employee.Id}/photos", formData);
+        var response = await client.PutAsync($"/api/employee/{employee.Id}/photo", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
         var get = await client.GetAsync($"/api/employee/{employee.Id}");
@@ -192,6 +192,7 @@ public class EmployeeControllerTests
         var content = await get.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
 
         content.Id.Should().Be(employee.Id);
-        content.Picture?.FileName.Should().Be("photo1.jpg");
+        content.Picture.Should().NotBeNull();
+        content.Picture!.FileName.Should().Be("photo1.jpg");
     }
 }

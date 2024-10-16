@@ -7,13 +7,15 @@ namespace LibrarySystem.Tests.Integration.Helpers;
 public static class BorrowTestExtensions
 {
     private static readonly Faker<Borrow> _borrowFaker = new Faker<Borrow>()
-        .RuleFor(u => u.Id, f => f.Random.Guid());
+        .RuleFor(b => b.Id, f => f.Random.Guid())
+        .RuleFor(b => b.BorrowDate, _ => DateTimeOffset.Now)
+        .RuleFor(b => b.DueDate, _ => DateTimeOffset.Now.AddMonths(1));
 
-    public static Borrow WithFakeData(this Borrow borrow, Guid bookId, Guid userId)
+    public static Borrow WithFakeData(this Borrow borrow, Book book, User user)
     {
         var fakeBorrow = _borrowFaker.Generate();
-        fakeBorrow.BookId = bookId;
-        fakeBorrow.UserId = userId;
+        fakeBorrow.BookId = book.Id;
+        fakeBorrow.UserId = user.Id;
 
         return fakeBorrow;
     }

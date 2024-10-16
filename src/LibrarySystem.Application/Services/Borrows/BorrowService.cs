@@ -2,6 +2,7 @@
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
+using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
 
@@ -10,14 +11,20 @@ namespace LibrarySystem.Application.Services.Borrows;
 public class BorrowService : IBorrowService
 {
     private readonly IRepositoryManager _repository;
+    private readonly IValidator<Borrow> _validator;
 
-    public BorrowService(IRepositoryManager repository)
+    public BorrowService(IRepositoryManager repository, IValidator<Borrow> validator)
     {
         _repository = repository;
+        _validator = validator;
     }
 
     public async Task CreateAsync(Borrow borrow)
     {
+        // validate
+        var (valid, exception) = await _validator.ValidateAsync(borrow);
+        if (!valid && exception is not null) throw exception;
+
         // create borrow entity and save changes
         _repository.Borrow.Create(borrow);
         await _repository.SaveSafelyAsync();
@@ -51,14 +58,14 @@ public class BorrowService : IBorrowService
         return borrows;
     }
 
-    public async Task ReturnAsync(Borrow borrow, string jwt)
+    public async Task ReturnAsync(Borrow borrow, string jwt, Func<Book, Task> updateBookAsync)
     {
         var book = await _repository.Book.GetAsync(borrow.BookId) ?? throw new NotFound404Exception(nameof(Book), borrow.BookId);
 
-        await this.ReturnAsync(borrow, book, jwt);
+        await this.ReturnAsync(borrow, book, jwt, updateBookAsync);
     }
 
-    public async Task ReturnAsync(Borrow borrow, Book book, string jwt)
+    public async Task ReturnAsync(Borrow borrow, Book book, string jwt, Func<Book, Task> UpdateBookAsync)
     {
         var role = JwtUtils.ParseFromPayload(jwt, ClaimTypes.Role);
 
@@ -76,17 +83,20 @@ public class BorrowService : IBorrowService
         }
 
         // set the book to available and the borrow status to returned, after that update both
-        book.IsAvailable = true;
-        borrow.IsReturned = true;
+        book.SetIsAvailable(true);
+        borrow.SetIsReturned(true);
 
-        _repository.Book.Update(book);
-        _repository.Borrow.Update(borrow);
-
-        await _repository.SaveSafelyAsync();
+        // update both entities
+        await UpdateAsync(borrow);
+        await UpdateBookAsync(book);
     }
 
     public async Task UpdateAsync(Borrow borrow)
     {
+        // validate
+        var (valid, exception) = await _validator.ValidateAsync(borrow);
+        if (!valid && exception is not null) throw exception;
+
         // delete borrow entity and save changes
         _repository.Borrow.Update(borrow);
         await _repository.SaveSafelyAsync();

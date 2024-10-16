@@ -25,7 +25,7 @@ public class BookReviewControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create1 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -57,7 +57,7 @@ public class BookReviewControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create1 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -92,7 +92,7 @@ public class BookReviewControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create1 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -135,7 +135,7 @@ public class BookReviewControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var create1 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([], []));
+        var create1 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);

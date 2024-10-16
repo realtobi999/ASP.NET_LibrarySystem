@@ -5,7 +5,7 @@ using LibrarySystem.Domain.Interfaces.Mappers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
-public class UserMapper : IUserMapper
+public class UserMapper : IMapper<User, RegisterUserDto>
 {
     private readonly IHasher _hasher;
 
@@ -14,7 +14,7 @@ public class UserMapper : IUserMapper
         _hasher = hasher;
     }
 
-    public User CreateFromDto(RegisterUserDto dto)
+    public User Map(RegisterUserDto dto)
     {
         return new User
         {
@@ -23,11 +23,5 @@ public class UserMapper : IUserMapper
             Email = dto.Email,
             Password = _hasher.Hash(dto.Password ?? throw new NullReferenceException("The password must be set."))
         };
-    }
-
-    public void UpdateFromDto(User user, UpdateUserDto dto)
-    {
-        user.Email = dto.Email;
-        user.Username = dto.Username;
     }
 }

@@ -9,7 +9,6 @@ public interface IRepositoryFactory
     IAuthorRepository CreateAuthorRepository();
     IGenreRepository CreateGenreRepository();
     IBookRepository CreateBookRepository();
-    IAssociationsRepository CreateAssociationsRepository();
     IBorrowRepository CreateBorrowRepository();
     IBookReviewRepository CreateBookReviewRepository();
     IWishlistRepository CreateWishlistRepository();

@@ -70,4 +70,43 @@ public class Book : IDtoSerialization<BookDto>
             Reviews = reviews,
         };
     }
+
+    public void Update(UpdateBookDto dto)
+    {
+        Title = dto.Title;
+        Description = dto.Description;
+        PagesCount = dto.PagesCount;
+        PublishedDate = dto.PublishedDate;
+
+        if (dto.Availability is not null)
+        {
+            IsAvailable = (bool)dto.Availability;
+        }
+
+        // clean previous attached genres, authors and assign new
+        BookAuthors.Clear();
+        BookGenres.Clear();
+
+        foreach (var genreId in dto.GenreIds)
+        {
+            BookGenres.Add(new BookGenre
+            {
+                BookId = Id,
+                GenreId = genreId,
+            });
+        }
+        foreach (var authorId in dto.AuthorIds)
+        {
+            BookAuthors.Add(new BookAuthor
+            {
+                BookId = Id,
+                AuthorId = authorId,
+            });
+        }
+    }
+
+    public void SetIsAvailable(bool isAvailable)
+    {
+        IsAvailable = isAvailable;
+    }
 }

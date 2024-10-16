@@ -7,6 +7,7 @@ using LibrarySystem.Application.Services.Pictures;
 using LibrarySystem.Application.Services.Reviews;
 using LibrarySystem.Application.Services.Users;
 using LibrarySystem.Application.Services.Wishlists;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -18,15 +19,13 @@ public class ServiceFactory : IServiceFactory
 {
     private readonly IRepositoryManager _repository;
     private readonly IHasher _hasher;
-    private readonly IBookAssociations _bookAssociations;
-    private readonly IWishlistAssociations _wishlistAssociations;
+    private readonly IValidatorFactory _validatorFactory;
 
-    public ServiceFactory(IRepositoryManager repository, IHasher hasher, IBookAssociations bookAssociations, IWishlistAssociations wishlistAssociations)
+    public ServiceFactory(IRepositoryManager repository, IHasher hasher, IValidatorFactory validatorFactory)
     {
         _repository = repository;
         _hasher = hasher;
-        _bookAssociations = bookAssociations;
-        _wishlistAssociations = wishlistAssociations;
+        _validatorFactory = validatorFactory;
     }
 
     public IAuthorService CreateAuthorService()
@@ -36,17 +35,17 @@ public class ServiceFactory : IServiceFactory
 
     public IBookReviewService CreateBookReviewService()
     {
-        return new BookReviewService(_repository);
+        return new BookReviewService(_repository, _validatorFactory.Initiate<BookReview>());
     }
 
     public IBookService CreateBookService()
     {
-        return new BookService(_repository, _bookAssociations);
+        return new BookService(_repository, _validatorFactory.Initiate<Book>());
     }
 
     public IBorrowService CreateBorrowService()
     {
-        return new BorrowService(_repository);
+        return new BorrowService(_repository, _validatorFactory.Initiate<Borrow>());
     }
 
     public IEmployeeService CreateEmployeeService()
@@ -71,6 +70,6 @@ public class ServiceFactory : IServiceFactory
 
     public IWishlistService CreateWishlistService()
     {
-        return new WishlistService(_repository, _wishlistAssociations);
+        return new WishlistService(_repository, _validatorFactory.Initiate<Wishlist>());
     }
 }

@@ -1,6 +1,4 @@
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Application.Services.Books;
-using LibrarySystem.Application.Services.Wishlists;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails;
 using LibrarySystem.EmailService;
@@ -19,7 +17,6 @@ public class Program
         {
             var config = builder.Configuration;
 
-
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.ConfigureCors();
@@ -31,14 +28,13 @@ public class Program
             builder.Services.ConfigureDbContext(config.GetConnectionString("LibrarySystem"));
 
             // services
-            builder.Services.ConfigureRepositoryManager();
-            builder.Services.ConfigureServiceManager();
+            builder.Services.ConfigureFactories();
+            builder.Services.ConfigureManagers();
+            builder.Services.ConfigureValidators();
             builder.Services.ConfigureMappers();
-            builder.Services.AddScoped<IBookAssociations, BookAssociations>();
-            builder.Services.AddScoped<IWishlistAssociations, WishlistAssociations>();
             builder.Services.AddScoped<IHasher, Hasher>();
 
-            // email clients
+            // email client
             builder.Services.AddSingleton(p => SmtpFactory.CreateInstance(config));
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.ConfigureMessageBuilders();

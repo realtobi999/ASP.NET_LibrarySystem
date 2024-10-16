@@ -4,9 +4,9 @@ using LibrarySystem.Domain.Interfaces.Mappers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
-public class BookReviewMapper : IBookReviewMapper
+public class BookReviewMapper : IMapper<BookReview, CreateBookReviewDto>
 {
-    public BookReview CreateFromDto(CreateBookReviewDto dto)
+    public BookReview Map(CreateBookReviewDto dto)
     {
         return new BookReview
         {
@@ -17,11 +17,5 @@ public class BookReviewMapper : IBookReviewMapper
             Text = dto.Text,
             CreatedAt = DateTimeOffset.UtcNow,
         };
-    }
-
-    public void UpdateFromDto(BookReview review, UpdateBookReviewDto dto)
-    {
-        review.Text = dto.Text;
-        review.Rating = dto.Rating;
     }
 }

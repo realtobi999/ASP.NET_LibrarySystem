@@ -22,4 +22,9 @@ public class Genre : IDtoSerialization<GenreDto>
             Name = this.Name
         };
     }
+
+    public void Update(UpdateGenreDto dto)
+    {
+        Name = dto.Name;
+    }
 }

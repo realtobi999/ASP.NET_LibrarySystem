@@ -32,10 +32,9 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
             .IsUnique();
 
         // relationships
-        modelBuilder.ConfigureBookAuthorRelationship();
-        modelBuilder.ConfigureBookGenreRelationship();
-        modelBuilder.ConfigureBookReviewsRelationShip();
-        modelBuilder.ConfigureWishlistBookRelationship();
+        modelBuilder.ConfigureBookRelationships();
+        modelBuilder.ConfigureWishlistRelationship();
         modelBuilder.ConfigurePictureRelationships();
+        modelBuilder.ConfigureUserRelationships();
     }
 }

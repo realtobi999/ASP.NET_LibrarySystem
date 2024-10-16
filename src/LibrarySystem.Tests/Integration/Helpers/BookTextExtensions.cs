@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿using System.Net.Http.Json;
+using Bogus;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
 
@@ -20,18 +21,24 @@ public static class BookTestExtensions
         return _BookFaker.Generate();
     }
 
-    public static CreateBookDto ToCreateBookDto(this Book book)
+    public static async Task<CreateBookDto> ToCreateBookDtoWithGenresAndAuthorsAsync(this Book book, HttpClient client)
     {
-        return new CreateBookDto
+        var authors = new List<Author>() { new Author().WithFakeData(), new Author().WithFakeData() };
+        var genres = new List<Genre>() { new Genre().WithFakeData(), new Genre().WithFakeData() };
+
+        foreach (var author in authors)
         {
-            Id = book.Id,
-            ISBN = book.ISBN,
-            Title = book.Title,
-            Description = book.Description,
-            PagesCount = book.PagesCount,
-            PublishedDate = book.PublishedDate,
-            Available = book.IsAvailable,
-        };
+            var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
+            create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        }
+
+        foreach (var genre in genres)
+        {
+            var create = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
+            create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        }
+
+        return book.ToCreateBookDto(authors.Select(a => a.Id), genres.Select(g => g.Id));
     }
 
     public static CreateBookDto ToCreateBookDto(this Book book, IEnumerable<Guid> authorIds, IEnumerable<Guid> genreIds)

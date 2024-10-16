@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Interfaces.Common;
 
@@ -25,6 +26,11 @@ public class Borrow : IDtoSerialization<BorrowDto>
     [Required, Column]
     public bool IsReturned { get; set; }
 
+    // relationships
+
+    [JsonIgnore]
+    public User? User { get; set; }
+
     /// <inheritdoc/>
     public BorrowDto ToDto()
     {
@@ -37,5 +43,10 @@ public class Borrow : IDtoSerialization<BorrowDto>
             DueDate = this.DueDate,
             IsReturned = this.IsReturned,
         };
+    }
+
+    public void SetIsReturned(bool isReturned)
+    {
+        IsReturned = isReturned;
     }
 }

@@ -17,6 +17,7 @@ public class BookMapper : IMapper<Book, CreateBookDto>
             Description = dto.Description,
             PagesCount = dto.PagesCount,
             PublishedDate = dto.PublishedDate,
+            CreatedAt = DateTimeOffset.UtcNow
         };
 
         // assign the genre and authors

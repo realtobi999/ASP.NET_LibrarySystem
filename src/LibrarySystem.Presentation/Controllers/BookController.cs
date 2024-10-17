@@ -4,6 +4,7 @@ using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 namespace LibrarySystem.Presentation.Controllers;
@@ -11,10 +12,11 @@ namespace LibrarySystem.Presentation.Controllers;
 [ApiController]
 /*
 
-GET     /api/book params: limit, offset, authorId, genreId, withRelations
-GET     /api/book/{book_id} params: withRelations
-GET     /api/book/isbn/{isbn} params: withRelations
-GET     /api/book/search/{query} params: limit, offset, authorId, genreId, withRelations
+GET     /api/book params: limit, offset, authorId, genreId, 
+GET     /api/book/recent params: limit, offset, authorId, genreId, 
+GET     /api/book/{book_id}  
+GET     /api/book/isbn/{isbn} 
+GET     /api/book/search/{query} params: limit, offset, authorId, genreId, 
 POST    /api/book
 PUT     /api/book/{book_id}/photo
 PUT     /api/book/{book_id}
@@ -35,10 +37,17 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("api/book")]
+    [HttpGet("api/book/recent")]
     [HttpGet("api/book/search/{query}")]
     public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId)
     {
         var books = await _service.Book.IndexAsync();
+
+        // if the url is api/book/recent order the books by the CreatedAt property
+        if (HttpContext.Request.GetDisplayUrl().Contains("/api/book/recent"))
+        {
+            books = books.OrderBy(b => b.CreatedAt);
+        }
 
         if (authorId != Guid.Empty)
         {

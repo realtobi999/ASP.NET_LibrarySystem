@@ -30,6 +30,9 @@ public class Book : IDtoSerialization<BookDto>
     [Required, Column("available")]
     public bool IsAvailable { get; set; }
 
+    [Required, Column("created_at")]
+    public DateTimeOffset CreatedAt { get; set; }
+
     // relationships
 
     [JsonIgnore]

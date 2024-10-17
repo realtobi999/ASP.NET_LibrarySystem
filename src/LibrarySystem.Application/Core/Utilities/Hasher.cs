@@ -5,9 +5,9 @@ namespace LibrarySystem.Application.Core.Utilities;
 
 public class Hasher : IHasher
 {
-    private const int SaltSize = 128 / 8;  // Size of the salt in bytes
-    private const int HashSize = 256 / 8;  // Size of the hash in bytes
-    private const int Iterations = 10_000; // Number of iterations for PBKDF2
+    private const int SaltSize = 128 / 8;  // size of the salt in bytes
+    private const int HashSize = 256 / 8;  // size of the hash in bytes
+    private const int Iterations = 10_000; // number of iterations for PBKDF2
     private static readonly HashAlgorithmName HashAlgorithm = HashAlgorithmName.SHA256;
     private static readonly char Delimiter = ';';
 

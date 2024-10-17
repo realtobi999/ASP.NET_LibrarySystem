@@ -27,7 +27,6 @@ public class BorrowControllerTests
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
@@ -55,7 +54,6 @@ public class BorrowControllerTests
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
@@ -67,6 +65,7 @@ public class BorrowControllerTests
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
+
         content.Id.Should().Be(book.Id);
         content.IsAvailable.Should().Be(false);
     }
@@ -89,7 +88,6 @@ public class BorrowControllerTests
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
@@ -101,6 +99,7 @@ public class BorrowControllerTests
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
+
         content.Id.Should().Be(book.Id);
         content.IsAvailable.Should().Be(false);
 
@@ -129,14 +128,12 @@ public class BorrowControllerTests
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create4 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create5 = await client.PostAsJsonAsync("/api/borrow", borrow1.ToCreateBorrowDto());
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create6 = await client.PostAsJsonAsync("/api/borrow", borrow2.ToCreateBorrowDto());
@@ -152,6 +149,7 @@ public class BorrowControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BorrowDto>>() ?? throw new NullReferenceException();
+
         content.Count.Should().Be(limit);
         content.ElementAt(0).Id.Should().Be(borrow2.Id);
     }
@@ -180,14 +178,12 @@ public class BorrowControllerTests
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user2.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create3 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create4 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create5 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create6 = await client.PostAsJsonAsync("/api/borrow", borrow1.ToCreateBorrowDto());
         create6.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create7 = await client.PostAsJsonAsync("/api/borrow", borrow2.ToCreateBorrowDto());
@@ -200,6 +196,7 @@ public class BorrowControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BorrowDto>>() ?? throw new NullReferenceException();
+
         content.Count.Should().Be(1);
         content.ElementAt(0).Id.Should().Be(borrow1.Id);
     }
@@ -220,10 +217,8 @@ public class BorrowControllerTests
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create3 = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
@@ -232,6 +227,7 @@ public class BorrowControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
+
         content.Id.Should().Be(borrow.Id);
     }
 
@@ -252,10 +248,8 @@ public class BorrowControllerTests
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create3 = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
@@ -273,13 +267,17 @@ public class BorrowControllerTests
         // get the book and borrow and check if the availability and IsReturned status is correct
         var get1 = await client.GetAsync($"/api/book/{book.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        
         var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
+
         content1.Id.Should().Be(book.Id);
         content1.IsAvailable.Should().Be(false);
 
         var get2 = await client.GetAsync($"/api/borrow/{borrow.Id}");
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
         var content2 = await get2.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
+
         content2.Id.Should().Be(borrow.Id);
         content2.IsReturned.Should().Be(false);
 
@@ -290,13 +288,17 @@ public class BorrowControllerTests
         // get the book and borrow and check if the availability and IsReturned status is correct
         var get3 = await client.GetAsync($"/api/book/{book.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
         var content3 = await get3.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
+
         content3.Id.Should().Be(book.Id);
         content3.IsAvailable.Should().Be(true);
 
         var get4 = await client.GetAsync($"/api/borrow/{borrow.Id}");
         get4.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
         var content4 = await get4.Content.ReadFromJsonAsync<BorrowDto>() ?? throw new NullReferenceException();
+
         content4.Id.Should().Be(borrow.Id);
         content4.IsReturned.Should().Be(true);
     }

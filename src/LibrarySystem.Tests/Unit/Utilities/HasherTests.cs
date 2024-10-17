@@ -2,10 +2,10 @@
 
 namespace LibrarySystem.Tests.Unit.Utilities;
 
-public class PasswordHasherTests
+public class HasherTests
 {
     [Fact]
-    public void PasswordHasher_Hash_Works()
+    public void Hasher_Hash_Works()
     {
         // prepare
         var hasher = new Hasher();
@@ -19,7 +19,7 @@ public class PasswordHasherTests
     }
 
     [Fact]
-    public void PasswordHasher_Compare_Works()
+    public void Hasher_Compare_Works()
     {
         // prepare
         var hasher = new Hasher();

@@ -12,7 +12,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class BookReviewControllerTests
 {
     [Fact]
-    public async void CreateBookReview_Returns201()
+    public async void CreateBookReview_Returns201AndLocationHeader()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -30,6 +30,7 @@ public class BookReviewControllerTests
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
+        // auth as the user to create the review
         var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),
@@ -62,6 +63,7 @@ public class BookReviewControllerTests
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
+        // auth as the user to create the review
         var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),
@@ -97,6 +99,7 @@ public class BookReviewControllerTests
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
+        // auth as the user to create the review
         var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),
@@ -140,6 +143,7 @@ public class BookReviewControllerTests
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
+        // auth as the user to create the review
         var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),

@@ -24,11 +24,10 @@ public class WishlistControllerTests
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
-        var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
+        var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
@@ -93,8 +92,8 @@ public class WishlistControllerTests
         var response = await client.GetAsync($"/api/wishlist/{wishlist.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var test = await response.Content.ReadAsStringAsync();
         var content = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
+
         content.Id.Should().Be(wishlist.Id);
         content.Books.Count().Should().Be(3);
     }
@@ -149,6 +148,7 @@ public class WishlistControllerTests
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get1.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
+        
         content.Books.Count().Should().Be(1);
         content.Books.ElementAt(0).Id.Should().Be(book1.Id);
     }

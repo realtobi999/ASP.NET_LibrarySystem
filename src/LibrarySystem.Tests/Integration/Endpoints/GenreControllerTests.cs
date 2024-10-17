@@ -50,9 +50,9 @@ public class GenreControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<GenreDto>() ?? throw new NullReferenceException();
+
         content.Should().BeEquivalentTo(genre.ToDto());
 
-        // test for 404
         var get = await client.GetAsync($"/api/genre/{Guid.NewGuid()}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
@@ -73,10 +73,8 @@ public class GenreControllerTests
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/genre", genre2.ToCreateGenreDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create3 = await client.PostAsJsonAsync("/api/genre", genre3.ToCreateGenreDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
@@ -88,6 +86,7 @@ public class GenreControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<GenreDto>>() ?? throw new NullReferenceException();
+
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().BeEquivalentTo(genre2.ToDto());
         content.ElementAt(1).Should().BeEquivalentTo(genre3.ToDto());
@@ -121,6 +120,7 @@ public class GenreControllerTests
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<GenreDto>() ?? throw new NullReferenceException();
+        
         content.Id.Should().Be(genre.Id);
         content.Name.Should().Be(updateDto.Name);
     }

@@ -40,6 +40,7 @@ public class AuthorControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<AuthorDto>>() ?? throw new NullReferenceException();
+
         content.Count.Should().Be(limit);
         content.ElementAt(0).Should().Be(author2.ToDto());
     }
@@ -87,6 +88,7 @@ public class AuthorControllerTests
         get2.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
 
         var content = await get1.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
+
         content.Should().Be(author.ToDto());
     }
 
@@ -120,6 +122,7 @@ public class AuthorControllerTests
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
+
         content.Id.Should().Be(author.Id);
         content.Name.Should().Be(updateDto.Name);
         content.Description.Should().Be(updateDto.Description);
@@ -164,8 +167,10 @@ public class AuthorControllerTests
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
+        // make the file
         var photo1 = new ByteArrayContent([1, 2, 3, 4]);
         photo1.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+
         var formData = new MultipartFormDataContent
         {
             { photo1, "file", "photo1.jpg" },

@@ -35,6 +35,7 @@ public class UserControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException();
+
         content.Count.Should().Be(limit);
         content.ElementAt(0).Id.Should().Be(user2.Id);
     }
@@ -53,9 +54,8 @@ public class UserControllerTests
         var response = await client.GetAsync($"/api/user/{user.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var test = await response.Content.ReadAsStringAsync();
-
         var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
+
         content.Id.Should().Be(user.Id);
     }
 
@@ -90,10 +90,11 @@ public class UserControllerTests
         var get = await client.GetAsync($"/api/user/{user.Id}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var newUser = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
-        newUser.Id.Should().Be(user.Id);
-        newUser.Username.Should().Be(updateDto.Username);
-        newUser.Email.Should().Be(updateDto.Email);
+        var content = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
+        
+        content.Id.Should().Be(user.Id);
+        content.Username.Should().Be(updateDto.Username);
+        content.Email.Should().Be(updateDto.Email);
     }
 
     [Fact]

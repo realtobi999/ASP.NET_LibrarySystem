@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Interfaces.Common;
 
@@ -12,6 +13,9 @@ public class Genre : IDtoSerialization<GenreDto>
 
     [Required, Column("name")]
     public string? Name { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Book> Books { get; set; } = [];
 
     /// <inheritdoc/>
     public GenreDto ToDto()

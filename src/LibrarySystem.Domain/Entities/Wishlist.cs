@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LibrarySystem.Domain.Dtos.Wishlists;
-using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
@@ -20,14 +19,12 @@ public class Wishlist : IDtoSerialization<WishlistDto>
     // relationships
 
     public User? User { get; set; }
-    public ICollection<WishlistBook> WishlistBooks { get; set; } = [];
+    public ICollection<Book> Books { get; set; } = [];
 
     /// <inheritdoc/>
     public WishlistDto ToDto()
     {
-        var books = this.WishlistBooks.Where(wb => wb.Book is not null)
-                                      .Select(wb => wb.Book!.ToDto())
-                                      .ToList();
+        var books = this.Books.Select(wb => wb.ToDto()).ToList();
         return new WishlistDto
         {
             Id = this.Id,
@@ -37,20 +34,16 @@ public class Wishlist : IDtoSerialization<WishlistDto>
         };
     }
 
-    public void Update(UpdateWishlistDto dto)
+    public void Update(UpdateWishlistDto dto, IEnumerable<Book> books)
     {
         Name = dto.Name;
 
         // clean previous attached books and assign new
-        WishlistBooks.Clear();
+        this.Books.Clear();
 
-        foreach (var bookId in dto.BookIds)
+        foreach (var book in books)
         {
-            WishlistBooks.Add(new WishlistBook
-            {
-                WishlistId = Id,
-                BookId = bookId,
-            });
+            this.Books.Add(book);
         }
     }
 }

@@ -1,6 +1,5 @@
 using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Tests.Integration.Helpers;
@@ -44,13 +43,10 @@ public class WishlistValidatorTests
         var wishlist = new Wishlist().WithFakeData(user);
         var book = new Book().WithFakeData();
 
-        wishlist.WishlistBooks = [
-            new WishlistBook
+        wishlist.Books = [
+            new Book()
             {
-                BookId = book.Id,
-                Book = book,
-                WishlistId = wishlist.Id,
-                Wishlist = wishlist,
+                Id = book.Id,
             }
         ];
 

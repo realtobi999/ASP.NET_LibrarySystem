@@ -23,7 +23,7 @@ public class WishlistValidator : IValidator<Wishlist>
         }
 
         // validate that the assigned books exists
-        foreach (var bookId in wishlist.WishlistBooks.Select(b => b.BookId))
+        foreach (var bookId in wishlist.Books.Select(b => b.Id))
         {
             var book = await _repository.Book.GetAsync(bookId);
 

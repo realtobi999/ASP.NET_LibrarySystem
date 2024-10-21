@@ -28,10 +28,9 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
     protected override IQueryable<Book> GetQueryable()
     {
         return base.GetQueryable()
-                   .Include(b => b.BookAuthors)
-                    .ThenInclude(ba => ba.Author)
-                   .Include(b => b.BookGenres)
-                    .ThenInclude(bg => bg.Genre)
+                   .Include(b => b.Authors)
+                   .Include(b => b.Genres)
+                   .Include(b => b.Borrows)
                    .Include(b => b.BookReviews)
                    .Include(b => b.CoverPictures);
     }

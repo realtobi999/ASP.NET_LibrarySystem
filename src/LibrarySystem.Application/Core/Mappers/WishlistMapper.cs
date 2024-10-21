@@ -1,12 +1,19 @@
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
 public class WishlistMapper : IMapper<Wishlist, CreateWishlistDto>
 {
+    private readonly IRepositoryManager _repository;
+
+    public WishlistMapper(IRepositoryManager repository)
+    {
+        _repository = repository;
+    }
+
     public Wishlist Map(CreateWishlistDto dto)
     {
         var wishlist = new Wishlist
@@ -16,14 +23,14 @@ public class WishlistMapper : IMapper<Wishlist, CreateWishlistDto>
             Name = dto.Name
         };
 
-        // clean previous attached books and assign new
+        // assign books
         foreach (var bookId in dto.BookIds)
         {
-            wishlist.WishlistBooks.Add(new WishlistBook
+            var book = _repository.Book.Get(bookId);
+            if (book is not null)
             {
-                WishlistId = wishlist.Id,
-                BookId = bookId,
-            });
+                wishlist.Books.Add(book);
+            }
         }
 
         return wishlist;

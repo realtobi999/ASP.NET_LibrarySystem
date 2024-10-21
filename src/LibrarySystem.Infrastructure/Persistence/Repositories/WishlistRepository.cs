@@ -17,21 +17,6 @@ public class WishlistRepository : BaseRepository<Wishlist>, IWishlistRepository
 
     protected override IQueryable<Wishlist> GetQueryable()
     {
-        return base.GetQueryable()
-                   .Include(w => w.WishlistBooks)
-                       .ThenInclude(wb => wb.Book)
-                       .ThenInclude(b => b!.BookAuthors)
-                           .ThenInclude(ba => ba.Author)
-                   .Include(w => w.WishlistBooks)
-                       .ThenInclude(wb => wb.Book)
-                       .ThenInclude(b => b!.BookGenres)
-                           .ThenInclude(bg => bg.Genre)
-                   .Include(w => w.WishlistBooks)
-                       .ThenInclude(wb => wb.Book)
-                       .ThenInclude(b => b!.BookReviews)
-                   .Include(w => w.WishlistBooks)
-                       .ThenInclude(wb => wb.Book)
-                       .ThenInclude(b => b!.CoverPictures);
+        return base.GetQueryable().Include(w => w.Books);
     }
-
 }

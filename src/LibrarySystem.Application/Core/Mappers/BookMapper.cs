@@ -1,12 +1,19 @@
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
 public class BookMapper : IMapper<Book, CreateBookDto>
 {
+    private readonly IRepositoryManager _repository;
+
+    public BookMapper(IRepositoryManager repository)
+    {
+        _repository = repository;
+    }
+
     public Book Map(CreateBookDto dto)
     {
         var book = new Book
@@ -23,19 +30,22 @@ public class BookMapper : IMapper<Book, CreateBookDto>
         // assign the genre and authors
         foreach (var genreId in dto.GenreIds)
         {
-            book.BookGenres.Add(new BookGenre
+            var genre = _repository.Genre.Get(genreId);
+
+            if (genre is not null)
             {
-                BookId = book.Id,
-                GenreId = genreId,
-            });
+                book.Genres.Add(genre);
+            }
         }
+
         foreach (var authorId in dto.AuthorIds)
         {
-            book.BookAuthors.Add(new BookAuthor
+            var author = _repository.Author.Get(authorId);
+
+            if (author is not null)
             {
-                BookId = book.Id,
-                AuthorId = authorId,
-            });
+                book.Authors.Add(author);
+            }
         }
 
         return book;

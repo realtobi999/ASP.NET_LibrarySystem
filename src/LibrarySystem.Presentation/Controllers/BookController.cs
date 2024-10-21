@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Books;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -51,12 +52,12 @@ public class BookController : ControllerBase
 
         if (authorId != Guid.Empty)
         {
-            books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId));
+            books = books.Where(b => b.Authors.Any(a => a.Id == authorId));
         }
 
         if (genreId != Guid.Empty)
         {
-            books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreId));
+            books = books.Where(b => b.Genres.Any(g => g.Id == genreId));
         }
 
         if (!query.IsNullOrEmpty())
@@ -99,8 +100,22 @@ public class BookController : ControllerBase
     public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookDto updateBookDto)
     {
         var book = await _service.Book.GetAsync(bookId);
+        
+        var genres = new List<Genre>();
+        var authors = new List<Author>();
 
-        book.Update(updateBookDto);
+        foreach (var authorId in updateBookDto.AuthorIds)
+        {
+            var author = await _service.Author.GetAsync(authorId);
+            authors.Add(author);
+        }
+        foreach (var genreId in updateBookDto.GenreIds)
+        {
+            var genre = await _service.Genre.GetAsync(genreId);
+            genres.Add(genre);
+        }
+
+        book.Update(updateBookDto, genres, authors);
         await _service.Book.UpdateAsync(book);
 
         return NoContent();

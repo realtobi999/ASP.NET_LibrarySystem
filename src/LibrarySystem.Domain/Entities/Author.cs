@@ -24,6 +24,9 @@ public class Author : IDtoSerialization<AuthorDto>
 
     [JsonIgnore]
     public Picture? Picture { get; set; }
+    
+    [JsonIgnore]
+    public ICollection<Book> Books { get; set; } = [];
 
     /// <inheritdoc/>
     public AuthorDto ToDto()

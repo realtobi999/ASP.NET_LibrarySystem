@@ -3,7 +3,7 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Tests.Integration.Helpers;
 
-namespace LibrarySystem.Tests.Unit.Utilities;
+namespace LibrarySystem.Tests.Unit.Books;
 
 public class BookPopularityCalculatorTests
 {
@@ -39,7 +39,7 @@ public class BookPopularityCalculatorTests
 
         book1Popularity.Should().NotBe(0);
         book2Popularity.Should().NotBe(0);
-        
+
         book1Popularity.Should().NotBe(book2Popularity);
         book1Popularity.Should().BeGreaterThan(book2Popularity);
     }

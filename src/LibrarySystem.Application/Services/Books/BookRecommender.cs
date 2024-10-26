@@ -25,20 +25,26 @@ public class BookRecommender : IBookRecommender
         {
             foreach (var book in wishlist.Books)
             {
-                userFavoriteBooks.Add(book);
+                if (book is not null)
+                {
+                   userFavoriteBooks.Add(book);
+                }
             }
         }
 
         foreach (var borrow in user.Borrows)
         {
-            userFavoriteBooks.Add(borrow.Book!);
+            if (borrow.Book is not null)
+            {
+                userFavoriteBooks.Add(borrow.Book);
+            }
         }
 
         foreach (var review in user.BookReviews)
         {
-            if (review.Rating > 5.5)
+            if (review.Rating > 5.5 && review.Book is not null)
             {
-                userFavoriteBooks.Add(review.Book!);
+                userFavoriteBooks.Add(review.Book);
             }
         }
 

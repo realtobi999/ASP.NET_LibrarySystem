@@ -15,6 +15,7 @@ namespace LibrarySystem.Presentation.Controllers;
 
 GET     /api/book params: limit, offset, authorId, genreId, 
 GET     /api/book/recent params: limit, offset, authorId, genreId, 
+GET     /api/book/popular params: limit, offset, authorId, genreId, 
 GET     /api/book/{book_id}  
 GET     /api/book/isbn/{isbn} 
 GET     /api/book/search/{query} params: limit, offset, authorId, genreId, 
@@ -39,6 +40,7 @@ public class BookController : ControllerBase
 
     [HttpGet("api/book")]
     [HttpGet("api/book/recent")]
+    [HttpGet("api/book/popular")]
     [HttpGet("api/book/search/{query}")]
     public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId)
     {
@@ -48,6 +50,12 @@ public class BookController : ControllerBase
         if (HttpContext.Request.GetDisplayUrl().Contains("/api/book/recent"))
         {
             books = books.OrderBy(b => b.CreatedAt);
+        }
+
+        // if the url is api/book/popular order the books by the Popularity property
+        if (HttpContext.Request.GetDisplayUrl().Contains("/api/book/popular"))
+        {
+            books = books.OrderBy(b => b.Popularity);
         }
 
         if (authorId != Guid.Empty)

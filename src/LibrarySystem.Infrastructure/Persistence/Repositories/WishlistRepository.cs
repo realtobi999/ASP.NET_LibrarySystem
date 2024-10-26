@@ -14,9 +14,4 @@ public class WishlistRepository : BaseRepository<Wishlist>, IWishlistRepository
     {
         return await this.GetAsync(w => w.Id == id);
     }
-
-    protected override IQueryable<Wishlist> GetQueryable()
-    {
-        return base.GetQueryable().Include(w => w.Books);
-    }
 }

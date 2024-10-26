@@ -29,7 +29,7 @@ public class BookPopularityBackgroundService : BackgroundService
 
         foreach (var book in books)
         {
-            await serviceManager.Book.UpdatePopularity(book, _popularityCalculator.CalculatePopularityScore(book));
+            await serviceManager.Book.UpdatePopularityAsync(book, _popularityCalculator.CalculatePopularityScore(book));
         }
     }
 

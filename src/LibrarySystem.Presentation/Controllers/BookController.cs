@@ -1,13 +1,16 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
+using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Enums;
+using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
@@ -16,6 +19,7 @@ namespace LibrarySystem.Presentation.Controllers;
 GET     /api/book params: limit, offset, authorId, genreId, 
 GET     /api/book/recent params: limit, offset, authorId, genreId, 
 GET     /api/book/popular params: limit, offset, authorId, genreId, 
+GET     /api/book/recommended params: limit, offset 
 GET     /api/book/{book_id}  
 GET     /api/book/isbn/{isbn} 
 GET     /api/book/search/{query} params: limit, offset, authorId, genreId, 
@@ -72,6 +76,18 @@ public class BookController : ControllerBase
         {
             books = books.Where(b => b.Title!.Contains(query!) || b.Description!.Contains(query!));
         }
+
+        return Ok(books.Paginate(offset, limit));
+    }
+
+    [Authorize(Policy = "User")]
+    [HttpGet("api/book/recommended")]
+    public async Task<IActionResult> GetRecommendedBooks(int limit, int offset)
+    {
+        var token = JwtUtils.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
+
+        var user = await _service.User.GetAsync(JwtUtils.ParseFromPayload(token, "UserId") ?? throw new NotAuthorized401Exception());
+        var books = await _service.Book.IndexRecommendedAsync(user);
 
         return Ok(books.Paginate(offset, limit));
     }

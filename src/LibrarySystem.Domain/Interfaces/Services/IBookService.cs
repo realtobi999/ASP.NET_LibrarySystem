@@ -4,7 +4,8 @@ namespace LibrarySystem.Domain.Interfaces.Services;
 
 public interface IBookService : IBaseService<Book>
 {
+    Task<IEnumerable<Book>> IndexRecommendedAsync(User user);
     Task<Book> GetAsync(string isbn);
-    Task UpdateAvailability(Book book, bool isAvailable);
-    Task UpdatePopularity(Book book, double popularity);
+    Task UpdateAvailabilityAsync(Book book, bool isAvailable);
+    Task UpdatePopularityAsync(Book book, double popularity);
 }

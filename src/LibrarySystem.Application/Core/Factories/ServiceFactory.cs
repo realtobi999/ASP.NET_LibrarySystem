@@ -40,7 +40,7 @@ public class ServiceFactory : IServiceFactory
 
     public IBookService CreateBookService()
     {
-        return new BookService(_repository, _validatorFactory.Initiate<Book>());
+        return new BookService(_repository, _validatorFactory.Initiate<Book>(), new BookRecommender(_repository));
     }
 
     public IBorrowService CreateBorrowService()

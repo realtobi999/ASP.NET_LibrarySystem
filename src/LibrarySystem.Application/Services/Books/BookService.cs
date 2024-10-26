@@ -10,11 +10,13 @@ public class BookService : IBookService
 {
     private readonly IRepositoryManager _repository;
     private readonly IValidator<Book> _validator;
+    private readonly IBookRecommender _recommender;
 
-    public BookService(IRepositoryManager repository, IValidator<Book> validator)
+    public BookService(IRepositoryManager repository, IValidator<Book> validator, IBookRecommender recommender)
     {
         _repository = repository;
         _validator = validator;
+        _recommender = recommender;
     }
 
     public async Task CreateAsync(Book book)
@@ -77,64 +79,12 @@ public class BookService : IBookService
     public async Task UpdatePopularityAsync(Book book, double popularity)
     {
         book.UpdatePopularity(popularity);
+
         await this.UpdateAsync(book);
     }
 
     public async Task<IEnumerable<Book>> IndexRecommendedAsync(User user)
     {
-        // use HashSet to avoid duplicate values
-        var userFavoriteBooks = new HashSet<Book>();
-        var userPreferredGenreIds = new HashSet<Guid>();
-        var userPreferredAuthorIds = new HashSet<Guid>();
-
-        // collect user favorite books from wishlists, borrows, and reviews
-        foreach (var wishlist in user.Wishlists)
-        {
-            foreach (var book in wishlist.Books)
-            {
-                userFavoriteBooks.Add(book);
-            }
-        }
-
-        foreach (var borrow in user.Borrows)
-        {
-            userFavoriteBooks.Add(borrow.Book!);
-        }
-
-        foreach (var review in user.BookReviews)
-        {
-            if (review.Rating > 5.5)
-            {
-                userFavoriteBooks.Add(review.Book!);
-            }
-        }
-
-        // extract preferred genres and authors from userFavoriteBooks 
-        foreach (var book in userFavoriteBooks)
-        {
-            foreach (var genre in book.Genres)
-            {
-                userPreferredGenreIds.Add(genre.Id);
-            }
-            foreach (var author in book.Authors)
-            {
-                userPreferredAuthorIds.Add(author.Id);
-            }
-        }
-
-        var books = await this.IndexAsync();
-        var userRecommendedBooks = new HashSet<Book>();
-
-        // recommend books based on matching genres or authors
-        foreach (var book in books)
-        {
-            if (!userFavoriteBooks.Contains(book) && (book.Genres.Any(g => userPreferredGenreIds.Contains(g.Id)) || book.Authors.Any(a => userPreferredAuthorIds.Contains(a.Id))))
-            {
-                userRecommendedBooks.Add(book);
-            }
-        }
-
-        // return sorted recommended books by popularity
-        return userRecommendedBooks.OrderBy(b => b.Popularity);
+        return (await _recommender.IndexRecommendedAsync(user)).OrderBy(b => b.Popularity);
     }
 }

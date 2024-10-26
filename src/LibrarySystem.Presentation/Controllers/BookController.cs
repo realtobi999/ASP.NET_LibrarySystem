@@ -20,9 +20,9 @@ GET     /api/book params: limit, offset, authorId, genreId,
 GET     /api/book/recent params: limit, offset, authorId, genreId, 
 GET     /api/book/popular params: limit, offset, authorId, genreId, 
 GET     /api/book/recommended params: limit, offset 
+GET     /api/book/search/{query} params: limit, offset, authorId, genreId, 
 GET     /api/book/{book_id}  
 GET     /api/book/isbn/{isbn} 
-GET     /api/book/search/{query} params: limit, offset, authorId, genreId, 
 POST    /api/book
 PUT     /api/book/{book_id}/photo
 PUT     /api/book/{book_id}

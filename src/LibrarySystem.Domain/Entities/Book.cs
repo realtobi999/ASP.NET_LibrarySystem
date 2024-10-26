@@ -26,6 +26,9 @@ public class Book : IDtoSerialization<BookDto>
     [Required, Column("published_at")]
     public DateTimeOffset PublishedDate { get; set; }
 
+    [Required, Column("popularity")]
+    public double Popularity { get; set; }
+
     [Required, Column("available")]
     public bool IsAvailable { get; set; }
 
@@ -98,8 +101,13 @@ public class Book : IDtoSerialization<BookDto>
         }
     }
 
-    public void SetIsAvailable(bool isAvailable)
+    public void UpdateAvailability(bool isAvailable)
     {
         IsAvailable = isAvailable;
+    }
+
+    public void UpdatePopularity(double popularity)
+    {
+        Popularity = popularity;
     }
 }

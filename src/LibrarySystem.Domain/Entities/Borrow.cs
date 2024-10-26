@@ -48,7 +48,7 @@ public class Borrow : IDtoSerialization<BorrowDto>
         };
     }
 
-    public void SetIsReturned(bool isReturned)
+    public void UpdateIsReturned(bool isReturned)
     {
         IsReturned = isReturned;
     }

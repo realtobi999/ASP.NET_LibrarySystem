@@ -67,9 +67,16 @@ public class BookService : IBookService
         await _repository.SaveSafelyAsync();
     }
 
-    public async Task SetAvailability(Book book, bool isAvailable)
+    public async Task UpdateAvailability(Book book, bool isAvailable)
     {
-        book.IsAvailable = isAvailable;
+        book.UpdateAvailability(isAvailable);
+
+        await this.UpdateAsync(book);
+    }
+
+    public async Task UpdatePopularity(Book book, double popularity)
+    {
+        book.UpdatePopularity(popularity);
 
         await this.UpdateAsync(book);
     }

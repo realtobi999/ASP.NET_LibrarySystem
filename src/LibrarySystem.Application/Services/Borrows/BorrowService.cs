@@ -83,8 +83,8 @@ public class BorrowService : IBorrowService
         }
 
         // set the book to available and the borrow status to returned, after that update both
-        book.SetIsAvailable(true);
-        borrow.SetIsReturned(true);
+        book.UpdateAvailability(true);
+        borrow.UpdateIsReturned(true);
 
         // update both entities
         await UpdateAsync(borrow);

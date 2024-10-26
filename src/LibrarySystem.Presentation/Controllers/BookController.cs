@@ -45,7 +45,6 @@ public class BookController : ControllerBase
     [HttpGet("api/book")]
     [HttpGet("api/book/recent")]
     [HttpGet("api/book/popular")]
-    [HttpGet("api/book/search/{query}")]
     public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId)
     {
         var books = await _service.Book.IndexAsync();
@@ -72,10 +71,13 @@ public class BookController : ControllerBase
             books = books.Where(b => b.Genres.Any(g => g.Id == genreId));
         }
 
-        if (!query.IsNullOrEmpty())
-        {
-            books = books.Where(b => b.Title!.Contains(query!) || b.Description!.Contains(query!));
-        }
+        return Ok(books.Paginate(offset, limit));
+    }
+
+    [HttpGet("api/book/search/{query}")]
+    public async Task<IActionResult> SearchBooks(string query, int limit, int offset)
+    {
+        var books = await _service.Book.SearchAsync(query);
 
         return Ok(books.Paginate(offset, limit));
     }

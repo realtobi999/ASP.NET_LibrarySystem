@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Domain.Entities;
+﻿using System.Collections;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -86,5 +87,12 @@ public class BookService : IBookService
     public async Task<IEnumerable<Book>> IndexRecommendedAsync(User user)
     {
         return (await _recommender.IndexRecommendedAsync(user)).OrderBy(b => b.Popularity);
+    }
+
+    public async Task<IEnumerable<Book>> SearchAsync(string query)
+    {
+        var books = await this.IndexAsync();
+
+        return books.Where(b => b.Title!.Contains(query!) || b.Description!.Contains(query!));
     }
 }

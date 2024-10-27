@@ -1,23 +1,26 @@
-﻿using System.Collections;
-using LibrarySystem.Domain.Entities;
+﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Domain.Interfaces.Services;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 
 namespace LibrarySystem.Application.Services.Books;
 
-public class BookService : IBookService
+public sealed class BookService : IBookService
 {
     private readonly IRepositoryManager _repository;
     private readonly IValidator<Book> _validator;
     private readonly IBookRecommender _recommender;
+    private readonly ISearcher<Book> _searcher;
+    private readonly IBookPopularityCalculator _calculator;
 
-    public BookService(IRepositoryManager repository, IValidator<Book> validator, IBookRecommender recommender)
+    public BookService(IRepositoryManager repository, IValidator<Book> validator, IBookRecommender recommender, ISearcher<Book> searcher, IBookPopularityCalculator calculator)
     {
         _repository = repository;
         _validator = validator;
         _recommender = recommender;
+        _searcher = searcher;
+        _calculator = calculator;
     }
 
     public async Task CreateAsync(Book book)
@@ -91,8 +94,11 @@ public class BookService : IBookService
 
     public async Task<IEnumerable<Book>> SearchAsync(string query)
     {
-        var books = await this.IndexAsync();
+        return await _searcher.SearchAsync(query);
+    }
 
-        return books.Where(b => b.Title!.Contains(query!) || b.Description!.Contains(query!));
+    public double CalculateBookPopularity(Book book)
+    {
+        return _calculator.CalculatePopularityScore(book);
     }
 }

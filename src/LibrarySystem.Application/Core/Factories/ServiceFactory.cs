@@ -12,6 +12,7 @@ using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 
 namespace LibrarySystem.Application.Core.Factories;
 
@@ -40,7 +41,7 @@ public class ServiceFactory : IServiceFactory
 
     public IBookService CreateBookService()
     {
-        return new BookService(_repository, _validatorFactory.Initiate<Book>(), new BookRecommender(_repository));
+        return new BookService(_repository, _validatorFactory.Initiate<Book>(), new BookRecommender(_repository), new BookSearcher(_repository), new BookPopularityCalculator());
     }
 
     public IBorrowService CreateBorrowService()

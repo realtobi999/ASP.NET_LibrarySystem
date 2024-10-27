@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Domain.Entities;
 
-namespace LibrarySystem.Domain.Interfaces.Services;
+namespace LibrarySystem.Domain.Interfaces.Services.Books;
 
 public interface IBookService : IBaseService<Book>
 {
@@ -9,4 +9,5 @@ public interface IBookService : IBaseService<Book>
     Task<Book> GetAsync(string isbn);
     Task UpdateAvailabilityAsync(Book book, bool isAvailable);
     Task UpdatePopularityAsync(Book book, double popularity);
+    double CalculateBookPopularity(Book book);
 }

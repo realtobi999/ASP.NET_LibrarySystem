@@ -1,10 +1,10 @@
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 
 namespace LibrarySystem.Application.Services.Books;
 
-public class BookRecommender : IBookRecommender
+internal sealed class BookRecommender : IBookRecommender
 {
     private readonly IRepositoryManager _repository;
 

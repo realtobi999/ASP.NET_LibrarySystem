@@ -1,17 +1,15 @@
-using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Managers;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 namespace LibrarySystem.Presentation.Services;
 
 public class BookPopularityBackgroundService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IBookPopularityCalculator _popularityCalculator;
     private Timer? _timer;
 
-    public BookPopularityBackgroundService(IServiceProvider serviceProvider, IBookPopularityCalculator popularityCalculator)
+    public BookPopularityBackgroundService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _popularityCalculator = popularityCalculator;
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -29,7 +27,7 @@ public class BookPopularityBackgroundService : BackgroundService
 
         foreach (var book in books)
         {
-            await serviceManager.Book.UpdatePopularityAsync(book, _popularityCalculator.CalculatePopularityScore(book));
+            await serviceManager.Book.UpdatePopularityAsync(book, serviceManager.Book.CalculateBookPopularity(book));
         }
     }
 

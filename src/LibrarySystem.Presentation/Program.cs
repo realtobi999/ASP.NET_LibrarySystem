@@ -3,6 +3,7 @@ using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 using LibrarySystem.EmailService;
 using LibrarySystem.Presentation.Extensions;
 using LibrarySystem.Presentation.Middlewares;
@@ -38,7 +39,6 @@ public class Program
             builder.Services.ConfigureValidators();
             builder.Services.ConfigureMappers();
             builder.Services.AddSingleton<IHasher, Hasher>();
-            builder.Services.AddSingleton<IBookPopularityCalculator, BookPopularityCalculator>();
 
             // email client
             builder.Services.AddSingleton(p => SmtpFactory.CreateInstance(config));

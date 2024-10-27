@@ -1,9 +1,9 @@
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Common;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 
 namespace LibrarySystem.Application.Services.Books;
 
-public class BookPopularityCalculator : IBookPopularityCalculator
+internal sealed class BookPopularityCalculator : IBookPopularityCalculator
 {
     public const double BORROW_MULTIPLIER = 1.5;
     public const double REVIEW_MULTIPLIER = 1.5;

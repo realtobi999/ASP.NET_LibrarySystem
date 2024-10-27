@@ -1,7 +1,7 @@
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 using LibrarySystem.Tests.Integration.Helpers;
 using Moq;
 

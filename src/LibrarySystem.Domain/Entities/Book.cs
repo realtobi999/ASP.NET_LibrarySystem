@@ -35,6 +35,10 @@ public class Book : IDtoSerialization<BookDto>
     [Required, Column("created_at")]
     public DateTimeOffset CreatedAt { get; set; }
 
+    // constants
+
+    public const double POPULARITY_DEFAULT_VALUE = 100;
+
     // relationships
 
     [JsonIgnore]

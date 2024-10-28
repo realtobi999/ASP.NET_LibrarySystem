@@ -2,7 +2,7 @@ using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Domain.Interfaces.Services.Books;
 
-public interface IBookPopularityCalculator
+public interface IBookCalculator
 {
     double CalculatePopularityScore(Book book);
 }

@@ -5,13 +5,13 @@ using LibrarySystem.Tests.Integration.Helpers;
 
 namespace LibrarySystem.Tests.Unit.Books;
 
-public class BookPopularityCalculatorTests
+public class BookCalculatorTests
 {
-    private readonly IBookPopularityCalculator _calculator;
+    private readonly IBookCalculator _calculator;
 
-    public BookPopularityCalculatorTests()
+    public BookCalculatorTests()
     {
-        _calculator = new BookPopularityCalculator();
+        _calculator = new BookCalculator();
     }
 
     [Fact]

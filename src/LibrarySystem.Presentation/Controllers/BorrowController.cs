@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Core.Extensions;
+﻿using System.Security.Claims;
+using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Borrows;
@@ -63,12 +64,16 @@ public class BorrowController : ControllerBase
     public async Task<IActionResult> CreateBorrow([FromBody] CreateBorrowDto createBorrowDto)
     {
         var borrow = _mapper.Borrow.Map(createBorrowDto);
+        var book = await _service.Book.GetAsync(borrow.BookId);
+
+        if (!book.IsAvailable)
+        {
+            throw new Conflict409Exception($"The book with ID: {book.Id} is currently borrowed. Please check the book ID and try again.");
+        }
+
+        await _service.Book.UpdateAvailabilityAsync(book, false);
 
         await _service.Borrow.CreateAsync(borrow);
-
-        // set the book unavailable
-        var book = await _service.Book.GetAsync(borrow.BookId);
-        await _service.Book.SetAvailability(book, false);
 
         // send confirmation email - FOR PRODUCTION ONLY
         if (_env.IsProduction())
@@ -93,14 +98,23 @@ public class BorrowController : ControllerBase
         var book = await _service.Book.GetAsync(borrow.BookId);
 
         var token = JwtUtils.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
+        var role = JwtUtils.ParseFromPayload(token, ClaimTypes.Role);
 
-        // match the user ID of the borrow and from the request
-        if (borrow.UserId.ToString() != JwtUtils.ParseFromPayload(token, "UserId"))
+        if (borrow.IsReturned)
         {
-            throw new NotAuthorized401Exception();
+            throw new BadRequest400Exception($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
+        }
+        if (book.IsAvailable)
+        {
+            throw new Conflict409Exception($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
+        }
+        if (DateTimeOffset.UtcNow > borrow.DueDate && role != "Employee") // this role check enables the librarians to return the book even if it's past due
+        {
+            throw new Conflict409Exception($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
         }
 
-        await _service.Borrow.ReturnAsync(borrow, book, token, _service.Book.UpdateAsync);
+        await _service.Book.UpdateAvailabilityAsync(book, true);
+        await _service.Borrow.UpdateIsReturnedAsync(borrow, true);
 
         // send confirmation email - FOR PRODUCTION ONLY
         if (_env.IsProduction())

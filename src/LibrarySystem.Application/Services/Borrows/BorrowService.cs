@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Domain.Entities;
+﻿using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
@@ -58,39 +56,6 @@ public class BorrowService : IBorrowService
         return borrows;
     }
 
-    public async Task ReturnAsync(Borrow borrow, string jwt, Func<Book, Task> updateBookAsync)
-    {
-        var book = await _repository.Book.GetAsync(borrow.BookId) ?? throw new NotFound404Exception(nameof(Book), borrow.BookId);
-
-        await this.ReturnAsync(borrow, book, jwt, updateBookAsync);
-    }
-
-    public async Task ReturnAsync(Borrow borrow, Book book, string jwt, Func<Book, Task> UpdateBookAsync)
-    {
-        var role = JwtUtils.ParseFromPayload(jwt, ClaimTypes.Role);
-
-        if (borrow.IsReturned)
-        {
-            throw new BadRequest400Exception($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
-        }
-        if (book.IsAvailable)
-        {
-            throw new Conflict409Exception($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
-        }
-        if (DateTimeOffset.UtcNow > borrow.DueDate && role != "Employee") // this role check enables the librarians to return the book even if it's past due
-        {
-            throw new Conflict409Exception($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
-        }
-
-        // set the book to available and the borrow status to returned, after that update both
-        book.SetIsAvailable(true);
-        borrow.SetIsReturned(true);
-
-        // update both entities
-        await UpdateAsync(borrow);
-        await UpdateBookAsync(book);
-    }
-
     public async Task UpdateAsync(Borrow borrow)
     {
         // validate
@@ -100,5 +65,12 @@ public class BorrowService : IBorrowService
         // delete borrow entity and save changes
         _repository.Borrow.Update(borrow);
         await _repository.SaveSafelyAsync();
+    }
+
+    public async Task UpdateIsReturnedAsync(Borrow borrow, bool isReturned)
+    {
+        borrow.UpdateIsReturned(isReturned);
+
+        await this.UpdateAsync(borrow);
     }
 }

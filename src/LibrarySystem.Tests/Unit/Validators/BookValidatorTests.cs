@@ -26,17 +26,11 @@ public class BookValidatorTests
         var genre = new Genre().WithFakeData();
         var author = new Author().WithFakeData();
 
-        book.BookGenres = [new (){
-            BookId = book.Id,
-            Book = book,
-            GenreId = genre.Id,
-            Genre = genre,
+        book.Genres = [new (){
+            Id = genre.Id,
         }];
-        book.BookAuthors = [new (){
-            BookId = book.Id,
-            Book = book,
-            AuthorId = author.Id,
-            Author = author,
+        book.Authors = [new (){
+            Id = author.Id,
         }];
 
         _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync((Genre?)null); // set the return to null value => emulate that the repository couldn't find this entity
@@ -57,17 +51,11 @@ public class BookValidatorTests
         var genre = new Genre().WithFakeData();
         var author = new Author().WithFakeData();
 
-        book.BookGenres = [new (){
-            BookId = book.Id,
-            Book = book,
-            GenreId = genre.Id,
-            Genre = genre,
+        book.Genres = [new (){
+            Id = genre.Id,
         }];
-        book.BookAuthors = [new (){
-            BookId = book.Id,
-            Book = book,
-            AuthorId = author.Id,
-            Author = author,
+        book.Authors = [new (){
+            Id = author.Id,
         }];
 
         _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync(genre);
@@ -92,18 +80,13 @@ public class BookValidatorTests
         var review = new BookReview().WithFakeData(book, new User().WithFakeData());
         review.BookId = Guid.NewGuid(); // assign a different book id
 
-        book.BookGenres = [new (){
-            BookId = book.Id,
-            Book = book,
-            GenreId = genre.Id,
-            Genre = genre,
+        book.Genres = [new (){
+            Id = genre.Id,
         }];
-        book.BookAuthors = [new (){
-            BookId = book.Id,
-            Book = book,
-            AuthorId = author.Id,
-            Author = author,
+        book.Authors = [new (){
+            Id = author.Id,
         }];
+
         book.BookReviews = [review];
 
         _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync(genre);

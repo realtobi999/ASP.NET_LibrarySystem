@@ -26,6 +26,10 @@ public class BookReview : IDtoSerialization<BookReviewDto>
     [Required, Column("created_at")]
     public DateTimeOffset CreatedAt { get; set; }
 
+    // constants
+
+    public const double RATING_MIDDLE_VALUE = 5;
+
     // relationships
 
     [JsonIgnore]

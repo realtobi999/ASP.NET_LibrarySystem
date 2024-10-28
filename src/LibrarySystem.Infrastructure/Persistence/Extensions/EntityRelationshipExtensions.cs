@@ -1,5 +1,4 @@
 ﻿using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,69 +6,20 @@ namespace LibrarySystem.Infrastructure.Persistence.Extensions;
 
 public static class EntityRelationshipExtensions
 {
-    public static void ConfigureWishlistRelationship(this ModelBuilder builder)
-    {
-        // configure many-to-many relationship between Wishlist and Book
-        builder.Entity<WishlistBook>()
-            .HasKey(wb => new { wb.WishlistId, wb.BookId });
-
-        builder.Entity<WishlistBook>()
-            .HasOne(wb => wb.Wishlist)
-            .WithMany(w => w.WishlistBooks)
-            .HasForeignKey(wb => wb.WishlistId);
-
-        builder.Entity<WishlistBook>()
-            .HasOne(wb => wb.Book)
-            .WithMany()
-            .HasForeignKey(wb => wb.BookId);
-    }
-
-    public static void ConfigureBookRelationships(this ModelBuilder builder)
-    {
-        // configure many-to-many relationship between Book and Author
-        builder.Entity<BookAuthor>()
-            .HasKey(ba => new { ba.BookId, ba.AuthorId });
-
-        builder.Entity<BookAuthor>()
-            .HasOne(ba => ba.Book)
-            .WithMany(b => b.BookAuthors)
-            .HasForeignKey(ba => ba.BookId);
-
-        builder.Entity<BookAuthor>()
-            .HasOne(ba => ba.Author)
-            .WithMany()
-            .HasForeignKey(ba => ba.AuthorId);
-
-        // configure many-to-many relationship between Book and Genre
-        builder.Entity<BookGenre>()
-            .HasKey(bg => new { bg.BookId, bg.GenreId });
-
-        builder.Entity<BookGenre>()
-            .HasOne(bg => bg.Book)
-            .WithMany(b => b.BookGenres)
-            .HasForeignKey(bg => bg.BookId);
-
-        builder.Entity<BookGenre>()
-            .HasOne(bg => bg.Genre)
-            .WithMany()
-            .HasForeignKey(bg => bg.GenreId);
-
-        // configure one-to-many relationship between Book and BookReview
-        builder.Entity<Book>()
-            .HasMany(b => b.BookReviews)
-            .WithOne(br => br.Book)
-            .HasForeignKey(br => br.BookId)
-            .OnDelete(DeleteBehavior.Cascade);
-    }
-
     public static void ConfigureUserRelationships(this ModelBuilder builder)
     {
-
-        // configure one-to-many relationship between User and BookReview
+        // configure one-to-many relationship between User and BookReviews
         builder.Entity<User>()
             .HasMany(u => u.BookReviews)
             .WithOne(br => br.User)
             .HasForeignKey(br => br.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // configure one-to-many relationship between User and Borrow
+        builder.Entity<User>()
+            .HasMany(u => u.Borrows)
+            .WithOne(b => b.User)
+            .HasForeignKey(b => b.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         // configure one-to-many relationship between User and Wishlist
@@ -78,13 +28,60 @@ public static class EntityRelationshipExtensions
             .WithOne(w => w.User)
             .HasForeignKey(w => w.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+    }
 
-        // configure one-to-many relationship between User and borrows
-        builder.Entity<User>()
-            .HasMany(u => u.Borrows)
-            .WithOne(b => b.User)
-            .HasForeignKey(b => b.UserId)
+    public static void ConfigureBookRelationship(this ModelBuilder builder)
+    {
+        // configure many-to-many relationship between Book and Author 
+        builder.Entity<Book>()
+            .HasMany(b => b.Authors)
+            .WithMany(a => a.Books);
+
+        // configure many-to-many relationship between Book and Genre 
+        builder.Entity<Book>()
+            .HasMany(b => b.Genres)
+            .WithMany(g => g.Books);
+
+        // configure one-to-many relationship between Book and Borrow
+        builder.Entity<Book>()
+            .HasMany(b => b.Borrows)
+            .WithOne(b => b.Book)
+            .HasForeignKey(b => b.BookId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // configure one-to-many relationship between Book and BookReviews
+        builder.Entity<Book>()
+            .HasMany(b => b.BookReviews)
+            .WithOne(br => br.Book)
+            .HasForeignKey(br => br.BookId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Book>()
+            .Navigation(b => b.Authors)
+            .AutoInclude();
+        builder.Entity<Book>()
+            .Navigation(b => b.Genres)
+            .AutoInclude();
+        builder.Entity<Book>()
+            .Navigation(b => b.Borrows)
+            .AutoInclude();
+        builder.Entity<Book>()
+            .Navigation(b => b.BookReviews)
+            .AutoInclude();
+        builder.Entity<Book>()
+            .Navigation(b => b.CoverPictures)
+            .AutoInclude();
+    }
+
+    public static void ConfigureWishlistRelationship(this ModelBuilder builder)
+    {
+        // configure many-to-many relationship between Wishlist and Book
+        builder.Entity<Wishlist>()
+            .HasMany(w => w.Books);
+
+        builder.Entity<Wishlist>()
+            .Navigation(w => w.Books)
+            .AutoInclude();
     }
 
     public static void ConfigurePictureRelationships(this ModelBuilder builder)

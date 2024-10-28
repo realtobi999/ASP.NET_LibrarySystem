@@ -17,13 +17,13 @@ public class BookValidator : IValidator<Book>
     public async Task<(bool isValid, Exception? exception)> ValidateAsync(Book book)
     {
         // validate that the book has at least one genre and author assigned
-        if (book.BookAuthors.Count < 1 || book.BookGenres.Count < 1)
+        if (book.Authors.Count < 1 || book.Genres.Count < 1)
         {
             return (false, new BadRequest400Exception("A book must have at least one author and one genre assigned."));
         }
 
         // validate that the assigned genres exists
-        foreach (var genreId in book.BookGenres.Select(bk => bk.GenreId))
+        foreach (var genreId in book.Genres.Select(g => g.Id))
         {
             var genre = await _repository.Genre.GetAsync(genreId);
 
@@ -34,7 +34,7 @@ public class BookValidator : IValidator<Book>
         }
 
         // validate that the assigned authors exists
-        foreach (var authorId in book.BookAuthors.Select(ba => ba.AuthorId))
+        foreach (var authorId in book.Authors.Select(a => a.Id))
         {
             var author = await _repository.Author.GetAsync(authorId);
 

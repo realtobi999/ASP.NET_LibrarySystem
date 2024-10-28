@@ -1,6 +1,7 @@
 ﻿using LibrarySystem.Application.Core.Attributes;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Dtos.Wishlists;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
 using Microsoft.AspNetCore.Authorization;
@@ -66,7 +67,15 @@ public class WishlistController : ControllerBase
             throw new NotAuthorized401Exception();
         }
 
-        wishlist.Update(updateWishlistDto);
+        var books = new List<Book>();
+
+        foreach (var bookId in updateWishlistDto.BookIds)
+        {
+            var book = await _service.Book.GetAsync(bookId);
+            books.Add(book);
+        }
+
+        wishlist.Update(updateWishlistDto, books);
         await _service.Wishlist.UpdateAsync(wishlist);
 
         return NoContent();

@@ -1,4 +1,5 @@
 ﻿using LibrarySystem.Domain.Interfaces.Services;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 
 namespace LibrarySystem.Domain.Interfaces.Factories;
 

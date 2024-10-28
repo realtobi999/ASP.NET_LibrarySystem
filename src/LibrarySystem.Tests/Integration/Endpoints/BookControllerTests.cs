@@ -467,4 +467,35 @@ public class BookControllerTests
         content.CoverPictures!.Count.Should().Be(2);
     }
 
+    [Fact]
+    public async void GetBooks_Returns200AndMostRecentBooks()
+    {
+         // prepare
+        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var book1 = new Book().WithFakeData();
+        var book2 = new Book().WithFakeData();
+        var book3 = new Book().WithFakeData();
+        var token = JwtTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Employee")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var create5 = await client.PostAsJsonAsync("/api/book", await book1.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create6 = await client.PostAsJsonAsync("/api/book", await book2.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        create6.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create7 = await client.PostAsJsonAsync("/api/book", await book3.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        create7.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var response = await client.GetAsync($"/api/book/recent");
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
+
+        content.ElementAt(0).Id.Should().Be(book1.Id);
+        content.ElementAt(1).Id.Should().Be(book2.Id);
+        content.ElementAt(2).Id.Should().Be(book3.Id);
+    }
 }

@@ -31,6 +31,9 @@ public class Borrow : IDtoSerialization<BorrowDto>
     [JsonIgnore]
     public User? User { get; set; }
 
+    [JsonIgnore]
+    public Book? Book { get; set; }
+
     /// <inheritdoc/>
     public BorrowDto ToDto()
     {
@@ -45,7 +48,7 @@ public class Borrow : IDtoSerialization<BorrowDto>
         };
     }
 
-    public void SetIsReturned(bool isReturned)
+    public void UpdateIsReturned(bool isReturned)
     {
         IsReturned = isReturned;
     }

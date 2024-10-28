@@ -2,19 +2,25 @@
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Domain.Interfaces.Services;
+using LibrarySystem.Domain.Interfaces.Services.Books;
 
 namespace LibrarySystem.Application.Services.Books;
 
-public class BookService : IBookService
+public sealed class BookService : IBookService
 {
     private readonly IRepositoryManager _repository;
     private readonly IValidator<Book> _validator;
+    private readonly IBookRecommender _recommender;
+    private readonly ISearcher<Book> _searcher;
+    private readonly IBookCalculator _calculator;
 
-    public BookService(IRepositoryManager repository, IValidator<Book> validator)
+    public BookService(IRepositoryManager repository, IValidator<Book> validator, IBookRecommender recommender, ISearcher<Book> searcher, IBookCalculator calculator)
     {
         _repository = repository;
         _validator = validator;
+        _recommender = recommender;
+        _searcher = searcher;
+        _calculator = calculator;
     }
 
     public async Task CreateAsync(Book book)
@@ -67,10 +73,32 @@ public class BookService : IBookService
         await _repository.SaveSafelyAsync();
     }
 
-    public async Task SetAvailability(Book book, bool isAvailable)
+    public async Task UpdateAvailabilityAsync(Book book, bool isAvailable)
     {
-        book.IsAvailable = isAvailable;
+        book.UpdateIsAvailable(isAvailable);
 
         await this.UpdateAsync(book);
+    }
+
+    public async Task UpdatePopularityAsync(Book book, double popularity)
+    {
+        book.UpdatePopularity(popularity);
+
+        await this.UpdateAsync(book);
+    }
+
+    public async Task<IEnumerable<Book>> IndexRecommendedAsync(User user)
+    {
+        return (await _recommender.IndexRecommendedAsync(user)).OrderBy(b => b.Popularity);
+    }
+
+    public async Task<IEnumerable<Book>> SearchAsync(string query)
+    {
+        return await _searcher.SearchAsync(query);
+    }
+
+    public double CalculateBookPopularity(Book book)
+    {
+        return _calculator.CalculatePopularityScore(book);
     }
 }

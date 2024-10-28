@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Books;
-using LibrarySystem.Domain.Entities.Relationships;
 using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Entities;
@@ -27,33 +26,42 @@ public class Book : IDtoSerialization<BookDto>
     [Required, Column("published_at")]
     public DateTimeOffset PublishedDate { get; set; }
 
+    [Required, Column("popularity")]
+    public double Popularity { get; set; }
+
     [Required, Column("available")]
     public bool IsAvailable { get; set; }
+
+    [Required, Column("created_at")]
+    public DateTimeOffset CreatedAt { get; set; }
+
+    // constants
+
+    public const double POPULARITY_DEFAULT_VALUE = 100;
 
     // relationships
 
     [JsonIgnore]
     public ICollection<Picture> CoverPictures { get; set; } = [];
+    
     [JsonIgnore]
-    public ICollection<BookAuthor> BookAuthors { get; set; } = [];
+    public ICollection<Author> Authors { get; set; } = [];
+
     [JsonIgnore]
-    public ICollection<BookGenre> BookGenres { get; set; } = [];
+    public ICollection<Genre> Genres { get; set; } = [];
+
     [JsonIgnore]
     public ICollection<BookReview> BookReviews { get; set; } = [];
+
+    [JsonIgnore]
+    public ICollection<Borrow> Borrows { get; set; } = [];
 
     /// <inheritdoc/>
     public BookDto ToDto()
     {
-        var authors = this.BookAuthors.Where(ba => ba.Author is not null)
-                        .Select(ba => ba.Author!.ToDto())
-                        .ToList();
-
-        var genres = this.BookGenres.Where(bg => bg.Genre is not null)
-                        .Select(bg => bg.Genre!.ToDto())
-                        .ToList();
-
-        var reviews = this.BookReviews.Select(br => br.ToDto())
-                                      .ToList();
+        var authors = this.Authors.Select(a => a.ToDto()).ToList();
+        var genres =  this.Genres.Select(g => g.ToDto()).ToList();
+        var reviews = this.BookReviews.Select(br => br.ToDto()).ToList();
 
         return new BookDto
         {
@@ -71,7 +79,7 @@ public class Book : IDtoSerialization<BookDto>
         };
     }
 
-    public void Update(UpdateBookDto dto)
+    public void Update(UpdateBookDto dto, IEnumerable<Genre> genres, IEnumerable<Author> authors)
     {
         Title = dto.Title;
         Description = dto.Description;
@@ -84,29 +92,26 @@ public class Book : IDtoSerialization<BookDto>
         }
 
         // clean previous attached genres, authors and assign new
-        BookAuthors.Clear();
-        BookGenres.Clear();
+        this.Genres.Clear();
+        this.Authors.Clear();
 
-        foreach (var genreId in dto.GenreIds)
+        foreach (var genre in genres)
         {
-            BookGenres.Add(new BookGenre
-            {
-                BookId = Id,
-                GenreId = genreId,
-            });
+            this.Genres.Add(genre);
         }
-        foreach (var authorId in dto.AuthorIds)
+        foreach (var author in authors)
         {
-            BookAuthors.Add(new BookAuthor
-            {
-                BookId = Id,
-                AuthorId = authorId,
-            });
+            this.Authors.Add(author);
         }
     }
 
-    public void SetIsAvailable(bool isAvailable)
+    public void UpdateIsAvailable(bool isAvailable)
     {
         IsAvailable = isAvailable;
+    }
+
+    public void UpdatePopularity(double popularity)
+    {
+        Popularity = popularity;
     }
 }

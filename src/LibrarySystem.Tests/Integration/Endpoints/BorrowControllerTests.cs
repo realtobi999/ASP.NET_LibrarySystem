@@ -104,7 +104,7 @@ public class BorrowControllerTests
         content.IsAvailable.Should().Be(false);
 
         var response = await client.PostAsJsonAsync("/api/borrow", borrow2.ToCreateBorrowDto());
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Conflict);
     }
 
     [Fact]

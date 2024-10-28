@@ -105,7 +105,7 @@ public class Book : IDtoSerialization<BookDto>
         }
     }
 
-    public void UpdateAvailability(bool isAvailable)
+    public void UpdateIsAvailable(bool isAvailable)
     {
         IsAvailable = isAvailable;
     }

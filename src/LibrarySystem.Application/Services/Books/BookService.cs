@@ -75,7 +75,7 @@ public sealed class BookService : IBookService
 
     public async Task UpdateAvailabilityAsync(Book book, bool isAvailable)
     {
-        book.UpdateAvailability(isAvailable);
+        book.UpdateIsAvailable(isAvailable);
 
         await this.UpdateAsync(book);
     }

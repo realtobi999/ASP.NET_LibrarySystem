@@ -24,6 +24,8 @@ public class BookMapper : IMapper<Book, CreateBookDto>
             Description = dto.Description,
             PagesCount = dto.PagesCount,
             PublishedDate = dto.PublishedDate,
+            Popularity = Book.POPULARITY_DEFAULT_VALUE,
+            IsAvailable = (bool)dto.Available!, // property is marked by the required attribute in the dto
             CreatedAt = DateTimeOffset.UtcNow
         };
 

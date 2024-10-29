@@ -37,7 +37,6 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);  
-        optionsBuilder.EnableSensitiveDataLogging();
     }
 
 }

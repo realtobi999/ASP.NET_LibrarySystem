@@ -78,10 +78,6 @@ public static class EntityRelationshipExtensions
         // configure many-to-many relationship between Wishlist and Book
         builder.Entity<Wishlist>()
             .HasMany(w => w.Books);
-
-        builder.Entity<Wishlist>()
-            .Navigation(w => w.Books)
-            .AutoInclude();
     }
 
     public static void ConfigurePictureRelationships(this ModelBuilder builder)

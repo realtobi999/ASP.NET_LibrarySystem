@@ -1,9 +1,6 @@
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Application.Services.Books;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails;
-using LibrarySystem.Domain.Interfaces.Services.Books;
 using LibrarySystem.EmailService;
 using LibrarySystem.Presentation.Extensions;
 using LibrarySystem.Presentation.Middlewares;
@@ -20,6 +17,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         {
             var config = builder.Configuration;
+
+            builder.Services.AddHttpLogging(opt => { });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -57,6 +56,7 @@ public class Program
         // application pipeline
         var app = builder.Build();
         {
+            app.UseHttpLogging();
             app.UseExceptionHandler(opt => { });
 
             if (app.Environment.IsDevelopment())

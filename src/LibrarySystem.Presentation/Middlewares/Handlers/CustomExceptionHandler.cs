@@ -7,6 +7,13 @@ namespace LibrarySystem.Presentation.Middlewares.Handlers;
 
 public class CustomExceptionHandler : IExceptionHandler
 {
+    private readonly ILogger<CustomExceptionHandler> _logger;
+
+    public CustomExceptionHandler(ILogger<CustomExceptionHandler> logger)
+    {
+        _logger = logger;
+    }
+
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken token)
     {
         if (exception is IHttpException httpException)
@@ -18,6 +25,13 @@ public class CustomExceptionHandler : IExceptionHandler
             await HandleGeneralException(context, exception, token);
         }
 
+        _logger.LogError("An error occurred at {Timestamp} while processing the request: {Method} {Path} - {Message}",
+            DateTime.UtcNow,
+            context.Request.Method,
+            context.Request.Path,
+            exception.Message);
+
+
         return false;
     }
 
@@ -26,6 +40,7 @@ public class CustomExceptionHandler : IExceptionHandler
         var error = new ErrorMessage
         {
             StatusCode = exception.StatusCode,
+            Type = exception.GetType().Name,
             Title = exception.Title,
             Detail = exception.Message,
             Instance = $"{context.Request.Method} {context.Request.Path}"

@@ -51,6 +51,7 @@ public static class ServiceExtensions
                 connection,
                 options =>
                 {
+                    options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                     options.EnableRetryOnFailure(maxRetryCount: 3);
                 });
         });

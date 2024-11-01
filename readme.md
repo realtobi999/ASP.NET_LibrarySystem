@@ -15,12 +15,12 @@
 ## Summary
 
 - This is a **REST DEMO API** project for a library system.
-- There is ***35*** endpoints in total, with over ***55*** **unit and integration** tests
+- There is ***45*** endpoints in total, with over ***80*** **unit and integration** tests
 - Uses a **PostgreSQL** database with **Entity Framework**
 - **JWT** authentication and authorization - (User, Employee, Admin policies)
 - Project is utilizing the **Clean Architecture**
 - Features **Users, Employees, Books, Authors, Genres, Borrow System, Reviews**
-- Features **searching** and **querying** with various filters
+- Features **searching**, **recommending** and **querying** books with various filters
 - Features **Email Notifications** on some endpoints.
 
 ## How To Build?
@@ -107,7 +107,7 @@ In total there is about **35+** endpoints
 
 ## Tests Overview
 
-In total there is about **55+** tests, both **integration** and **unit** tests. I've tried to cover most edge cases with the integration tests.
+In total there is about **80+** tests, both **integration** and **unit** tests. I've tried to cover most edge cases with the integration tests.
 
 ### **Integration Tests:**
 
@@ -121,8 +121,9 @@ In total there is about **55+** tests, both **integration** and **unit** tests. 
 │   ├── BorrowControllerTests.cs
 │   ├── EmployeeControllerTests.cs
 │   ├── GenreControllerTests.cs
-│   └── UserControllerTests.cs
-├── Extensions 
+│   ├── UserControllerTests.cs
+│   └── WishlistControllerTests.cs
+├── Helpers
 │   ├── AuthorTestExtensions.cs
 │   ├── BookReviewTestExtensions.cs
 │   ├── BookTextExtensions.cs
@@ -130,7 +131,8 @@ In total there is about **55+** tests, both **integration** and **unit** tests. 
 │   ├── EmployeeTestExtensions.cs
 │   ├── GenreTestExtensions.cs
 │   ├── JwtTestExtensions.cs
-│   └── UserTestExtensions.cs
+│   ├── UserTestExtensions.cs
+│   └── WishlistTestExtensions.cs
 ├── Middlewares
 │   ├── EmployeeAuthenticationMiddlewareTests.cs
 │   └── UserAuthenticationMiddlewareTests.cs
@@ -145,10 +147,19 @@ The Extensions folder is for helper extension methods that come in handy during 
 
 ```bash
 .
-└── Utilities
-    ├── AuthenticationMiddlewareBaseTests.cs
-    ├── JwtTests.cs
-    └── PasswordHasherTests.cs
+├── Books
+│   ├── BookCalculatorTests.cs
+│   ├── BookRecommenderTests.cs
+│   └── BookSearcherTests.cs
+├── Utilities
+│   ├── AuthenticationMiddlewareBaseTests.cs
+│   ├── HasherTests.cs
+│   └── JwtTests.cs
+└── Validators
+    ├── BookReviewValidatorTests.cs
+    ├── BookValidatorTests.cs
+    ├── BorrowValidatorTests.cs
+    └── WishlistValidatorTests.cs
 ```
 
 ## Architecture Overview
@@ -156,67 +167,74 @@ The Extensions folder is for helper extension methods that come in handy during 
 This project utilizes a **Clean Architecture** paradigm. Which is very widely known for its scalability and its perfect for bigger sized projects.
 
 ```bash
-├── LibrarySystem.Application // The Application Layer
+.
+├── LibrarySystem.Application // application layer
 │   ├── Core
 │   │   ├── Attributes
+│   │   ├── Configuration
 │   │   ├── Emails
+│   │   │   └── Services
 │   │   ├── Extensions
 │   │   ├── Factories
-│   │   └── Utilities
-│   ├── Interfaces
-│   │   ├── Emails
-│   │   └── Services
+│   │   ├── Mappers
+│   │   ├── Utilities
+│   │   └── Validators
 │   └── Services
 │       ├── Authors
 │       ├── Books
 │       ├── Borrows
 │       ├── Genres
+│       ├── Pictures
 │       ├── Reviews
 │       ├── Staffs
-│       └── Users
-├── LibrarySystem.Domain // The Domain/Core Layer
+│       ├── Users
+│       └── Wishlists
+├── LibrarySystem.Domain // domain layer
 │   ├── Dtos
 │   │   ├── Authors
 │   │   ├── Books
 │   │   ├── Borrows
+│   │   ├── Email
+│   │   │   └── Messages
 │   │   ├── Employees
 │   │   ├── Genres
-│   │   ├── Messages
 │   │   ├── Responses
 │   │   ├── Reviews
-│   │   └── Users
+│   │   ├── Users
+│   │   └── Wishlists
 │   ├── Entities
-│   │   └── Relationships
+│   ├── Enums
 │   ├── Exceptions
-│   │   ├── BadRequest
-│   │   └── NotFound
+│   │   ├── Common
+│   │   └── HTTP
 │   └── Interfaces
+│       ├── Common
 │       ├── Emails
+│       │   └── Borrow
+│       ├── Factories
+│       ├── Managers
 │       ├── Repositories
-│       └── Utilities
-├── LibrarySystem.EmailService
-├── LibrarySystem.Infrastructure // The Infrastructure Layer
+│       └── Services
+│           ├── Books
+│           └── Services
+├── LibrarySystem.Infrastructure // infrastructure layer
 │   ├── Factories
 │   ├── Messages
-│   │   ├── Borrows
+│   │   ├── Builders
 │   │   └── Html
 │   └── Persistence
 │       ├── Extensions
 │       ├── Migrations
 │       └── Repositories
-├── LibrarySystem.Presentation // The Presentation Layer
-│   ├── Controllers
-│   ├── Extensions
-│   ├── Middlewares
-│   └── Properties
-└── LibrarySystem.Tests
-    ├── Integration
-    │   ├── Endpoints
-    │   ├── Extensions
-    │   ├── Middlewares
-    │   └── Server
-    └── Unit
-        └── Utilities
+└── LibrarySystem.Presentation // presentation layer
+    ├── Controllers
+    ├── Extensions
+    ├── Middlewares
+    │   ├── Filters
+    │   └── Handlers
+    ├── Properties
+    └── Services
+
 ```
 
 ## Notes

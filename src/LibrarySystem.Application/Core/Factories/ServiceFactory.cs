@@ -41,7 +41,9 @@ public class ServiceFactory : IServiceFactory
 
     public IBookService CreateBookService()
     {
-        return new BookService(_repository, _validatorFactory.Initiate<Book>(), new BookRecommender(_repository), new BookSearcher(_repository), new BookCalculator());
+        var searcher = new BookSearcher(_repository, new GenreSearcher(_repository), new AuthorSearcher(_repository));
+
+        return new BookService(_repository, _validatorFactory.Initiate<Book>(), new BookRecommender(_repository), searcher, new BookCalculator());
     }
 
     public IBorrowService CreateBorrowService()

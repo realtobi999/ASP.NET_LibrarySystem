@@ -149,8 +149,11 @@ The Extensions folder is for helper extension methods that come in handy during 
 .
 ├── Books
 │   ├── BookCalculatorTests.cs
-│   ├── BookRecommenderTests.cs
-│   └── BookSearcherTests.cs
+│   └── BookRecommenderTests.cs
+├── Searchers
+│   ├── AuthorSearcherTests.cs
+│   ├── BookSearcherTests.cs
+│   └── GenreSearcherTests.cs
 ├── Utilities
 │   ├── AuthenticationMiddlewareBaseTests.cs
 │   ├── HasherTests.cs

@@ -1,5 +1,4 @@
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Services.Books;
 namespace LibrarySystem.Presentation.Services;
 
 public class BookPopularityBackgroundService : BackgroundService

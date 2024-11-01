@@ -25,6 +25,9 @@ public class Picture
     [Required, Column("mime_type")]
     public string? MimeType { get; set; }
 
+    [Required, Column("created_at")]
+    public DateTimeOffset CreatedAt { get; set; }
+
     // relationships
 
     [JsonIgnore]

@@ -470,7 +470,7 @@ public class BookControllerTests
     [Fact]
     public async void GetBooks_Returns200AndMostRecentBooks()
     {
-         // prepare
+        // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var book1 = new Book().WithFakeData();
         var book2 = new Book().WithFakeData();

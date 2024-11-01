@@ -20,6 +20,9 @@ public class User : IDtoSerialization<UserDto>
     [Required, Column("password")]
     public string? Password { get; set; }
 
+    [Required, Column("created_at")]
+    public DateTimeOffset CreatedAt { get; set; }
+
     // relationships
 
     [JsonIgnore]

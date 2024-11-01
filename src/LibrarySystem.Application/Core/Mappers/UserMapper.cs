@@ -21,7 +21,8 @@ public class UserMapper : IMapper<User, RegisterUserDto>
             Id = dto.Id ?? Guid.NewGuid(),
             Username = dto.Username,
             Email = dto.Email,
-            Password = _hasher.Hash(dto.Password ?? throw new NullReferenceException("The password must be set."))
+            Password = _hasher.Hash(dto.Password ?? throw new NullReferenceException("The password must be set.")),
+            CreatedAt = DateTimeOffset.UtcNow
         };
     }
 }

@@ -59,6 +59,7 @@ public class PictureService : IPictureService
             FileContent = await file.GetBytes(),
             FileName = file.FileName,
             MimeType = file.ContentType,
+            CreatedAt = DateTimeOffset.Now,
         };
     }
 

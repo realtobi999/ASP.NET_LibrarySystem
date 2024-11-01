@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
@@ -154,7 +153,7 @@ public class BookSearcherTests
         }
 
         var bookToSearchFor1 = books[_random.Next(books.Count - 2)];
-        bookToSearchFor1.Genres = [genre]; 
+        bookToSearchFor1.Genres = [genre];
         var bookToSearchFor2 = books[books.IndexOf(bookToSearchFor1) + 1];
         bookToSearchFor2.Authors = [author];
         var bookToSearchFor3 = books[books.IndexOf(bookToSearchFor1) + 2];

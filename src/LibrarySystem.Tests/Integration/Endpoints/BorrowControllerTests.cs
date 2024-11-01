@@ -267,7 +267,7 @@ public class BorrowControllerTests
         // get the book and borrow and check if the availability and IsReturned status is correct
         var get1 = await client.GetAsync($"/api/book/{book.Id}");
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        
+
         var content1 = await get1.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
 
         content1.Id.Should().Be(book.Id);

@@ -148,7 +148,7 @@ public class WishlistControllerTests
         get1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get1.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new NullReferenceException();
-        
+
         content.Books.Count().Should().Be(1);
         content.Books.ElementAt(0).Id.Should().Be(book1.Id);
     }

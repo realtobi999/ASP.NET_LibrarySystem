@@ -12,6 +12,7 @@ public class GenreMapper : IMapper<Genre, CreateGenreDto>
         {
             Id = dto.Id ?? Guid.NewGuid(),
             Name = dto.Name,
+            CreatedAt = DateTimeOffset.UtcNow,
         };
     }
 }

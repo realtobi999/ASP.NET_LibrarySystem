@@ -14,6 +14,11 @@ public class Genre : IDtoSerialization<GenreDto>
     [Required, Column("name")]
     public string? Name { get; set; }
 
+    [Required]
+    public DateTimeOffset CreatedAt { get; set; }
+
+    // relationships
+
     [JsonIgnore]
     public ICollection<Book> Books { get; set; } = [];
 

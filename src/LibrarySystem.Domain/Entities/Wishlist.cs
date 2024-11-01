@@ -16,6 +16,9 @@ public class Wishlist : IDtoSerialization<WishlistDto>
     [Required, Column("name")]
     public string? Name { get; set; }
 
+    [Required, Column("created_at")]
+    public DateTimeOffset CreatedAt { get; set; }
+
     // relationships
 
     public User? User { get; set; }

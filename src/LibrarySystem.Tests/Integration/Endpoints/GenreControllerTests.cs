@@ -120,7 +120,7 @@ public class GenreControllerTests
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<GenreDto>() ?? throw new NullReferenceException();
-        
+
         content.Id.Should().Be(genre.Id);
         content.Name.Should().Be(updateDto.Name);
     }

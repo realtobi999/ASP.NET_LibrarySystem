@@ -13,7 +13,8 @@ public class AuthorMapper : IMapper<Author, CreateAuthorDto>
             Id = dto.Id ?? Guid.NewGuid(),
             Name = dto.Name,
             Description = dto.Description,
-            Birthday = dto.Birthday.ToUniversalTime()
+            Birthday = dto.Birthday.ToUniversalTime(),
+            CreatedAt = DateTimeOffset.UtcNow
         };
     }
 }

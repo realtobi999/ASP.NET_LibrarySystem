@@ -27,7 +27,7 @@ internal sealed class BookRecommender : IBookRecommender
             {
                 if (book is not null)
                 {
-                   userFavoriteBooks.Add(book);
+                    userFavoriteBooks.Add(book);
                 }
             }
         }

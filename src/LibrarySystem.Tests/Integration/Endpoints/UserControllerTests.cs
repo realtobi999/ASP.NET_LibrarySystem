@@ -91,7 +91,7 @@ public class UserControllerTests
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
-        
+
         content.Id.Should().Be(user.Id);
         content.Username.Should().Be(updateDto.Username);
         content.Email.Should().Be(updateDto.Email);

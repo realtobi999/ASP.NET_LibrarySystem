@@ -20,7 +20,8 @@ public class WishlistMapper : IMapper<Wishlist, CreateWishlistDto>
         {
             Id = dto.Id ?? Guid.NewGuid(),
             UserId = dto.UserId,
-            Name = dto.Name
+            Name = dto.Name,
+            CreatedAt = DateTimeOffset.UtcNow,
         };
 
         // assign books

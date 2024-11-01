@@ -20,11 +20,14 @@ public class Author : IDtoSerialization<AuthorDto>
     [Required, Column("birthday")]
     public DateTimeOffset Birthday { get; set; }
 
+    [Required, Column("created_at")]
+    public DateTimeOffset CreatedAt { get; set; }
+
     // relationships
 
     [JsonIgnore]
     public Picture? Picture { get; set; }
-    
+
     [JsonIgnore]
     public ICollection<Book> Books { get; set; } = [];
 

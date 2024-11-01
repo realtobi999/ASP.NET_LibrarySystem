@@ -22,6 +22,7 @@ public class EmployeeMapper : IMapper<Employee, RegisterEmployeeDto>
             Name = dto.Name,
             Email = dto.Email,
             Password = _hasher.Hash(dto.Password ?? throw new NullReferenceException("The password must be set.")),
+            CreatedAt = DateTimeOffset.UtcNow,
         };
     }
 }

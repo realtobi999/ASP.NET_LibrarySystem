@@ -9,7 +9,6 @@ using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LibrarySystem.Presentation.Controllers;
 
@@ -126,7 +125,7 @@ public class BookController : ControllerBase
     public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookDto updateBookDto)
     {
         var book = await _service.Book.GetAsync(bookId);
-        
+
         var genres = new List<Genre>();
         var authors = new List<Author>();
 

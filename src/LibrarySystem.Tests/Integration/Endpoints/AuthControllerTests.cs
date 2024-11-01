@@ -54,7 +54,7 @@ public class AuthControllerTests
         content.Token.Should().NotBeNull();
 
         var tokenPayload = JwtUtils.ParsePayload(content.Token!);
-        
+
         tokenPayload.Count().Should().BeGreaterThan(2);
         tokenPayload.ElementAt(0).Type.Should().Be("UserId");
         tokenPayload.ElementAt(0).Value.Should().Be(user.Id.ToString());
@@ -136,7 +136,7 @@ public class AuthControllerTests
         content.Token.Should().NotBeNull();
 
         var tokenPayload = JwtUtils.ParsePayload(content.Token!);
-        
+
         tokenPayload.Count().Should().BeGreaterThan(2);
         tokenPayload.ElementAt(0).Type.Should().Be("EmployeeId");
         tokenPayload.ElementAt(0).Value.Should().Be(employee.Id.ToString());

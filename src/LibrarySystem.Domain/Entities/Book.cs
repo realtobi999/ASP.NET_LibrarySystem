@@ -43,7 +43,7 @@ public class Book : IDtoSerialization<BookDto>
 
     [JsonIgnore]
     public ICollection<Picture> CoverPictures { get; set; } = [];
-    
+
     [JsonIgnore]
     public ICollection<Author> Authors { get; set; } = [];
 
@@ -60,7 +60,7 @@ public class Book : IDtoSerialization<BookDto>
     public BookDto ToDto()
     {
         var authors = this.Authors.Select(a => a.ToDto()).ToList();
-        var genres =  this.Genres.Select(g => g.ToDto()).ToList();
+        var genres = this.Genres.Select(g => g.ToDto()).ToList();
         var reviews = this.BookReviews.Select(br => br.ToDto()).ToList();
 
         return new BookDto

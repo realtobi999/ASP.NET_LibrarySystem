@@ -26,6 +26,10 @@
   - **[PUT - api/book/{book_id}](#put---apibookbookid)**
   - **[PUT - api/book/{book_id}/photo](#put---apibookbookidphoto)**
   - **[DELETE - api/book/{book_id}](#delete---apibookbookid)**
+- **[Book Review Endpoints](#book-review-endpoints)**
+  - **[POST - api/review](#post---apireview)**
+  - **[PUT - api/review/{review_id}](#put---apireviewreviewid)**
+  - **[DELETE - api/review/{review_id}](#delete---apireviewreviewid)**
 
 ## Auth Endpoints
 
@@ -491,3 +495,83 @@ Uploads a photo for the specified book. Requires authentication with `Employee` 
 - `401` - Unauthorized
 - `403` - Forbidden
 - `404` - Book not found
+
+## Book Review Endpoints
+
+### `POST - /api/review`
+
+Creates a new review for a book. Requires authentication with the `User` role.
+
+#### Headers
+
+- `Authorization`: Bearer `USER_JWT_TOKEN`
+
+#### Example Request
+
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "bookId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "rating": 10,
+  "text": "string"
+}
+
+```
+
+#### Returns
+
+- `201` - Review created successfully
+- `401` - Unauthorized
+- `403` - Forbidden
+
+---
+
+### `DELETE - /api/review/{reviewId}`
+
+Deletes a review by its unique ID. Requires authentication with the `User` role and verification that the user is the creator of the review.
+
+#### Headers
+
+- `Authorization`: Bearer `USER_JWT_TOKEN`
+
+#### Parameters
+
+- `reviewId` - The unique identifier of the review to delete.
+
+#### Returns
+
+- `204` - No content, delete successful
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Review not found
+
+---
+
+### `PUT - /api/review/{reviewId}`
+
+Updates an existing review. Requires authentication with the `User` role and verification that the user is the creator of the review.
+
+#### Headers
+
+- `Authorization`: Bearer `USER_JWT_TOKEN`
+
+#### Parameters
+
+- `reviewId` - The unique identifier of the review to update.
+
+#### Example Request
+
+```json
+{
+ "text": "string",
+  "rating": 10
+}
+```
+
+#### Returns
+
+- `204` - No content, update successful
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Review not found

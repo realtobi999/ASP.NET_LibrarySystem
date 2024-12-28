@@ -27,6 +27,8 @@ using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Application.Core.Mappers;
+using Microsoft.OpenApi.Models;
+using LibrarySystem.Presentation.Middlewares.Filters;
 
 namespace LibrarySystem.Presentation.Extensions;
 
@@ -123,5 +125,40 @@ public static class ServiceExtensions
         services.AddScoped<IMapper<Genre, CreateGenreDto>, GenreMapper>();
         services.AddScoped<IMapper<User, RegisterUserDto>, UserMapper>();
         services.AddScoped<IMapper<Wishlist, CreateWishlistDto>, WishlistMapper>();
+    }
+
+    public static void ConfigureSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(opt =>
+        {
+            // configure the swagger documentation
+            opt.SwaggerDoc(Program.VERSION, new OpenApiInfo()
+            {
+                Title = Program.NAME,
+                Version = Program.VERSION,
+                Description = "Swagger for a library system API.",
+                Contact = new OpenApiContact()
+                {
+                    Name = "Tobiáš Filgas",
+                    Email = "tobiasfilgas.work@gmail.com"
+                }
+            });
+
+            // configure the swagger authentication
+            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                In = ParameterLocation.Header,
+                BearerFormat = "JWT",
+                Description = "JWT Authorization header using the Bearer scheme.",
+            });
+
+            // apply a filter so only the endpoints with authorize attribute are locked
+            opt.OperationFilter<SwaggerAuthorizeOperationFilter>();
+        });
+
+        services.AddEndpointsApiExplorer();
     }
 }

@@ -27,7 +27,7 @@
 
 You will need:
 
-- `Dotnet SDK 8.0.107` or higher
+- `Dotnet SDK 8.0.*`
 - `PostgreSQL`
 
 Clone the repository into your desired folder:

@@ -3,6 +3,7 @@ using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using Moq;
 
@@ -28,7 +29,7 @@ public class GenreSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            genres.Add(new Genre().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
         }
 
         var genreToSearchFor1 = genres[_random.Next(genres.Count)];
@@ -51,7 +52,7 @@ public class GenreSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            genres.Add(new Genre().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
         }
 
         var genreToSearchFor1 = genres[_random.Next(genres.Count)];
@@ -74,7 +75,7 @@ public class GenreSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            genres.Add(new Genre().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
         }
 
         var genreToSearchFor1 = genres[_random.Next(genres.Count - 1)];
@@ -99,7 +100,7 @@ public class GenreSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            genres.Add(new Genre().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
         }
 
         var genreToSearchFor1 = genres[_random.Next(genres.Count - 1)];

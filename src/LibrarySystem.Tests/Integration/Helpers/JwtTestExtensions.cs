@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace LibrarySystem.Tests.Integration.Helpers;
 
-public static class JwtTestExtensions
+internal static class JwtTestExtensions
 {
     public static Jwt Create()
     {

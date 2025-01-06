@@ -8,31 +8,33 @@ namespace LibrarySystem.Domain.Entities;
 
 public class Borrow : IDtoSerialization<BorrowDto>
 {
+    // core properties
+
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required, Column("book_id")]
-    public Guid BookId { get; set; }
+    public required Guid BookId { get; set; }
 
     [Required, Column("user_id")]
-    public Guid UserId { get; set; }
+    public required Guid UserId { get; set; }
 
     [Required, Column("borrow_date")]
-    public DateTimeOffset BorrowDate { get; set; }
+    public required DateTimeOffset BorrowDate { get; set; }
 
     [Required, Column("borrow_due")]
-    public DateTimeOffset DueDate { get; set; }
+    public required DateTimeOffset DueDate { get; set; }
 
     [Required, Column]
-    public bool IsReturned { get; set; }
+    public required bool IsReturned { get; set; }
 
     // relationships
 
     [JsonIgnore]
-    public User? User { get; set; }
-
+    public virtual User? User { get; set; }
+    
     [JsonIgnore]
-    public Book? Book { get; set; }
+    public virtual Book? Book { get; set; }
 
     /// <inheritdoc/>
     public BorrowDto ToDto()

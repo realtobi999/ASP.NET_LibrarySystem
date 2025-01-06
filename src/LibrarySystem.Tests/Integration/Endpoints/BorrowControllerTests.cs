@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Dtos.Borrows;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -15,9 +15,9 @@ public class BorrowControllerTests
     public async void CreateBorrow_Returns201AndLocationHeader()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -42,9 +42,9 @@ public class BorrowControllerTests
     public async void CreateBorrow_BookIsLabeledAsUnavailable()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -74,10 +74,10 @@ public class BorrowControllerTests
     public async void CreateBorrow_Returns409WhenTryingToBorrowUnavailableBook()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book, user);
-        var borrow2 = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow1 = BorrowFactory.CreateWithFakeData(book, user);
+        var borrow2 = BorrowFactory.CreateWithFakeData(book, user);
 
 
         var token = JwtTestExtensions.Create().Generate([
@@ -112,13 +112,13 @@ public class BorrowControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book1, user);
-        var borrow2 = new Borrow().WithFakeData(book2, user);
-        var borrow3 = new Borrow().WithFakeData(book3, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
+        var borrow1 = BorrowFactory.CreateWithFakeData(book1, user);
+        var borrow2 = BorrowFactory.CreateWithFakeData(book2, user);
+        var borrow3 = BorrowFactory.CreateWithFakeData(book3, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -159,14 +159,14 @@ public class BorrowControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user1 = new User().WithFakeData();
-        var user2 = new User().WithFakeData();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
-        var borrow1 = new Borrow().WithFakeData(book1, user1);
-        var borrow2 = new Borrow().WithFakeData(book2, user2);
-        var borrow3 = new Borrow().WithFakeData(book3, user2);
+        var user1 = UserFactory.CreateWithFakeData();
+        var user2 = UserFactory.CreateWithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
+        var borrow1 = BorrowFactory.CreateWithFakeData(book1, user1);
+        var borrow2 = BorrowFactory.CreateWithFakeData(book2, user2);
+        var borrow3 = BorrowFactory.CreateWithFakeData(book3, user2);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -205,9 +205,9 @@ public class BorrowControllerTests
     public async void GetBorrow_Returns200AndCorrectBorrowRecord()
     {
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
@@ -236,9 +236,9 @@ public class BorrowControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")

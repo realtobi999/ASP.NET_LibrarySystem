@@ -1,22 +1,10 @@
-﻿using Bogus;
-using LibrarySystem.Domain.Dtos.Users;
+﻿using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Tests.Integration.Helpers;
 
-public static class UserTestExtensions
+internal static class UserTestExtensions
 {
-    private static readonly Faker<User> _userFaker = new Faker<User>()
-        .RuleFor(u => u.Id, f => f.Random.Guid())
-        .RuleFor(u => u.Username, f => f.Internet.UserName())
-        .RuleFor(u => u.Email, f => f.Internet.Email())
-        .RuleFor(u => u.Password, f => f.Internet.Password());
-
-    public static User WithFakeData(this User user)
-    {
-        return _userFaker.Generate();
-    }
-
     public static RegisterUserDto ToRegisterUserDto(this User user)
     {
         return new RegisterUserDto

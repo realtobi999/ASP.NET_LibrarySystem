@@ -2,6 +2,7 @@ using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using Moq;
 
@@ -22,8 +23,8 @@ public class WishlistValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenUserDoesntExist()
     {
         // prepare
-        var user = new User().WithFakeData();
-        var wishlist = new Wishlist().WithFakeData(user);
+        var user = UserFactory.CreateWithFakeData();
+        var wishlist = WishlistFactory.CreateWithFakeData(user);
 
         _repository.Setup(r => r.User.GetAsync(user.Id)).ReturnsAsync((User?)null);
 
@@ -39,16 +40,11 @@ public class WishlistValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenBooksDoesntExist()
     {
         // prepare
-        var user = new User().WithFakeData();
-        var wishlist = new Wishlist().WithFakeData(user);
-        var book = new Book().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var wishlist = WishlistFactory.CreateWithFakeData(user);
+        var book = BookFactory.CreateWithFakeData();
 
-        wishlist.Books = [
-            new Book()
-            {
-                Id = book.Id,
-            }
-        ];
+        wishlist.Books = [book];
 
         _repository.Setup(r => r.User.GetAsync(user.Id)).ReturnsAsync(user);
         _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync((Book?)null);

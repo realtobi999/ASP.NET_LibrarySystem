@@ -3,6 +3,7 @@ using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using Moq;
 
@@ -34,7 +35,7 @@ public class BookSearcherTests
         for (int i = 0; i < 100; i++)
         {
 
-            books.Add(new Book().WithFakeData());
+            books.Add(BookFactory.CreateWithFakeData());
         }
 
         var bookToSearchFor1 = books[_random.Next(books.Count - 1)];
@@ -61,7 +62,7 @@ public class BookSearcherTests
         for (int i = 0; i < 100; i++)
         {
 
-            books.Add(new Book().WithFakeData());
+            books.Add(BookFactory.CreateWithFakeData());
         }
 
         var bookToSearchFor1 = books[_random.Next(books.Count - 1)];
@@ -88,7 +89,7 @@ public class BookSearcherTests
         for (int i = 0; i < 100; i++)
         {
 
-            books.Add(new Book().WithFakeData());
+            books.Add(BookFactory.CreateWithFakeData());
         }
 
         var bookToSearchFor1 = books[_random.Next(books.Count - 1)];
@@ -114,7 +115,7 @@ public class BookSearcherTests
         for (int i = 0; i < 100; i++)
         {
 
-            books.Add(new Book().WithFakeData());
+            books.Add(BookFactory.CreateWithFakeData());
         }
 
         var bookToSearchFor1 = books[_random.Next(books.Count - 1)];
@@ -137,8 +138,8 @@ public class BookSearcherTests
     {
         // prepare
         var books = new List<Book>();
-        var genre = new Genre().WithFakeData();
-        var author = new Author().WithFakeData();
+        var genre = GenreFactory.CreateWithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
 
         var query = "test";
 
@@ -149,7 +150,7 @@ public class BookSearcherTests
         for (int i = 0; i < 100; i++)
         {
 
-            books.Add(new Book().WithFakeData());
+            books.Add(BookFactory.CreateWithFakeData());
         }
 
         var bookToSearchFor1 = books[_random.Next(books.Count - 2)];

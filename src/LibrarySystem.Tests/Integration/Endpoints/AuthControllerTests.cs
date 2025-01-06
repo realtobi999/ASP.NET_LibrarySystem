@@ -3,11 +3,11 @@ using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Tests.Integration.Server;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Factories;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 
@@ -18,7 +18,7 @@ public class AuthControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
@@ -33,7 +33,7 @@ public class AuthControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
 
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -67,7 +67,7 @@ public class AuthControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
 
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -88,7 +88,7 @@ public class AuthControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var employee = new Employee().WithFakeData();
+        var employee = EmployeeFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
@@ -108,7 +108,7 @@ public class AuthControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var employee = new Employee().WithFakeData();
+        var employee = EmployeeFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);

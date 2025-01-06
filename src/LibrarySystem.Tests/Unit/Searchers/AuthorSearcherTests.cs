@@ -3,6 +3,7 @@ using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using Moq;
 
@@ -28,7 +29,7 @@ public class AuthorSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            authors.Add(new Author().WithFakeData());
+            authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
         var authorToSearchFor1 = authors[_random.Next(authors.Count) - 1];
@@ -54,7 +55,7 @@ public class AuthorSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            authors.Add(new Author().WithFakeData());
+            authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
         var authorToSearchFor1 = authors[_random.Next(authors.Count)];
@@ -77,7 +78,7 @@ public class AuthorSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            authors.Add(new Author().WithFakeData());
+            authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
         var authorToSearchFor1 = authors[_random.Next(authors.Count + 1)];
@@ -102,7 +103,7 @@ public class AuthorSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            authors.Add(new Author().WithFakeData());
+            authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
         var authorToSearchFor1 = authors[_random.Next(authors.Count - 1)];

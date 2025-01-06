@@ -2,8 +2,8 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Books;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -16,17 +16,17 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
+        var book = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var author1 = new Author().WithFakeData();
-        var author2 = new Author().WithFakeData();
-        var genre1 = new Genre().WithFakeData();
-        var genre2 = new Genre().WithFakeData();
+        var author1 = AuthorFactory.CreateWithFakeData();
+        var author2 = AuthorFactory.CreateWithFakeData();
+        var genre1 = GenreFactory.CreateWithFakeData();
+        var genre2 = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -50,19 +50,19 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
-        var user = new User().WithFakeData();
-        var review = new BookReview().WithFakeData(book, user);
+        var book = BookFactory.CreateWithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var review = BookReviewFactory.CreateWithFakeData(book, user);
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
-        var author1 = new Author().WithFakeData();
-        var author2 = new Author().WithFakeData();
-        var genre1 = new Genre().WithFakeData();
-        var genre2 = new Genre().WithFakeData();
+        var author1 = AuthorFactory.CreateWithFakeData();
+        var author2 = AuthorFactory.CreateWithFakeData();
+        var genre1 = GenreFactory.CreateWithFakeData();
+        var genre2 = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -111,9 +111,9 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -145,19 +145,19 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
+        var book = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var author1 = new Author().WithFakeData();
-        var author2 = new Author().WithFakeData();
-        var author3 = new Author().WithFakeData();
-        var genre1 = new Genre().WithFakeData();
-        var genre2 = new Genre().WithFakeData();
-        var genre3 = new Genre().WithFakeData();
+        var author1 = AuthorFactory.CreateWithFakeData();
+        var author2 = AuthorFactory.CreateWithFakeData();
+        var author3 = AuthorFactory.CreateWithFakeData();
+        var genre1 = GenreFactory.CreateWithFakeData();
+        var genre2 = GenreFactory.CreateWithFakeData();
+        var genre3 = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -210,7 +210,7 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
+        var book = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -233,7 +233,7 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
+        var book = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -258,19 +258,19 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var author1 = new Author().WithFakeData();
-        var author2 = new Author().WithFakeData();
-        var genre1 = new Genre().WithFakeData();
-        var genre2 = new Genre().WithFakeData();
+        var author1 = AuthorFactory.CreateWithFakeData();
+        var author2 = AuthorFactory.CreateWithFakeData();
+        var genre1 = GenreFactory.CreateWithFakeData();
+        var genre2 = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -303,19 +303,19 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var author1 = new Author().WithFakeData();
-        var author2 = new Author().WithFakeData();
-        var genre1 = new Genre().WithFakeData();
-        var genre2 = new Genre().WithFakeData();
+        var author1 = AuthorFactory.CreateWithFakeData();
+        var author2 = AuthorFactory.CreateWithFakeData();
+        var genre1 = GenreFactory.CreateWithFakeData();
+        var genre2 = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -348,19 +348,19 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var author1 = new Author().WithFakeData();
-        var author2 = new Author().WithFakeData();
-        var genre1 = new Genre().WithFakeData();
-        var genre2 = new Genre().WithFakeData();
+        var author1 = AuthorFactory.CreateWithFakeData();
+        var author2 = AuthorFactory.CreateWithFakeData();
+        var genre1 = GenreFactory.CreateWithFakeData();
+        var genre2 = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -392,9 +392,9 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -431,7 +431,7 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
+        var book = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -472,9 +472,9 @@ public class BookControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);

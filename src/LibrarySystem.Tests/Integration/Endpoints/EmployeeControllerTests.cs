@@ -2,8 +2,8 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Employees;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -16,9 +16,9 @@ public class EmployeeControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var employee1 = new Employee().WithFakeData();
-        var employee2 = new Employee().WithFakeData();
-        var employee3 = new Employee().WithFakeData();
+        var employee1 = EmployeeFactory.CreateWithFakeData();
+        var employee2 = EmployeeFactory.CreateWithFakeData();
+        var employee3 = EmployeeFactory.CreateWithFakeData();
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
@@ -51,7 +51,7 @@ public class EmployeeControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var employee = new Employee().WithFakeData();
+        var employee = EmployeeFactory.CreateWithFakeData();
 
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
@@ -79,7 +79,7 @@ public class EmployeeControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var employee = new Employee().WithFakeData();
+        var employee = EmployeeFactory.CreateWithFakeData();
 
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
@@ -124,7 +124,7 @@ public class EmployeeControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var employee = new Employee().WithFakeData();
+        var employee = EmployeeFactory.CreateWithFakeData();
 
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
@@ -156,7 +156,7 @@ public class EmployeeControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var employee = new Employee().WithFakeData();
+        var employee = EmployeeFactory.CreateWithFakeData();
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);

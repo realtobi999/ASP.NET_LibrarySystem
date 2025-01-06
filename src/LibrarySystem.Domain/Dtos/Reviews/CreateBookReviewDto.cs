@@ -7,14 +7,14 @@ public record class CreateBookReviewDto
     public Guid? Id { get; init; }
 
     [Required]
-    public Guid BookId { get; init; }
+    public required Guid BookId { get; init; }
 
     [Required]
-    public Guid UserId { get; init; }
+    public required Guid UserId { get; init; }
 
     [Required, Range(0, 10)]
-    public double Rating { get; init; }
+    public required double Rating { get; init; }
 
     [Required, MaxLength(555)]
-    public string? Text { get; init; }
+    public required string Text { get; init; }
 }

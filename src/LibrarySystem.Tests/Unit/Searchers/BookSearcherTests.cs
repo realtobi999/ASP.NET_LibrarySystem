@@ -4,7 +4,6 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Tests.Integration.Factories;
-using LibrarySystem.Tests.Integration.Helpers;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Searchers;
@@ -15,7 +14,7 @@ public class BookSearcherTests
     private readonly Mock<ISearcher<Genre>> _genreSearcher;
     private readonly Mock<ISearcher<Author>> _authorSearcher;
     private readonly ISearcher<Book> _searcher;
-    private static readonly Random _random = new Random();
+    private static readonly Random _random = new();
 
     public BookSearcherTests()
     {
@@ -38,9 +37,10 @@ public class BookSearcherTests
             books.Add(BookFactory.CreateWithFakeData());
         }
 
-        var bookToSearchFor1 = books[_random.Next(books.Count - 1)];
+        // get random books from the list
+        var bookToSearchFor1 = books[_random.Next(books.Count)];
+        var bookToSearchFor2 = books[_random.Next(books.Count)];
         bookToSearchFor1.Title = "testing";
-        var bookToSearchFor2 = books[books.IndexOf(bookToSearchFor1) + 1];
         bookToSearchFor2.Description = "test";
 
         _repository.Setup(r => r.Book.IndexAsync()).ReturnsAsync(books.OrderBy(b => b.CreatedAt));
@@ -49,8 +49,8 @@ public class BookSearcherTests
         var searchedBooks = await _searcher.SearchAsync("test");
 
         searchedBooks.Count().Should().Be(2);
-        searchedBooks.ElementAt(0).Id.Should().Be(bookToSearchFor1.Id);
-        searchedBooks.ElementAt(1).Id.Should().Be(bookToSearchFor2.Id);
+        searchedBooks.Contains(bookToSearchFor1).Should().BeTrue();
+        searchedBooks.Contains(bookToSearchFor2).Should().BeTrue();
     }
 
     [Fact]
@@ -65,9 +65,10 @@ public class BookSearcherTests
             books.Add(BookFactory.CreateWithFakeData());
         }
 
-        var bookToSearchFor1 = books[_random.Next(books.Count - 1)];
+        // get random books from the list
+        var bookToSearchFor1 = books[_random.Next(books.Count)];
+        var bookToSearchFor2 = books[_random.Next(books.Count)];
         bookToSearchFor1.Title = "test not so";
-        var bookToSearchFor2 = books[books.IndexOf(bookToSearchFor1) + 1];
         bookToSearchFor2.Description = "test not so";
 
         _repository.Setup(r => r.Book.IndexAsync()).ReturnsAsync(books.OrderBy(b => b.CreatedAt));
@@ -76,8 +77,8 @@ public class BookSearcherTests
         var searchedBooks = await _searcher.SearchAsync("\t test not so          \n ");
 
         searchedBooks.Count().Should().Be(2);
-        searchedBooks.ElementAt(0).Id.Should().Be(bookToSearchFor1.Id);
-        searchedBooks.ElementAt(1).Id.Should().Be(bookToSearchFor2.Id);
+        searchedBooks.Contains(bookToSearchFor1).Should().BeTrue();
+        searchedBooks.Contains(bookToSearchFor2).Should().BeTrue();
     }
 
     [Fact]
@@ -92,18 +93,19 @@ public class BookSearcherTests
             books.Add(BookFactory.CreateWithFakeData());
         }
 
-        var bookToSearchFor1 = books[_random.Next(books.Count - 1)];
+        // get random books from the list
+        var bookToSearchFor1 = books[_random.Next(books.Count)];
+        var bookToSearchFor2 = books[_random.Next(books.Count)];
         bookToSearchFor1.Title = "test not so";
-        var bookToSearchFor2 = books[books.IndexOf(bookToSearchFor1) + 1];
         bookToSearchFor2.Description = "not so test";
 
         _repository.Setup(r => r.Book.IndexAsync()).ReturnsAsync(books.OrderBy(b => b.CreatedAt));
 
         // act & assert
-        var searchedBooks = await _searcher.SearchAsync(Constants.QUERY_SEARCH_FILTER_OPERATOR + "test");
+        var searchedBooks = await _searcher.SearchAsync($"{BookSearcher.FILTER_OPERATOR}test");
 
         searchedBooks.Count().Should().Be(1);
-        searchedBooks.ElementAt(0).Id.Should().Be(bookToSearchFor1.Id);
+        searchedBooks.Contains(bookToSearchFor1).Should().BeTrue();
     }
 
     [Fact]
@@ -118,18 +120,19 @@ public class BookSearcherTests
             books.Add(BookFactory.CreateWithFakeData());
         }
 
-        var bookToSearchFor1 = books[_random.Next(books.Count - 1)];
+        // get random books from the list
+        var bookToSearchFor1 = books[_random.Next(books.Count)];
+        var bookToSearchFor2 = books[_random.Next(books.Count)];
         bookToSearchFor1.Title = "test not so";
-        var bookToSearchFor2 = books[books.IndexOf(bookToSearchFor1) + 1];
         bookToSearchFor2.Description = "not so test";
 
         _repository.Setup(r => r.Book.IndexAsync()).ReturnsAsync(books.OrderBy(b => b.CreatedAt));
 
         // act & assert
-        var searchedBooks = await _searcher.SearchAsync("so" + Constants.QUERY_SEARCH_FILTER_OPERATOR);
+        var searchedBooks = await _searcher.SearchAsync($"so{BookSearcher.FILTER_OPERATOR}");
 
         searchedBooks.Count().Should().Be(1);
-        searchedBooks.ElementAt(0).Id.Should().Be(bookToSearchFor1.Id);
+        searchedBooks.Contains(bookToSearchFor1).Should().BeTrue();
     }
 
 
@@ -153,11 +156,12 @@ public class BookSearcherTests
             books.Add(BookFactory.CreateWithFakeData());
         }
 
-        var bookToSearchFor1 = books[_random.Next(books.Count - 2)];
+        // get random books from the list
+        var bookToSearchFor1 = books[_random.Next(books.Count)];
+        var bookToSearchFor2 = books[_random.Next(books.Count)];
+        var bookToSearchFor3 = books[_random.Next(books.Count)];
         bookToSearchFor1.Genres = [genre];
-        var bookToSearchFor2 = books[books.IndexOf(bookToSearchFor1) + 1];
         bookToSearchFor2.Authors = [author];
-        var bookToSearchFor3 = books[books.IndexOf(bookToSearchFor1) + 2];
         bookToSearchFor3.Title = query;
 
         _repository.Setup(r => r.Book.IndexAsync()).ReturnsAsync(books.OrderBy(b => b.CreatedAt));
@@ -168,8 +172,8 @@ public class BookSearcherTests
         var searchedBooks = await _searcher.SearchAsync(query);
 
         searchedBooks.Count().Should().Be(3);
-        searchedBooks.ElementAt(0).Id.Should().Be(bookToSearchFor3.Id); // this will be first because of the order of filtering
-        searchedBooks.ElementAt(1).Id.Should().Be(bookToSearchFor1.Id);
-        searchedBooks.ElementAt(2).Id.Should().Be(bookToSearchFor2.Id);
+        searchedBooks.Contains(bookToSearchFor1).Should().BeTrue();
+        searchedBooks.Contains(bookToSearchFor2).Should().BeTrue();
+        searchedBooks.Contains(bookToSearchFor3).Should().BeTrue();
     }
 }

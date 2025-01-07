@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails;
@@ -39,7 +40,7 @@ public class Program
             builder.Services.ConfigureManagers();
             builder.Services.ConfigureValidators();
             builder.Services.ConfigureMappers();
-            builder.Services.AddSingleton<IHasher, Hasher>();
+            builder.Services.AddSingleton<IHasher>(new Hasher(algorithm: HashAlgorithmName.SHA512));
 
             // email client
             builder.Services.AddSingleton(p => SmtpFactory.CreateInstance(config));

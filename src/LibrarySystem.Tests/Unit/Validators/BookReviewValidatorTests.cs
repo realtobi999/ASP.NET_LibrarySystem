@@ -2,7 +2,7 @@ using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Validators;
@@ -22,9 +22,9 @@ public class BookReviewValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenBookDoesntExist()
     {
         // prepare
-        var book = new Book().WithFakeData();
-        var user = new User().WithFakeData();
-        var review = new BookReview().WithFakeData(book, user);
+        var book = BookFactory.CreateWithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var review = BookReviewFactory.CreateWithFakeData(book, user);
 
         _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync((Book?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
@@ -40,9 +40,9 @@ public class BookReviewValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenUserDoesntExist()
     {
         // prepare
-        var book = new Book().WithFakeData();
-        var user = new User().WithFakeData();
-        var review = new BookReview().WithFakeData(book, user);
+        var book = BookFactory.CreateWithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var review = BookReviewFactory.CreateWithFakeData(book, user);
 
         _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync(book);
         _repository.Setup(r => r.User.GetAsync(user.Id)).ReturnsAsync((User?)null); // set the return to null value => emulate that the repository couldn't find this entity

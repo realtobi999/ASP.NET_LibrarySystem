@@ -2,9 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
-using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Factories;
 
 namespace LibrarySystem.Tests.Unit.Utilities;
 
@@ -35,7 +34,7 @@ public class JwtTests
         var key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
         var jwt = new Jwt(issuer, key);
 
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
 
         // act & assert
         var token = jwt.Generate([
@@ -67,7 +66,7 @@ public class JwtTests
         var key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
         var jwt = new Jwt(issuer, key);
 
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
 
         var token = jwt.Generate([
             new Claim("AccountId", user.Id.ToString())
@@ -86,7 +85,7 @@ public class JwtTests
         var key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
         var jwt = new Jwt(issuer, key);
 
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
 
         var token = jwt.Generate([
             new Claim("AccountId", user.Id.ToString())

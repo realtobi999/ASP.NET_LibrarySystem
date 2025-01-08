@@ -7,7 +7,7 @@ namespace LibrarySystem.Application.Services.Books;
 
 internal sealed class BookSearcher : ISearcher<Book>
 {
-    private const string FilterOperator = Constants.QUERY_SEARCH_FILTER_OPERATOR;
+    public const string FILTER_OPERATOR = Constants.QUERY_SEARCH_FILTER_OPERATOR;
     private readonly IRepositoryManager _repository;
     private readonly ISearcher<Genre> _genreSearcher;
     private readonly ISearcher<Author> _authorSearcher;
@@ -26,15 +26,15 @@ internal sealed class BookSearcher : ISearcher<Book>
 
         query = query.Trim();
 
-        if (query.StartsWith(FilterOperator))
+        if (query.StartsWith(FILTER_OPERATOR))
         {
             // search for title or description that starts with the query without the filter operator
-            filteredBooks.AddRange(books.Where(b => b.Title!.StartsWith(query[FilterOperator.Length..]) || b.Description!.StartsWith(query[FilterOperator.Length..])));
+            filteredBooks.AddRange(books.Where(b => b.Title!.StartsWith(query[FILTER_OPERATOR.Length..]) || b.Description!.StartsWith(query[FILTER_OPERATOR.Length..])));
         }
-        else if (query.EndsWith(FilterOperator))
+        else if (query.EndsWith(FILTER_OPERATOR))
         {
             // search for title or description that ends with the query without the filter operator
-            filteredBooks.AddRange(books.Where(b => b.Title!.EndsWith(query[..^FilterOperator.Length]) || b.Description!.StartsWith(query[..^FilterOperator.Length])));
+            filteredBooks.AddRange(books.Where(b => b.Title!.EndsWith(query[..^FILTER_OPERATOR.Length]) || b.Description!.StartsWith(query[..^FILTER_OPERATOR.Length])));
         }
         else
         {

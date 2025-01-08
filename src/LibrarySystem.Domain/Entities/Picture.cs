@@ -7,6 +7,8 @@ namespace LibrarySystem.Domain.Entities;
 
 public class Picture
 {
+    // core properties
+
     [Required, Column("id")]
     public Guid Id { get; set; }
 
@@ -32,10 +34,13 @@ public class Picture
 
     [JsonIgnore]
     public Book? Book { get; set; }
+
     [JsonIgnore]
     public Author? Author { get; set; }
+
     [JsonIgnore]
     public User? User { get; set; }
+
     [JsonIgnore]
     public Employee? Employee { get; set; }
 }

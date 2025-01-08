@@ -8,19 +8,21 @@ namespace LibrarySystem.Domain.Entities;
 
 public class Genre : IDtoSerialization<GenreDto>
 {
+    // core properties
+
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required, Column("name")]
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     [Required]
-    public DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     // relationships
 
     [JsonIgnore]
-    public ICollection<Book> Books { get; set; } = [];
+    public virtual ICollection<Book> Books { get; set; } = [];
 
     /// <inheritdoc/>
     public GenreDto ToDto()

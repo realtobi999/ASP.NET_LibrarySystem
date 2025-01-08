@@ -1,9 +1,8 @@
 using LibrarySystem.Application.Services.Genres;
-using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Searchers;
@@ -28,11 +27,12 @@ public class GenreSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            genres.Add(new Genre().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
         }
 
-        var genreToSearchFor1 = genres[_random.Next(genres.Count)];
-        genreToSearchFor1.Name = "test";
+        // get random genre from the list
+        var genreToSearchFor = genres[_random.Next(genres.Count)];
+        genreToSearchFor.Name = "test";
 
         _repository.Setup(r => r.Genre.IndexAsync()).ReturnsAsync(genres);
 
@@ -40,7 +40,7 @@ public class GenreSearcherTests
         var searchedGenres = await _searcher.SearchAsync("tes");
 
         searchedGenres.Count().Should().Be(1);
-        searchedGenres.ElementAt(0).Id.Should().Be(genreToSearchFor1.Id);
+        searchedGenres.Contains(genreToSearchFor).Should().BeTrue();
     }
 
     [Fact]
@@ -51,11 +51,12 @@ public class GenreSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            genres.Add(new Genre().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
         }
 
-        var genreToSearchFor1 = genres[_random.Next(genres.Count)];
-        genreToSearchFor1.Name = "test";
+        // get random genre from the list
+        var genreToSearchFor = genres[_random.Next(genres.Count)];
+        genreToSearchFor.Name = "test";
 
         _repository.Setup(r => r.Genre.IndexAsync()).ReturnsAsync(genres.OrderBy(g => g.CreatedAt));
 
@@ -63,7 +64,7 @@ public class GenreSearcherTests
         var searchedGenres = await _searcher.SearchAsync("\t test          \n ");
 
         searchedGenres.Count().Should().Be(1);
-        searchedGenres.ElementAt(0).Id.Should().Be(genreToSearchFor1.Id);
+        searchedGenres.Contains(genreToSearchFor).Should().BeTrue();
     }
 
     [Fact]
@@ -74,21 +75,22 @@ public class GenreSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            genres.Add(new Genre().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
         }
 
-        var genreToSearchFor1 = genres[_random.Next(genres.Count - 1)];
+        // get random genres from the list
+        var genreToSearchFor1 = genres[_random.Next(genres.Count)];
+        var genreToSearchFor2 = genres[_random.Next(genres.Count)];
         genreToSearchFor1.Name = "test not so";
-        var genreToSearchFor2 = genres[_random.Next(genres.Count + 1)];
         genreToSearchFor2.Name = "so not test";
 
         _repository.Setup(r => r.Genre.IndexAsync()).ReturnsAsync(genres.OrderBy(g => g.CreatedAt));
 
         // act & assert
-        var searchedGenres = await _searcher.SearchAsync($"{Constants.QUERY_SEARCH_FILTER_OPERATOR}test");
+        var searchedGenres = await _searcher.SearchAsync($"{GenreSearcher.FILTER_OPERATOR}test");
 
         searchedGenres.Count().Should().Be(1);
-        searchedGenres.ElementAt(0).Id.Should().Be(genreToSearchFor1.Id);
+        searchedGenres.Contains(genreToSearchFor1).Should().BeTrue();
     }
 
     [Fact]
@@ -99,20 +101,21 @@ public class GenreSearcherTests
 
         for (int i = 0; i < 100; i++)
         {
-            genres.Add(new Genre().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
         }
 
-        var genreToSearchFor1 = genres[_random.Next(genres.Count - 1)];
-        genreToSearchFor1.Name = "so not test";
-        var genreToSearchFor2 = genres[_random.Next(genres.Count + 1)];
-        genreToSearchFor2.Name = "test not so";
+        // get random genres from the list
+        var genreToSearchFor1 = genres[_random.Next(genres.Count)];
+        var genreToSearchFor2 = genres[_random.Next(genres.Count)];
+        genreToSearchFor1.Name = "test not so";
+        genreToSearchFor2.Name = "so not test";
 
         _repository.Setup(r => r.Genre.IndexAsync()).ReturnsAsync(genres.OrderBy(g => g.CreatedAt));
 
         // act & assert
-        var searchedGenres = await _searcher.SearchAsync($"test{Constants.QUERY_SEARCH_FILTER_OPERATOR}");
+        var searchedGenres = await _searcher.SearchAsync($"test{GenreSearcher.FILTER_OPERATOR}");
 
         searchedGenres.Count().Should().Be(1);
-        searchedGenres.ElementAt(0).Id.Should().Be(genreToSearchFor1.Id);
+        searchedGenres.Contains(genreToSearchFor2).Should().BeTrue();
     }
 }

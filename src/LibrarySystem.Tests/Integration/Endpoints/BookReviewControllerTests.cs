@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Dtos.Reviews;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -16,9 +16,9 @@ public class BookReviewControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
-        var user = new User().WithFakeData();
-        var review = new BookReview().WithFakeData(book, user);
+        var book = BookFactory.CreateWithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var review = BookReviewFactory.CreateWithFakeData(book, user);
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -49,9 +49,9 @@ public class BookReviewControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
-        var user = new User().WithFakeData();
-        var review = new BookReview().WithFakeData(book, user);
+        var book = BookFactory.CreateWithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var review = BookReviewFactory.CreateWithFakeData(book, user);
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -85,9 +85,9 @@ public class BookReviewControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
-        var user = new User().WithFakeData();
-        var review = new BookReview().WithFakeData(book, user);
+        var book = BookFactory.CreateWithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var review = BookReviewFactory.CreateWithFakeData(book, user);
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -129,9 +129,9 @@ public class BookReviewControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var book = new Book().WithFakeData();
-        var user = new User().WithFakeData();
-        var review = new BookReview().WithFakeData(book, user);
+        var book = BookFactory.CreateWithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var review = BookReviewFactory.CreateWithFakeData(book, user);
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -158,7 +158,8 @@ public class BookReviewControllerTests
         // act & assert
         var updateBookReviewDto = new UpdateBookReviewDto
         {
-            Text = "Test_Test_Test"
+            Text = "Test_Test_Test",
+            Rating = review.Rating
         };
 
         var response = await client.PutAsJsonAsync($"/api/review/{review.Id}", updateBookReviewDto);

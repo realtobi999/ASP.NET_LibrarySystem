@@ -2,7 +2,7 @@ using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Validators;
@@ -22,16 +22,12 @@ public class BookValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenAssignedGenresDoesntExist()
     {
         // prepare
-        var book = new Book().WithFakeData();
-        var genre = new Genre().WithFakeData();
-        var author = new Author().WithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var genre = GenreFactory.CreateWithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
 
-        book.Genres = [new (){
-            Id = genre.Id,
-        }];
-        book.Authors = [new (){
-            Id = author.Id,
-        }];
+        book.Genres = [genre];
+        book.Authors = [author];
 
         _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync((Genre?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
@@ -47,16 +43,12 @@ public class BookValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenAssignedAuthorsDoesntExist()
     {
         // prepare
-        var book = new Book().WithFakeData();
-        var genre = new Genre().WithFakeData();
-        var author = new Author().WithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var genre = GenreFactory.CreateWithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
 
-        book.Genres = [new (){
-            Id = genre.Id,
-        }];
-        book.Authors = [new (){
-            Id = author.Id,
-        }];
+        book.Genres = [genre];
+        book.Authors = [author];
 
         _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync(genre);
         _repository.Setup(r => r.Author.GetAsync(author.Id)).ReturnsAsync((Author?)null); // set the return to null value => emulate that the repository couldn't find this entity
@@ -73,19 +65,15 @@ public class BookValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenBookReviewsAreWithWrongBookId()
     {
         // prepare
-        var book = new Book().WithFakeData();
-        var genre = new Genre().WithFakeData();
-        var author = new Author().WithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var genre = GenreFactory.CreateWithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
 
-        var review = new BookReview().WithFakeData(book, new User().WithFakeData());
+        var review = BookReviewFactory.CreateWithFakeData(book, UserFactory.CreateWithFakeData());
         review.BookId = Guid.NewGuid(); // assign a different book id
 
-        book.Genres = [new (){
-            Id = genre.Id,
-        }];
-        book.Authors = [new (){
-            Id = author.Id,
-        }];
+        book.Genres = [genre];
+        book.Authors = [author];
 
         book.BookReviews = [review];
 

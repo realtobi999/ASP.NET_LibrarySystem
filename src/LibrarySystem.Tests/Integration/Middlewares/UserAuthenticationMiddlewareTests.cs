@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Reviews;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -15,8 +15,8 @@ public class UserAuthenticationMiddlewareTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user1 = new User().WithFakeData();
-        var user2 = new User().WithFakeData();
+        var user1 = UserFactory.CreateWithFakeData();
+        var user2 = UserFactory.CreateWithFakeData();
         // user1 jwt token
         var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user1.Id.ToString()),
@@ -45,7 +45,7 @@ public class UserAuthenticationMiddlewareTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),

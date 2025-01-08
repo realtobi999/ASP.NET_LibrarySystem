@@ -7,11 +7,11 @@ namespace LibrarySystem.Domain.Dtos.Users;
 
 public record class UserDto
 {
-    public Guid Id { get; init; }
-    public string? Username { get; init; }
-    public string? Email { get; init; }
-    public Picture? ProfilePicture { get; init; }
-    public List<WishlistDto> Wishlists { get; set; } = [];
-    public List<BookReviewDto> Reviews { get; set; } = [];
-    public List<BorrowDto> Borrows { get; set; } = [];
+    public required Guid Id { get; init; }
+    public required string Username { get; init; }
+    public required string Email { get; init; }
+    public required Picture? ProfilePicture { get; init; }
+    public required List<WishlistDto> Wishlists { get; set; } = [];
+    public required List<BookReviewDto> Reviews { get; set; } = [];
+    public required List<BorrowDto> Borrows { get; set; } = [];
 }

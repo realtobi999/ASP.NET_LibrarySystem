@@ -2,8 +2,8 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Users;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -16,9 +16,9 @@ public class UserControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user1 = new User().WithFakeData();
-        var user2 = new User().WithFakeData();
-        var user3 = new User().WithFakeData();
+        var user1 = UserFactory.CreateWithFakeData();
+        var user2 = UserFactory.CreateWithFakeData();
+        var user3 = UserFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user1.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -45,7 +45,7 @@ public class UserControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
 
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -64,7 +64,7 @@ public class UserControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user.Id.ToString()),
             new Claim(ClaimTypes.Role, "User"),
@@ -102,7 +102,7 @@ public class UserControllerTests
     {
         //prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user.Id.ToString()),
             new Claim(ClaimTypes.Role, "User"),
@@ -126,7 +126,7 @@ public class UserControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User")
         ]);

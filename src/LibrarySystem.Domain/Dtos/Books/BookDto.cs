@@ -7,15 +7,15 @@ namespace LibrarySystem.Domain.Dtos.Books;
 
 public record class BookDto
 {
-    public Guid Id { get; init; }
-    public string? ISBN { get; init; }
-    public string? Title { get; init; }
-    public string? Description { get; init; }
-    public int PagesCount { get; init; }
-    public DateTimeOffset PublishedDate { get; init; }
-    public bool IsAvailable { get; init; }
-    public List<Picture>? CoverPictures { get; init; }
-    public List<AuthorDto> Authors { get; init; } = [];
-    public List<GenreDto> Genres { get; init; } = [];
-    public List<BookReviewDto> Reviews { get; init; } = [];
+    public required Guid Id { get; init; }
+    public required string? ISBN { get; init; }
+    public required string? Title { get; init; }
+    public required string? Description { get; init; }
+    public required int PagesCount { get; init; }
+    public required DateTimeOffset PublishedDate { get; init; }
+    public required bool IsAvailable { get; init; }
+    public required List<Picture>? CoverPictures { get; init; }
+    public required List<AuthorDto> Authors { get; init; } = [];
+    public required List<GenreDto> Genres { get; init; } = [];
+    public required List<BookReviewDto> Reviews { get; init; } = [];
 }

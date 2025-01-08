@@ -8,28 +8,30 @@ namespace LibrarySystem.Domain.Entities;
 
 public class Author : IDtoSerialization<AuthorDto>
 {
+    // core properties
+
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required, Column("name")]
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     [Required, Column("description")]
-    public string? Description { get; set; }
+    public required string Description { get; set; }
 
     [Required, Column("birthday")]
-    public DateTimeOffset Birthday { get; set; }
+    public required DateTimeOffset Birthday { get; set; }
 
     [Required, Column("created_at")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     // relationships
 
     [JsonIgnore]
-    public Picture? Picture { get; set; }
+    public virtual Picture? Picture { get; set; }
 
     [JsonIgnore]
-    public ICollection<Book> Books { get; set; } = [];
+    public virtual ICollection<Book> Books { get; set; } = [];
 
     /// <inheritdoc/>
     public AuthorDto ToDto()

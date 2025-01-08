@@ -7,8 +7,8 @@ public record class CreateBorrowDto
     public Guid? Id { get; init; }
 
     [Required]
-    public Guid BookId { get; init; }
+    public required Guid BookId { get; init; }
 
     [Required]
-    public Guid UserId { get; init; }
+    public required Guid UserId { get; init; }
 }

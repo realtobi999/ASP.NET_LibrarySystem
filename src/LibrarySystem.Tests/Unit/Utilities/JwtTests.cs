@@ -2,10 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Tests.Integration.Factories;
-using LibrarySystem.Tests.Integration.Helpers;
 
 namespace LibrarySystem.Tests.Unit.Utilities;
 

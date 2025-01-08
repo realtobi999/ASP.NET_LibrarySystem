@@ -3,7 +3,6 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Tests.Integration.Factories;
-using LibrarySystem.Tests.Integration.Helpers;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Validators;

@@ -1,8 +1,6 @@
 using LibrarySystem.Application.Services.Books;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Services.Books;
 using LibrarySystem.Tests.Integration.Factories;
-using LibrarySystem.Tests.Integration.Helpers;
 
 namespace LibrarySystem.Tests.Unit.Books;
 

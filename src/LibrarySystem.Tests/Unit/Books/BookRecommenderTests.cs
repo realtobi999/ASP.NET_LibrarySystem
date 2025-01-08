@@ -3,7 +3,6 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services.Books;
 using LibrarySystem.Tests.Integration.Factories;
-using LibrarySystem.Tests.Integration.Helpers;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Books;

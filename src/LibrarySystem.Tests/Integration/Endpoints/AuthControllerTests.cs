@@ -1,11 +1,11 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
+using LibrarySystem.Presentation;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
 using LibrarySystem.Tests.Integration.Server;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Factories;
 
@@ -143,5 +143,4 @@ public class AuthControllerTests
         tokenPayload.ElementAt(1).Type.Should().Be("role");
         tokenPayload.ElementAt(1).Value.Should().Be("Employee");
     }
-
 }

@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Wishlists;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -15,11 +15,11 @@ public class WishlistControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var wishlist = new Wishlist().WithFakeData(user);
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var wishlist = WishlistFactory.CreateWithFakeData(user);
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -56,11 +56,11 @@ public class WishlistControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var wishlist = new Wishlist().WithFakeData(user);
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var wishlist = WishlistFactory.CreateWithFakeData(user);
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -103,11 +103,11 @@ public class WishlistControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var wishlist = new Wishlist().WithFakeData(user);
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var wishlist = WishlistFactory.CreateWithFakeData(user);
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -158,11 +158,11 @@ public class WishlistControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = new User().WithFakeData();
-        var wishlist = new Wishlist().WithFakeData(user);
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
-        var book3 = new Book().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var wishlist = WishlistFactory.CreateWithFakeData(user);
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
+        var book3 = BookFactory.CreateWithFakeData();
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);

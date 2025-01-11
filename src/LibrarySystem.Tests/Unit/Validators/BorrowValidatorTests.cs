@@ -2,7 +2,7 @@ using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Repositories;
-using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Validators;
@@ -23,9 +23,9 @@ public class BorrowValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenBookDoesntExistAsync()
     {
         // prepare
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync((Book?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
@@ -41,9 +41,9 @@ public class BorrowValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenUserDoesntExistAsync()
     {
         // prepare
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync(book);
         _repository.Setup(r => r.User.GetAsync(user.Id)).ReturnsAsync((User?)null); // set the return to null value => emulate that the repository couldn't find this entity
@@ -60,9 +60,9 @@ public class BorrowValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenDueDateIsBeforeBorrowDate()
     {
         // prepare
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         // make the DueDate one month before the borrowDate
         borrow.BorrowDate = DateTimeOffset.Now;
@@ -84,9 +84,9 @@ public class BorrowValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenBookIsNotReturnedAfterDueDate()
     {
         // prepare
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         // make it so the borrow is one month late of returning
         borrow.BorrowDate = DateTimeOffset.Now.AddMonths(-2);
@@ -108,9 +108,9 @@ public class BorrowValidatorTests
     public async void ValidateAsync_ReturnsFalseWhenBookIsSetToAvailableAfterBorrowing()
     {
         // prepare
-        var user = new User().WithFakeData();
-        var book = new Book().WithFakeData();
-        var borrow = new Borrow().WithFakeData(book, user);
+        var user = UserFactory.CreateWithFakeData();
+        var book = BookFactory.CreateWithFakeData();
+        var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         book.IsAvailable = true;
 

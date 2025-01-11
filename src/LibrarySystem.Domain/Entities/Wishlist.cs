@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Interfaces.Common;
 
@@ -7,22 +8,27 @@ namespace LibrarySystem.Domain.Entities;
 
 public class Wishlist : IDtoSerialization<WishlistDto>
 {
+    // core properties
+    
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required, Column("user_id")]
-    public Guid UserId { get; set; }
+    public required Guid UserId { get; set; }
 
     [Required, Column("name")]
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     [Required, Column("created_at")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     // relationships
 
-    public User? User { get; set; }
-    public ICollection<Book> Books { get; set; } = [];
+    [JsonIgnore]
+    public virtual User? User { get; set; }
+
+    [JsonIgnore]
+    public virtual ICollection<Book> Books { get; set; } = [];
 
     /// <inheritdoc/>
     public WishlistDto ToDto()

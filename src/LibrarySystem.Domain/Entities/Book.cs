@@ -8,32 +8,34 @@ namespace LibrarySystem.Domain.Entities;
 
 public class Book : IDtoSerialization<BookDto>
 {
+    // core properties
+
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required, Column("isbn")]
-    public string? ISBN { get; set; }
+    public required string ISBN { get; set; }
 
     [Required, Column("title")]
-    public string? Title { get; set; }
+    public required string Title { get; set; }
 
     [Required, Column("description")]
-    public string? Description { get; set; }
+    public required string Description { get; set; }
 
     [Required, Column("pages_count")]
-    public int PagesCount { get; set; }
+    public required int PagesCount { get; set; }
 
     [Required, Column("published_at")]
-    public DateTimeOffset PublishedDate { get; set; }
+    public required DateTimeOffset PublishedDate { get; set; }
 
     [Required, Column("popularity")]
-    public double Popularity { get; set; }
+    public required double Popularity { get; set; }
 
     [Required, Column("available")]
-    public bool IsAvailable { get; set; }
+    public required bool IsAvailable { get; set; }
 
     [Required, Column("created_at")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     // constants
 
@@ -42,19 +44,19 @@ public class Book : IDtoSerialization<BookDto>
     // relationships
 
     [JsonIgnore]
-    public ICollection<Picture> CoverPictures { get; set; } = [];
+    public virtual ICollection<Picture> CoverPictures { get; set; } = [];
 
     [JsonIgnore]
-    public ICollection<Author> Authors { get; set; } = [];
+    public virtual ICollection<Author> Authors { get; set; } = [];
 
     [JsonIgnore]
-    public ICollection<Genre> Genres { get; set; } = [];
+    public virtual ICollection<Genre> Genres { get; set; } = [];
 
     [JsonIgnore]
-    public ICollection<BookReview> BookReviews { get; set; } = [];
+    public virtual ICollection<BookReview> BookReviews { get; set; } = [];
 
     [JsonIgnore]
-    public ICollection<Borrow> Borrows { get; set; } = [];
+    public virtual ICollection<Borrow> Borrows { get; set; } = [];
 
     /// <inheritdoc/>
     public BookDto ToDto()

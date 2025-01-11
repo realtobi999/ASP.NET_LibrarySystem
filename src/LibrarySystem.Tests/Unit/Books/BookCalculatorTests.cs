@@ -1,7 +1,6 @@
 using LibrarySystem.Application.Services.Books;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Services.Books;
-using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Factories;
 
 namespace LibrarySystem.Tests.Unit.Books;
 
@@ -18,20 +17,20 @@ public class BookCalculatorTests
     public void CalculatePopularityScore_ShouldReturnCorrectPopularityValue()
     {
         // prepare
-        var user = new User().WithFakeData();
-        var book1 = new Book().WithFakeData();
-        var book2 = new Book().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
+        var book1 = BookFactory.CreateWithFakeData();
+        var book2 = BookFactory.CreateWithFakeData();
 
         // assign three borrow and reviews to book1
         for (int i = 0; i < 3; i++)
         {
-            book1.Borrows.Add(new Borrow().WithFakeData(book1, user));
-            book1.BookReviews.Add(new BookReview().WithFakeData(book1, user));
+            book1.Borrows.Add(BorrowFactory.CreateWithFakeData(book1, user));
+            book1.BookReviews.Add(BookReviewFactory.CreateWithFakeData(book1, user));
         }
 
         //assign one borrow and review to book2
-        book2.Borrows.Add(new Borrow().WithFakeData(book2, user));
-        book2.BookReviews.Add(new BookReview().WithFakeData(book2, user));
+        book2.Borrows.Add(BorrowFactory.CreateWithFakeData(book2, user));
+        book2.BookReviews.Add(BookReviewFactory.CreateWithFakeData(book2, user));
 
         // act & assert
         var book1Popularity = _calculator.CalculatePopularityScore(book1);

@@ -8,34 +8,36 @@ namespace LibrarySystem.Domain.Entities;
 
 public class User : IDtoSerialization<UserDto>
 {
+    // core properties
+    
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required, Column("username")]
-    public string? Username { get; set; }
+    public required string Username { get; set; }
 
     [Required, Column("email")]
-    public string? Email { get; set; }
+    public required string Email { get; set; }
 
     [Required, Column("password")]
-    public string? Password { get; set; }
+    public required string Password { get; set; }
 
     [Required, Column("created_at")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     // relationships
 
     [JsonIgnore]
-    public Picture? ProfilePicture { get; set; }
+    public virtual Picture? ProfilePicture { get; set; }
 
     [JsonIgnore]
-    public ICollection<BookReview> BookReviews { get; set; } = [];
+    public virtual ICollection<BookReview> BookReviews { get; set; } = [];
 
     [JsonIgnore]
-    public ICollection<Wishlist> Wishlists { get; set; } = [];
+    public virtual ICollection<Wishlist> Wishlists { get; set; } = [];
 
     [JsonIgnore]
-    public ICollection<Borrow> Borrows { get; set; } = [];
+    public virtual ICollection<Borrow> Borrows { get; set; } = [];
 
     /// <inheritdoc/>
     public UserDto ToDto()

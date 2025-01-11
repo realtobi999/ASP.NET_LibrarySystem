@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Emails;
@@ -12,6 +13,9 @@ namespace LibrarySystem.Presentation;
 
 public class Program
 {
+    public const string NAME = "LibrarySystem";
+    public const string VERSION = "1.0.0";
+
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -19,9 +23,8 @@ public class Program
             var config = builder.Configuration;
 
             builder.Services.AddHttpLogging(opt => { });
+            builder.Services.ConfigureSwagger();
 
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
             builder.Services.ConfigureCors();
             builder.Services.AddControllers(opt =>
             {
@@ -37,7 +40,7 @@ public class Program
             builder.Services.ConfigureManagers();
             builder.Services.ConfigureValidators();
             builder.Services.ConfigureMappers();
-            builder.Services.AddSingleton<IHasher, Hasher>();
+            builder.Services.AddSingleton<IHasher>(new Hasher(algorithm: HashAlgorithmName.SHA512));
 
             // email client
             builder.Services.AddSingleton(p => SmtpFactory.CreateInstance(config));
@@ -62,7 +65,10 @@ public class Program
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(opt =>
+                {
+                    opt.SwaggerEndpoint($"/swagger/{Program.VERSION}/swagger.json", Program.NAME);
+                });
             }
 
             app.UseCors("MainCorsPolicy");

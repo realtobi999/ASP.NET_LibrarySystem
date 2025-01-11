@@ -1,4 +1,5 @@
-﻿using LibrarySystem.Application.Core.Utilities;
+﻿using System.Security.Cryptography;
+using LibrarySystem.Application.Core.Utilities;
 
 namespace LibrarySystem.Tests.Unit.Utilities;
 
@@ -8,7 +9,7 @@ public class HasherTests
     public void Hasher_Hash_Works()
     {
         // prepare
-        var hasher = new Hasher();
+        var hasher = new Hasher(algorithm: HashAlgorithmName.SHA256);
 
         var password = "TEST_PASSWORD_IN_PLAIN_TEXT";
 
@@ -22,7 +23,7 @@ public class HasherTests
     public void Hasher_Compare_Works()
     {
         // prepare
-        var hasher = new Hasher();
+        var hasher = new Hasher(algorithm: HashAlgorithmName.SHA256);
 
         var password1 = "TEST_PASSWORD_IN_PLAIN_TEXT";
         var password2 = "ANOTHER_TEST_PASSWORD";

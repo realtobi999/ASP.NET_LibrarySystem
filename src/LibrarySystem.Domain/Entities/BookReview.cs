@@ -8,23 +8,25 @@ namespace LibrarySystem.Domain.Entities;
 
 public class BookReview : IDtoSerialization<BookReviewDto>
 {
+    // core properties
+    
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required, Column("book_id")]
-    public Guid BookId { get; set; }
+    public required Guid BookId { get; set; }
 
     [Required, Column("user_id")]
-    public Guid UserId { get; set; }
+    public required Guid UserId { get; set; }
 
     [Required, Range(0, 10), Column("rating")]
-    public double Rating { get; set; }
+    public required double Rating { get; set; }
 
     [Required, Column("text")]
-    public string? Text { get; set; }
+    public required string Text { get; set; }
 
     [Required, Column("created_at")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     // constants
 
@@ -33,10 +35,10 @@ public class BookReview : IDtoSerialization<BookReviewDto>
     // relationships
 
     [JsonIgnore]
-    public Book? Book { get; set; }
+    public virtual Book? Book { get; set; }
 
     [JsonIgnore]
-    public User? User { get; set; }
+    public virtual User? User { get; set; }
 
     /// <inheritdoc/>
     public BookReviewDto ToDto()

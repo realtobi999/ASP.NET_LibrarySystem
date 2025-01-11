@@ -30,7 +30,7 @@ public class EmployeeService : IEmployeeService
         var email = loginEmployeeDto.Email ?? throw new NullReferenceException("The email must be set.");
         var password = loginEmployeeDto.Password ?? throw new NullReferenceException("The password must be set.");
 
-        var employee = await this.GetAsync(email);
+        var employee = await GetAsync(email);
 
         return _hasher.Compare(password, employee.Password!);
     }
@@ -69,5 +69,4 @@ public class EmployeeService : IEmployeeService
         _repository.Employee.Delete(employee);
         await _repository.SaveSafelyAsync();
     }
-
 }

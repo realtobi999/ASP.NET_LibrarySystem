@@ -1,30 +1,16 @@
 ﻿using System.Net.Http.Json;
-using Bogus;
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Tests.Integration.Factories;
 
 namespace LibrarySystem.Tests.Integration.Helpers;
 
-public static class BookTestExtensions
+internal static class BookTestExtensions
 {
-    private static readonly Faker<Book> _BookFaker = new Faker<Book>()
-        .RuleFor(b => b.Id, f => f.Random.Guid())
-        .RuleFor(b => b.ISBN, f => f.Random.Replace("###-#-##-######-#"))
-        .RuleFor(b => b.Title, f => f.Lorem.Sentence(3))
-        .RuleFor(b => b.Description, f => f.Lorem.Paragraph())
-        .RuleFor(b => b.PagesCount, f => f.Random.Int(100, 1000))
-        .RuleFor(b => b.PublishedDate, f => f.Date.PastOffset())
-        .RuleFor(b => b.IsAvailable, true);
-
-    public static Book WithFakeData(this Book book)
-    {
-        return _BookFaker.Generate();
-    }
-
     public static async Task<CreateBookDto> ToCreateBookDtoWithGenresAndAuthorsAsync(this Book book, HttpClient client)
     {
-        var authors = new List<Author>() { new Author().WithFakeData(), new Author().WithFakeData() };
-        var genres = new List<Genre>() { new Genre().WithFakeData(), new Genre().WithFakeData() };
+        var authors = new List<Author>() { AuthorFactory.CreateWithFakeData(), AuthorFactory.CreateWithFakeData() };
+        var genres = new List<Genre>() { GenreFactory.CreateWithFakeData(), GenreFactory.CreateWithFakeData() };
 
         foreach (var author in authors)
         {

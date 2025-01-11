@@ -8,20 +8,22 @@ namespace LibrarySystem.Domain.Entities;
 
 public class Employee : IDtoSerialization<EmployeeDto>
 {
+    // core properties
+    
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required, Column("Name")]
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     [Required, Column("email")]
-    public string? Email { get; set; }
+    public required string Email { get; set; }
 
     [Required, Column("password")]
-    public string? Password { get; set; }
+    public required string Password { get; set; }
 
     [Required, Column("created_at")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     // relationships
 

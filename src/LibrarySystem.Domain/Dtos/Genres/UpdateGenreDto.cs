@@ -5,5 +5,5 @@ namespace LibrarySystem.Domain.Dtos.Genres;
 public record class UpdateGenreDto
 {
     [Required, MaxLength(55)]
-    public string? Name { get; init; }
+    public required string Name { get; init; }
 }

@@ -2,8 +2,8 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Authors;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
 
@@ -16,9 +16,9 @@ public class AuthorControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var author1 = new Author().WithFakeData();
-        var author2 = new Author().WithFakeData();
-        var author3 = new Author().WithFakeData();
+        var author1 = AuthorFactory.CreateWithFakeData();
+        var author2 = AuthorFactory.CreateWithFakeData();
+        var author3 = AuthorFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -50,7 +50,7 @@ public class AuthorControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var author = new Author().WithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -70,7 +70,7 @@ public class AuthorControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var author = new Author().WithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -97,7 +97,7 @@ public class AuthorControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var author = new Author().WithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -134,7 +134,7 @@ public class AuthorControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var author = new Author().WithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
@@ -157,7 +157,7 @@ public class AuthorControllerTests
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var author = new Author().WithFakeData();
+        var author = AuthorFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);

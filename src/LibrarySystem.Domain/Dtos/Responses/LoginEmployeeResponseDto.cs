@@ -4,6 +4,6 @@ namespace LibrarySystem.Domain.Dtos.Responses;
 
 public record class LoginEmployeeResponseDto
 {
-    public EmployeeDto? EmployeeDto { get; init; }
-    public string? Token { get; init; }
+    public required EmployeeDto EmployeeDto { get; init; }
+    public required string Token { get; init; }
 }

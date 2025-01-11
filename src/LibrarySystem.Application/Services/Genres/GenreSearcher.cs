@@ -7,7 +7,7 @@ namespace LibrarySystem.Application.Services.Genres;
 
 public class GenreSearcher : ISearcher<Genre>
 {
-    private const string FilterOperator = Constants.QUERY_SEARCH_FILTER_OPERATOR;
+    public const string FILTER_OPERATOR = Constants.QUERY_SEARCH_FILTER_OPERATOR;
     private readonly IRepositoryManager _repository;
 
     public GenreSearcher(IRepositoryManager repository)
@@ -21,13 +21,13 @@ public class GenreSearcher : ISearcher<Genre>
 
         query = query.Trim();
 
-        if (query.StartsWith(FilterOperator))
+        if (query.StartsWith(FILTER_OPERATOR))
         {
-            return genres.Where(a => a.Name!.StartsWith(query[FilterOperator.Length..]));
+            return genres.Where(a => a.Name!.StartsWith(query[FILTER_OPERATOR.Length..]));
         }
-        else if (query.EndsWith(FilterOperator))
+        else if (query.EndsWith(FILTER_OPERATOR))
         {
-            return genres.Where(a => a.Name!.EndsWith(query[..^FilterOperator.Length]));
+            return genres.Where(a => a.Name!.EndsWith(query[..^FILTER_OPERATOR.Length]));
         }
         else
         {

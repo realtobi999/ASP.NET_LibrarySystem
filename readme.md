@@ -6,7 +6,7 @@
 - **[How To Build?](#how-to-build)**
 - **[How To Run Tests?](#how-to-run-tests)**
 - **[Endpoints Overview](#endpoints-overview)**
-- **[Test Overview](#tests-overview)**
+- **[Test Overview](#test-overview)**
   - **[Integration Tests](#integration-tests)**
   - **[Unit Tests](#unit-tests)**
 - **[Architecture Overview](#architecture-overview)**
@@ -15,34 +15,34 @@
 ## Summary
 
 - This is a **REST DEMO API** project for a library system.
-- There is ***45*** endpoints in total, with over ***80*** **unit and integration** tests
-- Uses a **PostgreSQL** database with **Entity Framework**
-- **JWT** authentication and authorization - (User, Employee, Admin policies)
-- Project is utilizing the **Clean Architecture**
-- Features **Users, Employees, Books, Authors, Genres, Borrow System, Reviews**
-- Features **searching**, **recommending** and **querying** books with various filters
-- Features **Email Notifications** on some endpoints.
+- There are **45 endpoints** in total, with over **80 unit and integration tests**.
+- Uses a **PostgreSQL** database with **Entity Framework**.
+- **JWT** authentication and authorization with User, Employee, and Admin policies.
+- Follows **Clean Architecture**.
+- Features include **Users, Employees, Books, Authors, Genres, Borrow System, Reviews**.
+- Provides **search**, **recommendation**, and **querying** for books with various filters.
+- Supports **Email Notifications** on some endpoints.
 
 ## How To Build?
 
-You will need to have installed:
+You will need:
 
-- **Dotnet SDK 8.0.107** and higher
-- **Postgres**
+- `Dotnet SDK 8.0.*`
+- `PostgreSQL`
 
-After that clone the git repo into the desired folder like this:
+Clone the repository into your desired folder:
 
-``` bash
+```bash
 git clone https://github.com/realtobi999/ASP.NET_LibrarySystem.git
 ```
 
-Open the cloned folder and navigate to the presentation layer of the project:
+Navigate to the presentation layer:
 
 ```bash
 cd src/LibrarySystem.Presentation
 ```
 
-After that open ***appsettings.json*** in your favorite editor and modify the settings as such:
+Open `appsettings.json` in your editor and modify as follows:
 
 ```json
 {
@@ -62,22 +62,22 @@ After that open ***appsettings.json*** in your favorite editor and modify the se
   },
   "SMTP": {
     "Host": "YOUR_HOST",
-    "Port": "YOUR_POST",
+    "Port": "YOUR_PORT",
     "Username": "YOUR_USERNAME",
     "Password": "YOUR_PASSWORD"
   }
 }
 ```
 
-After that you can finally go back to the **root** folder and run the project:
+Return to the **root** folder and run the project:
 
-``` bash
+```bash
 cd ../.. && make run
 ```
 
 **OR** run it directly from the presentation layer:
 
-``` bash
+```bash
 dotnet run
 ```
 
@@ -87,9 +87,9 @@ dotnet run
 
 ## How To Run Tests?
 
-I love to hear that you care about that! It's simple if you got the app running successfull just run this command in the **root** folder:
+To run tests, use the following command in the **root** folder:
 
-``` bash
+```bash
 make test
 ```
 
@@ -99,7 +99,7 @@ make test
 
 ## Endpoints Overview
 
-In total there is about **35+** endpoints
+In total there are about **35+** endpoints.
 
 ![swagger.gif](./doc/swagger.gif)
 
@@ -107,11 +107,11 @@ In total there is about **35+** endpoints
 
 ## Tests Overview
 
-In total there is about **80+** tests, both **integration** and **unit** tests. I've tried to cover most edge cases with the integration tests.
+There are about **80+** tests, both **integration** and **unit** tests. Integration tests cover various edge cases.
 
 ### **Integration Tests:**
 
-``` bash
+```bash
 .
 ├── Endpoints
 │   ├── AuthControllerTests.cs
@@ -141,7 +141,7 @@ In total there is about **80+** tests, both **integration** and **unit** tests. 
     └── WebAppFactory.cs
 ```
 
-The Extensions folder is for helper extension methods that come in handy during testing. Server folder is where the testing server is defined.
+The `Extensions` folder contains helper extension methods for testing. The `Server` folder defines the testing server.
 
 ### **Unit Tests:**
 
@@ -167,7 +167,7 @@ The Extensions folder is for helper extension methods that come in handy during 
 
 ## Architecture Overview
 
-This project utilizes a **Clean Architecture** paradigm. Which is very widely known for its scalability and its perfect for bigger sized projects.
+This project utilizes a **Clean Architecture** paradigm, ideal for scalability and larger projects.
 
 ```bash
 .
@@ -237,9 +237,8 @@ This project utilizes a **Clean Architecture** paradigm. Which is very widely kn
     │   └── Handlers
     ├── Properties
     └── Services
-
 ```
 
 ## Notes
 
-In this project i learned a lot about ASP.NET and specifically about API's. I've implemented various authentication middlewares and authorization policies, implemented the clean architecture design, got better at writing integration tests, learned how to implement an **EMAIL** service and how to use the Razor Engine for custom email HTML. I've also got better at writing bussiness logic and implemented various features.
+In this project, I learned a lot about ASP.NET, specifically about building APIs. I implemented various authentication middlewares, authorization policies, and the clean architecture design. I improved at writing integration tests, implemented an **EMAIL** service, learned how to use the Razor Engine for custom email HTML, and developed a stronger grasp of business logic and feature implementation.

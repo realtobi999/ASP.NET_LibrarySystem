@@ -13,13 +13,13 @@ public static class JwtUtils
             throw new BadRequest400Exception("Authorization header is missing. Expected Format: BEARER <TOKEN>");
         }
 
-        const string bearerPrefix = "Bearer ";
-        if (!header.StartsWith(bearerPrefix, StringComparison.OrdinalIgnoreCase))
+        const string BEARER_PREFIX = "Bearer ";
+        if (!header.StartsWith(BEARER_PREFIX, StringComparison.OrdinalIgnoreCase))
         {
             throw new BadRequest400Exception("Invalid authorization header format. Expected format: BEARER <TOKEN>");
         }
 
-        string token = header[bearerPrefix.Length..].Trim();
+        string token = header[BEARER_PREFIX.Length..].Trim();
 
         if (string.IsNullOrEmpty(token))
         {

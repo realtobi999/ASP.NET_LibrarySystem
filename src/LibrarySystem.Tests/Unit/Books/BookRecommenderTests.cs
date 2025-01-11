@@ -2,7 +2,7 @@ using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Domain.Interfaces.Services.Books;
-using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Books;
@@ -23,7 +23,7 @@ public class BookRecommenderTests
     public async void IndexRecommendedAsync_ReturnsCorrectlyRecommendedBooks()
     {
         // prepare
-        var user = new User().WithFakeData();
+        var user = UserFactory.CreateWithFakeData();
 
         var books = new List<Book>();
         var genres = new List<Genre>();
@@ -31,13 +31,13 @@ public class BookRecommenderTests
 
         for (int i = 0; i < 5; i++)
         {
-            genres.Add(new Genre().WithFakeData());
-            authors.Add(new Author().WithFakeData());
+            genres.Add(GenreFactory.CreateWithFakeData());
+            authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
         for (int i = 0; i < 100; i++)
         {
-            var book = new Book().WithFakeData();
+            var book = BookFactory.CreateWithFakeData();
 
             book.Genres.Add(genres[_random.Next(genres.Count)]);
             book.Authors.Add(authors[_random.Next(authors.Count)]);
@@ -48,8 +48,8 @@ public class BookRecommenderTests
         // assign books to user review and borrow
         var userPreferredBook1 = books[_random.Next(books.Count)];
 
-        user.Borrows.Add(new Borrow().WithFakeData(userPreferredBook1, user));
-        user.BookReviews.Add(new BookReview().WithFakeData(userPreferredBook1, user));
+        user.Borrows.Add(BorrowFactory.CreateWithFakeData(userPreferredBook1, user));
+        user.BookReviews.Add(BookReviewFactory.CreateWithFakeData(userPreferredBook1, user));
 
         _repository.Setup(r => r.Book.IndexAsync()).ReturnsAsync(books);
 

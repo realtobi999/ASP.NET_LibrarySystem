@@ -103,7 +103,7 @@ In total there is about **35+** endpoints
 
 ![swagger.gif](./doc/swagger.gif)
 
-**Check out each endpoint in detail [here.](./doc/endpoints.md)**
+**Check out each endpoint in detail [here.](./doc/endpoints.md)** (NOT DONE YET)
 
 ## Tests Overview
 

@@ -30,8 +30,8 @@ public class User : IDtoSerialization<UserDto>
     [Required, Column("login_attempts")]
     public int LoginAttempts { get; set; }
 
-    [Required, Column("user_lock")]
-    public (bool IsLocked, DateTimeOffset DueTo) UserLock { get; set; }
+    [Required, Column("login_lock")]
+    public (bool IsLocked, DateTimeOffset DueTo) LoginLock { get; set; }
 
     // relationships
 
@@ -49,7 +49,7 @@ public class User : IDtoSerialization<UserDto>
 
     // constants
 
-    public static readonly TimeSpan UserLockDuration = TimeSpan.FromMinutes(15);
+    public static readonly TimeSpan LoginLockDuration = TimeSpan.FromMinutes(15);
     public static readonly int AttemptsBeforeLock = 5;
 
     /// <inheritdoc/>
@@ -75,16 +75,16 @@ public class User : IDtoSerialization<UserDto>
 
     public void Lock()
     {
-        UserLock = (IsLocked: true, DueTo: DateTimeOffset.Now.Add(UserLockDuration));
+        LoginLock = (IsLocked: true, DueTo: DateTimeOffset.Now.Add(LoginLockDuration));
     }
 
     public void Unlock()
     {
-        UserLock = default;
+        LoginLock = default;
     }
 
     public bool IsLocked()
     {
-        return UserLock.IsLocked && UserLock.DueTo > DateTimeOffset.Now;
+        return LoginLock.IsLocked && LoginLock.DueTo > DateTimeOffset.Now;
     }
 }

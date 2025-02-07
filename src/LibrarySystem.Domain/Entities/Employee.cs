@@ -9,7 +9,7 @@ namespace LibrarySystem.Domain.Entities;
 public class Employee : IDtoSerialization<EmployeeDto>
 {
     // core properties
-    
+
     [Required, Column("id")]
     public required Guid Id { get; set; }
 
@@ -24,6 +24,19 @@ public class Employee : IDtoSerialization<EmployeeDto>
 
     [Required, Column("created_at")]
     public required DateTimeOffset CreatedAt { get; set; }
+
+    // auth properties
+
+    [Required, Column("login_attempts")]
+    public int LoginAttempts { get; set; }
+
+    [Required, Column("login_lock")]
+    public (bool IsLocked, DateTimeOffset DueTo) LoginLock { get; set; }
+
+    // constants
+
+    public static readonly TimeSpan LoginLockDuration = TimeSpan.FromMinutes(15);
+    public static readonly int AttemptsBeforeLock = 5;
 
     // relationships
 
@@ -46,5 +59,20 @@ public class Employee : IDtoSerialization<EmployeeDto>
     {
         Email = dto.Email;
         Name = dto.Name;
+    }
+
+    public void Lock()
+    {
+        LoginLock = (IsLocked: true, DueTo: DateTimeOffset.Now.Add(LoginLockDuration));
+    }
+
+    public void Unlock()
+    {
+        LoginLock = default;
+    }
+
+    public bool IsLocked()
+    {
+        return LoginLock.IsLocked && LoginLock.DueTo > DateTimeOffset.Now;
     }
 }

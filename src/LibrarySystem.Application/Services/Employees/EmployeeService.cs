@@ -25,16 +25,6 @@ public class EmployeeService : IEmployeeService
         return employee;
     }
 
-    public async Task<bool> AuthAsync(LoginEmployeeDto loginEmployeeDto)
-    {
-        var email = loginEmployeeDto.Email ?? throw new NullReferenceException("The email must be set.");
-        var password = loginEmployeeDto.Password ?? throw new NullReferenceException("The password must be set.");
-
-        var employee = await GetAsync(email);
-
-        return _hasher.Compare(password, employee.Password!);
-    }
-
     public async Task CreateAsync(Employee employee)
     {
         // create employee and save changes
@@ -68,5 +58,43 @@ public class EmployeeService : IEmployeeService
         // delete employee and save changes
         _repository.Employee.Delete(employee);
         await _repository.SaveSafelyAsync();
+    }
+
+    public async Task<bool> AuthAsync(LoginEmployeeDto loginEmployeeDto)
+    {
+        var email = loginEmployeeDto.Email ?? throw new NullReferenceException("The email must be set.");
+        var password = loginEmployeeDto.Password ?? throw new NullReferenceException("The password must be set.");
+
+        var employee = await GetAsync(email);
+
+        if (employee.IsLocked())
+        {
+            throw new BadRequest400Exception("User is locked. Try again later.");
+        }
+        else
+        {
+            employee.Unlock();
+        }
+
+        var authenticated = _hasher.Compare(password, employee.Password!);
+
+        if (!authenticated)
+        {
+            employee.LoginAttempts++;
+
+            // lock employee if failed attempts exceed the limit
+            if (employee.LoginAttempts % User.AttemptsBeforeLock == 0)
+            {
+                employee.Lock();
+            }
+        }
+        else
+        {
+            employee.LoginAttempts = 0; // reset on successful login
+        }
+
+        await this.UpdateAsync(employee);
+
+        return authenticated;
     }
 }

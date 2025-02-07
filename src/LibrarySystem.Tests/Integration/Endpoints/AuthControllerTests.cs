@@ -64,27 +64,6 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void LoginUser_Returns401()
-    {
-        // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
-        var user = UserFactory.CreateWithFakeData();
-
-        var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
-        // act & assert
-        var loginDto = new LoginUserDto
-        {
-            Email = user.Email,
-            Password = user.Email
-        };
-
-        var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
-    }
-
-    [Fact]
     public async void LoginUser_Returns400WhenUserLocked()
     {
         // prepare
@@ -107,6 +86,9 @@ public class AuthControllerTests
             var login = await client.PostAsJsonAsync("/api/auth/login", dto);
             login.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
+
+        using var context = app.GetDatabaseContext();
+        context.Set<User>().FirstOrDefault(u => u.Id == user.Id)!.LoginAttempts.Should().Be(User.AttemptsBeforeLock);
 
         var response = await client.PostAsJsonAsync("/api/auth/login", dto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
@@ -171,5 +153,43 @@ public class AuthControllerTests
         tokenPayload.ElementAt(0).Value.Should().Be(employee.Id.ToString());
         tokenPayload.ElementAt(1).Type.Should().Be("role");
         tokenPayload.ElementAt(1).Value.Should().Be("Employee");
+    }
+
+    [Fact]
+    public async void LoginEmployee_Returns400WhenEmployeeLocked()
+    {
+        // prepare
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
+        var employee = EmployeeFactory.CreateWithFakeData();
+        var token = JwtTestExtensions.Create().Generate([
+            new Claim(ClaimTypes.Role, "Admin")
+        ]);
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        client.DefaultRequestHeaders.Remove("Authorization");
+
+        // act & assert
+        var dto = new LoginEmployeeDto
+        {
+            Email = employee.Email,
+            Password = employee.Email,
+        };
+
+        for (int i = 0; i < Employee.AttemptsBeforeLock; i++)
+        {
+            var login = await client.PostAsJsonAsync("/api/auth/employee/login", dto);
+            login.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+        }
+
+        using var context = app.GetDatabaseContext();
+        context.Set<Employee>().FirstOrDefault(e => e.Id == employee.Id)!.LoginAttempts.Should().Be(Employee.AttemptsBeforeLock);
+
+        var response = await client.PostAsJsonAsync("/api/auth/employee/login", dto);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
 }

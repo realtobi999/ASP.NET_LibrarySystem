@@ -9,7 +9,7 @@ namespace LibrarySystem.Domain.Entities;
 public class BookReview : IDtoSerialization<BookReviewDto>
 {
     // core properties
-    
+
     [Required, Column("id")]
     public required Guid Id { get; set; }
 
@@ -34,9 +34,9 @@ public class BookReview : IDtoSerialization<BookReviewDto>
 
     // relationships
 
+
     [JsonIgnore]
     public virtual Book? Book { get; set; }
-
     [JsonIgnore]
     public virtual User? User { get; set; }
 

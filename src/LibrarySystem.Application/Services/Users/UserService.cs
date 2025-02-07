@@ -46,16 +46,6 @@ public class UserService : IUserService
         return users;
     }
 
-    public async Task<bool> AuthAsync(LoginUserDto loginUserDto)
-    {
-        var email = loginUserDto.Email ?? throw new NullReferenceException("The email must be set.");
-        var password = loginUserDto.Password ?? throw new NullReferenceException("The password must be set.");
-
-        var user = await this.GetAsync(email);
-
-        return _hasher.Compare(password, user.Password!);
-    }
-
     public async Task CreateAsync(User user)
     {
         // create user and save changes
@@ -68,5 +58,43 @@ public class UserService : IUserService
         // update user and save changes
         _repository.User.Update(user);
         await _repository.SaveSafelyAsync();
+    }
+
+    public async Task<bool> AuthAsync(LoginUserDto loginUserDto)
+    {
+        var email = loginUserDto.Email ?? throw new NullReferenceException("Email is required.");
+        var password = loginUserDto.Password ?? throw new NullReferenceException("Password is required.");
+
+        var user = await this.GetAsync(email);
+
+        if (user.IsLocked())
+        {
+            throw new BadRequest400Exception("User is locked. Try again later.");
+        }
+        else
+        {
+            user.Unlock();
+        }
+
+        var authenticated = _hasher.Compare(password, user.Password!);
+
+        if (!authenticated)
+        {
+            user.LoginAttempts++;
+
+            // lock user if failed attempts exceed the limit
+            if (user.LoginAttempts % User.AttemptsBeforeLock == 0)
+            {
+                user.Lock();
+            }
+        }
+        else
+        {
+            user.LoginAttempts = 0; // reset on successful login
+        }
+
+        await this.UpdateAsync(user);
+
+        return authenticated;
     }
 }

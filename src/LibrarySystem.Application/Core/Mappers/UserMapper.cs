@@ -22,7 +22,7 @@ public class UserMapper : IMapper<User, RegisterUserDto>
             Username = dto.Username,
             Email = dto.Email,
             Password = _hasher.Hash(dto.Password ?? throw new NullReferenceException("The password must be set.")),
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedAt = DateTimeOffset.UtcNow,
         };
     }
 }

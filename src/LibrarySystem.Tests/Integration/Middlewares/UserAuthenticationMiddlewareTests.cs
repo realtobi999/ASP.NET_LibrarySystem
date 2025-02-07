@@ -11,7 +11,7 @@ namespace LibrarySystem.Tests.Integration.Middlewares;
 public class UserAuthenticationMiddlewareTests
 {
     [Fact]
-    public async void UserAuthenticationMiddleware_Returns401WhenTryingToModifyDifferentAccount()
+    public async void UserAuthenticationMiddleware_Returns401WhenTryingToModifyDifferentUser()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();

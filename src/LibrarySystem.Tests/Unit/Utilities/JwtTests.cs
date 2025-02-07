@@ -38,13 +38,13 @@ public class JwtTests
 
         // act & assert
         var token = jwt.Generate([
-            new Claim("AccountId", user.Id.ToString())
+            new Claim("UserId", user.Id.ToString())
         ]);
         token.Should().NotBeNull();
 
         var payload = JwtUtils.ParsePayload(token);
         payload.Count().Should().BeGreaterThan(0);
-        payload.ElementAt(0).Type.Should().Be("AccountId");
+        payload.ElementAt(0).Type.Should().Be("UserId");
         payload.ElementAt(0).Value.Should().Be(user.Id.ToString());
     }
 
@@ -69,7 +69,7 @@ public class JwtTests
         var user = UserFactory.CreateWithFakeData();
 
         var token = jwt.Generate([
-            new Claim("AccountId", user.Id.ToString())
+            new Claim("UserId", user.Id.ToString())
         ]);
         token.Should().NotBeNull();
 
@@ -88,15 +88,15 @@ public class JwtTests
         var user = UserFactory.CreateWithFakeData();
 
         var token = jwt.Generate([
-            new Claim("AccountId", user.Id.ToString())
+            new Claim("UserId", user.Id.ToString())
         ]);
         token.Should().NotBeNull();
 
         // act & assert
-        JwtUtils.ParseFromPayload(token, "AccountId").Should().Be(user.Id.ToString());
-        JwtUtils.ParseFromPayload(token, "ACCOUNTID").Should().Be(user.Id.ToString());
-        JwtUtils.ParseFromPayload(token, "accountid").Should().Be(user.Id.ToString());
+        JwtUtils.ParseFromPayload(token, "UserId").Should().Be(user.Id.ToString());
+        JwtUtils.ParseFromPayload(token, "USERID").Should().Be(user.Id.ToString());
+        JwtUtils.ParseFromPayload(token, "userid").Should().Be(user.Id.ToString());
 
-        JwtUtils.ParseFromPayload(token, "account_id").Should().BeNull();
+        JwtUtils.ParseFromPayload(token, "user_id").Should().BeNull();
     }
 }

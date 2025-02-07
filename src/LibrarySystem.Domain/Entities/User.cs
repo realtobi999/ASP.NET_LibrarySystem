@@ -9,7 +9,7 @@ namespace LibrarySystem.Domain.Entities;
 public class User : IDtoSerialization<UserDto>
 {
     // core properties
-    
+
     [Required, Column("id")]
     public required Guid Id { get; set; }
 
@@ -25,6 +25,14 @@ public class User : IDtoSerialization<UserDto>
     [Required, Column("created_at")]
     public required DateTimeOffset CreatedAt { get; set; }
 
+    // auth properties
+
+    [Required, Column("login_attempts")]
+    public int LoginAttempts { get; set; }
+
+    [Required, Column("user_lock")]
+    public (bool IsLocked, DateTimeOffset DueTo) UserLock { get; set; }
+
     // relationships
 
     [JsonIgnore]
@@ -38,6 +46,11 @@ public class User : IDtoSerialization<UserDto>
 
     [JsonIgnore]
     public virtual ICollection<Borrow> Borrows { get; set; } = [];
+
+    // constants
+
+    public static readonly TimeSpan UserLockDuration = TimeSpan.FromMinutes(15);
+    public static readonly int AttemptsBeforeLock = 5;
 
     /// <inheritdoc/>
     public UserDto ToDto()
@@ -58,5 +71,20 @@ public class User : IDtoSerialization<UserDto>
     {
         Email = dto.Email;
         Username = dto.Username;
+    }
+
+    public void Lock()
+    {
+        UserLock = (IsLocked: true, DueTo: DateTimeOffset.Now.Add(UserLockDuration));
+    }
+
+    public void Unlock()
+    {
+        UserLock = default;
+    }
+
+    public bool IsLocked()
+    {
+        return UserLock.IsLocked && UserLock.DueTo > DateTimeOffset.Now;
     }
 }

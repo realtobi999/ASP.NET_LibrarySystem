@@ -8,6 +8,7 @@ using LibrarySystem.Tests.Integration.Server;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Factories;
+using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 
@@ -76,11 +77,39 @@ public class AuthControllerTests
         var loginDto = new LoginUserDto
         {
             Email = user.Email,
-            Password = user.Password + "BLEEH"
+            Password = user.Email
         };
 
         var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async void LoginUser_Returns400WhenUserLocked()
+    {
+        // prepare
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
+        var user = UserFactory.CreateWithFakeData();
+
+        var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
+        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
+        // act & assert
+        var dto = new LoginUserDto
+        {
+            Email = user.Email,
+            Password = user.Email
+        };
+
+        for (int i = 0; i < User.AttemptsBeforeLock; i++)
+        {
+            var login = await client.PostAsJsonAsync("/api/auth/login", dto);
+            login.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+        }
+
+        var response = await client.PostAsJsonAsync("/api/auth/login", dto);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
 
     [Fact]

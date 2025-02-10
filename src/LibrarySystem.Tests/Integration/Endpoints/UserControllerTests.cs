@@ -2,17 +2,19 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Users;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 
 public class UserControllerTests
 {
     [Fact]
-    public async void UserController_GetUsers_Returns200AndUsersAsync()
+    public async void GetUsers_Returns200AndUsersAsync()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -37,11 +39,11 @@ public class UserControllerTests
         var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(limit);
-        content.ElementAt(0).Id.Should().Be(user2.Id);
+        content.ElementAt(0).Should().Be(user2.ToDto());
     }
 
     [Fact]
-    public async void UserController_GetUser_Returns200AndUserAsync()
+    public async void GetUser_Returns200AndUserAsync()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -56,14 +58,15 @@ public class UserControllerTests
 
         var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
 
-        content.Id.Should().Be(user.Id);
+        content.Should().Be(user.ToDto());
     }
 
     [Fact]
-    public async void UserController_UpdateUser_Returns204AndIsUpdatedAsync()
+    public async void UpdateUser_Returns204AndIsUpdatedInTheDatabase()
     {
         // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
         var user = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user.Id.ToString()),
@@ -85,23 +88,21 @@ public class UserControllerTests
         var response = await client.PutAsJsonAsync($"/api/user/{user.Id}", updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-        client.DefaultRequestHeaders.Remove("Authorization");
+        // assert that the user is updated
+        using var context = app.GetDatabaseContext();
+        var updatedUser = context.Set<User>().FirstOrDefault(u => u.Id == user.Id) ?? throw new NullReferenceException();
 
-        var get = await client.GetAsync($"/api/user/{user.Id}");
-        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-
-        var content = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
-
-        content.Id.Should().Be(user.Id);
-        content.Username.Should().Be(updateDto.Username);
-        content.Email.Should().Be(updateDto.Email);
+        updatedUser.Id.Should().Be(user.Id);
+        updatedUser.Username.Should().Be(updateDto.Username);
+        updatedUser.Email.Should().Be(updateDto.Email);
     }
 
     [Fact]
-    public async void UserController_DeleteUser_Returns204AndUserDoesntExistInTheDb()
+    public async void DeleteUser_Returns204AndUserIsDeletedInTheDatabase()
     {
         //prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
         var user = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user.Id.ToString()),
@@ -117,15 +118,17 @@ public class UserControllerTests
         var response = await client.DeleteAsync($"/api/user/{user.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-        var get = await client.GetAsync($"/api/user/{user.Id}");
-        get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+        // assert that the user is deleted
+        using var context = app.GetDatabaseContext();
+        context.Set<User>().Any(u => u.Id == user.Id).Should().BeFalse();
     }
 
     [Fact]
-    public async void UserController_UploadPhotos_Returns204AndIsUploaded()
+    public async void UploadPhotos_Returns204AndIsUploaded()
     {
         // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
         var user = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User")
@@ -150,13 +153,13 @@ public class UserControllerTests
         var response = await client.PutAsync($"/api/user/{user.Id}/photo", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-        var get = await client.GetAsync($"/api/user/{user.Id}");
-        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await get.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
+        // assert that the user profile picture is updated
+        using var context = app.GetDatabaseContext();
+        var updatedUser = context.Set<User>().Include(u => u.ProfilePicture).FirstOrDefault(u => u.Id == user.Id) ?? throw new NullReferenceException();
 
-        content.Id.Should().Be(user.Id);
-        content.ProfilePicture.Should().NotBeNull();
-        content.ProfilePicture!.FileName.Should().Be("photo1.jpg");
+        updatedUser.Id.Should().Be(user.Id);
+        updatedUser.ProfilePicture.Should().NotBeNull();
+        updatedUser.ProfilePicture!.FileName.Should().Be("photo1.jpg");
     }
 }

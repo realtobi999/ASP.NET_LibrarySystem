@@ -15,10 +15,11 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class AuthControllerTests
 {
     [Fact]
-    public async void RegisterUser_Returns201AndLocationHeader()
+    public async void RegisterUser_Returns201AndLocationHeaderAndUserExistsInTheDatabase()
     {
         // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
         var user = UserFactory.CreateWithFakeData();
 
         // act & assert
@@ -27,6 +28,9 @@ public class AuthControllerTests
 
         var header = response.Headers.GetValues("Location");
         header.Should().Equal($"/api/user/{user.Id}");
+
+        using var context = app.GetDatabaseContext();
+        context.Set<User>().Any(u => u.Id == user.Id).Should().BeTrue();
     }
 
     [Fact]
@@ -75,7 +79,7 @@ public class AuthControllerTests
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var dto = new LoginUserDto
+        var loginDto = new LoginUserDto
         {
             Email = user.Email,
             Password = user.Email
@@ -83,22 +87,24 @@ public class AuthControllerTests
 
         for (int i = 0; i < User.AttemptsBeforeLock; i++)
         {
-            var login = await client.PostAsJsonAsync("/api/auth/login", dto);
+            var login = await client.PostAsJsonAsync("/api/auth/login", loginDto);
             login.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
+        // assert that the login lock is setup correctly
         using var context = app.GetDatabaseContext();
         context.Set<User>().FirstOrDefault(u => u.Id == user.Id)!.LoginAttempts.Should().Be(User.AttemptsBeforeLock);
 
-        var response = await client.PostAsJsonAsync("/api/auth/login", dto);
+        var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
 
     [Fact]
-    public async void RegisterEmployee_Returns201AndLocationHeader()
+    public async void RegisterEmployee_Returns201AndLocationHeaderAndEmployeeExistsInTheDatabase()
     {
         // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
         var employee = EmployeeFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
@@ -112,6 +118,9 @@ public class AuthControllerTests
 
         var header = response.Headers.GetValues("Location");
         header.Should().Equal($"/api/employee/{employee.Id}");
+
+        using var context = app.GetDatabaseContext();
+        context.Set<Employee>().Any(e => e.Id == employee.Id).Should().BeTrue();
     }
 
     [Fact]
@@ -174,7 +183,7 @@ public class AuthControllerTests
         client.DefaultRequestHeaders.Remove("Authorization");
 
         // act & assert
-        var dto = new LoginEmployeeDto
+        var loginDto = new LoginEmployeeDto
         {
             Email = employee.Email,
             Password = employee.Email,
@@ -182,14 +191,15 @@ public class AuthControllerTests
 
         for (int i = 0; i < Employee.AttemptsBeforeLock; i++)
         {
-            var login = await client.PostAsJsonAsync("/api/auth/employee/login", dto);
+            var login = await client.PostAsJsonAsync("/api/auth/employee/login", loginDto);
             login.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
+        // assert that the login lock is setup correctly
         using var context = app.GetDatabaseContext();
         context.Set<Employee>().FirstOrDefault(e => e.Id == employee.Id)!.LoginAttempts.Should().Be(Employee.AttemptsBeforeLock);
 
-        var response = await client.PostAsJsonAsync("/api/auth/employee/login", dto);
+        var response = await client.PostAsJsonAsync("/api/auth/employee/login", loginDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
 }

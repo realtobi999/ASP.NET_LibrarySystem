@@ -2,10 +2,12 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Employees;
+using LibrarySystem.Domain.Entities;
 using LibrarySystem.Presentation;
 using LibrarySystem.Tests.Integration.Factories;
 using LibrarySystem.Tests.Integration.Helpers;
 using LibrarySystem.Tests.Integration.Server;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 
@@ -63,41 +65,36 @@ public class EmployeeControllerTests
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var response1 = await client.GetAsync($"/api/employee/{employee.Id}");
-        response1.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        var response = await client.GetAsync($"/api/employee/{employee.Id}");
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-        var content = await response1.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
+        var content = await response.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
 
         content.Should().Be(employee.ToDto());
-
-        var response2 = await client.GetAsync($"/api/employee/{Guid.NewGuid()}");
-        response2.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public async void UpdateEmployee_Returns204AndEmployeeIsUpdated()
+    public async void UpdateEmployee_Returns204AndEmployeeIsUpdatedInTheDatabase()
     {
         // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
         var employee = EmployeeFactory.CreateWithFakeData();
 
-        var token1 = JwtTestExtensions.Create().Generate([
+        var adminToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {adminToken}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-
-        var token2 = JwtTestExtensions.Create().Generate([
+        var employeeToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee"),
             new Claim("EmployeeId", employee.Id.ToString()),
         ]);
-
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {employeeToken}");
 
         // act & assert
         var updateDto = new UpdateEmployeeDto
@@ -109,53 +106,53 @@ public class EmployeeControllerTests
         var response = await client.PutAsJsonAsync($"api/employee/{employee.Id}", updateDto);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-        var get = await client.GetAsync($"/api/employee/{employee.Id}");
-        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        // assert that the employee is updated
+        using var context = app.GetDatabaseContext();
+        var updatedEmployee = context.Set<Employee>().FirstOrDefault(e => e.Id == employee.Id) ?? throw new NullReferenceException();
 
-        var content = await get.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
-
-        content.Id.Should().Be(employee.Id);
-        content.Name.Should().Be(updateDto.Name);
-        content.Email.Should().Be(updateDto.Email);
+        updatedEmployee.Id.Should().Be(employee.Id);
+        updatedEmployee.Name.Should().Be(updateDto.Name);
+        updatedEmployee.Email.Should().Be(updateDto.Email);
     }
 
     [Fact]
-    public async void UpdateEmployee_Returns204AndEmployeeIsDeleted()
+    public async void UpdateEmployee_Returns204AndEmployeeIsDeletedInTheDatabase()
     {
         // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
         var employee = EmployeeFactory.CreateWithFakeData();
 
-        var token1 = JwtTestExtensions.Create().Generate([
+        var adminToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {adminToken}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
         create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
-        var token2 = JwtTestExtensions.Create().Generate([
+        client.DefaultRequestHeaders.Remove("Authorization");
+        var employeeToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee"),
             new Claim("EmployeeId", employee.Id.ToString()),
         ]);
-
-        client.DefaultRequestHeaders.Remove("Authorization");
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {employeeToken}");
 
         // act & assert
         var response = await client.DeleteAsync($"/api/employee/{employee.Id}");
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-        var get = await client.GetAsync($"/api/employee/{employee.Id}");
-        get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+        // assert that the employee is deleted
+        using var context = app.GetDatabaseContext();
+        context.Set<Employee>().Any(e => e.Id == employee.Id).Should().BeFalse();
     }
 
     [Fact]
     public async void UploadPhotos_Returns204AndIsUploaded()
     {
         // prepare
-        var client = new WebAppFactory<Program>().CreateDefaultClient();
+        var app = new WebAppFactory<Program>();
+        var client = app.CreateDefaultClient();
         var employee = EmployeeFactory.CreateWithFakeData();
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
@@ -189,13 +186,12 @@ public class EmployeeControllerTests
         var response = await client.PutAsync($"/api/employee/{employee.Id}/photo", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-        var get = await client.GetAsync($"/api/employee/{employee.Id}");
-        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        // assert that the employee picture is updated
+        using var context = app.GetDatabaseContext();
+        var updatedEmployee = context.Set<Employee>().Include(e => e.Picture).FirstOrDefault(e => e.Id == employee.Id) ?? throw new NullReferenceException();
 
-        var content = await get.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
-
-        content.Id.Should().Be(employee.Id);
-        content.Picture.Should().NotBeNull();
-        content.Picture!.FileName.Should().Be("photo1.jpg");
+        updatedEmployee.Id.Should().Be(employee.Id);
+        updatedEmployee.Picture.Should().NotBeNull();
+        updatedEmployee.Picture!.FileName.Should().Be("photo1.jpg");
     }
 }

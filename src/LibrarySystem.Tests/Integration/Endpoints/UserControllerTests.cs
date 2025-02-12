@@ -14,7 +14,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class UserControllerTests
 {
     [Fact]
-    public async void GetUsers_Returns200AndUsersAsync()
+    public async void GetUsers_Returns200AndCorrectValues()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -39,11 +39,11 @@ public class UserControllerTests
         var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(limit);
-        content.ElementAt(0).Should().Be(user2.ToDto());
+        content.ElementAt(0).Should().BeEquivalentTo(user2.ToDto());
     }
 
     [Fact]
-    public async void GetUser_Returns200AndUserAsync()
+    public async void GetUser_Returns200AndCorrectValue()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -58,11 +58,11 @@ public class UserControllerTests
 
         var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
 
-        content.Should().Be(user.ToDto());
+        content.Should().BeEquivalentTo(user.ToDto());
     }
 
     [Fact]
-    public async void UpdateUser_Returns204AndIsUpdatedInTheDatabase()
+    public async void UpdateUser_Returns204AndUserIsUpdated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -98,7 +98,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async void DeleteUser_Returns204AndUserIsDeletedInTheDatabase()
+    public async void DeleteUser_Returns204AndUserIsDeleted()
     {
         //prepare
         var app = new WebAppFactory<Program>();
@@ -124,7 +124,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async void UploadPhotos_Returns204AndIsUploaded()
+    public async void UploadPhotos_Returns204AndPhotoIsUploaded()
     {
         // prepare
         var app = new WebAppFactory<Program>();

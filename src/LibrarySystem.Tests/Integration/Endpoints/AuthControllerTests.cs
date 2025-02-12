@@ -15,7 +15,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class AuthControllerTests
 {
     [Fact]
-    public async void RegisterUser_Returns201AndLocationHeaderAndUserExistsInTheDatabase()
+    public async void RegisterUser_Returns201AndUserIsCreated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -26,6 +26,7 @@ public class AuthControllerTests
         var response = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
+        // assert that the user is created
         var header = response.Headers.GetValues("Location");
         header.Should().Equal($"/api/user/{user.Id}");
 
@@ -100,7 +101,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void RegisterEmployee_Returns201AndLocationHeaderAndEmployeeExistsInTheDatabase()
+    public async void RegisterEmployee_Returns201AndEmployeeIsCreated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -119,6 +120,7 @@ public class AuthControllerTests
         var header = response.Headers.GetValues("Location");
         header.Should().Equal($"/api/employee/{employee.Id}");
 
+        // assert that the user is created
         using var context = app.GetDatabaseContext();
         context.Set<Employee>().Any(e => e.Id == employee.Id).Should().BeTrue();
     }

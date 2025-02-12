@@ -14,7 +14,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class EmployeeControllerTests
 {
     [Fact]
-    public async void GetEmployees_Returns200AndLimitAndOffsetWorks()
+    public async void GetEmployees_Returns200AndCorrectValues()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -45,11 +45,11 @@ public class EmployeeControllerTests
         var content = await response.Content.ReadFromJsonAsync<List<EmployeeDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(limit);
-        content.ElementAt(0).Should().Be(employee2.ToDto());
+        content.ElementAt(0).Should().BeEquivalentTo(employee2.ToDto());
     }
 
     [Fact]
-    public async void GetEmployee_Returns200AndEmployee()
+    public async void GetEmployee_Returns200AndCorrectValue()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -70,11 +70,11 @@ public class EmployeeControllerTests
 
         var content = await response.Content.ReadFromJsonAsync<EmployeeDto>() ?? throw new NullReferenceException();
 
-        content.Should().Be(employee.ToDto());
+        content.Should().BeEquivalentTo(employee.ToDto());
     }
 
     [Fact]
-    public async void UpdateEmployee_Returns204AndEmployeeIsUpdatedInTheDatabase()
+    public async void UpdateEmployee_Returns204AndEmployeeIsUpdated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -116,7 +116,7 @@ public class EmployeeControllerTests
     }
 
     [Fact]
-    public async void UpdateEmployee_Returns204AndEmployeeIsDeletedInTheDatabase()
+    public async void UpdateEmployee_Returns204AndEmployeeIsDeleted()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -148,7 +148,7 @@ public class EmployeeControllerTests
     }
 
     [Fact]
-    public async void UploadPhotos_Returns204AndIsUploaded()
+    public async void UploadPhotos_Returns204AndPhotoIsUploaded()
     {
         // prepare
         var app = new WebAppFactory<Program>();

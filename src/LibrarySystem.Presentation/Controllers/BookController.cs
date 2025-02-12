@@ -51,7 +51,7 @@ public class BookController : ControllerBase
         // if the url is api/book/recent order the books by the CreatedAt property
         if (HttpContext.Request.GetDisplayUrl().Contains("/api/book/recent"))
         {
-            books = books.OrderBy(b => b.CreatedAt);
+            books = books.OrderByDescending(b => b.CreatedAt);
         }
 
         // if the url is api/book/popular order the books by the Popularity property

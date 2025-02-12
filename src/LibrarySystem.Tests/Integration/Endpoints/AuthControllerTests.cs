@@ -110,7 +110,6 @@ public class AuthControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
@@ -134,7 +133,6 @@ public class AuthControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
@@ -176,7 +174,6 @@ public class AuthControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());

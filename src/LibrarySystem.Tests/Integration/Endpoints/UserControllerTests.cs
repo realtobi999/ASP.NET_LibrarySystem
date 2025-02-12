@@ -92,7 +92,6 @@ public class UserControllerTests
         using var context = app.GetDatabaseContext();
         var updatedUser = context.Set<User>().FirstOrDefault(u => u.Id == user.Id) ?? throw new NullReferenceException();
 
-        updatedUser.Id.Should().Be(user.Id);
         updatedUser.Username.Should().Be(updateDto.Username);
         updatedUser.Email.Should().Be(updateDto.Email);
     }
@@ -154,11 +153,10 @@ public class UserControllerTests
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
 
-        // assert that the user profile picture is updated
+        // assert that the user profile picture is uploaded
         using var context = app.GetDatabaseContext();
         var updatedUser = context.Set<User>().Include(u => u.ProfilePicture).FirstOrDefault(u => u.Id == user.Id) ?? throw new NullReferenceException();
 
-        updatedUser.Id.Should().Be(user.Id);
         updatedUser.ProfilePicture.Should().NotBeNull();
         updatedUser.ProfilePicture!.FileName.Should().Be("photo1.jpg");
     }

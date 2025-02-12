@@ -7,6 +7,7 @@ namespace LibrarySystem.Tests.Integration.Helpers;
 
 internal static class BookTestExtensions
 {
+    // DELETE
     public static async Task<CreateBookDto> ToCreateBookDtoWithGenresAndAuthorsAsync(this Book book, HttpClient client)
     {
         var authors = new List<Author>() { AuthorFactory.CreateWithFakeData(), AuthorFactory.CreateWithFakeData() };

@@ -21,11 +21,9 @@ public class EmployeeControllerTests
         var employee1 = EmployeeFactory.CreateWithFakeData();
         var employee2 = EmployeeFactory.CreateWithFakeData();
         var employee3 = EmployeeFactory.CreateWithFakeData();
-
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/employee/register", employee1.ToRegisterEmployeeDto());
@@ -54,11 +52,9 @@ public class EmployeeControllerTests
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var employee = EmployeeFactory.CreateWithFakeData();
-
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
@@ -80,7 +76,6 @@ public class EmployeeControllerTests
         var app = new WebAppFactory<Program>();
         var client = app.CreateDefaultClient();
         var employee = EmployeeFactory.CreateWithFakeData();
-
         var adminToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
@@ -122,7 +117,6 @@ public class EmployeeControllerTests
         var app = new WebAppFactory<Program>();
         var client = app.CreateDefaultClient();
         var employee = EmployeeFactory.CreateWithFakeData();
-
         var adminToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
@@ -157,7 +151,6 @@ public class EmployeeControllerTests
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
@@ -186,7 +179,7 @@ public class EmployeeControllerTests
         var response = await client.PutAsync($"/api/employee/{employee.Id}/photo", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-        // assert that the employee picture is updated
+        // assert that the employee picture is uploaded
         using var context = app.GetDatabaseContext();
         var updatedEmployee = context.Set<Employee>().Include(e => e.Picture).FirstOrDefault(e => e.Id == employee.Id) ?? throw new NullReferenceException();
 

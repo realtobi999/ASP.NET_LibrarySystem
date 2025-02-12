@@ -24,7 +24,6 @@ public class AuthorControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/author", author1.ToCreateAuthorDto());
@@ -56,7 +55,6 @@ public class AuthorControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
@@ -81,7 +79,6 @@ public class AuthorControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
@@ -106,7 +103,6 @@ public class AuthorControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
@@ -127,7 +123,6 @@ public class AuthorControllerTests
         using var context = app.GetDatabaseContext();
         var updatedAuthor = context.Set<Author>().FirstOrDefault(a => a.Id == author.Id) ?? throw new NullReferenceException();
 
-        updatedAuthor.Id.Should().Be(author.Id);
         updatedAuthor.Name.Should().Be(updateDto.Name);
         updatedAuthor.Description.Should().Be(updateDto.Description);
         updatedAuthor.Birthday.Should().Be(updateDto.Birthday);
@@ -143,7 +138,6 @@ public class AuthorControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
@@ -168,7 +162,6 @@ public class AuthorControllerTests
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
@@ -187,11 +180,10 @@ public class AuthorControllerTests
         var response = await client.PutAsync($"/api/author/{author.Id}/photo", formData);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-        // assert that the user profile picture is updated
+        // assert that the user profile picture is uploaded
         using var context = app.GetDatabaseContext();
         var updatedAuthor = context.Set<Author>().Include(a => a.Picture).FirstOrDefault(a => a.Id == author.Id) ?? throw new NullReferenceException();
 
-        updatedAuthor.Id.Should().Be(author.Id);
         updatedAuthor.Picture.Should().NotBeNull();
         updatedAuthor.Picture!.FileName.Should().Be("photo1.jpg");
     }

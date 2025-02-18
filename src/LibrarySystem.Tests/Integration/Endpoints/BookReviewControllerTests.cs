@@ -23,7 +23,6 @@ public class BookReviewControllerTests
         var employeeToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {employeeToken}");
 
         var author = AuthorFactory.CreateWithFakeData();
@@ -39,12 +38,11 @@ public class BookReviewControllerTests
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // auth as the user to create the review
+        client.DefaultRequestHeaders.Remove("Authorization");
         var userToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),
         ]);
-
-        client.DefaultRequestHeaders.Remove("Authorization");
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {userToken}");
 
         // act & assert
@@ -68,7 +66,6 @@ public class BookReviewControllerTests
         var employeeToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {employeeToken}");
 
         var author = AuthorFactory.CreateWithFakeData();
@@ -84,13 +81,13 @@ public class BookReviewControllerTests
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // auth as the user to create the review
+        client.DefaultRequestHeaders.Remove("Authorization");
         var userToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),
         ]);
-
-        client.DefaultRequestHeaders.Remove("Authorization");
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {userToken}");
+
 
         var create5 = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());
         create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -124,7 +121,6 @@ public class BookReviewControllerTests
         var employeeToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {employeeToken}");
 
         var author = AuthorFactory.CreateWithFakeData();
@@ -140,12 +136,11 @@ public class BookReviewControllerTests
         create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // auth as the user to create the review
+        client.DefaultRequestHeaders.Remove("Authorization");
         var userToken = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),
         ]);
-
-        client.DefaultRequestHeaders.Remove("Authorization");
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {userToken}");
 
         var create5 = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());

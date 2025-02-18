@@ -59,13 +59,13 @@ public class AuthControllerTests
         content.UserDto!.Id.Should().Be(user.Id);
         content.Token.Should().NotBeNull();
 
-        var tokenPayload = JwtUtils.ParsePayload(content.Token!);
+        var payload = JwtUtils.ParsePayload(content.Token!);
 
-        tokenPayload.Count().Should().BeGreaterThan(2);
-        tokenPayload.ElementAt(0).Type.Should().Be("UserId");
-        tokenPayload.ElementAt(0).Value.Should().Be(user.Id.ToString());
-        tokenPayload.ElementAt(1).Type.Should().Be("role");
-        tokenPayload.ElementAt(1).Value.Should().Be("User");
+        payload.Count().Should().BeGreaterThan(2);
+        payload.ElementAt(0).Type.Should().Be("UserId");
+        payload.ElementAt(0).Value.Should().Be(user.Id.ToString());
+        payload.ElementAt(1).Type.Should().Be("role");
+        payload.ElementAt(1).Value.Should().Be("User");
     }
 
     [Fact]
@@ -155,13 +155,13 @@ public class AuthControllerTests
         content.EmployeeDto!.Id.Should().Be(employee.Id);
         content.Token.Should().NotBeNull();
 
-        var tokenPayload = JwtUtils.ParsePayload(content.Token!);
+        var payload = JwtUtils.ParsePayload(content.Token!);
 
-        tokenPayload.Count().Should().BeGreaterThan(2);
-        tokenPayload.ElementAt(0).Type.Should().Be("EmployeeId");
-        tokenPayload.ElementAt(0).Value.Should().Be(employee.Id.ToString());
-        tokenPayload.ElementAt(1).Type.Should().Be("role");
-        tokenPayload.ElementAt(1).Value.Should().Be("Employee");
+        payload.Count().Should().BeGreaterThan(2);
+        payload.ElementAt(0).Type.Should().Be("EmployeeId");
+        payload.ElementAt(0).Value.Should().Be(employee.Id.ToString());
+        payload.ElementAt(1).Type.Should().Be("role");
+        payload.ElementAt(1).Value.Should().Be("Employee");
     }
 
     [Fact]

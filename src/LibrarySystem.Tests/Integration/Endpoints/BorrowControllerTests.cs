@@ -166,10 +166,17 @@ public class BorrowControllerTests
         ]);
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
+        var author = AuthorFactory.CreateWithFakeData();
+        var genre = GenreFactory.CreateWithFakeData();
+
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        var create2 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create3 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
+        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create4 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
+        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
@@ -197,10 +204,17 @@ public class BorrowControllerTests
         ]);
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
+        var author = AuthorFactory.CreateWithFakeData();
+        var genre = GenreFactory.CreateWithFakeData();
+
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        var create2 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create3 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
+        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create4 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
+        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
@@ -229,14 +243,21 @@ public class BorrowControllerTests
         ]);
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
+        var author = AuthorFactory.CreateWithFakeData();
+        var genre = GenreFactory.CreateWithFakeData();
+
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        var create2 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create3 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
+        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create4 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
+        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create5 = await client.PostAsJsonAsync("/api/borrow", borrow1.ToCreateBorrowDto());
+        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // act & assert
-        var create3 = await client.PostAsJsonAsync("/api/borrow", borrow1.ToCreateBorrowDto());
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         // assert that the book is unavailable
         using var context = app.GetDatabaseContext();
@@ -264,12 +285,19 @@ public class BorrowControllerTests
         ]);
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {employeeToken}");
 
+        var author = AuthorFactory.CreateWithFakeData();
+        var genre = GenreFactory.CreateWithFakeData();
+
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create2 = await client.PostAsJsonAsync("/api/book", await book.ToCreateBookDtoWithGenresAndAuthorsAsync(client));
+        var create2 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        var create3 = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
+        var create3 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
         create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create4 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
+        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        var create5 = await client.PostAsJsonAsync("/api/borrow", borrow.ToCreateBorrowDto());
+        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Remove("Authorization");
         var userToken = JwtTestExtensions.Create().Generate([

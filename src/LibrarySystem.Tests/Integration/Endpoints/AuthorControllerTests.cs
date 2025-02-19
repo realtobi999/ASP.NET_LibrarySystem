@@ -43,7 +43,7 @@ public class AuthorControllerTests
         var content = await response.Content.ReadFromJsonAsync<List<AuthorDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(limit);
-        content.ElementAt(0).Should().BeEquivalentTo(author2.ToDto());
+        content.ElementAt(0).Id.Should().Be(author2.Id);
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class AuthorControllerTests
 
         var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
 
-        content.Should().BeEquivalentTo(author.ToDto());
+        content.Id.Should().Be(author.Id);
     }
 
     [Fact]

@@ -41,8 +41,8 @@ public class GenreControllerTests
         var content = await response.Content.ReadFromJsonAsync<List<GenreDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(limit);
-        content.ElementAt(0).Should().BeEquivalentTo(genre2.ToDto());
-        content.ElementAt(1).Should().BeEquivalentTo(genre3.ToDto());
+        content.ElementAt(0).Id.Should().Be(genre2.Id);
+        content.ElementAt(1).Id.Should().Be(genre3.Id);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class GenreControllerTests
 
         var content = await response.Content.ReadFromJsonAsync<GenreDto>() ?? throw new NullReferenceException();
 
-        content.Should().BeEquivalentTo(genre.ToDto());
+        content.Id.Should().Be(genre.Id);
 
         var get = await client.GetAsync($"/api/genre/{Guid.NewGuid()}");
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);

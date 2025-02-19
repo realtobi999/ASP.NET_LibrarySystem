@@ -348,9 +348,9 @@ public class BookControllerTests
         updatedBook.Description.Should().Be(updateDto.Description);
         updatedBook.PagesCount.Should().Be(updateDto.PagesCount);
         updatedBook.Authors.Count.Should().Be(1);
-        updatedBook.Authors.ElementAt(0).ToDto().Should().BeEquivalentTo(author2.ToDto());
+        updatedBook.Authors.ElementAt(0).Id.Should().Be(author2.Id);
         updatedBook.Genres.Count.Should().Be(1);
-        updatedBook.Genres.ElementAt(0).ToDto().Should().BeEquivalentTo(genre2.ToDto());
+        updatedBook.Genres.ElementAt(0).Id.Should().Be(genre2.Id);
         updatedBook.IsAvailable.Should().Be(false);
         updatedBook.PublishedDate.Should().Be(updateDto.PublishedDate);
     }

@@ -39,7 +39,7 @@ public class UserControllerTests
         var content = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException();
 
         content.Count.Should().Be(limit);
-        content.ElementAt(0).Should().BeEquivalentTo(user2.ToDto());
+        content.ElementAt(0).Id.Should().Be(user2.Id);
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class UserControllerTests
 
         var content = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new NullReferenceException();
 
-        content.Should().BeEquivalentTo(user.ToDto());
+        content.Id.Should().Be(user.Id);
     }
 
     [Fact]

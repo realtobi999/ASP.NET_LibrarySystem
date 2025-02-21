@@ -61,9 +61,9 @@ public class User : IDtoSerialization<UserDto>
             Username = this.Username,
             Email = this.Email,
             ProfilePicture = this.ProfilePicture,
-            Reviews = this.BookReviews.Select(br => br.ToDto()).ToList(),
-            Wishlists = this.Wishlists.Select(w => w.ToDto()).ToList(),
-            Borrows = this.Borrows.Select(b => b.ToDto()).ToList()
+            Reviews = [.. this.BookReviews.Select(br => br.ToDto())],
+            Wishlists = [.. this.Wishlists.Select(w => w.ToDto())],
+            Borrows = [.. this.Borrows.Select(b => b.ToDto())]
         };
     }
 

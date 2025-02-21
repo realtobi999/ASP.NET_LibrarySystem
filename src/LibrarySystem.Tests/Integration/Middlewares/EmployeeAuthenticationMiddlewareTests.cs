@@ -16,26 +16,21 @@ public class EmployeeAuthenticationMiddlewareTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var employee1 = EmployeeFactory.CreateWithFakeData();
         var employee2 = EmployeeFactory.CreateWithFakeData();
-
         var token1 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Admin")
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token1}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/employee/register", employee1.ToRegisterEmployeeDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/auth/employee/register", employee2.ToRegisterEmployeeDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Remove("Authorization");
-
         var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee"),
             new Claim("EmployeeId", employee1.Id.ToString()),
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         // act & assert

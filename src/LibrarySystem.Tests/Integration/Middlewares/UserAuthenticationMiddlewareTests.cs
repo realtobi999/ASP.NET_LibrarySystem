@@ -17,20 +17,16 @@ public class UserAuthenticationMiddlewareTests
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user1 = UserFactory.CreateWithFakeData();
         var user2 = UserFactory.CreateWithFakeData();
-        // user1 jwt token
         var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user1.Id.ToString()),
             new Claim(ClaimTypes.Role, "User"),
         ]);
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/auth/register", user1.ToRegisterUserDto());
         create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
         var create2 = await client.PostAsJsonAsync("/api/auth/register", user2.ToRegisterUserDto());
         create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
-        // authenticate as the user1
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert
         var response1 = await client.DeleteAsync($"/api/user/{user2.Id}"); // try to delete the other user, authenticated as the first
@@ -50,7 +46,6 @@ public class UserAuthenticationMiddlewareTests
             new Claim(ClaimTypes.Role, "User"),
             new Claim("UserId", user.Id.ToString()),
         ]);
-
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         // act & assert

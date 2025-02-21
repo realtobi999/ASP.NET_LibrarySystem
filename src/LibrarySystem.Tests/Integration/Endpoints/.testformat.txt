@@ -1,0 +1,9 @@
+FORMAT FOR ENDPOINT INTEGRATION TESTS
+
+-------------------------------------
+
+GET_Xs_Returns200AndCorrectValues
+GET_X_Returns200AndCorrectValue
+POST_X_Returns201AndXIsCreated
+UPDATE_X_Returns204AndXIsUpdated
+DELETE_X_Returns204AndXIsDeleted

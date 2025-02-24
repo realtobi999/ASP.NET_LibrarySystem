@@ -11,6 +11,7 @@ public class AuthorSearcherTests
 {
     private readonly Mock<IRepositoryManager> _repository;
     private readonly ISearcher<Author> _searcher;
+
     private static readonly Random _random = new();
 
     public AuthorSearcherTests()

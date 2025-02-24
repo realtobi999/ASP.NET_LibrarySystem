@@ -48,7 +48,7 @@ internal sealed class BookRecommender : IBookRecommender
             }
         }
 
-        // extract preferred genres and authors from userFavoriteBooks 
+        // extract preferred genres and authors from user favorite books 
         foreach (var book in userFavoriteBooks)
         {
             foreach (var genre in book.Genres)
@@ -64,7 +64,7 @@ internal sealed class BookRecommender : IBookRecommender
         var userRecommendedBooks = new HashSet<Book>();
 
         // recommend books based on matching genres or authors
-        foreach (var book in await _repository.Book.IndexAsync())
+        foreach (var book in (await _repository.Book.IndexAsync()))
         {
             if (!userFavoriteBooks.Contains(book) && (book.Genres.Any(g => userPreferredGenreIds.Contains(g.Id)) || book.Authors.Any(a => userPreferredAuthorIds.Contains(a.Id))))
             {

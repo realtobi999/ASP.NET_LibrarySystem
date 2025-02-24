@@ -13,6 +13,7 @@ public class BookSearcherTests
     private readonly Mock<ISearcher<Genre>> _genreSearcher;
     private readonly Mock<ISearcher<Author>> _authorSearcher;
     private readonly ISearcher<Book> _searcher;
+
     private static readonly Random _random = new();
 
     public BookSearcherTests()

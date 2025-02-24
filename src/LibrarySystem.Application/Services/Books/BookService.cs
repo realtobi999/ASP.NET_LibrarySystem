@@ -12,9 +12,9 @@ public sealed class BookService : IBookService
     private readonly IValidator<Book> _validator;
     private readonly ISearcher<Book> _searcher;
     private readonly IBookRecommender _recommender;
-    private readonly IBookCalculator _calculator;
+    private readonly IBookPopularityCalculator _calculator;
 
-    public BookService(IRepositoryManager repository, IValidator<Book> validator, IBookRecommender recommender, ISearcher<Book> searcher, IBookCalculator calculator)
+    public BookService(IRepositoryManager repository, IValidator<Book> validator, IBookRecommender recommender, ISearcher<Book> searcher, IBookPopularityCalculator calculator)
     {
         _repository = repository;
         _validator = validator;

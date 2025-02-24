@@ -3,7 +3,7 @@ using LibrarySystem.Domain.Interfaces.Services.Books;
 
 namespace LibrarySystem.Application.Services.Books;
 
-internal sealed class BookCalculator : IBookCalculator
+internal sealed class BookPopularityCalculator : IBookPopularityCalculator
 {
     public const double BORROW_SCORE_INCREMENT = 50;
     public const double REVIEW_SCORE_INCREMENT = 25;

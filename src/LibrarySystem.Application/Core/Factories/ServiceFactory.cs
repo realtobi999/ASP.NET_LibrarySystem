@@ -43,7 +43,7 @@ public class ServiceFactory : IServiceFactory
     {
         var searcher = new BookSearcher(_repository, new GenreSearcher(_repository), new AuthorSearcher(_repository));
 
-        return new BookService(_repository, _validatorFactory.Initiate<Book>(), new BookRecommender(_repository), searcher, new BookCalculator());
+        return new BookService(_repository, _validatorFactory.Initiate<Book>(), new BookRecommender(_repository), searcher, new BookPopularityCalculator());
     }
 
     public IBorrowService CreateBorrowService()

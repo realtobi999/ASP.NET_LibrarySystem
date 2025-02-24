@@ -7,11 +7,11 @@ namespace LibrarySystem.Tests.Unit.Books;
 
 public class BookCalculatorTests
 {
-    private readonly IBookCalculator _calculator;
+    private readonly IBookPopularityCalculator _calculator;
 
     public BookCalculatorTests()
     {
-        _calculator = new BookCalculator();
+        _calculator = new BookPopularityCalculator();
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class BookCalculatorTests
         for (int i = 0; i < 3; i++)
         {
             var borrow = BorrowFactory.CreateWithFakeData(book2, user);
-            borrow.BorrowDate = borrow.BorrowDate.AddDays(-(BookCalculator.RECENT_ACTIVITY_DAYS + 1));
+            borrow.BorrowDate = borrow.BorrowDate.AddDays(-(BookPopularityCalculator.RECENT_ACTIVITY_DAYS + 1));
 
             book2.Borrows.Add(borrow);
         }
@@ -92,6 +92,6 @@ public class BookCalculatorTests
         // act & assert
         var bookPopularity = _calculator.CalculatePopularityScore(book);
 
-        bookPopularity.Should().Be(book.Popularity - book.Popularity * BookCalculator.INACTIVITY_PENALTY_MULTIPLIER);
+        bookPopularity.Should().Be(book.Popularity - book.Popularity * BookPopularityCalculator.INACTIVITY_PENALTY_MULTIPLIER);
     }
 }

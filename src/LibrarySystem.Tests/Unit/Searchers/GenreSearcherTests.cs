@@ -11,6 +11,7 @@ public class GenreSearcherTests
 {
     private readonly Mock<IRepositoryManager> _repository;
     private readonly ISearcher<Genre> _searcher;
+
     private static readonly Random _random = new Random();
 
     public GenreSearcherTests()

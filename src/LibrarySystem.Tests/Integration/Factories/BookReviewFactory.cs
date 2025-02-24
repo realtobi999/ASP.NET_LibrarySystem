@@ -9,7 +9,7 @@ internal class BookReviewFactory
         .RuleFor(br => br.Id, f => f.Random.Guid())
         .RuleFor(br => br.Rating, f => f.Random.Double(0, 10))
         .RuleFor(br => br.Text, f => f.Lorem.Paragraph())
-        .RuleFor(br => br.CreatedAt, f => f.Date.PastOffset());
+        .RuleFor(br => br.CreatedAt, f => f.Date.RecentOffset());
 
     public static BookReview CreateWithFakeData(Book book, User user)
     {

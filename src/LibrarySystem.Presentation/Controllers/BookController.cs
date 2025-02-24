@@ -90,7 +90,7 @@ public class BookController : ControllerBase
         var user = await _service.User.GetAsync(JwtUtils.ParseFromPayload(token, "UserId") ?? throw new NotAuthorized401Exception());
         var books = await _service.Book.IndexRecommendedAsync(user);
 
-        return Ok(books.Paginate(offset, limit));
+        return Ok(books.Paginate(offset, limit).OrderBy(b => b.Popularity));
     }
 
     [HttpGet("api/book/{bookId:guid}")]

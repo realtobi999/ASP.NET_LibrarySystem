@@ -6,8 +6,9 @@ namespace LibrarySystem.Tests.Integration.Factories;
 internal class GenreFactory
 {
     private static readonly Faker<Genre> _factory = new Faker<Genre>()
-        .RuleFor(u => u.Id, f => f.Random.Guid())
-        .RuleFor(u => u.Name, f => f.Internet.UserName());
+        .RuleFor(g => g.Id, f => f.Random.Guid())
+        .RuleFor(g => g.Name, f => f.Lorem.Word())
+        .RuleFor(g => g.CreatedAt, _ => DateTimeOffset.UtcNow);
 
     public static Genre CreateWithFakeData()
     {

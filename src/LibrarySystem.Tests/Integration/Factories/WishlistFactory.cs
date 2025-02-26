@@ -6,8 +6,9 @@ namespace LibrarySystem.Tests.Integration.Factories;
 internal class WishlistFactory
 {
     private static readonly Faker<Wishlist> _factory = new Faker<Wishlist>()
-        .RuleFor(b => b.Id, f => f.Random.Guid())
-        .RuleFor(b => b.Name, f => f.Lorem.Sentence(3));
+        .RuleFor(w => w.Id, f => f.Random.Guid())
+        .RuleFor(w => w.Name, f => f.Lorem.Sentence(3))
+        .RuleFor(w => w.CreatedAt, _ => DateTimeOffset.UtcNow);
 
     public static Wishlist CreateWithFakeData(User user)
     {

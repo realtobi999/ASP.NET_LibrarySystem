@@ -12,8 +12,9 @@ internal class BookFactory
         .RuleFor(b => b.Description, f => f.Lorem.Paragraph())
         .RuleFor(b => b.PagesCount, f => f.Random.Int(100, 1000))
         .RuleFor(b => b.PublishedDate, f => f.Date.PastOffset())
-        .RuleFor(b => b.Popularity, f => Book.POPULARITY_DEFAULT_VALUE)
-        .RuleFor(b => b.IsAvailable, true);
+        .RuleFor(b => b.Popularity, f => f.Random.Double(0, 100))
+        .RuleFor(b => b.IsAvailable, true)
+        .RuleFor(b => b.CreatedAt, _ => DateTimeOffset.UtcNow);
 
     public static Book CreateWithFakeData()
     {

@@ -22,23 +22,23 @@ internal sealed class BookSearcher : ISearcher<Book>
     public async Task<IEnumerable<Book>> SearchAsync(string query)
     {
         var books = await _repository.Book.IndexAsync();
-        var filteredBooks = new List<Book>();
+        var matchedBooks = new HashSet<Book>();
 
         query = query.Trim();
 
         if (query.StartsWith(FILTER_OPERATOR))
         {
             // search for title or description that starts with the query without the filter operator
-            filteredBooks.AddRange(books.Where(b => b.Title!.StartsWith(query[FILTER_OPERATOR.Length..]) || b.Description!.StartsWith(query[FILTER_OPERATOR.Length..])));
+            matchedBooks.UnionWith(books.Where(b => b.Title!.StartsWith(query[FILTER_OPERATOR.Length..]) || b.Description!.StartsWith(query[FILTER_OPERATOR.Length..])));
         }
         else if (query.EndsWith(FILTER_OPERATOR))
         {
             // search for title or description that ends with the query without the filter operator
-            filteredBooks.AddRange(books.Where(b => b.Title!.EndsWith(query[..^FILTER_OPERATOR.Length]) || b.Description!.StartsWith(query[..^FILTER_OPERATOR.Length])));
+            matchedBooks.UnionWith(books.Where(b => b.Title!.EndsWith(query[..^FILTER_OPERATOR.Length]) || b.Description!.EndsWith(query[..^FILTER_OPERATOR.Length])));
         }
         else
         {
-            filteredBooks.AddRange(books.Where(b => b.Title!.Contains(query) || b.Description!.Contains(query)));
+            matchedBooks.UnionWith(books.Where(b => b.Title!.Contains(query) || b.Description!.Contains(query)));
         }
 
         // search for filtered genres and authors
@@ -48,16 +48,17 @@ internal sealed class BookSearcher : ISearcher<Book>
         // filter books by genres
         if (filteredGenres.Any())
         {
-
-            filteredBooks.AddRange(books.Where(b => b.Genres.Any(g => filteredGenres.Select(genre => genre.Id).Contains(g.Id))));
+            // select all books where one of the genres is the genre we are searching for
+            matchedBooks.UnionWith(books.Where(b => b.Genres.Any(g => filteredGenres.Select(g => g.Id).Contains(g.Id))));
         }
 
         // filter books by authors
         if (filteredAuthors.Any())
         {
-            filteredBooks.AddRange(books.Where(b => b.Authors.Any(a => filteredAuthors.Select(author => author.Id).Contains(a.Id))));
+            // select all books where one of the authors is the author we are searching for
+            matchedBooks.UnionWith(books.Where(b => b.Authors.Any(a => filteredAuthors.Select(author => author.Id).Contains(a.Id))));
         }
 
-        return filteredBooks.Distinct();
+        return matchedBooks.Distinct();
     }
 }

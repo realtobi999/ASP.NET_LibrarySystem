@@ -1,8 +1,10 @@
+using System.ComponentModel.Design;
 using LibrarySystem.Application.Services.Authors;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Tests.Integration.Factories;
+using Microsoft.IdentityModel.Tokens;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Searchers;
@@ -31,16 +33,18 @@ public class AuthorSearcherTests
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
+        var keyword = Guid.NewGuid().ToString();
+
         // get random authors from the list
         var authorToSearchFor1 = authors[_random.Next(authors.Count)];
         var authorToSearchFor2 = authors[_random.Next(authors.Count)];
-        authorToSearchFor1.Name = "testing";
-        authorToSearchFor2.Name = "test author";
+        authorToSearchFor1.Name = $"test {keyword}";
+        authorToSearchFor2.Name = $"{keyword} test";
 
         _repository.Setup(r => r.Author.IndexAsync()).ReturnsAsync(authors.OrderBy(a => a.CreatedAt));
 
         // act & assert
-        var searchedAuthors = await _searcher.SearchAsync("test");
+        var searchedAuthors = await _searcher.SearchAsync(keyword);
 
         searchedAuthors.Count().Should().Be(2);
         searchedAuthors.Contains(authorToSearchFor1).Should().BeTrue();
@@ -58,14 +62,16 @@ public class AuthorSearcherTests
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
+        var keyword = Guid.NewGuid().ToString();
+
         // get random author from the list
         var authorToSearchFor1 = authors[_random.Next(authors.Count)];
-        authorToSearchFor1.Name = "test not so";
+        authorToSearchFor1.Name = $"test {keyword}";
 
         _repository.Setup(r => r.Author.IndexAsync()).ReturnsAsync(authors.OrderBy(a => a.CreatedAt));
 
         // act & assert
-        var searchedAuthors = await _searcher.SearchAsync("\t test not so          \n ");
+        var searchedAuthors = await _searcher.SearchAsync($"\t {keyword}          \n ");
 
         searchedAuthors.Count().Should().Be(1);
         searchedAuthors.Contains(authorToSearchFor1).Should().BeTrue();
@@ -82,16 +88,18 @@ public class AuthorSearcherTests
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
+        var keyword = Guid.NewGuid().ToString();
+
         // get random authors from the list
         var authorToSearchFor1 = authors[_random.Next(authors.Count)];
         var authorToSearchFor2 = authors[_random.Next(authors.Count)];
-        authorToSearchFor1.Name = "test not so";
-        authorToSearchFor2.Name = "not so test";
+        authorToSearchFor1.Name = $"{keyword} test";
+        authorToSearchFor2.Name = $"test {keyword}";
 
         _repository.Setup(r => r.Author.IndexAsync()).ReturnsAsync(authors.OrderBy(a => a.CreatedAt));
 
         // act & assert
-        var searchedAuthors = await _searcher.SearchAsync($"{AuthorSearcher.FILTER_OPERATOR}test");
+        var searchedAuthors = await _searcher.SearchAsync($"{AuthorSearcher.FILTER_OPERATOR}{keyword}");
 
         searchedAuthors.Count().Should().Be(1);
         searchedAuthors.Contains(authorToSearchFor1).Should().BeTrue();
@@ -108,16 +116,18 @@ public class AuthorSearcherTests
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
+        var keyword = Guid.NewGuid().ToString();
+
         // get random authors from the list
         var authorToSearchFor1 = authors[_random.Next(authors.Count)];
         var authorToSearchFor2 = authors[_random.Next(authors.Count)];
-        authorToSearchFor1.Name = "not so test";
-        authorToSearchFor2.Name = "test not so";
+        authorToSearchFor1.Name = $"test {keyword}";
+        authorToSearchFor2.Name = $"{keyword} test";
 
         _repository.Setup(r => r.Author.IndexAsync()).ReturnsAsync(authors.OrderBy(a => a.CreatedAt));
 
         // act & assert
-        var searchedAuthors = await _searcher.SearchAsync($"test{AuthorSearcher.FILTER_OPERATOR}");
+        var searchedAuthors = await _searcher.SearchAsync($"{keyword}{AuthorSearcher.FILTER_OPERATOR}");
 
         searchedAuthors.Count().Should().Be(1);
         searchedAuthors.Contains(authorToSearchFor1).Should().BeTrue();

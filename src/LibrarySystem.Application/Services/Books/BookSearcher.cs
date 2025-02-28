@@ -41,22 +41,22 @@ internal sealed class BookSearcher : ISearcher<Book>
             matchedBooks.UnionWith(books.Where(b => b.Title!.Contains(query) || b.Description!.Contains(query)));
         }
 
-        // search for filtered genres and authors
-        var filteredGenres = await _genreSearcher.SearchAsync(query);
-        var filteredAuthors = await _authorSearcher.SearchAsync(query);
+        // search for genres and authors
+        var matchedGenres = await _genreSearcher.SearchAsync(query);
+        var matchedAuthors = await _authorSearcher.SearchAsync(query);
 
         // filter books by genres
-        if (filteredGenres.Any())
+        if (matchedGenres.Any())
         {
             // select all books where one of the genres is the genre we are searching for
-            matchedBooks.UnionWith(books.Where(b => b.Genres.Any(g => filteredGenres.Select(g => g.Id).Contains(g.Id))));
+            matchedBooks.UnionWith(books.Where(b => b.Genres.Any(g => matchedGenres.Select(g => g.Id).Contains(g.Id))));
         }
 
         // filter books by authors
-        if (filteredAuthors.Any())
+        if (matchedAuthors.Any())
         {
             // select all books where one of the authors is the author we are searching for
-            matchedBooks.UnionWith(books.Where(b => b.Authors.Any(a => filteredAuthors.Select(author => author.Id).Contains(a.Id))));
+            matchedBooks.UnionWith(books.Where(b => b.Authors.Any(a => matchedAuthors.Select(author => author.Id).Contains(a.Id))));
         }
 
         return matchedBooks.Distinct();

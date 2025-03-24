@@ -12,7 +12,7 @@ internal static class AuthorTestExtensions
             Id = author.Id,
             Name = author.Name,
             Description = author.Description,
-            Birthday = author.Birthday,
+            Birthday = author.Birthday
         };
     }
 }

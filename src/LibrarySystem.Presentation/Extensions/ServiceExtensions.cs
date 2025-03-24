@@ -1,7 +1,5 @@
 ﻿using System.Text;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Application.Services;
-using LibrarySystem.Domain.Interfaces.Repositories;
 using LibrarySystem.Infrastructure.Factories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +15,6 @@ using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Infrastructure.Messages.Builders;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Application.Core.Validators;
-using LibrarySystem.Domain.Interfaces.Mappers;
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Wishlists;
@@ -39,7 +36,7 @@ public static class ServiceExtensions
         services.AddCors(options =>
         {
             options.AddPolicy("MainCorsPolicy", builder =>
-                    builder
+                builder
                     .AllowAnyOrigin()
                     .WithMethods("POST", "GET", "PUT", "DELETE"));
         });
@@ -51,10 +48,10 @@ public static class ServiceExtensions
         {
             options.UseNpgsql(
                 connection,
-                options =>
+                builder =>
                 {
-                    options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                    options.EnableRetryOnFailure(maxRetryCount: 3);
+                    builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    builder.EnableRetryOnFailure(maxRetryCount: 3);
                 });
         });
     }
@@ -78,22 +75,22 @@ public static class ServiceExtensions
     {
         var jwt = JwtFactory.CreateInstance(configuration);
 
-        services.AddSingleton<IJwt>(p => jwt);
+        services.AddSingleton<IJwt>(_ => jwt);
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
+            .AddJwtBearer(options =>
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwt.Issuer,
-                ValidAudience = jwt.Issuer,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key))
-            };
-        });
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwt.Issuer,
+                    ValidAudience = jwt.Issuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key))
+                };
+            });
     }
 
     public static void ConfigureMessageBuilders(this IServiceCollection services)
@@ -132,12 +129,12 @@ public static class ServiceExtensions
         services.AddSwaggerGen(opt =>
         {
             // configure the swagger documentation
-            opt.SwaggerDoc(Program.VERSION, new OpenApiInfo()
+            opt.SwaggerDoc(Program.VERSION, new OpenApiInfo
             {
                 Title = Program.NAME,
                 Version = Program.VERSION,
                 Description = "Swagger for a library system API.",
-                Contact = new OpenApiContact()
+                Contact = new OpenApiContact
                 {
                     Name = "Tobiáš Filgas",
                     Email = "tobiasfilgas.work@gmail.com"
@@ -145,14 +142,14 @@ public static class ServiceExtensions
             });
 
             // configure the swagger authentication
-            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = JwtBearerDefaults.AuthenticationScheme,
                 In = ParameterLocation.Header,
                 BearerFormat = "JWT",
-                Description = "JWT Authorization header using the Bearer scheme.",
+                Description = "JWT Authorization header using the Bearer scheme."
             });
 
             // apply a filter so only the endpoints with authorize attribute are locked

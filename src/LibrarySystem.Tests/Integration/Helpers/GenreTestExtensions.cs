@@ -10,7 +10,7 @@ internal static class GenreTestExtensions
         return new CreateGenreDto
         {
             Id = genre.Id,
-            Name = genre.Name,
+            Name = genre.Name
         };
     }
 }

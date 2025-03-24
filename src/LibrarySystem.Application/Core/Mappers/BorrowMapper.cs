@@ -1,6 +1,6 @@
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
@@ -15,7 +15,7 @@ public class BorrowMapper : IMapper<Borrow, CreateBorrowDto>
             UserId = dto.UserId,
             BorrowDate = DateTimeOffset.UtcNow,
             DueDate = DateTimeOffset.UtcNow.AddMonths(1),
-            IsReturned = false,
+            IsReturned = false
         };
     }
 }

@@ -1,4 +1,5 @@
 using LibrarySystem.Domain.Interfaces.Managers;
+
 namespace LibrarySystem.Presentation.Services;
 
 public class BookPopularityBackgroundService : BackgroundService
@@ -54,4 +55,3 @@ public class BookPopularityBackgroundService : BackgroundService
         base.Dispose();
     }
 }
-

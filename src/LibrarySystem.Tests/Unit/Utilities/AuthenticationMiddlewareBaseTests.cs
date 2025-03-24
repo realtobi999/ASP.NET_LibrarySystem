@@ -8,7 +8,7 @@ namespace LibrarySystem.Tests.Unit.Utilities;
 public class AuthenticationMiddlewareBaseTests : AuthenticationMiddlewareBase
 {
     [Fact]
-    public async void ExtractKeyFromRoute_WithValueInRoute_ReturnsCorrectValue()
+    public async Task ExtractKeyFromRoute_WithValueInRoute_ReturnsCorrectValue()
     {
         // prepare
         var context = new DefaultHttpContext();
@@ -21,14 +21,19 @@ public class AuthenticationMiddlewareBaseTests : AuthenticationMiddlewareBase
     }
 
     [Fact]
-    public async void ExtractKeyFromRoute_WithValueInBody_ReturnsCorrectValue()
+    public async Task ExtractKeyFromRoute_WithValueInBody_ReturnsCorrectValue()
     {
         // prepare
-        var requestBody = "{\"UserId\": \"456\"}";
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes(requestBody));
-        var context = new DefaultHttpContext();
-        context.Request.Body = stream;
-        context.Request.ContentType = "application/json";
+        const string body = "{\"UserId\": \"456\"}";
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(body));
+        var context = new DefaultHttpContext
+        {
+            Request =
+            {
+                Body = stream,
+                ContentType = "application/json"
+            }
+        };
 
         // act & assert
         var result = await ExtractKeyFromRouteOrBodyAsync(context, "UserId");
@@ -37,19 +42,21 @@ public class AuthenticationMiddlewareBaseTests : AuthenticationMiddlewareBase
     }
 
     [Fact]
-    public async void ExtractKeyFromRouteOrBody_KeyNotFound_ThrowsBadRequestException()
+    public async Task ExtractKeyFromRouteOrBody_KeyNotFound_ThrowsBadRequestException()
     {
         // prepare
-        var requestBody = "{\"Test\": \"456\"}";
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes(requestBody));
-        var context = new DefaultHttpContext();
-        context.Request.Body = stream;
-        context.Request.ContentType = "application/json";
+        const string body = "{\"Test\": \"456\"}";
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(body));
+        var context = new DefaultHttpContext
+        {
+            Request =
+            {
+                Body = stream,
+                ContentType = "application/json"
+            }
+        };
 
         // act & assert 
-        await Assert.ThrowsAsync<BadRequest400Exception>(async () =>
-        {
-            await ExtractKeyFromRouteOrBodyAsync(context, "UserId");
-        });
+        await Assert.ThrowsAsync<BadRequest400Exception>(async () => { await ExtractKeyFromRouteOrBodyAsync(context, "UserId"); });
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Books;
@@ -13,9 +14,8 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 
 public class BookControllerTests
 {
-
     [Fact]
-    public async void GetBooks_Returns200AndCorrectValues()
+    public async Task GetBooks_Returns200AndCorrectValues()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -31,22 +31,22 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([author.Id], [genre.Id]));
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
         var create4 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([author.Id], [genre.Id]));
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create4.StatusCode.Should().Be(HttpStatusCode.Created);
         var create5 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([author.Id], [genre.Id]));
-        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create5.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
-        var limit = 2;
-        var offset = 1;
+        const int limit = 2;
+        const int offset = 1;
 
         var response = await client.GetAsync($"/api/book?limit={limit}&offset={offset}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
@@ -55,7 +55,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void GetBooks_Returns200AndCorrectValuesFilteredByAuthor()
+    public async Task GetBooks_Returns200AndCorrectValuesFilteredByAuthor()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -72,21 +72,21 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author1.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/author", author2.ToCreateAuthorDto());
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
         var create4 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([author1.Id], [genre.Id]));
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create4.StatusCode.Should().Be(HttpStatusCode.Created);
         var create5 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([author1.Id], [genre.Id]));
-        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create5.StatusCode.Should().Be(HttpStatusCode.Created);
         var create6 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([author2.Id], [genre.Id])); // we assign the second author
-        create6.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create6.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var response = await client.GetAsync($"/api/book?authorId={author1.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
@@ -96,7 +96,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void GetBooks_Returns200AndCorrectValuesFilteredByGenre()
+    public async Task GetBooks_Returns200AndCorrectValuesFilteredByGenre()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -113,21 +113,21 @@ public class BookControllerTests
         var genre2 = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/genre", genre2.ToCreateGenreDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
         var create4 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([author.Id], [genre1.Id, genre2.Id]));
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create4.StatusCode.Should().Be(HttpStatusCode.Created);
         var create5 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([author.Id], [genre1.Id, genre2.Id]));
-        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create5.StatusCode.Should().Be(HttpStatusCode.Created);
         var create6 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([author.Id], [genre2.Id])); // we assign the second genre
-        create6.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create6.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var response = await client.GetAsync($"/api/book?genreId={genre1.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
@@ -137,7 +137,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void GetBooks_Returns200AndCorrectValuesFilteredRecently()
+    public async Task GetBooks_Returns200AndCorrectValuesFilteredRecently()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -154,32 +154,32 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([author.Id], [genre.Id]));
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
         var create4 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([author.Id], [genre.Id]));
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create4.StatusCode.Should().Be(HttpStatusCode.Created);
         var create5 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([author.Id], [genre.Id]));
-        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create5.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // update the CreatedAt property in the database for more accurate assertions
-        using var context = app.GetDatabaseContext();
+        await using var context = app.GetDatabaseContext();
 
         var ids = new[] { book1.Id, book2.Id, book3.Id };
-        for (int i = 0; i < ids.Length; i++)
+        for (var i = 0; i < ids.Length; i++)
         {
             var book = context.Set<Book>().FirstOrDefault(b => b.Id == ids[i]) ?? throw new NullReferenceException();
 
             book.CreatedAt = DateTimeOffset.Now.AddDays(-(i + 1));
         }
 
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         // act & assert
-        var response = await client.GetAsync($"/api/book/recent");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        var response = await client.GetAsync("/api/book/recent");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
@@ -190,7 +190,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void GetBook_Returns200AndCorrectValue()
+    public async Task GetBook_Returns200AndCorrectValue()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -206,28 +206,28 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // auth as user to create the review
         client.DefaultRequestHeaders.Remove("Authorization");
         var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
-            new Claim("UserId", user.Id.ToString()),
+            new Claim("UserId", user.Id.ToString())
         ]);
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 
         var create4 = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create4.StatusCode.Should().Be(HttpStatusCode.Created);
         var create5 = await client.PostAsJsonAsync("/api/review", review.ToCreateBookReviewDto());
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create5.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var response = await client.GetAsync($"/api/book/{book.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
 
@@ -235,7 +235,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void GetBook_Returns200AndCorrectValueGotByISBN()
+    public async Task GetBook_Returns200AndCorrectValueGotByISBN()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -249,15 +249,15 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync($"/api/book/isbn/{book.ISBN}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        var response = await client.GetAsync($"/api/book/isbn/{book.Isbn}");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<BookDto>() ?? throw new NullReferenceException();
 
@@ -265,7 +265,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void CreateBook_Returns201AndBookIsCreated()
+    public async Task CreateBook_Returns201AndBookIsCreated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -280,25 +280,25 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
         header.Should().Equal($"/api/book/{book.Id}");
 
         // assert that the book is created
-        using var context = app.GetDatabaseContext();
+        await using var context = app.GetDatabaseContext();
         context.Set<Book>().Any(b => b.Id == book.Id).Should().BeTrue();
     }
 
 
     [Fact]
-    public async void UpdateBook_Returns204AndBookIsUpdated()
+    public async Task UpdateBook_Returns204AndBookIsUpdated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -315,15 +315,15 @@ public class BookControllerTests
         var genre2 = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre1.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/genre", genre2.ToCreateGenreDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/author", author1.ToCreateAuthorDto());
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
         var create4 = await client.PostAsJsonAsync("/api/author", author2.ToCreateAuthorDto());
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create4.StatusCode.Should().Be(HttpStatusCode.Created);
         var create5 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author1.Id], [genre1.Id]));
-        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create5.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var updateDto = new UpdateBookDto
@@ -334,15 +334,16 @@ public class BookControllerTests
             AuthorIds = [author2.Id],
             GenreIds = [genre2.Id],
             Availability = false,
-            PublishedDate = DateTimeOffset.Now,
+            PublishedDate = DateTimeOffset.Now
         };
 
         var response = await client.PutAsJsonAsync($"/api/book/{book.Id}", updateDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // assert that the book is updated
-        using var context = app.GetDatabaseContext();
-        var updatedBook = context.Set<Book>().FirstOrDefault(b => b.Id == book.Id) ?? throw new NullReferenceException();
+        await using var context = app.GetDatabaseContext();
+        var updatedBook = context.Set<Book>().Include(b => b.Authors).Include(b => b.Genres).FirstOrDefault(b => b.Id == book.Id) ??
+                          throw new NullReferenceException();
 
         updatedBook.Title.Should().Be(updateDto.Title);
         updatedBook.Description.Should().Be(updateDto.Description);
@@ -356,7 +357,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void DeleteBook_Returns204AndBookIsDeleted()
+    public async Task DeleteBook_Returns204AndBookIsDeleted()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -371,23 +372,23 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var response = await client.DeleteAsync($"/api/book/{book.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // assert that the book is created
-        using var context = app.GetDatabaseContext();
+        await using var context = app.GetDatabaseContext();
         context.Set<Book>().Any(b => b.Id == book.Id).Should().BeFalse();
     }
 
     [Fact]
-    public async void SearchBooks_Returns200AndCorrectValues()
+    public async Task SearchBooks_Returns200AndCorrectValues()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -410,19 +411,20 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", book1.ToCreateBookDto([author.Id], [genre.Id]));
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
         var create4 = await client.PostAsJsonAsync("/api/book", book2.ToCreateBookDto([author.Id], [genre.Id]));
-        create4.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create4.StatusCode.Should().Be(HttpStatusCode.Created);
         var create5 = await client.PostAsJsonAsync("/api/book", book3.ToCreateBookDto([author.Id], [genre.Id]));
-        create5.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create5.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
-        var response = await client.GetAsync($"/api/book/search/{"tes"}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        const string query = "tes";
+        var response = await client.GetAsync($"/api/book/search/{query}");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? throw new NullReferenceException();
 
@@ -432,7 +434,7 @@ public class BookControllerTests
     }
 
     [Fact]
-    public async void UploadPhotos_Returns204AndPhotoUploaded()
+    public async Task UploadPhotos_Returns204AndPhotoUploaded()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -447,11 +449,11 @@ public class BookControllerTests
         var genre = GenreFactory.CreateWithFakeData();
 
         var create1 = await client.PostAsJsonAsync("/api/genre", genre.ToCreateGenreDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/book", book.ToCreateBookDto([author.Id], [genre.Id]));
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // create photo files and then assign them
         var photo1 = new ByteArrayContent([1, 2, 3, 4]);
@@ -467,13 +469,14 @@ public class BookControllerTests
 
         // act & assert
         var response = await client.PutAsync($"/api/book/{book.Id}/photo", formData);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // assert that the book cover picture is uploaded
-        using var context = app.GetDatabaseContext();
-        var updatedBook = context.Set<Book>().Include(b => b.CoverPictures).FirstOrDefault(b => b.Id == book.Id) ?? throw new NullReferenceException();
+        await using var context = app.GetDatabaseContext();
+        var updatedBook = context.Set<Book>().Include(b => b.CoverPictures).FirstOrDefault(b => b.Id == book.Id) ??
+                          throw new NullReferenceException();
 
         updatedBook.CoverPictures.Should().NotBeNullOrEmpty();
-        updatedBook.CoverPictures!.Count.Should().Be(2);
+        updatedBook.CoverPictures.Count.Should().Be(2);
     }
 }

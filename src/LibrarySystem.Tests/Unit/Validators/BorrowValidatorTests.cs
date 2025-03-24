@@ -1,7 +1,7 @@
 using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
@@ -9,7 +9,6 @@ namespace LibrarySystem.Tests.Unit.Validators;
 
 public class BorrowValidatorTests
 {
-
     private readonly Mock<IRepositoryManager> _repository;
     private readonly BorrowValidator _validator;
 
@@ -20,14 +19,15 @@ public class BorrowValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenBookDoesntExistAsync()
+    public async Task ValidateAsync_ReturnsFalseWhenBookDoesntExistAsync()
     {
         // prepare
         var user = UserFactory.CreateWithFakeData();
         var book = BookFactory.CreateWithFakeData();
         var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
-        _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync((Book?)null); // set the return to null value => emulate that the repository couldn't find this entity
+        _repository.Setup(r => r.Book.GetAsync(book.Id))
+            .ReturnsAsync((Book?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
         // act & assert
         var (isValid, exception) = await _validator.ValidateAsync(borrow);
@@ -38,7 +38,7 @@ public class BorrowValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenUserDoesntExistAsync()
+    public async Task ValidateAsync_ReturnsFalseWhenUserDoesntExistAsync()
     {
         // prepare
         var user = UserFactory.CreateWithFakeData();
@@ -46,7 +46,8 @@ public class BorrowValidatorTests
         var borrow = BorrowFactory.CreateWithFakeData(book, user);
 
         _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync(book);
-        _repository.Setup(r => r.User.GetAsync(user.Id)).ReturnsAsync((User?)null); // set the return to null value => emulate that the repository couldn't find this entity
+        _repository.Setup(r => r.User.GetAsync(user.Id))
+            .ReturnsAsync((User?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
         // act & assert
         var (isValid, exception) = await _validator.ValidateAsync(borrow);
@@ -57,7 +58,7 @@ public class BorrowValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenDueDateIsBeforeBorrowDate()
+    public async Task ValidateAsync_ReturnsFalseWhenDueDateIsBeforeBorrowDate()
     {
         // prepare
         var user = UserFactory.CreateWithFakeData();
@@ -76,12 +77,12 @@ public class BorrowValidatorTests
 
         isValid.Should().BeFalse();
         exception.Should().BeOfType<BadRequest400Exception>();
-        exception!.Message.Should().Be($"Borrow date must be before the due date.");
+        exception!.Message.Should().Be("Borrow date must be before the due date.");
     }
 
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenBookIsNotReturnedAfterDueDate()
+    public async Task ValidateAsync_ReturnsFalseWhenBookIsNotReturnedAfterDueDate()
     {
         // prepare
         var user = UserFactory.CreateWithFakeData();
@@ -101,11 +102,11 @@ public class BorrowValidatorTests
 
         isValid.Should().BeFalse();
         exception.Should().BeOfType<BadRequest400Exception>();
-        exception!.Message.Should().Be($"The book cannot be set to returned after the due date.");
+        exception!.Message.Should().Be("The book cannot be set to returned after the due date.");
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenBookIsSetToAvailableAfterBorrowing()
+    public async Task ValidateAsync_ReturnsFalseWhenBookIsSetToAvailableAfterBorrowing()
     {
         // prepare
         var user = UserFactory.CreateWithFakeData();
@@ -122,6 +123,6 @@ public class BorrowValidatorTests
 
         isValid.Should().BeFalse();
         exception.Should().BeOfType<Conflict409Exception>();
-        exception!.Message.Should().Be($"The book should be marked as unavailable if not returned.");
+        exception!.Message.Should().Be("The book should be marked as unavailable if not returned.");
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace LibrarySystem.Application.Core.Extensions;
 
-public class DirectoryExtensions
+public static class DirectoryExtensions
 {
     public static string GetProjectSourceDirectory()
     {

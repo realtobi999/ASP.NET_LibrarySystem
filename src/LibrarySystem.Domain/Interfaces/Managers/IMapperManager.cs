@@ -7,7 +7,7 @@ using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Interfaces.Managers;
 

@@ -23,9 +23,9 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     protected override IQueryable<User> GetQueryable()
     {
         return base.GetQueryable()
-                   .Include(u => u.ProfilePicture)
-                   .Include(u => u.BookReviews)
-                   .Include(u => u.Wishlists)
-                   .Include(u => u.Borrows);
+            .Include(u => u.ProfilePicture)
+            .Include(u => u.BookReviews)
+            .Include(u => u.Wishlists)
+            .Include(u => u.Borrows);
     }
 }

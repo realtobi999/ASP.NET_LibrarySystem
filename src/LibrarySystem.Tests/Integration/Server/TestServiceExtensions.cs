@@ -5,10 +5,9 @@ namespace LibrarySystem.Tests.Integration.Server;
 
 public static class TestServicesExtensions
 {
-    public static void RemoveService<Service>(this IServiceCollection services)
+    public static void RemoveService<TService>(this IServiceCollection services)
     {
-        var descriptor = services.SingleOrDefault(
-            d => d.ServiceType == typeof(Service));
+        var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(TService));
 
         if (descriptor != null)
         {
@@ -20,9 +19,6 @@ public static class TestServicesExtensions
     {
         services.RemoveService<DbContextOptions<TContext>>();
 
-        services.AddDbContext<TContext>(options =>
-        {
-            options.UseInMemoryDatabase(dbName);
-        });
+        services.AddDbContext<TContext>(options => { options.UseInMemoryDatabase(dbName); });
     }
 }

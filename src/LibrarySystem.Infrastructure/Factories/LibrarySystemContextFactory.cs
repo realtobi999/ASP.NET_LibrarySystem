@@ -10,10 +10,10 @@ public class LibrarySystemContextFactory : IDesignTimeDbContextFactory<LibrarySy
     public LibrarySystemContext CreateDbContext(string[] args)
     {
         var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory() + "../../LibrarySystem.Presentation")
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
-                .Build();
+            .SetBasePath(Directory.GetCurrentDirectory() + "../../LibrarySystem.Presentation")
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+            .Build();
 
         var builder = new DbContextOptionsBuilder<LibrarySystemContext>().UseNpgsql(configuration.GetConnectionString("LibrarySystem"));
 

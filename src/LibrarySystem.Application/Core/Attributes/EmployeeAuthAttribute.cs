@@ -1,6 +1,4 @@
 ﻿namespace LibrarySystem.Application.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class EmployeeAuthAttribute : Attribute
-{
-}
+public class EmployeeAuthAttribute : Attribute;

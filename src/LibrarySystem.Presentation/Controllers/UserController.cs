@@ -3,13 +3,13 @@ using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
+[Route("api/user")]
 /*
 
 GET     /api/user params: offset, limit
@@ -30,7 +30,7 @@ public class UserController : ControllerBase
         _repository = repository;
     }
 
-    [HttpGet("api/user")]
+    [HttpGet("")]
     public async Task<IActionResult> GetUsers(int limit, int offset)
     {
         var users = await _service.User.IndexAsync();
@@ -38,7 +38,7 @@ public class UserController : ControllerBase
         return Ok(users.Paginate(offset, limit));
     }
 
-    [HttpGet("api/user/{userId:guid}")]
+    [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
         var user = await _service.User.GetAsync(userId);
@@ -47,7 +47,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Policy = "User"), UserAuth]
-    [HttpPut("api/user/{userId:guid}")]
+    [HttpPut("{userId:guid}")]
     public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
         var user = await _service.User.GetAsync(userId);
@@ -59,7 +59,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Policy = "User"), UserAuth]
-    [HttpDelete("api/user/{userId:guid}")]
+    [HttpDelete("{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
         var user = await _service.User.GetAsync(userId);
@@ -70,7 +70,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpPut("api/user/{userId:guid}/photo")]
+    [HttpPut("{userId:guid}/photo")]
     public async Task<IActionResult> UploadPhotos(Guid userId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);

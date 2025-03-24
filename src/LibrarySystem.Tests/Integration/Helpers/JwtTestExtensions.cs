@@ -7,10 +7,8 @@ internal static class JwtTestExtensions
 {
     public static Jwt Create()
     {
-        var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                                                      .AddJsonFile("appsettings.json")
-                                                      .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
-                                                      .Build();
+        var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true).Build();
 
         var jwtIssuer = configuration.GetSection("Jwt:Issuer").Value;
         var jwtKey = configuration.GetSection("Jwt:Key").Value;
@@ -19,6 +17,7 @@ internal static class JwtTestExtensions
         {
             throw new NullReferenceException("JWT Issuer configuration is missing");
         }
+
         if (string.IsNullOrEmpty(jwtKey))
         {
             throw new NullReferenceException("JWT Key configuration is missing");

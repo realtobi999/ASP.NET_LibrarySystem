@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Employees;
 
-public record class LoginEmployeeDto
+public record LoginEmployeeDto
 {
     [Required]
     public required string Email { get; init; }

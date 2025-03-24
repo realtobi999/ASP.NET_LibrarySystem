@@ -12,14 +12,12 @@ public static class IEnumerableExtensions
             throw new BadRequest400Exception("Offset must be zero or greater.");
         }
 
-        if (limit < 0)
+        switch (limit)
         {
-            throw new BadRequest400Exception("Limit must be zero or greater.");
-        }
-
-        if (limit > Constants.MAX_LIMIT_VALUE)
-        {
-            throw new BadRequest400Exception($"Limit must not exceed the maximum allowed value of {Constants.MAX_LIMIT_VALUE}.");
+            case < 0:
+                throw new BadRequest400Exception("Limit must be zero or greater.");
+            case > Constants.MAX_LIMIT_VALUE:
+                throw new BadRequest400Exception($"Limit must not exceed the maximum allowed value of {Constants.MAX_LIMIT_VALUE}.");
         }
 
         if (offset == 0 && limit == 0)
@@ -27,13 +25,6 @@ public static class IEnumerableExtensions
             return source;
         }
 
-        if (limit == 0)
-        {
-            return source.Skip(offset).Take(Constants.MAX_LIMIT_VALUE);
-        }
-        else
-        {
-            return source.Skip(offset).Take(limit);
-        }
+        return source.Skip(offset).Take(limit == 0 ? Constants.MAX_LIMIT_VALUE : limit);
     }
 }

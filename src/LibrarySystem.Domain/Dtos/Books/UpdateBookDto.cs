@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Books;
 
-public record class UpdateBookDto
+public record UpdateBookDto
 {
     [Required, MaxLength(55)]
     public required string Title { get; init; }

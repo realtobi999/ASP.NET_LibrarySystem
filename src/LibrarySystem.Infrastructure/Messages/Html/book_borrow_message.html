@@ -8,6 +8,7 @@
         body {
             font-family: Arial, sans-serif;
         }
+
         .container {
             max-width: 600px;
             margin: 40px auto;
@@ -16,21 +17,26 @@
             border: 1px solid #ddd;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .header {
             background-color: #333;
             color: #fff;
             padding: 10px;
             text-align: center;
         }
+
         .header h2 {
             margin: 0;
         }
+
         .content {
             padding: 20px;
         }
+
         .content p {
             margin-bottom: 20px;
         }
+
         .footer {
             background-color: #333;
             color: #fff;
@@ -41,21 +47,23 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h2>Book Borrow Confirmation</h2>
-        </div>
-        <div class="content">
-            <p>Dear @Model.Username,</p>
-            <p>We are pleased to inform you that the book <strong>"@Model.BookTitle"</strong> with ISBN "@Model.BookISBN"has been successfully borrowed.</p>
-            <p>The book return is due <strong>@Model.BorrowDueDate</strong>, if you want to return the book past this deadline you will need to contact your local librarian.</p>
-            <p>Thank you for using our library services.</p>
-            <p>Best regards,</p>
-            <p>[Your Library Name]</p>
-        </div>
-        <div class="footer">
-            <p>&copy; [Your Library Name]</p>
-        </div>
+<div class="container">
+    <div class="header">
+        <h2>Book Borrow Confirmation</h2>
     </div>
+    <div class="content">
+        <p>Dear @Model.Username,</p>
+        <p>We are pleased to inform you that the book <strong>"@Model.BookTitle"</strong> with ISBN "@Model.BookISBN"has been successfully borrowed.
+        </p>
+        <p>The book return is due <strong>@Model.BorrowDueDate</strong>, if you want to return the book past this deadline you will need to contact
+            your local librarian.</p>
+        <p>Thank you for using our library services.</p>
+        <p>Best regards,</p>
+        <p>[Your Library Name]</p>
+    </div>
+    <div class="footer">
+        <p>&copy; [Your Library Name]</p>
+    </div>
+</div>
 </body>
 </html>

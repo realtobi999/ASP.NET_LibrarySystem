@@ -12,7 +12,7 @@ public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
 
     public Author? Get(Guid id)
     {
-        return _context.Authors.FirstOrDefault(a => a.Id == id);
+        return Context.Authors.FirstOrDefault(a => a.Id == id);
     }
 
     public async Task<Author?> GetAsync(Guid id)

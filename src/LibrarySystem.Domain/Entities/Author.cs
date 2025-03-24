@@ -11,7 +11,7 @@ public class Author : IDtoSerialization<AuthorDto>
     // core properties
 
     [Required, Column("id")]
-    public required Guid Id { get; set; }
+    public required Guid Id { get; init; }
 
     [Required, Column("name")]
     public required string Name { get; set; }
@@ -23,7 +23,7 @@ public class Author : IDtoSerialization<AuthorDto>
     public required DateTimeOffset Birthday { get; set; }
 
     [Required, Column("created_at")]
-    public required DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; init; }
 
     // relationships
 
@@ -42,7 +42,7 @@ public class Author : IDtoSerialization<AuthorDto>
             Name = this.Name,
             Description = this.Description,
             Birthday = this.Birthday,
-            Picture = this.Picture,
+            Picture = this.Picture
         };
     }
 

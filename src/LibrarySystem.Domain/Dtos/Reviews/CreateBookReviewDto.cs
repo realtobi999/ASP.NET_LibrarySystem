@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Reviews;
 
-public record class CreateBookReviewDto
+public record CreateBookReviewDto
 {
     public Guid? Id { get; init; }
 

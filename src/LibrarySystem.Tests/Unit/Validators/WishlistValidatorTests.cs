@@ -1,7 +1,7 @@
 using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
@@ -19,7 +19,7 @@ public class WishlistValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenUserDoesntExist()
+    public async Task ValidateAsync_ReturnsFalseWhenUserDoesntExist()
     {
         // prepare
         var user = UserFactory.CreateWithFakeData();
@@ -36,7 +36,7 @@ public class WishlistValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenBooksDoesntExist()
+    public async Task ValidateAsync_ReturnsFalseWhenBooksDoesntExist()
     {
         // prepare
         var user = UserFactory.CreateWithFakeData();

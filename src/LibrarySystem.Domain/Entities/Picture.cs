@@ -10,7 +10,7 @@ public class Picture
     // core properties
 
     [Required, Column("id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     [Required, Column("book_id")]
     public Guid EntityId { get; set; }
@@ -28,19 +28,19 @@ public class Picture
     public string? MimeType { get; set; }
 
     [Required, Column("created_at")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; init; }
 
     // relationships
 
     [JsonIgnore]
-    public Book? Book { get; set; }
+    public virtual Book? Book { get; set; }
 
     [JsonIgnore]
-    public Author? Author { get; set; }
+    public virtual Author? Author { get; set; }
 
     [JsonIgnore]
-    public User? User { get; set; }
+    public virtual User? User { get; set; }
 
     [JsonIgnore]
-    public Employee? Employee { get; set; }
+    public virtual Employee? Employee { get; set; }
 }

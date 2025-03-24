@@ -1,5 +1,4 @@
 using LibrarySystem.Application.Services.Books;
-using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Services.Books;
 using LibrarySystem.Tests.Integration.Factories;
 
@@ -7,12 +6,7 @@ namespace LibrarySystem.Tests.Unit.Books;
 
 public class BookCalculatorTests
 {
-    private readonly IBookPopularityCalculator _calculator;
-
-    public BookCalculatorTests()
-    {
-        _calculator = new BookPopularityCalculator();
-    }
+    private readonly IBookPopularityCalculator _calculator = new BookPopularityCalculator();
 
     [Fact]
     public void CalculatePopularityScore_ReturnsCorrectValueBasedOnBorrows()
@@ -23,13 +17,13 @@ public class BookCalculatorTests
         var book2 = BookFactory.CreateWithFakeData();
 
         // assign recent borrows to book1
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
             book1.Borrows.Add(BorrowFactory.CreateWithFakeData(book1, user));
         }
 
         // assign not recent borrows to book2
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
             var borrow = BorrowFactory.CreateWithFakeData(book2, user);
             borrow.BorrowDate = borrow.BorrowDate.AddDays(-(BookPopularityCalculator.RECENT_ACTIVITY_DAYS + 1));
@@ -56,7 +50,7 @@ public class BookCalculatorTests
         var book2 = BookFactory.CreateWithFakeData();
 
         // assign recent positive reviews to book1
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
             var review = BookReviewFactory.CreateWithFakeData(book1, user);
             review.Rating = 10;
@@ -65,7 +59,7 @@ public class BookCalculatorTests
         }
 
         // assign recent negative reviews to book1
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
             var review = BookReviewFactory.CreateWithFakeData(book2, user);
             review.Rating = 0;

@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using LibrarySystem.Domain.Dtos.Authors;
@@ -14,7 +15,7 @@ namespace LibrarySystem.Tests.Integration.Endpoints;
 public class AuthorControllerTests
 {
     [Fact]
-    public async void GetAuthors_Returns200AndCorrectValues()
+    public async Task GetAuthors_Returns200AndCorrectValues()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -27,18 +28,18 @@ public class AuthorControllerTests
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create1 = await client.PostAsJsonAsync("/api/author", author1.ToCreateAuthorDto());
-        create1.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create1.StatusCode.Should().Be(HttpStatusCode.Created);
         var create2 = await client.PostAsJsonAsync("/api/author", author2.ToCreateAuthorDto());
-        create2.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create2.StatusCode.Should().Be(HttpStatusCode.Created);
         var create3 = await client.PostAsJsonAsync("/api/author", author3.ToCreateAuthorDto());
-        create3.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create3.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
-        var limit = 2;
-        var offset = 1;
+        const int limit = 2;
+        const int offset = 1;
 
         var response = await client.GetAsync($"/api/author?limit={limit}&offset={offset}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<List<AuthorDto>>() ?? throw new NullReferenceException();
 
@@ -47,7 +48,7 @@ public class AuthorControllerTests
     }
 
     [Fact]
-    public async void GetAuthor_Returns200AndCorrectValue()
+    public async Task GetAuthor_Returns200AndCorrectValue()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -58,11 +59,11 @@ public class AuthorControllerTests
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var get = await client.GetAsync($"/api/author/{author.Id}");
-        get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        get.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await get.Content.ReadFromJsonAsync<AuthorDto>() ?? throw new NullReferenceException();
 
@@ -70,7 +71,7 @@ public class AuthorControllerTests
     }
 
     [Fact]
-    public async void CreateAuthor_Returns201AndAuthorIsCreated()
+    public async Task CreateAuthor_Returns201AndAuthorIsCreated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -83,18 +84,18 @@ public class AuthorControllerTests
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
         header.Should().Equal($"/api/author/{author.Id}");
 
         // assert that the author is created
-        using var context = app.GetDatabaseContext();
+        await using var context = app.GetDatabaseContext();
         context.Set<Author>().Any(a => a.Id == author.Id).Should().BeTrue();
     }
 
     [Fact]
-    public async void UpdateAuthor_Returns204AndAuthorIsUpdated()
+    public async Task UpdateAuthor_Returns204AndAuthorIsUpdated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -106,21 +107,21 @@ public class AuthorControllerTests
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var updateDto = new UpdateAuthorDto
         {
             Name = "test",
             Description = "test_test_test",
-            Birthday = DateTimeOffset.UtcNow.AddDays(2),
+            Birthday = DateTimeOffset.UtcNow.AddDays(2)
         };
 
         var response = await client.PutAsJsonAsync($"/api/author/{author.Id}", updateDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // assert that the author is updated
-        using var context = app.GetDatabaseContext();
+        await using var context = app.GetDatabaseContext();
         var updatedAuthor = context.Set<Author>().FirstOrDefault(a => a.Id == author.Id) ?? throw new NullReferenceException();
 
         updatedAuthor.Name.Should().Be(updateDto.Name);
@@ -129,7 +130,7 @@ public class AuthorControllerTests
     }
 
     [Fact]
-    public async void DeleteAuthor_Returns204AndAuthorIsDeleted()
+    public async Task DeleteAuthor_Returns204AndAuthorIsDeleted()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -141,19 +142,19 @@ public class AuthorControllerTests
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var response = await client.DeleteAsync($"/api/author/{author.Id}");
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // assert that the author is created
-        using var context = app.GetDatabaseContext();
+        await using var context = app.GetDatabaseContext();
         context.Set<Author>().Any(a => a.Id == author.Id).Should().BeFalse();
     }
 
     [Fact]
-    public async void UploadPhoto_Returns204AndPhotoIsUploaded()
+    public async Task UploadPhoto_Returns204AndPhotoIsUploaded()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -165,7 +166,7 @@ public class AuthorControllerTests
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/author", author.ToCreateAuthorDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // make the file
         var photo1 = new ByteArrayContent([1, 2, 3, 4]);
@@ -173,16 +174,17 @@ public class AuthorControllerTests
 
         var formData = new MultipartFormDataContent
         {
-            { photo1, "file", "photo1.jpg" },
+            { photo1, "file", "photo1.jpg" }
         };
 
         // act & assert
         var response = await client.PutAsync($"/api/author/{author.Id}/photo", formData);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // assert that the user profile picture is uploaded
-        using var context = app.GetDatabaseContext();
-        var updatedAuthor = context.Set<Author>().Include(a => a.Picture).FirstOrDefault(a => a.Id == author.Id) ?? throw new NullReferenceException();
+        await using var context = app.GetDatabaseContext();
+        var updatedAuthor = context.Set<Author>().Include(a => a.Picture).FirstOrDefault(a => a.Id == author.Id) ??
+                            throw new NullReferenceException();
 
         updatedAuthor.Picture.Should().NotBeNull();
         updatedAuthor.Picture!.FileName.Should().Be("photo1.jpg");

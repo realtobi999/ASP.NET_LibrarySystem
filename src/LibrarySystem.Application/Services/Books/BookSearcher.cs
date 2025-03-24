@@ -1,13 +1,14 @@
 using LibrarySystem.Domain;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 
 namespace LibrarySystem.Application.Services.Books;
 
 internal sealed class BookSearcher : ISearcher<Book>
 {
     public const string FILTER_OPERATOR = Constants.QUERY_SEARCH_FILTER_OPERATOR;
+
     private readonly IRepositoryManager _repository;
     private readonly ISearcher<Genre> _genreSearcher;
     private readonly ISearcher<Author> _authorSearcher;
@@ -29,16 +30,16 @@ internal sealed class BookSearcher : ISearcher<Book>
         if (query.StartsWith(FILTER_OPERATOR))
         {
             // search for title or description that starts with the query without the filter operator
-            matchedBooks.UnionWith(books.Where(b => b.Title!.StartsWith(query[FILTER_OPERATOR.Length..]) || b.Description!.StartsWith(query[FILTER_OPERATOR.Length..])));
+            matchedBooks.UnionWith(books.Where(b => b.Title.StartsWith(query[FILTER_OPERATOR.Length..]) || b.Description.StartsWith(query[FILTER_OPERATOR.Length..])));
         }
         else if (query.EndsWith(FILTER_OPERATOR))
         {
             // search for title or description that ends with the query without the filter operator
-            matchedBooks.UnionWith(books.Where(b => b.Title!.EndsWith(query[..^FILTER_OPERATOR.Length]) || b.Description!.EndsWith(query[..^FILTER_OPERATOR.Length])));
+            matchedBooks.UnionWith(books.Where(b => b.Title.EndsWith(query[..^FILTER_OPERATOR.Length]) || b.Description.EndsWith(query[..^FILTER_OPERATOR.Length])));
         }
         else
         {
-            matchedBooks.UnionWith(books.Where(b => b.Title!.Contains(query) || b.Description!.Contains(query)));
+            matchedBooks.UnionWith(books.Where(b => b.Title.Contains(query) || b.Description.Contains(query)));
         }
 
         // search for genres and authors

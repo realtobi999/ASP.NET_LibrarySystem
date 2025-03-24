@@ -1,6 +1,6 @@
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Services.Books;
 using LibrarySystem.Tests.Integration.Factories;
 using Moq;
@@ -11,7 +11,7 @@ public class BookRecommenderTests
 {
     private readonly Mock<IRepositoryManager> _repository;
     private readonly IBookRecommender _recommender;
-    private static readonly Random _random = new Random();
+    private static readonly Random Random = new();
 
     public BookRecommenderTests()
     {
@@ -20,7 +20,7 @@ public class BookRecommenderTests
     }
 
     [Fact]
-    public async void IndexRecommendedAsync_ReturnsCorrectlyRecommendedBooks()
+    public async Task IndexRecommendedAsync_ReturnsCorrectlyRecommendedBooks()
     {
         // prepare
         var user = UserFactory.CreateWithFakeData();
@@ -29,24 +29,24 @@ public class BookRecommenderTests
         var genres = new List<Genre>();
         var authors = new List<Author>();
 
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             genres.Add(GenreFactory.CreateWithFakeData());
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
             var book = BookFactory.CreateWithFakeData();
 
-            book.Genres.Add(genres[_random.Next(genres.Count)]);
-            book.Authors.Add(authors[_random.Next(authors.Count)]);
+            book.Genres.Add(genres[Random.Next(genres.Count)]);
+            book.Authors.Add(authors[Random.Next(authors.Count)]);
 
             books.Add(book);
         }
 
         // assign books to user review and borrow
-        var userPreferredBook1 = books[_random.Next(books.Count)];
+        var userPreferredBook1 = books[Random.Next(books.Count)];
 
         user.Borrows.Add(BorrowFactory.CreateWithFakeData(userPreferredBook1, user));
         user.BookReviews.Add(BookReviewFactory.CreateWithFakeData(userPreferredBook1, user));

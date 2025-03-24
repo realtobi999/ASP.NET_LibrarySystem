@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Employees;
 
-public record class EmployeeDto
+public record EmployeeDto
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }

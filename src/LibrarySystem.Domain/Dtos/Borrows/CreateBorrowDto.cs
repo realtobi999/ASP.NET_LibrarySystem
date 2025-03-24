@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Borrows;
 
-public record class CreateBorrowDto
+public record CreateBorrowDto
 {
     public Guid? Id { get; init; }
 

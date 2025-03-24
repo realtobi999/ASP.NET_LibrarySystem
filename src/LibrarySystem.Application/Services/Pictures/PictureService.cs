@@ -1,7 +1,7 @@
 ﻿using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Enums;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 
@@ -35,7 +35,11 @@ public class PictureService : IPictureService
 
     public async Task BulkCreateWithEntity(IEnumerable<Picture> pictures, Guid entityId, PictureEntityType entityType)
     {
-        pictures.ToList().ForEach(p => { p.EntityId = entityId; p.EntityType = entityType; });
+        pictures.ToList().ForEach(p =>
+        {
+            p.EntityId = entityId;
+            p.EntityType = entityType;
+        });
 
         await this.BulkCreate(pictures);
     }
@@ -59,7 +63,7 @@ public class PictureService : IPictureService
             FileContent = await file.GetBytes(),
             FileName = file.FileName,
             MimeType = file.ContentType,
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = DateTimeOffset.Now
         };
     }
 

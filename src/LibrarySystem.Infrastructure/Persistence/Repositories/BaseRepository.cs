@@ -6,26 +6,26 @@ namespace LibrarySystem.Infrastructure.Persistence.Repositories;
 
 public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
 {
-    protected readonly LibrarySystemContext _context;
+    protected readonly LibrarySystemContext Context;
 
-    public BaseRepository(LibrarySystemContext context)
+    protected BaseRepository(LibrarySystemContext context)
     {
-        _context = context;
+        Context = context;
     }
 
     public virtual void Create(T entity)
     {
-        _context.Set<T>().Add(entity);
+        Context.Set<T>().Add(entity);
     }
 
     public virtual void Delete(T entity)
     {
-        _context.Set<T>().Remove(entity);
+        Context.Set<T>().Remove(entity);
     }
 
     public virtual void Update(T entity)
     {
-        _context.Set<T>().Update(entity);
+        Context.Set<T>().Update(entity);
     }
 
     public virtual async Task<T?> GetAsync(Expression<Func<T, bool>> expression)
@@ -40,6 +40,6 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
 
     protected virtual IQueryable<T> GetQueryable()
     {
-        return _context.Set<T>().AsQueryable();
+        return Context.Set<T>().AsQueryable();
     }
 }

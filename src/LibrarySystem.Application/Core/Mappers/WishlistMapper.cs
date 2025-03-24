@@ -1,7 +1,7 @@
 using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Mappers;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Common;
+using LibrarySystem.Domain.Interfaces.Managers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
@@ -21,7 +21,7 @@ public class WishlistMapper : IMapper<Wishlist, CreateWishlistDto>
             Id = dto.Id ?? Guid.NewGuid(),
             UserId = dto.UserId,
             Name = dto.Name,
-            CreatedAt = DateTimeOffset.UtcNow,
+            CreatedAt = DateTimeOffset.UtcNow
         };
 
         // assign books

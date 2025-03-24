@@ -5,14 +5,14 @@ namespace LibrarySystem.Tests.Integration.Helpers;
 
 internal static class EmployeeTestExtensions
 {
-    public static RegisterEmployeeDto ToRegisterEmployeeDto(this Employee Employee)
+    public static RegisterEmployeeDto ToRegisterEmployeeDto(this Employee employee)
     {
         return new RegisterEmployeeDto
         {
-            Id = Employee.Id,
-            Name = Employee.Name,
-            Email = Employee.Email,
-            Password = Employee.Password,
+            Id = employee.Id,
+            Name = employee.Name,
+            Email = employee.Email,
+            Password = employee.Password
         };
     }
 }

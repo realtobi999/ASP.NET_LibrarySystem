@@ -1,6 +1,6 @@
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Application.Core.Mappers;
 

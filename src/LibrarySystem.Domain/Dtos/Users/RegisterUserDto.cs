@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Users;
 
-public record class RegisterUserDto
+public record RegisterUserDto
 {
     public Guid? Id { get; init; }
 
@@ -17,4 +17,3 @@ public record class RegisterUserDto
 
     // TODO: add confirm password validation with attribute
 }
-

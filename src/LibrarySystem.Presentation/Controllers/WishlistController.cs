@@ -10,14 +10,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
-/**
+[Route("api/wishlist")]
+/*
 
 GET     /api/wishlist/{wishlist_id}
 POST    /api/wishlist
 PUT     /api/wishlist/{wishlist_id}
 DELETE  /api/wishlist/{wishlist_id}
 
-**/
+*/
 public class WishlistController : ControllerBase
 {
     private readonly IServiceManager _service;
@@ -30,7 +31,7 @@ public class WishlistController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpGet("api/wishlist/{wishlistId:guid}")]
+    [HttpGet("{wishlistId:guid}")]
     public async Task<IActionResult> GetWishlist(Guid wishlistId)
     {
         var wishlist = await _service.Wishlist.GetAsync(wishlistId);
@@ -45,7 +46,7 @@ public class WishlistController : ControllerBase
     }
 
     [Authorize(Policy = "User"), UserAuth]
-    [HttpPost("api/wishlist")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateWishlist([FromBody] CreateWishlistDto createWishlistDto)
     {
         var wishlist = _mapper.Wishlist.Map(createWishlistDto);
@@ -56,7 +57,7 @@ public class WishlistController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpPut("api/wishlist/{wishlistId:guid}")]
+    [HttpPut("{wishlistId:guid}")]
     public async Task<IActionResult> UpdateWishlist(Guid wishlistId, [FromBody] UpdateWishlistDto updateWishlistDto)
     {
         var wishlist = await _service.Wishlist.GetAsync(wishlistId);
@@ -82,7 +83,7 @@ public class WishlistController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpDelete("api/wishlist/{wishlistId:guid}")]
+    [HttpDelete("{wishlistId:guid}")]
     public async Task<IActionResult> DeleteWishlist(Guid wishlistId)
     {
         var wishlist = await _service.Wishlist.GetAsync(wishlistId);

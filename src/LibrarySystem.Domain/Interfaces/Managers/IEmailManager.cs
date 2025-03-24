@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.Domain.Interfaces.Emails.Borrow;
 
-namespace LibrarySystem.Application.Interfaces;
+namespace LibrarySystem.Domain.Interfaces.Managers;
 
 public interface IEmailManager
 {

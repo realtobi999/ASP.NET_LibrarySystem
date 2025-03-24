@@ -1,4 +1,4 @@
-﻿using LibrarySystem.Application.Interfaces;
+﻿using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Emails.Borrow;
 using LibrarySystem.Domain.Interfaces.Factories;
 

@@ -9,14 +9,12 @@ using LibrarySystem.Domain.Dtos.Wishlists;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Factories;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
 public class MapperManager : IMapperManager
 {
-    private readonly IMapperFactory _factory;
-
     private readonly Lazy<IMapper<Author, CreateAuthorDto>> _authorMapper;
     private readonly Lazy<IMapper<Book, CreateBookDto>> _bookMapper;
     private readonly Lazy<IMapper<BookReview, CreateBookReviewDto>> _bookReviewMapper;
@@ -26,18 +24,17 @@ public class MapperManager : IMapperManager
     private readonly Lazy<IMapper<User, RegisterUserDto>> _userMapper;
     private readonly Lazy<IMapper<Wishlist, CreateWishlistDto>> _wishlistMapper;
 
-    public MapperManager(IMapperFactory factory)
+    public MapperManager(IMapperFactory mapperFactory)
     {
-        _factory = factory;
-
-        _authorMapper = new(() => _factory.Initiate<Author, CreateAuthorDto>());
-        _bookMapper = new(() => _factory.Initiate<Book, CreateBookDto>());
-        _bookReviewMapper = new(() => _factory.Initiate<BookReview, CreateBookReviewDto>());
-        _borrowMapper = new(() => _factory.Initiate<Borrow, CreateBorrowDto>());
-        _employeeMapper = new(() => _factory.Initiate<Employee, RegisterEmployeeDto>());
-        _genreMapper = new(() => _factory.Initiate<Genre, CreateGenreDto>());
-        _userMapper = new(() => _factory.Initiate<User, RegisterUserDto>());
-        _wishlistMapper = new(() => _factory.Initiate<Wishlist, CreateWishlistDto>());
+        var factory = mapperFactory;
+        _authorMapper = new Lazy<IMapper<Author, CreateAuthorDto>>(() => factory.Initiate<Author, CreateAuthorDto>());
+        _bookMapper = new Lazy<IMapper<Book, CreateBookDto>>(() => factory.Initiate<Book, CreateBookDto>());
+        _bookReviewMapper = new Lazy<IMapper<BookReview, CreateBookReviewDto>>(() => factory.Initiate<BookReview, CreateBookReviewDto>());
+        _borrowMapper = new Lazy<IMapper<Borrow, CreateBorrowDto>>(() => factory.Initiate<Borrow, CreateBorrowDto>());
+        _employeeMapper = new Lazy<IMapper<Employee, RegisterEmployeeDto>>(() => factory.Initiate<Employee, RegisterEmployeeDto>());
+        _genreMapper = new Lazy<IMapper<Genre, CreateGenreDto>>(() => factory.Initiate<Genre, CreateGenreDto>());
+        _userMapper = new Lazy<IMapper<User, RegisterUserDto>>(() => factory.Initiate<User, RegisterUserDto>());
+        _wishlistMapper = new Lazy<IMapper<Wishlist, CreateWishlistDto>>(() => factory.Initiate<Wishlist, CreateWishlistDto>());
     }
 
     public IMapper<Author, CreateAuthorDto> Author => _authorMapper.Value;

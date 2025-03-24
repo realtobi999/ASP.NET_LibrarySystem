@@ -1,5 +1,5 @@
 using LibrarySystem.Domain.Interfaces.Factories;
-using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Common;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LibrarySystem.Application.Core.Factories;
@@ -13,11 +13,10 @@ public class MapperFactory : IMapperFactory
         _serviceProvider = serviceProvider;
     }
 
-    public IMapper<Entity, Dto> Initiate<Entity, Dto>()
+    public IMapper<TEntity, TDto> Initiate<TEntity, TDto>()
     {
-        var mapper = _serviceProvider.GetService<IMapper<Entity, Dto>>() ?? throw new Exception($"Mapper for types {typeof(Entity)} and {typeof(Dto)} not found.");
+        var mapper = _serviceProvider.GetService<IMapper<TEntity, TDto>>() ?? throw new Exception($"Mapper for types {typeof(TEntity)} and {typeof(TDto)} not found.");
 
         return mapper;
     }
 }
-

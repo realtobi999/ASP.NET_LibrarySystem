@@ -10,7 +10,7 @@ using LibrarySystem.Application.Services.Wishlists;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
 using LibrarySystem.Domain.Interfaces.Factories;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Services;
 using LibrarySystem.Domain.Interfaces.Services.Books;
 

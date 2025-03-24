@@ -20,4 +20,3 @@ public class ValidatorFactory : IValidatorFactory
         return validator;
     }
 }
-

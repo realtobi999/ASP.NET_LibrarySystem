@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace LibrarySystem.Application.Core.Factories;
 
-public class JwtFactory
+public static class JwtFactory
 {
     public static Jwt CreateInstance(IConfiguration configuration)
     {
@@ -14,6 +14,7 @@ public class JwtFactory
         {
             throw new NullReferenceException("JWT Issuer configuration is missing");
         }
+
         if (string.IsNullOrEmpty(key))
         {
             throw new NullReferenceException("JWT Key configuration is missing");

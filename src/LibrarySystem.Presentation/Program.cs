@@ -22,14 +22,11 @@ public class Program
         {
             var config = builder.Configuration;
 
-            builder.Services.AddHttpLogging(opt => { });
+            builder.Services.AddHttpLogging(_ => { });
             builder.Services.ConfigureSwagger();
 
             builder.Services.ConfigureCors();
-            builder.Services.AddControllers(opt =>
-            {
-                opt.Filters.Add<CustomDtoSerializationFilter>();
-            });
+            builder.Services.AddControllers(opt => { opt.Filters.Add<CustomDtoSerializationFilter>(); });
 
             builder.Services.ConfigureDbContext(config.GetConnectionString("LibrarySystem"));
 
@@ -43,16 +40,16 @@ public class Program
             builder.Services.AddSingleton<IHasher>(new Hasher(algorithm: HashAlgorithmName.SHA512));
 
             // email client
-            builder.Services.AddSingleton(p => SmtpFactory.CreateInstance(config));
+            builder.Services.AddSingleton(_ => SmtpFactory.CreateInstance(config));
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.ConfigureMessageBuilders();
             builder.Services.ConfigureEmailManager();
 
             builder.Services.ConfigureJwtAuthentication(config);
             builder.Services.AddAuthorizationBuilder()
-                            .AddPolicy("User", policy => policy.RequireRole("User")) // user authorization
-                            .AddPolicy("Employee", policy => policy.RequireRole("Employee")) // employee authorization
-                            .AddPolicy("Admin", policy => policy.RequireRole("Admin")); // admin authorization
+                .AddPolicy("User", policy => policy.RequireRole("User")) // user authorization
+                .AddPolicy("Employee", policy => policy.RequireRole("Employee")) // employee authorization
+                .AddPolicy("Admin", policy => policy.RequireRole("Admin")); // admin authorization
             builder.Services.AddExceptionHandler<CustomExceptionHandler>();
         }
 
@@ -60,15 +57,12 @@ public class Program
         var app = builder.Build();
         {
             app.UseHttpLogging();
-            app.UseExceptionHandler(opt => { });
+            app.UseExceptionHandler(_ => { });
 
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(opt =>
-                {
-                    opt.SwaggerEndpoint($"/swagger/{Program.VERSION}/swagger.json", Program.NAME);
-                });
+                app.UseSwaggerUI(opt => { opt.SwaggerEndpoint($"/swagger/{VERSION}/swagger.json", NAME); });
             }
 
             app.UseCors("MainCorsPolicy");

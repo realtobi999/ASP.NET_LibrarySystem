@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Wishlists;
 
-public record class UpdateWishlistDto
+public record UpdateWishlistDto
 {
     [Required, MaxLength(55)]
     public required string Name { get; init; }

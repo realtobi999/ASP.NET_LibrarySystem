@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
+[Route("api/auth")]
 /*
 
 POST    /api/auth/register
@@ -32,7 +33,7 @@ public class AuthController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPost("api/auth/register")]
+    [HttpPost("register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto registerUserDto)
     {
         var user = _mapper.User.Map(registerUserDto);
@@ -42,7 +43,7 @@ public class AuthController : ControllerBase
         return Created($"/api/user/{user.Id}", null);
     }
 
-    [HttpPost("api/auth/login")]
+    [HttpPost("login")]
     public async Task<IActionResult> LoginUser([FromBody] LoginUserDto loginUserDto)
     {
         // authorize the user, if fails return 401
@@ -53,21 +54,21 @@ public class AuthController : ControllerBase
         }
 
         // get the user by the email address and create their JWT
-        var user = await _service.User.GetAsync(loginUserDto.Email!);
+        var user = await _service.User.GetAsync(loginUserDto.Email);
         var token = _jwt.Generate([
             new Claim("UserId", user.Id.ToString()),
-            new Claim(ClaimTypes.Role, "User"),
+            new Claim(ClaimTypes.Role, "User")
         ]);
 
         return Ok(new LoginUserResponseDto
         {
             UserDto = user.ToDto(),
-            Token = token,
+            Token = token
         });
     }
 
     [Authorize(Policy = "Admin")]
-    [HttpPost("api/auth/employee/register")]
+    [HttpPost("employee/register")]
     public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeDto registerEmployeeDto)
     {
         var employee = _mapper.Employee.Map(registerEmployeeDto);
@@ -77,7 +78,7 @@ public class AuthController : ControllerBase
         return Created($"/api/employee/{employee.Id}", null);
     }
 
-    [HttpPost("api/auth/employee/login")]
+    [HttpPost("employee/login")]
     public async Task<IActionResult> LoginEmployee([FromBody] LoginEmployeeDto loginEmployeeDto)
     {
         // authorize the employee, if fails return 401
@@ -88,10 +89,10 @@ public class AuthController : ControllerBase
         }
 
         // get the employee by the email address and create their JWT
-        var employee = await _service.Employee.GetAsync(loginEmployeeDto.Email!);
+        var employee = await _service.Employee.GetAsync(loginEmployeeDto.Email);
         var token = _jwt.Generate([
             new Claim("EmployeeId", employee.Id.ToString()),
-            new Claim(ClaimTypes.Role, "Employee"),
+            new Claim(ClaimTypes.Role, "Employee")
         ]);
 
         return Ok(new LoginEmployeeResponseDto

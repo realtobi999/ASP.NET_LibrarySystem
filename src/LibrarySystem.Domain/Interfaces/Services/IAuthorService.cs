@@ -2,6 +2,4 @@
 
 namespace LibrarySystem.Domain.Interfaces.Services;
 
-public interface IAuthorService : IBaseService<Author>
-{
-}
+public interface IAuthorService : IBaseService<Author>;

@@ -11,7 +11,7 @@ public class Borrow : IDtoSerialization<BorrowDto>
     // core properties
 
     [Required, Column("id")]
-    public required Guid Id { get; set; }
+    public required Guid Id { get; init; }
 
     [Required, Column("book_id")]
     public required Guid BookId { get; set; }
@@ -32,7 +32,7 @@ public class Borrow : IDtoSerialization<BorrowDto>
 
     [JsonIgnore]
     public virtual User? User { get; set; }
-    
+
     [JsonIgnore]
     public virtual Book? Book { get; set; }
 
@@ -46,7 +46,7 @@ public class Borrow : IDtoSerialization<BorrowDto>
             UserId = this.UserId,
             BorrowDate = this.BorrowDate,
             DueDate = this.DueDate,
-            IsReturned = this.IsReturned,
+            IsReturned = this.IsReturned
         };
     }
 

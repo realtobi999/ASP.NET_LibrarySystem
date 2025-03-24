@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Genres;
 
-public record class CreateGenreDto
+public record CreateGenreDto
 {
     public Guid? Id { get; init; }
 

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace LibrarySystem.EmailService;
 
-public class SmtpFactory
+public static class SmtpFactory
 {
     public static SmtpClient CreateInstance(IConfiguration configuration)
     {

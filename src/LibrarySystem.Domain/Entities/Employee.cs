@@ -11,7 +11,7 @@ public class Employee : IDtoSerialization<EmployeeDto>
     // core properties
 
     [Required, Column("id")]
-    public required Guid Id { get; set; }
+    public required Guid Id { get; init; }
 
     [Required, Column("Name")]
     public required string Name { get; set; }
@@ -23,7 +23,7 @@ public class Employee : IDtoSerialization<EmployeeDto>
     public required string Password { get; set; }
 
     [Required, Column("created_at")]
-    public required DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; init; }
 
     // auth properties
 

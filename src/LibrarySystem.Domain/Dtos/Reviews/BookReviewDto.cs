@@ -1,6 +1,6 @@
 ﻿namespace LibrarySystem.Domain.Dtos.Reviews;
 
-public record class BookReviewDto
+public record BookReviewDto
 {
     public required Guid Id { get; init; }
     public required Guid BookId { get; init; }

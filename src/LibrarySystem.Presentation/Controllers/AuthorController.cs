@@ -2,13 +2,13 @@
 using LibrarySystem.Domain.Dtos.Authors;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
+[Route("api/author")]
 /*
 
 GET     /api/author param: offset, limit
@@ -33,7 +33,7 @@ public class AuthorController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpGet("api/author")]
+    [HttpGet("")]
     public async Task<IActionResult> GetAuthors(int limit, int offset)
     {
         var authors = await _service.Author.IndexAsync();
@@ -42,7 +42,7 @@ public class AuthorController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpGet("api/author/{authorId:guid}")]
+    [HttpGet("{authorId:guid}")]
     public async Task<IActionResult> GetAuthor(Guid authorId)
     {
         var author = await _service.Author.GetAsync(authorId);
@@ -51,7 +51,7 @@ public class AuthorController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPost("api/author")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorDto createAuthorDto)
     {
         var author = _mapper.Author.Map(createAuthorDto);
@@ -62,7 +62,7 @@ public class AuthorController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/author/{authorId:guid}")]
+    [HttpPut("{authorId:guid}")]
     public async Task<IActionResult> UpdateAuthor(Guid authorId, [FromBody] UpdateAuthorDto updateAuthorDto)
     {
         var author = await _service.Author.GetAsync(authorId);
@@ -74,7 +74,7 @@ public class AuthorController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpDelete("api/author/{authorId:guid}")]
+    [HttpDelete("{authorId:guid}")]
     public async Task<IActionResult> DeleteAuthor(Guid authorId)
     {
         var author = await _service.Author.GetAsync(authorId);
@@ -85,7 +85,7 @@ public class AuthorController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/author/{authorId:guid}/photo")]
+    [HttpPut("{authorId:guid}/photo")]
     public async Task<IActionResult> UploadPhoto(Guid authorId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);

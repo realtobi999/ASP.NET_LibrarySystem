@@ -12,7 +12,7 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
 
     public Book? Get(Guid id)
     {
-        return _context.Books.FirstOrDefault(b => b.Id == id);
+        return Context.Books.FirstOrDefault(b => b.Id == id);
     }
 
     public async Task<Book?> GetAsync(Guid id)
@@ -22,16 +22,16 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
 
     public async Task<Book?> GetAsync(string isbn)
     {
-        return await this.GetAsync(b => b.ISBN == isbn);
+        return await this.GetAsync(b => b.Isbn == isbn);
     }
 
     protected override IQueryable<Book> GetQueryable()
     {
         return base.GetQueryable()
-                   .Include(b => b.Authors)
-                   .Include(b => b.Genres)
-                   .Include(b => b.Borrows)
-                   .Include(b => b.BookReviews)
-                   .Include(b => b.CoverPictures);
+            .Include(b => b.Authors)
+            .Include(b => b.Genres)
+            .Include(b => b.Borrows)
+            .Include(b => b.BookReviews)
+            .Include(b => b.CoverPictures);
     }
 }

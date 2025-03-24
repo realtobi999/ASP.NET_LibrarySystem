@@ -1,6 +1,6 @@
-namespace LibrarySystem.Domain.Interfaces.Mappers;
+namespace LibrarySystem.Domain.Interfaces.Common;
 
-public interface IMapper<Entity, Dto>
+public interface IMapper<out TEntity, in TDto>
 {
-    Entity Map(Dto dto);
+    TEntity Map(TDto dto);
 }

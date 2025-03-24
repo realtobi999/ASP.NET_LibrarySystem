@@ -2,7 +2,7 @@
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Common;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Services;
 
 namespace LibrarySystem.Application.Services.Users;
@@ -76,7 +76,7 @@ public class UserService : IUserService
             user.Unlock();
         }
 
-        var authenticated = _hasher.Compare(password, user.Password!);
+        var authenticated = _hasher.Compare(password, user.Password);
 
         if (!authenticated)
         {

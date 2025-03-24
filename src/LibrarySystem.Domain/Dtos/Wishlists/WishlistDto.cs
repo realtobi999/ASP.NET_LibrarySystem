@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Wishlists;
 
-public record class WishlistDto
+public record WishlistDto
 {
     public required Guid Id { get; init; }
     public required Guid UserId { get; init; }

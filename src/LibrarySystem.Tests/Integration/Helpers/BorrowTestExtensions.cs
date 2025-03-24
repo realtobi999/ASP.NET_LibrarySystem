@@ -11,7 +11,7 @@ internal static class BorrowTestExtensions
         {
             Id = borrow.Id,
             BookId = borrow.BookId,
-            UserId = borrow.UserId,
+            UserId = borrow.UserId
         };
     }
 }

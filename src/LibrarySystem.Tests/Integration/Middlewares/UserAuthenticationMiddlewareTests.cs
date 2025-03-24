@@ -11,7 +11,7 @@ namespace LibrarySystem.Tests.Integration.Middlewares;
 public class UserAuthenticationMiddlewareTests
 {
     [Fact]
-    public async void UserAuthenticationMiddleware_Returns401WhenTryingToModifyDifferentUser()
+    public async Task UserAuthenticationMiddleware_Returns401WhenTryingToModifyDifferentUser()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -19,7 +19,7 @@ public class UserAuthenticationMiddlewareTests
         var user2 = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim("UserId", user1.Id.ToString()),
-            new Claim(ClaimTypes.Role, "User"),
+            new Claim(ClaimTypes.Role, "User")
         ]);
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
@@ -37,14 +37,14 @@ public class UserAuthenticationMiddlewareTests
     }
 
     [Fact]
-    public async void UserAuthenticationMiddleware_Returns401WhenTheIdIsWrongInTheBody()
+    public async Task UserAuthenticationMiddleware_Returns401WhenTheIdIsWrongInTheBody()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = UserFactory.CreateWithFakeData();
         var token = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "User"),
-            new Claim("UserId", user.Id.ToString()),
+            new Claim("UserId", user.Id.ToString())
         ]);
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
@@ -55,7 +55,7 @@ public class UserAuthenticationMiddlewareTests
             BookId = Guid.Empty,
             UserId = Guid.NewGuid(), // insert bad id
             Rating = 0,
-            Text = "test",
+            Text = "test"
         });
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
     }

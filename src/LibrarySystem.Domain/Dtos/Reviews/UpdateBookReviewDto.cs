@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Reviews;
 
-public record class UpdateBookReviewDto
+public record UpdateBookReviewDto
 {
     [Required, MaxLength(555)]
     public required string Text { get; init; }

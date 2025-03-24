@@ -10,8 +10,7 @@ public class HasherTests
     {
         // prepare
         var hasher = new Hasher(algorithm: HashAlgorithmName.SHA256);
-
-        var password = "TEST_PASSWORD_IN_PLAIN_TEXT";
+        const string password = "TEST_PASSWORD_IN_PLAIN_TEXT";
 
         // act & assert
         var hashedPassword = hasher.Hash(password);
@@ -24,9 +23,8 @@ public class HasherTests
     {
         // prepare
         var hasher = new Hasher(algorithm: HashAlgorithmName.SHA256);
-
-        var password1 = "TEST_PASSWORD_IN_PLAIN_TEXT";
-        var password2 = "ANOTHER_TEST_PASSWORD";
+        const string password1 = "TEST_PASSWORD_IN_PLAIN_TEXT";
+        const string password2 = "ANOTHER_TEST_PASSWORD";
 
         var hashedPassword1 = hasher.Hash(password1);
         var hashedPassword2 = hasher.Hash(password2);

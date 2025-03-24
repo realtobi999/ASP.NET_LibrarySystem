@@ -11,10 +11,7 @@ public class WebAppFactory<TStartup> : WebApplicationFactory<TStartup> where TSt
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services =>
-        {
-            services.ReplaceWithInMemoryDatabase<LibrarySystemContext>(_dbName);
-        });
+        builder.ConfigureServices(services => { services.ReplaceWithInMemoryDatabase<LibrarySystemContext>(_dbName); });
     }
 
     /// <summary>
@@ -28,5 +25,3 @@ public class WebAppFactory<TStartup> : WebApplicationFactory<TStartup> where TSt
         return context;
     }
 }
-
-

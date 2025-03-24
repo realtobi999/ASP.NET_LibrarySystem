@@ -1,21 +1,22 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using System.Security.Claims;
-using LibrarySystem.Presentation;
-using LibrarySystem.Domain.Dtos.Users;
+using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Dtos.Responses;
-using LibrarySystem.Tests.Integration.Server;
-using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Tests.Integration.Helpers;
-using LibrarySystem.Tests.Integration.Factories;
+using LibrarySystem.Domain.Dtos.Users;
 using LibrarySystem.Domain.Entities;
+using LibrarySystem.Presentation;
+using LibrarySystem.Tests.Integration.Factories;
+using LibrarySystem.Tests.Integration.Helpers;
+using LibrarySystem.Tests.Integration.Server;
 
 namespace LibrarySystem.Tests.Integration.Endpoints;
 
 public class AuthControllerTests
 {
     [Fact]
-    public async void RegisterUser_Returns201AndUserIsCreated()
+    public async Task RegisterUser_Returns201AndUserIsCreated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -24,25 +25,25 @@ public class AuthControllerTests
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // assert that the user is created
         var header = response.Headers.GetValues("Location");
         header.Should().Equal($"/api/user/{user.Id}");
 
-        using var context = app.GetDatabaseContext();
+        await using var context = app.GetDatabaseContext();
         context.Set<User>().Any(u => u.Id == user.Id).Should().BeTrue();
     }
 
     [Fact]
-    public async void LoginUser_Returns200AndJwtAndUser()
+    public async Task LoginUser_Returns200AndJwtAndUser()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
         var user = UserFactory.CreateWithFakeData();
 
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var loginDto = new LoginUserDto
@@ -52,14 +53,14 @@ public class AuthControllerTests
         };
 
         var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<LoginUserResponseDto>() ?? throw new NullReferenceException();
 
-        content.UserDto!.Id.Should().Be(user.Id);
+        content.UserDto.Id.Should().Be(user.Id);
         content.Token.Should().NotBeNull();
 
-        var payload = JwtUtils.ParsePayload(content.Token!);
+        var payload = JwtUtils.ParsePayload(content.Token);
 
         payload.Count().Should().BeGreaterThan(2);
         payload.ElementAt(0).Type.Should().Be("UserId");
@@ -69,7 +70,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void LoginUser_Returns400WhenUserLocked()
+    public async Task LoginUser_Returns400WhenUserLocked()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -77,7 +78,7 @@ public class AuthControllerTests
         var user = UserFactory.CreateWithFakeData();
 
         var create = await client.PostAsJsonAsync("/api/auth/register", user.ToRegisterUserDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // act & assert
         var loginDto = new LoginUserDto
@@ -86,22 +87,22 @@ public class AuthControllerTests
             Password = user.Email
         };
 
-        for (int i = 0; i < User.AttemptsBeforeLock; i++)
+        for (var i = 0; i < User.AttemptsBeforeLock; i++)
         {
             var login = await client.PostAsJsonAsync("/api/auth/login", loginDto);
-            login.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+            login.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
-        // assert that the login lock is setup correctly
-        using var context = app.GetDatabaseContext();
+        // assert that the login lock is set up correctly
+        await using var context = app.GetDatabaseContext();
         context.Set<User>().FirstOrDefault(u => u.Id == user.Id)!.LoginAttempts.Should().Be(User.AttemptsBeforeLock);
 
         var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
-    public async void RegisterEmployee_Returns201AndEmployeeIsCreated()
+    public async Task RegisterEmployee_Returns201AndEmployeeIsCreated()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -114,18 +115,18 @@ public class AuthControllerTests
 
         // act & assert
         var response = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var header = response.Headers.GetValues("Location");
         header.Should().Equal($"/api/employee/{employee.Id}");
 
         // assert that the user is created
-        using var context = app.GetDatabaseContext();
+        await using var context = app.GetDatabaseContext();
         context.Set<Employee>().Any(e => e.Id == employee.Id).Should().BeTrue();
     }
 
     [Fact]
-    public async void LoginEmployee_Returns201AndJwtAndEmployee()
+    public async Task LoginEmployee_Returns201AndJwtAndEmployee()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -136,7 +137,7 @@ public class AuthControllerTests
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create.StatusCode.Should().Be(HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Remove("Authorization");
 
@@ -144,18 +145,18 @@ public class AuthControllerTests
         var loginDto = new LoginEmployeeDto
         {
             Email = employee.Email,
-            Password = employee.Password,
+            Password = employee.Password
         };
 
         var response = await client.PostAsJsonAsync("/api/auth/employee/login", loginDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadFromJsonAsync<LoginEmployeeResponseDto>() ?? throw new NullReferenceException();
 
-        content.EmployeeDto!.Id.Should().Be(employee.Id);
+        content.EmployeeDto.Id.Should().Be(employee.Id);
         content.Token.Should().NotBeNull();
 
-        var payload = JwtUtils.ParsePayload(content.Token!);
+        var payload = JwtUtils.ParsePayload(content.Token);
 
         payload.Count().Should().BeGreaterThan(2);
         payload.ElementAt(0).Type.Should().Be("EmployeeId");
@@ -165,7 +166,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async void LoginEmployee_Returns400WhenEmployeeLocked()
+    public async Task LoginEmployee_Returns400WhenEmployeeLocked()
     {
         // prepare
         var app = new WebAppFactory<Program>();
@@ -177,7 +178,7 @@ public class AuthControllerTests
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
         var create = await client.PostAsJsonAsync("/api/auth/employee/register", employee.ToRegisterEmployeeDto());
-        create.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        create.StatusCode.Should().Be(HttpStatusCode.Created);
 
         client.DefaultRequestHeaders.Remove("Authorization");
 
@@ -185,20 +186,20 @@ public class AuthControllerTests
         var loginDto = new LoginEmployeeDto
         {
             Email = employee.Email,
-            Password = employee.Email,
+            Password = employee.Email
         };
 
-        for (int i = 0; i < Employee.AttemptsBeforeLock; i++)
+        for (var i = 0; i < Employee.AttemptsBeforeLock; i++)
         {
             var login = await client.PostAsJsonAsync("/api/auth/employee/login", loginDto);
-            login.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+            login.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
-        // assert that the login lock is setup correctly
-        using var context = app.GetDatabaseContext();
+        // assert that the login lock is set up correctly
+        await using var context = app.GetDatabaseContext();
         context.Set<Employee>().FirstOrDefault(e => e.Id == employee.Id)!.LoginAttempts.Should().Be(Employee.AttemptsBeforeLock);
 
         var response = await client.PostAsJsonAsync("/api/auth/employee/login", loginDto);
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }

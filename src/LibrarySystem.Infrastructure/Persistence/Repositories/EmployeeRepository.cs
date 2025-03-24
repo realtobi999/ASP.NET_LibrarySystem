@@ -23,6 +23,6 @@ public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
     protected override IQueryable<Employee> GetQueryable()
     {
         return base.GetQueryable()
-                   .Include(e => e.Picture);
+            .Include(e => e.Picture);
     }
 }

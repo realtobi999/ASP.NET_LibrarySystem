@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
+[Route("api/review")]
 /*
 
 POST    /api/review
@@ -28,7 +29,7 @@ public class BookReviewController : ControllerBase
     }
 
     [Authorize(Policy = "User"), UserAuth]
-    [HttpPost("api/review")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateBookReview([FromBody] CreateBookReviewDto createBookReviewDto)
     {
         var review = _mapper.BookReview.Map(createBookReviewDto);
@@ -39,7 +40,7 @@ public class BookReviewController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpDelete("api/review/{reviewId:guid}")]
+    [HttpDelete("{reviewId:guid}")]
     public async Task<IActionResult> DeleteBookReview(Guid reviewId)
     {
         var review = await _service.BookReview.GetAsync(reviewId);
@@ -56,7 +57,7 @@ public class BookReviewController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpPut("api/review/{reviewId:guid}")]
+    [HttpPut("{reviewId:guid}")]
     public async Task<IActionResult> UpdateBookReview(Guid reviewId, UpdateBookReviewDto updateBookReviewDto)
     {
         var review = await _service.BookReview.GetAsync(reviewId);

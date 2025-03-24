@@ -2,6 +2,4 @@
 
 namespace LibrarySystem.Domain.Interfaces.Services;
 
-public interface IWishlistService : IBaseService<Wishlist>
-{
-}
+public interface IWishlistService : IBaseService<Wishlist>;

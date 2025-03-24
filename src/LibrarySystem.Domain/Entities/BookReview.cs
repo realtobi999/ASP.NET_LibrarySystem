@@ -11,7 +11,7 @@ public class BookReview : IDtoSerialization<BookReviewDto>
     // core properties
 
     [Required, Column("id")]
-    public required Guid Id { get; set; }
+    public required Guid Id { get; init; }
 
     [Required, Column("book_id")]
     public required Guid BookId { get; set; }
@@ -26,7 +26,7 @@ public class BookReview : IDtoSerialization<BookReviewDto>
     public required string Text { get; set; }
 
     [Required, Column("created_at")]
-    public required DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; init; }
 
     // constants
 
@@ -37,6 +37,7 @@ public class BookReview : IDtoSerialization<BookReviewDto>
 
     [JsonIgnore]
     public virtual Book? Book { get; set; }
+
     [JsonIgnore]
     public virtual User? User { get; set; }
 

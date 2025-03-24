@@ -5,8 +5,8 @@ namespace LibrarySystem.Application.Core.Utilities;
 
 public class Hasher : IHasher
 {
-    private const int SALT_SIZE = 128 / 8;  // size of the salt in bytes
-    private const int HASH_SIZE = 256 / 8;  // size of the hash in bytes
+    private const int SALT_SIZE = 128 / 8; // size of the salt in bytes
+    private const int HASH_SIZE = 256 / 8; // size of the hash in bytes
     private const int ITERATIONS = 10_000; // number of iterations for PBKDF2
 
     private readonly char _delimiter = ';';

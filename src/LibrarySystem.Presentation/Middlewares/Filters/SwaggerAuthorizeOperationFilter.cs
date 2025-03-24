@@ -13,9 +13,9 @@ public class SwaggerAuthorizeOperationFilter : IOperationFilter
             return;
         }
 
-        // check if the endpoint has a authorize attribute
+        // check if the endpoint has an authorize attribute
         var hasAuthorizeAttribute = context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any()
-                    || context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
+                                    || context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
 
         if (!hasAuthorizeAttribute)
         {
@@ -33,11 +33,11 @@ public class SwaggerAuthorizeOperationFilter : IOperationFilter
         };
 
         operation.Security =
-            [
-                new OpenApiSecurityRequirement
-                {
-                    [scheme] = Array.Empty<string>()
-                }
-            ];
+        [
+            new OpenApiSecurityRequirement
+            {
+                [scheme] = Array.Empty<string>()
+            }
+        ];
     }
 }

@@ -2,12 +2,12 @@
 
 namespace LibrarySystem.Domain.Dtos.Books;
 
-public record class CreateBookDto
+public record CreateBookDto
 {
     public Guid? Id { get; init; }
 
     [Required]
-    public required string ISBN { get; init; }
+    public required string Isbn { get; init; }
 
     [Required, MaxLength(55)]
     public required string Title { get; init; }

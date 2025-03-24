@@ -3,13 +3,13 @@ using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Domain.Dtos.Employees;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
+[Route("api/employee")]
 /*
 
 GET     /api/employee params: offset, limit
@@ -30,7 +30,7 @@ public class EmployeeController : ControllerBase
         _repository = repository;
     }
 
-    [HttpGet("api/employee")]
+    [HttpGet("")]
     public async Task<IActionResult> GetEmployees(int limit, int offset)
     {
         var employees = await _service.Employee.IndexAsync();
@@ -38,7 +38,7 @@ public class EmployeeController : ControllerBase
         return Ok(employees.Paginate(offset, limit));
     }
 
-    [HttpGet("api/employee/{employeeId:guid}")]
+    [HttpGet("{employeeId:guid}")]
     public async Task<IActionResult> GetEmployee(Guid employeeId)
     {
         var employee = await _service.Employee.GetAsync(employeeId);
@@ -47,7 +47,7 @@ public class EmployeeController : ControllerBase
     }
 
     [Authorize(Policy = "Employee"), EmployeeAuth]
-    [HttpPut("api/employee/{employeeId:guid}")]
+    [HttpPut("{employeeId:guid}")]
     public async Task<IActionResult> UpdateEmployee(Guid employeeId, [FromBody] UpdateEmployeeDto updateEmployeeDto)
     {
         var employee = await _service.Employee.GetAsync(employeeId);
@@ -59,7 +59,7 @@ public class EmployeeController : ControllerBase
     }
 
     [Authorize(Policy = "Employee"), EmployeeAuth]
-    [HttpDelete("api/employee/{employeeId:guid}")]
+    [HttpDelete("{employeeId:guid}")]
     public async Task<IActionResult> DeleteEmployee(Guid employeeId)
     {
         var employee = await _service.Employee.GetAsync(employeeId);
@@ -70,7 +70,7 @@ public class EmployeeController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/employee/{employeeId:guid}/photo")]
+    [HttpPut("{employeeId:guid}/photo")]
     public async Task<IActionResult> UploadPhotos(Guid employeeId, IFormFile file)
     {
         var picture = await _service.Picture.Extract(file);

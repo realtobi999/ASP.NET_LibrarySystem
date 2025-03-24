@@ -1,8 +1,8 @@
-using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Domain.Interfaces.Factories;
 
 public interface IMapperFactory
 {
-    IMapper<Entity, Dto> Initiate<Entity, Dto>();
+    IMapper<TEntity, TDto> Initiate<TEntity, TDto>();
 }

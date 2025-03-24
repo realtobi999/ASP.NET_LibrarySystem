@@ -1,9 +1,8 @@
 using LibrarySystem.Application.Services.Books;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Tests.Integration.Factories;
-using Microsoft.IdentityModel.Tokens;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Searchers;
@@ -14,8 +13,7 @@ public class BookSearcherTests
     private readonly Mock<ISearcher<Genre>> _genreSearcher;
     private readonly Mock<ISearcher<Author>> _authorSearcher;
     private readonly ISearcher<Book> _searcher;
-
-    private static readonly Random _random = new();
+    private static readonly Random Random = new();
 
     public BookSearcherTests()
     {
@@ -27,22 +25,21 @@ public class BookSearcherTests
     }
 
     [Fact]
-    public async void SearchAsync_ShouldWorkWithBasicQueryInput()
+    public async Task SearchAsync_ShouldWorkWithBasicQueryInput()
     {
         // prepare
         var books = new List<Book>();
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
-
             books.Add(BookFactory.CreateWithFakeData());
         }
 
         var keyword = Guid.NewGuid().ToString();
 
         // get random books from the list
-        var bookToSearchFor1 = books[_random.Next(books.Count)];
-        var bookToSearchFor2 = books[_random.Next(books.Count)];
+        var bookToSearchFor1 = books[Random.Next(books.Count)];
+        var bookToSearchFor2 = books[Random.Next(books.Count)];
         bookToSearchFor1.Title = $"{keyword} test";
         bookToSearchFor2.Description = $"test {keyword}";
 
@@ -57,22 +54,21 @@ public class BookSearcherTests
     }
 
     [Fact]
-    public async void SearchAsync_ShouldWorkWithBadQueryInput()
+    public async Task SearchAsync_ShouldWorkWithBadQueryInput()
     {
         // prepare
         var books = new List<Book>();
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
-
             books.Add(BookFactory.CreateWithFakeData());
         }
 
         var keyword = Guid.NewGuid().ToString();
 
         // get random books from the list
-        var bookToSearchFor1 = books[_random.Next(books.Count)];
-        var bookToSearchFor2 = books[_random.Next(books.Count)];
+        var bookToSearchFor1 = books[Random.Next(books.Count)];
+        var bookToSearchFor2 = books[Random.Next(books.Count)];
         bookToSearchFor1.Title = $"{keyword} test";
         bookToSearchFor2.Description = $"test {keyword}";
 
@@ -87,22 +83,21 @@ public class BookSearcherTests
     }
 
     [Fact]
-    public async void SearchAsync_StartsWithFilterShouldWorkWithBasicQueryInput()
+    public async Task SearchAsync_StartsWithFilterShouldWorkWithBasicQueryInput()
     {
         // prepare
         var books = new List<Book>();
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
-
             books.Add(BookFactory.CreateWithFakeData());
         }
 
         var keyword = Guid.NewGuid().ToString();
 
         // get random books from the list
-        var bookToSearchFor1 = books[_random.Next(books.Count)];
-        var bookToSearchFor2 = books[_random.Next(books.Count)];
+        var bookToSearchFor1 = books[Random.Next(books.Count)];
+        var bookToSearchFor2 = books[Random.Next(books.Count)];
         bookToSearchFor1.Title = $"{keyword} test";
         bookToSearchFor2.Description = $"test {keyword}";
 
@@ -116,22 +111,21 @@ public class BookSearcherTests
     }
 
     [Fact]
-    public async void SearchAsync_EndsWithFilterShouldWorkWithBasicQueryInput()
+    public async Task SearchAsync_EndsWithFilterShouldWorkWithBasicQueryInput()
     {
         // prepare
         var books = new List<Book>();
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
-
             books.Add(BookFactory.CreateWithFakeData());
         }
 
         var keyword = Guid.NewGuid().ToString();
 
         // get random books from the list
-        var bookToSearchFor1 = books[_random.Next(books.Count)];
-        var bookToSearchFor2 = books[_random.Next(books.Count)];
+        var bookToSearchFor1 = books[Random.Next(books.Count)];
+        var bookToSearchFor2 = books[Random.Next(books.Count)];
         bookToSearchFor1.Title = $"test {keyword}";
         bookToSearchFor2.Description = $"{keyword} test";
 
@@ -146,7 +140,7 @@ public class BookSearcherTests
 
 
     [Fact]
-    public async void SearchAsync_ShouldWorkWithAuthorAngGenreQuerySearch()
+    public async Task SearchAsync_ShouldWorkWithAuthorAngGenreQuerySearch()
     {
         // prepare
         var books = new List<Book>();
@@ -159,16 +153,15 @@ public class BookSearcherTests
         genre.Name = keyword;
         author.Name = keyword;
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
-
             books.Add(BookFactory.CreateWithFakeData());
         }
 
         // get random books from the list
-        var bookToSearchFor1 = books[_random.Next(books.Count)];
-        var bookToSearchFor2 = books[_random.Next(books.Count)];
-        var bookToSearchFor3 = books[_random.Next(books.Count)];
+        var bookToSearchFor1 = books[Random.Next(books.Count)];
+        var bookToSearchFor2 = books[Random.Next(books.Count)];
+        var bookToSearchFor3 = books[Random.Next(books.Count)];
         bookToSearchFor1.Genres = [genre];
         bookToSearchFor2.Authors = [author];
         bookToSearchFor3.Title = keyword;

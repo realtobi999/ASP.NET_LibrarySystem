@@ -6,7 +6,7 @@ namespace LibrarySystem.Domain.Exceptions.HTTP;
 public class NotAuthorized401Exception : Exception, IHttpException
 {
     public NotAuthorized401Exception()
-        : base($"You are not authorized to perform the action. Please ensure you have the necessary permissions.")
+        : base("You are not authorized to perform the action. Please ensure you have the necessary permissions.")
     {
     }
 

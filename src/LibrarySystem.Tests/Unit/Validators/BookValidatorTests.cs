@@ -1,7 +1,7 @@
 using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
@@ -19,7 +19,7 @@ public class BookValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenAssignedGenresDoesntExist()
+    public async Task ValidateAsync_ReturnsFalseWhenAssignedGenresDoesntExist()
     {
         // prepare
         var book = BookFactory.CreateWithFakeData();
@@ -29,7 +29,8 @@ public class BookValidatorTests
         book.Genres = [genre];
         book.Authors = [author];
 
-        _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync((Genre?)null); // set the return to null value => emulate that the repository couldn't find this entity
+        _repository.Setup(r => r.Genre.GetAsync(genre.Id))
+            .ReturnsAsync((Genre?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
         // act & assert
         var (isValid, exception) = await _validator.ValidateAsync(book);
@@ -40,7 +41,7 @@ public class BookValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenAssignedAuthorsDoesntExist()
+    public async Task ValidateAsync_ReturnsFalseWhenAssignedAuthorsDoesntExist()
     {
         // prepare
         var book = BookFactory.CreateWithFakeData();
@@ -51,7 +52,8 @@ public class BookValidatorTests
         book.Authors = [author];
 
         _repository.Setup(r => r.Genre.GetAsync(genre.Id)).ReturnsAsync(genre);
-        _repository.Setup(r => r.Author.GetAsync(author.Id)).ReturnsAsync((Author?)null); // set the return to null value => emulate that the repository couldn't find this entity
+        _repository.Setup(r => r.Author.GetAsync(author.Id))
+            .ReturnsAsync((Author?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
         // act & assert
         var (isValid, exception) = await _validator.ValidateAsync(book);
@@ -62,7 +64,7 @@ public class BookValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenBookReviewsAreWithWrongBookId()
+    public async Task ValidateAsync_ReturnsFalseWhenBookReviewsAreWithWrongBookId()
     {
         // prepare
         var book = BookFactory.CreateWithFakeData();
@@ -85,6 +87,7 @@ public class BookValidatorTests
 
         isValid.Should().BeFalse();
         exception.Should().BeOfType<Conflict409Exception>();
-        exception!.Message.Should().Be($"Review with ID {review.Id} is incorrectly associated with Book ID {review.BookId} instead of Book ID {book.Id}.");
+        exception!.Message.Should()
+            .Be($"Review with ID {review.Id} is incorrectly associated with Book ID {review.BookId} instead of Book ID {book.Id}.");
     }
 }

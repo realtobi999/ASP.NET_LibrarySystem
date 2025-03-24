@@ -1,5 +1,4 @@
-﻿
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using LibrarySystem.Application.Core.Utilities;
 using LibrarySystem.Domain.Exceptions.HTTP;
@@ -13,8 +12,8 @@ public class JwtTests
     public void Jwt_Generate_Works()
     {
         // prepare
-        var issuer = "TEST_ISSUER";
-        var key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
+        const string issuer = "TEST_ISSUER";
+        const string key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
         var jwt = new Jwt(issuer, key);
 
         // act & assert
@@ -30,8 +29,8 @@ public class JwtTests
     public void Jwt_ParsePayload_Works()
     {
         // prepare
-        var issuer = "TEST_ISSUER";
-        var key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
+        const string issuer = "TEST_ISSUER";
+        const string key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
         var jwt = new Jwt(issuer, key);
 
         var user = UserFactory.CreateWithFakeData();
@@ -62,8 +61,8 @@ public class JwtTests
     public void Jwt_Parse_Works()
     {
         // prepare
-        var issuer = "TEST_ISSUER";
-        var key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
+        const string issuer = "TEST_ISSUER";
+        const string key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
         var jwt = new Jwt(issuer, key);
 
         var user = UserFactory.CreateWithFakeData();
@@ -81,8 +80,8 @@ public class JwtTests
     public void Jwt_ParseFromPayload_Works()
     {
         // prepare
-        var issuer = "TEST_ISSUER";
-        var key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
+        const string issuer = "TEST_ISSUER";
+        const string key = "VERY_LONG_KEY_THAT_IS_SECURE_AND_STRONG";
         var jwt = new Jwt(issuer, key);
 
         var user = UserFactory.CreateWithFakeData();

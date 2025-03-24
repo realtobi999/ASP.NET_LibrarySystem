@@ -5,10 +5,10 @@ using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Domain.Dtos.Books;
 
-public record class BookDto
+public record BookDto
 {
     public required Guid Id { get; init; }
-    public required string? ISBN { get; init; }
+    public required string? Isbn { get; init; }
     public required string? Title { get; init; }
     public required string? Description { get; init; }
     public required int PagesCount { get; init; }

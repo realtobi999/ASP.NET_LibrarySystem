@@ -9,9 +9,9 @@ namespace LibrarySystem.Domain.Entities;
 public class Wishlist : IDtoSerialization<WishlistDto>
 {
     // core properties
-    
+
     [Required, Column("id")]
-    public required Guid Id { get; set; }
+    public required Guid Id { get; init; }
 
     [Required, Column("user_id")]
     public required Guid UserId { get; set; }
@@ -20,7 +20,7 @@ public class Wishlist : IDtoSerialization<WishlistDto>
     public required string Name { get; set; }
 
     [Required, Column("created_at")]
-    public required DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; init; }
 
     // relationships
 
@@ -39,7 +39,7 @@ public class Wishlist : IDtoSerialization<WishlistDto>
             Id = this.Id,
             UserId = this.UserId,
             Name = this.Name,
-            Books = books,
+            Books = books
         };
     }
 

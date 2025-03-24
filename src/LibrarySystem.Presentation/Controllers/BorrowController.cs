@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using LibrarySystem.Application.Core.Extensions;
 using LibrarySystem.Application.Core.Utilities;
-using LibrarySystem.Application.Interfaces;
 using LibrarySystem.Domain.Dtos.Borrows;
 using LibrarySystem.Domain.Dtos.Email.Messages;
 using LibrarySystem.Domain.Exceptions.HTTP;
@@ -11,14 +10,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
-/**
+[Route("api/borrow")]
+/*
 
 GET     /api/borrow params: limit, offset, userId, active
 GET     /api/borrow/{borrow_id}
 POST    /api/borrow
 PUT     /api/borrow/{borrow_id}/return
 
-**/
+*/
 public class BorrowController : ControllerBase
 {
     private readonly IServiceManager _service;
@@ -34,7 +34,7 @@ public class BorrowController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("api/borrow")]
+    [HttpGet("")]
     public async Task<IActionResult> GetBorrows(int limit, int offset, Guid userId, bool active)
     {
         var borrows = await _service.Borrow.IndexAsync();
@@ -52,7 +52,7 @@ public class BorrowController : ControllerBase
         return Ok(borrows.Paginate(offset, limit));
     }
 
-    [HttpGet("api/borrow/{borrowId:guid}")]
+    [HttpGet("{borrowId:guid}")]
     public async Task<IActionResult> GetBorrow(Guid borrowId)
     {
         var borrow = await _service.Borrow.GetAsync(borrowId);
@@ -60,7 +60,7 @@ public class BorrowController : ControllerBase
         return Ok(borrow);
     }
 
-    [HttpPost("api/borrow")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateBorrow([FromBody] CreateBorrowDto createBorrowDto)
     {
         var borrow = _mapper.Borrow.Map(createBorrowDto);
@@ -72,26 +72,24 @@ public class BorrowController : ControllerBase
         }
 
         await _service.Book.UpdateAvailabilityAsync(book, false);
-
         await _service.Borrow.CreateAsync(borrow);
 
-        // send confirmation email - FOR PRODUCTION ONLY
-        if (_env.IsProduction())
+        // send confirmation email
+        if (!_env.IsProduction()) return Created($"/api/borrow/{borrow.Id}", null);
+
+        var user = await _service.User.GetAsync(createBorrowDto.UserId);
+        _email.Borrow.SendBorrowBookEmail(new BorrowBookMessageDto
         {
-            var user = await _service.User.GetAsync(createBorrowDto.UserId);
-            _email.Borrow.SendBorrowBookEmail(new BorrowBookMessageDto
-            {
-                UserEmail = user.Email!,
-                Username = user.Username!,
-                BookTitle = book.Title!,
-                BookISBN = book.ISBN!,
-                BorrowDueDate = borrow.DueDate.ToString("dd-MM-yyyy")
-            });
-        }
+            UserEmail = user.Email,
+            Username = user.Username,
+            BookTitle = book.Title,
+            BookIsbn = book.Isbn,
+            BorrowDueDate = borrow.DueDate.ToString("dd-MM-yyyy")
+        });
         return Created($"/api/borrow/{borrow.Id}", null);
     }
 
-    [HttpPut("api/borrow/{borrowId:guid}/return")]
+    [HttpPut("{borrowId:guid}/return")]
     public async Task<IActionResult> ReturnBorrow(Guid borrowId)
     {
         var borrow = await _service.Borrow.GetAsync(borrowId);
@@ -104,10 +102,12 @@ public class BorrowController : ControllerBase
         {
             throw new BadRequest400Exception($"The borrow record for book ID: {book.Id} is already closed. This book has already been IsReturned.");
         }
+
         if (book.IsAvailable)
         {
             throw new Conflict409Exception($"The book with ID: {book.Id} is not currently borrowed. Please check the book ID and try again.");
         }
+
         if (DateTimeOffset.UtcNow > borrow.DueDate && role != "Employee") // this role check enables the librarians to return the book even if it's past due
         {
             throw new Conflict409Exception($"The book with ID: {book.Id} cannot be returned because it is past the due date ({borrow.DueDate}). Please contact the library for assistance.");
@@ -116,18 +116,17 @@ public class BorrowController : ControllerBase
         await _service.Book.UpdateAvailabilityAsync(book, true);
         await _service.Borrow.UpdateIsReturnedAsync(borrow, true);
 
-        // send confirmation email - FOR PRODUCTION ONLY
-        if (_env.IsProduction())
+        // send confirmation email
+        if (!_env.IsProduction()) return NoContent();
+
+        var user = await _service.User.GetAsync(borrow.UserId);
+        _email.Borrow.SendReturnBookEmail(new ReturnBookMessageDto
         {
-            var user = await _service.User.GetAsync(borrow.UserId);
-            _email.Borrow.SendReturnBookEmail(new ReturnBookMessageDto
-            {
-                UserEmail = user.Email!,
-                Username = user.Username!,
-                BookTitle = book.Title!,
-                BookISBN = book.ISBN!
-            });
-        }
+            UserEmail = user.Email,
+            Username = user.Username,
+            BookTitle = book.Title,
+            BookIsbn = book.Isbn
+        });
 
         return NoContent();
     }

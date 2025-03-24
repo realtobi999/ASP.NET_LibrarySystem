@@ -5,7 +5,6 @@ using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Enums;
 using LibrarySystem.Domain.Exceptions.HTTP;
 using LibrarySystem.Domain.Interfaces.Managers;
-using LibrarySystem.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +12,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
+[Route("api/book")]
 /*
 
-GET     /api/book params: limit, offset, authorId, genreId, 
-GET     /api/book/recent params: limit, offset, authorId, genreId, 
-GET     /api/book/popular params: limit, offset, authorId, genreId, 
-GET     /api/book/recommended params: limit, offset 
-GET     /api/book/search/{query} params: limit, offset, authorId, genreId, 
-GET     /api/book/{book_id}  
-GET     /api/book/isbn/{isbn} 
+GET     /api/book params: limit, offset, authorId, genreId,
+GET     /api/book/recent params: limit, offset, authorId, genreId,
+GET     /api/book/popular params: limit, offset, authorId, genreId,
+GET     /api/book/recommended params: limit, offset
+GET     /api/book/search/{query} params: limit, offset, authorId, genreId,
+GET     /api/book/{book_id}
+GET     /api/book/isbn/{isbn}
 POST    /api/book
 PUT     /api/book/{book_id}/photo
 PUT     /api/book/{book_id}
@@ -41,10 +41,10 @@ public class BookController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("api/book")]
-    [HttpGet("api/book/recent")]
-    [HttpGet("api/book/popular")]
-    public async Task<IActionResult> GetBooks(string? query, int limit, int offset, Guid authorId, Guid genreId)
+    [HttpGet("")]
+    [HttpGet("recent")]
+    [HttpGet("popular")]
+    public async Task<IActionResult> GetBooks(int limit, int offset, Guid authorId, Guid genreId)
     {
         var books = await _service.Book.IndexAsync();
 
@@ -73,7 +73,7 @@ public class BookController : ControllerBase
         return Ok(books.Paginate(offset, limit));
     }
 
-    [HttpGet("api/book/search/{query}")]
+    [HttpGet("search/{query}")]
     public async Task<IActionResult> SearchBooks(string query, int limit, int offset)
     {
         var books = await _service.Book.SearchAsync(query);
@@ -82,7 +82,7 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
-    [HttpGet("api/book/recommended")]
+    [HttpGet("recommended")]
     public async Task<IActionResult> GetRecommendedBooks(int limit, int offset)
     {
         var token = JwtUtils.Parse(HttpContext.Request.Headers.Authorization.FirstOrDefault());
@@ -93,7 +93,7 @@ public class BookController : ControllerBase
         return Ok(books.Paginate(offset, limit).OrderBy(b => b.Popularity));
     }
 
-    [HttpGet("api/book/{bookId:guid}")]
+    [HttpGet("{bookId:guid}")]
     public async Task<IActionResult> GetBook(Guid bookId)
     {
         var book = await _service.Book.GetAsync(bookId);
@@ -101,7 +101,7 @@ public class BookController : ControllerBase
         return Ok(book);
     }
 
-    [HttpGet("api/book/isbn/{isbn}")]
+    [HttpGet("isbn/{isbn}")]
     public async Task<IActionResult> GetBookByIsbn(string isbn)
     {
         var book = await _service.Book.GetAsync(isbn);
@@ -110,7 +110,7 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPost("api/book")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateBook([FromBody] CreateBookDto createBookDto)
     {
         var book = _mapper.Book.Map(createBookDto);
@@ -121,7 +121,7 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/book/{bookId:guid}")]
+    [HttpPut("{bookId:guid}")]
     public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookDto updateBookDto)
     {
         var book = await _service.Book.GetAsync(bookId);
@@ -134,6 +134,7 @@ public class BookController : ControllerBase
             var author = await _service.Author.GetAsync(authorId);
             authors.Add(author);
         }
+
         foreach (var genreId in updateBookDto.GenreIds)
         {
             var genre = await _service.Genre.GetAsync(genreId);
@@ -147,7 +148,7 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpDelete("api/book/{bookId:guid}")]
+    [HttpDelete("{bookId:guid}")]
     public async Task<IActionResult> DeleteBook(Guid bookId)
     {
         var book = await _service.Book.GetAsync(bookId);
@@ -158,7 +159,7 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/book/{bookId:guid}/photo")]
+    [HttpPut("{bookId:guid}/photo")]
     public async Task<IActionResult> UploadPhotos(Guid bookId, IFormCollection files)
     {
         var pictures = await _service.Picture.Extract(files);

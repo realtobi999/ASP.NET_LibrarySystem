@@ -1,6 +1,6 @@
 using LibrarySystem.Domain.Dtos.Reviews;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
@@ -15,7 +15,7 @@ public class BookReviewMapper : IMapper<BookReview, CreateBookReviewDto>
             BookId = dto.BookId,
             Rating = dto.Rating,
             Text = dto.Text,
-            CreatedAt = DateTimeOffset.UtcNow,
+            CreatedAt = DateTimeOffset.UtcNow
         };
     }
 }

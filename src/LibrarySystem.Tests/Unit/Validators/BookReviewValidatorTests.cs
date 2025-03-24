@@ -1,7 +1,7 @@
 using LibrarySystem.Application.Core.Validators;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Exceptions.HTTP;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Tests.Integration.Factories;
 using Moq;
 
@@ -19,14 +19,15 @@ public class BookReviewValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenBookDoesntExist()
+    public async Task ValidateAsync_ReturnsFalseWhenBookDoesntExist()
     {
         // prepare
         var book = BookFactory.CreateWithFakeData();
         var user = UserFactory.CreateWithFakeData();
         var review = BookReviewFactory.CreateWithFakeData(book, user);
 
-        _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync((Book?)null); // set the return to null value => emulate that the repository couldn't find this entity
+        _repository.Setup(r => r.Book.GetAsync(book.Id))
+            .ReturnsAsync((Book?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
         // act & assert
         var (isValid, exception) = await _validator.ValidateAsync(review);
@@ -37,7 +38,7 @@ public class BookReviewValidatorTests
     }
 
     [Fact]
-    public async void ValidateAsync_ReturnsFalseWhenUserDoesntExist()
+    public async Task ValidateAsync_ReturnsFalseWhenUserDoesntExist()
     {
         // prepare
         var book = BookFactory.CreateWithFakeData();
@@ -45,7 +46,8 @@ public class BookReviewValidatorTests
         var review = BookReviewFactory.CreateWithFakeData(book, user);
 
         _repository.Setup(r => r.Book.GetAsync(book.Id)).ReturnsAsync(book);
-        _repository.Setup(r => r.User.GetAsync(user.Id)).ReturnsAsync((User?)null); // set the return to null value => emulate that the repository couldn't find this entity
+        _repository.Setup(r => r.User.GetAsync(user.Id))
+            .ReturnsAsync((User?)null); // set the return to null value => emulate that the repository couldn't find this entity
 
         // act & assert
         var (isValid, exception) = await _validator.ValidateAsync(review);

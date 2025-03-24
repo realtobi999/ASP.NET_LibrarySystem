@@ -1,6 +1,6 @@
 using LibrarySystem.Domain.Dtos.Genres;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Mappers;
+using LibrarySystem.Domain.Interfaces.Common;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
@@ -12,7 +12,7 @@ public class GenreMapper : IMapper<Genre, CreateGenreDto>
         {
             Id = dto.Id ?? Guid.NewGuid(),
             Name = dto.Name,
-            CreatedAt = DateTimeOffset.UtcNow,
+            CreatedAt = DateTimeOffset.UtcNow
         };
     }
 }

@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Users;
 
-public record class UpdateUserDto
+public record UpdateUserDto
 {
     [Required, MaxLength(55)]
     public required string Username { get; init; }

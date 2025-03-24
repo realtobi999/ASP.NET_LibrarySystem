@@ -1,5 +1,6 @@
 ﻿using LibrarySystem.Domain.Exceptions.Common;
 using LibrarySystem.Domain.Interfaces.Factories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Repositories;
 
 namespace LibrarySystem.Infrastructure.Persistence.Repositories;
@@ -8,8 +9,6 @@ public class RepositoryManager : IRepositoryManager
 {
     private readonly IRepositoryFactory _factory;
     private readonly LibrarySystemContext _context;
-
-    // TODO: implement lazy loading
 
     public RepositoryManager(IRepositoryFactory factory, LibrarySystemContext context)
     {

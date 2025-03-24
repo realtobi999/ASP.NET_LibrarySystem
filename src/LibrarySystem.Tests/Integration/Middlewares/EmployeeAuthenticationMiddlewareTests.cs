@@ -10,7 +10,7 @@ namespace LibrarySystem.Tests.Integration.Middlewares;
 public class EmployeeAuthenticationMiddlewareTests
 {
     [Fact]
-    public async void EmployeeAuthenticationMiddleware_Returns401WhenTryingToModifyDifferentEmployee()
+    public async Task EmployeeAuthenticationMiddleware_Returns401WhenTryingToModifyDifferentEmployee()
     {
         // prepare
         var client = new WebAppFactory<Program>().CreateDefaultClient();
@@ -29,7 +29,7 @@ public class EmployeeAuthenticationMiddlewareTests
         client.DefaultRequestHeaders.Remove("Authorization");
         var token2 = JwtTestExtensions.Create().Generate([
             new Claim(ClaimTypes.Role, "Employee"),
-            new Claim("EmployeeId", employee1.Id.ToString()),
+            new Claim("EmployeeId", employee1.Id.ToString())
         ]);
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token2}");
 

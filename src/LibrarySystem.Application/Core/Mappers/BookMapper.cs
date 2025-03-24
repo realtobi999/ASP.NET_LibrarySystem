@@ -1,7 +1,7 @@
 using LibrarySystem.Domain.Dtos.Books;
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Mappers;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Common;
+using LibrarySystem.Domain.Interfaces.Managers;
 
 namespace LibrarySystem.Application.Core.Mappers;
 
@@ -19,7 +19,7 @@ public class BookMapper : IMapper<Book, CreateBookDto>
         var book = new Book
         {
             Id = dto.Id ?? Guid.NewGuid(),
-            ISBN = dto.ISBN,
+            Isbn = dto.Isbn,
             Title = dto.Title,
             Description = dto.Description,
             PagesCount = dto.PagesCount,

@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LibrarySystem.Infrastructure\LibrarySystem.Infrastructure.csproj" />
-    <ProjectReference Include="..\LibrarySystem.Application\LibrarySystem.Application.csproj" />
-    <ProjectReference Include="..\LibrarySystem.Domain\LibrarySystem.Domain.csproj" />
-    <ProjectReference Include="..\LibrarySystem.EmailService\LibrarySystem.EmailService.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\LibrarySystem.Infrastructure\LibrarySystem.Infrastructure.csproj"/>
+        <ProjectReference Include="..\LibrarySystem.Application\LibrarySystem.Application.csproj"/>
+        <ProjectReference Include="..\LibrarySystem.Domain\LibrarySystem.Domain.csproj"/>
+        <ProjectReference Include="..\LibrarySystem.EmailService\LibrarySystem.EmailService.csproj"/>
+    </ItemGroup>
 
 </Project>

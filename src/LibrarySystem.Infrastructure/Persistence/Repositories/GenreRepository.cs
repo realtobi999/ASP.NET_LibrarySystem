@@ -11,7 +11,7 @@ public class GenreRepository : BaseRepository<Genre>, IGenreRepository
 
     public Genre? Get(Guid id)
     {
-        return _context.Genres.FirstOrDefault(g => g.Id == id);
+        return Context.Genres.FirstOrDefault(g => g.Id == id);
     }
 
     public async Task<Genre?> GetAsync(Guid id)

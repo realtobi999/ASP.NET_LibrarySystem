@@ -11,13 +11,13 @@ public class Genre : IDtoSerialization<GenreDto>
     // core properties
 
     [Required, Column("id")]
-    public required Guid Id { get; set; }
+    public required Guid Id { get; init; }
 
     [Required, Column("name")]
     public required string Name { get; set; }
 
     [Required]
-    public required DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; init; }
 
     // relationships
 

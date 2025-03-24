@@ -11,10 +11,10 @@ public class Book : IDtoSerialization<BookDto>
     // core properties
 
     [Required, Column("id")]
-    public required Guid Id { get; set; }
+    public required Guid Id { get; init; }
 
     [Required, Column("isbn")]
-    public required string ISBN { get; set; }
+    public required string Isbn { get; init; }
 
     [Required, Column("title")]
     public required string Title { get; set; }
@@ -68,7 +68,7 @@ public class Book : IDtoSerialization<BookDto>
         return new BookDto
         {
             Id = this.Id,
-            ISBN = this.ISBN,
+            Isbn = this.Isbn,
             Title = this.Title,
             Description = this.Description,
             PagesCount = this.PagesCount,
@@ -77,7 +77,7 @@ public class Book : IDtoSerialization<BookDto>
             CoverPictures = [.. this.CoverPictures],
             Authors = authors,
             Genres = genres,
-            Reviews = reviews,
+            Reviews = reviews
         };
     }
 
@@ -101,6 +101,7 @@ public class Book : IDtoSerialization<BookDto>
         {
             this.Genres.Add(genre);
         }
+
         foreach (var author in authors)
         {
             this.Authors.Add(author);

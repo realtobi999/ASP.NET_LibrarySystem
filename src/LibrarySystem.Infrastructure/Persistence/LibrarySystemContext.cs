@@ -33,10 +33,4 @@ public class LibrarySystemContext(DbContextOptions<LibrarySystemContext> options
         modelBuilder.ConfigureUserRelationships();
         modelBuilder.ConfigureWishlistRelationship();
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-    }
-
 }

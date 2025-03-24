@@ -1,10 +1,8 @@
-using System.ComponentModel.Design;
 using LibrarySystem.Application.Services.Authors;
 using LibrarySystem.Domain.Entities;
 using LibrarySystem.Domain.Interfaces.Common;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Tests.Integration.Factories;
-using Microsoft.IdentityModel.Tokens;
 using Moq;
 
 namespace LibrarySystem.Tests.Unit.Searchers;
@@ -13,8 +11,7 @@ public class AuthorSearcherTests
 {
     private readonly Mock<IRepositoryManager> _repository;
     private readonly ISearcher<Author> _searcher;
-
-    private static readonly Random _random = new();
+    private static readonly Random Random = new();
 
     public AuthorSearcherTests()
     {
@@ -23,12 +20,12 @@ public class AuthorSearcherTests
     }
 
     [Fact]
-    public async void SearchAsync_ShouldWorkWithBasicQueryInput()
+    public async Task SearchAsync_ShouldWorkWithBasicQueryInput()
     {
         // prepare
         var authors = new List<Author>();
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
@@ -36,8 +33,8 @@ public class AuthorSearcherTests
         var keyword = Guid.NewGuid().ToString();
 
         // get random authors from the list
-        var authorToSearchFor1 = authors[_random.Next(authors.Count)];
-        var authorToSearchFor2 = authors[_random.Next(authors.Count)];
+        var authorToSearchFor1 = authors[Random.Next(authors.Count)];
+        var authorToSearchFor2 = authors[Random.Next(authors.Count)];
         authorToSearchFor1.Name = $"test {keyword}";
         authorToSearchFor2.Name = $"{keyword} test";
 
@@ -52,12 +49,12 @@ public class AuthorSearcherTests
     }
 
     [Fact]
-    public async void SearchAsync_ShouldWorkWithBadQueryInput()
+    public async Task SearchAsync_ShouldWorkWithBadQueryInput()
     {
         // prepare
         var authors = new List<Author>();
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
@@ -65,7 +62,7 @@ public class AuthorSearcherTests
         var keyword = Guid.NewGuid().ToString();
 
         // get random author from the list
-        var authorToSearchFor1 = authors[_random.Next(authors.Count)];
+        var authorToSearchFor1 = authors[Random.Next(authors.Count)];
         authorToSearchFor1.Name = $"test {keyword}";
 
         _repository.Setup(r => r.Author.IndexAsync()).ReturnsAsync(authors.OrderBy(a => a.CreatedAt));
@@ -78,12 +75,12 @@ public class AuthorSearcherTests
     }
 
     [Fact]
-    public async void SearchAsync_StartsWithFilterShouldWorkWithBasicQueryInput()
+    public async Task SearchAsync_StartsWithFilterShouldWorkWithBasicQueryInput()
     {
         // prepare
         var authors = new List<Author>();
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
@@ -91,8 +88,8 @@ public class AuthorSearcherTests
         var keyword = Guid.NewGuid().ToString();
 
         // get random authors from the list
-        var authorToSearchFor1 = authors[_random.Next(authors.Count)];
-        var authorToSearchFor2 = authors[_random.Next(authors.Count)];
+        var authorToSearchFor1 = authors[Random.Next(authors.Count)];
+        var authorToSearchFor2 = authors[Random.Next(authors.Count)];
         authorToSearchFor1.Name = $"{keyword} test";
         authorToSearchFor2.Name = $"test {keyword}";
 
@@ -106,12 +103,12 @@ public class AuthorSearcherTests
     }
 
     [Fact]
-    public async void SearchAsync_EndsWithFilterShouldWorkWithBasicQueryInput()
+    public async Task SearchAsync_EndsWithFilterShouldWorkWithBasicQueryInput()
     {
         // prepare
         var authors = new List<Author>();
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
             authors.Add(AuthorFactory.CreateWithFakeData());
         }
@@ -119,8 +116,8 @@ public class AuthorSearcherTests
         var keyword = Guid.NewGuid().ToString();
 
         // get random authors from the list
-        var authorToSearchFor1 = authors[_random.Next(authors.Count)];
-        var authorToSearchFor2 = authors[_random.Next(authors.Count)];
+        var authorToSearchFor1 = authors[Random.Next(authors.Count)];
+        var authorToSearchFor2 = authors[Random.Next(authors.Count)];
         authorToSearchFor1.Name = $"test {keyword}";
         authorToSearchFor2.Name = $"{keyword} test";
 

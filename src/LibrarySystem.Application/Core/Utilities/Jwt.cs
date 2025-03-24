@@ -8,8 +8,8 @@ namespace LibrarySystem.Application.Core.Utilities;
 
 public class Jwt : IJwt
 {
-    public string Issuer { get; set; }
-    public string Key { get; set; }
+    public string Issuer { get; }
+    public string Key { get; }
 
     public Jwt(string issuer, string key)
     {

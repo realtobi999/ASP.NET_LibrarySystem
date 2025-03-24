@@ -3,9 +3,9 @@ using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Tests.Integration.Factories;
 
-internal class EmployeeFactory
+internal static class EmployeeFactory
 {
-    private static readonly Faker<Employee> _factory = new Faker<Employee>()
+    private static readonly Faker<Employee> Factory = new Faker<Employee>()
         .RuleFor(e => e.Id, f => f.Random.Guid())
         .RuleFor(e => e.Name, f => f.Internet.UserName())
         .RuleFor(e => e.Email, f => f.Internet.Email())
@@ -14,6 +14,6 @@ internal class EmployeeFactory
 
     public static Employee CreateWithFakeData()
     {
-        return _factory.Generate();
+        return Factory.Generate();
     }
 }

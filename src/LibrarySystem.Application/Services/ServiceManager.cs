@@ -9,8 +9,6 @@ public class ServiceManager : IServiceManager
 {
     private readonly IServiceFactory _factory;
 
-    // TODO: Implement lazy loading
-
     public ServiceManager(IServiceFactory factory)
     {
         _factory = factory;

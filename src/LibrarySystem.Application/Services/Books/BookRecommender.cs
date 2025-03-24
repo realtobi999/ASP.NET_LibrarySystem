@@ -1,5 +1,5 @@
 using LibrarySystem.Domain.Entities;
-using LibrarySystem.Domain.Interfaces.Repositories;
+using LibrarySystem.Domain.Interfaces.Managers;
 using LibrarySystem.Domain.Interfaces.Services.Books;
 
 namespace LibrarySystem.Application.Services.Books;
@@ -25,10 +25,7 @@ internal sealed class BookRecommender : IBookRecommender
         {
             foreach (var book in wishlist.Books)
             {
-                if (book is not null)
-                {
-                    userFavoriteBooks.Add(book);
-                }
+                userFavoriteBooks.Add(book);
             }
         }
 
@@ -42,7 +39,7 @@ internal sealed class BookRecommender : IBookRecommender
 
         foreach (var review in user.BookReviews)
         {
-            if (review.Rating > 5.5 && review.Book is not null)
+            if (review is { Rating: > 5.5, Book: not null })
             {
                 userFavoriteBooks.Add(review.Book);
             }
@@ -55,6 +52,7 @@ internal sealed class BookRecommender : IBookRecommender
             {
                 userPreferredGenreIds.Add(genre.Id);
             }
+
             foreach (var author in book.Authors)
             {
                 userPreferredAuthorIds.Add(author.Id);
@@ -64,7 +62,7 @@ internal sealed class BookRecommender : IBookRecommender
         var userRecommendedBooks = new HashSet<Book>();
 
         // recommend books based on matching genres or authors
-        foreach (var book in (await _repository.Book.IndexAsync()))
+        foreach (var book in await _repository.Book.IndexAsync())
         {
             if (!userFavoriteBooks.Contains(book) && (book.Genres.Any(g => userPreferredGenreIds.Contains(g.Id)) || book.Authors.Any(a => userPreferredAuthorIds.Contains(a.Id))))
             {

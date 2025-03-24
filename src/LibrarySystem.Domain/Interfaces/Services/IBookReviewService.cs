@@ -2,6 +2,4 @@
 
 namespace LibrarySystem.Domain.Interfaces.Services;
 
-public interface IBookReviewService : IBaseService<BookReview>
-{
-}
+public interface IBookReviewService : IBaseService<BookReview>;

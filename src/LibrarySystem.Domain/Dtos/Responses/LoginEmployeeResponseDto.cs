@@ -2,7 +2,7 @@
 
 namespace LibrarySystem.Domain.Dtos.Responses;
 
-public record class LoginEmployeeResponseDto
+public record LoginEmployeeResponseDto
 {
     public required EmployeeDto EmployeeDto { get; init; }
     public required string Token { get; init; }

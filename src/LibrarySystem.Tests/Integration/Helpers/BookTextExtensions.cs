@@ -10,14 +10,14 @@ internal static class BookTestExtensions
         return new CreateBookDto
         {
             Id = book.Id,
-            ISBN = book.ISBN,
+            Isbn = book.Isbn,
             Title = book.Title,
             Description = book.Description,
             PagesCount = book.PagesCount,
             PublishedDate = book.PublishedDate,
             Available = book.IsAvailable,
             AuthorIds = authorIds,
-            GenreIds = genreIds,
+            GenreIds = genreIds
         };
     }
 }

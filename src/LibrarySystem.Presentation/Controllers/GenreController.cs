@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibrarySystem.Presentation.Controllers;
 
 [ApiController]
+[Route("api/genre")]
 /*
 
 GET     /api/genre param: limit, offset
@@ -28,7 +29,7 @@ public class GenreController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpGet("api/genre")]
+    [HttpGet("")]
     public async Task<IActionResult> GetGenres(int limit, int offset)
     {
         var genres = await _service.Genre.IndexAsync();
@@ -37,7 +38,7 @@ public class GenreController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpGet("api/genre/{genreId:guid}")]
+    [HttpGet("{genreId:guid}")]
     public async Task<IActionResult> GetGenre(Guid genreId)
     {
         var genre = await _service.Genre.GetAsync(genreId);
@@ -46,7 +47,7 @@ public class GenreController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPost("api/genre")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDto createGenreDto)
     {
         var genre = _mapper.Genre.Map(createGenreDto);
@@ -57,7 +58,7 @@ public class GenreController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpPut("api/genre/{genreId:guid}")]
+    [HttpPut("{genreId:guid}")]
     public async Task<IActionResult> UpdateGenre(Guid genreId, [FromBody] UpdateGenreDto updateGenreDto)
     {
         var genre = await _service.Genre.GetAsync(genreId);
@@ -69,7 +70,7 @@ public class GenreController : ControllerBase
     }
 
     [Authorize(Policy = "Employee")]
-    [HttpDelete("api/genre/{genreId:guid}")]
+    [HttpDelete("{genreId:guid}")]
     public async Task<IActionResult> DeleteGenre(Guid genreId)
     {
         var genre = await _service.Genre.GetAsync(genreId);

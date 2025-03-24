@@ -8,13 +8,11 @@ namespace LibrarySystem.Infrastructure.Messages.Builders;
 
 public abstract class MessageBuilderBase
 {
-    private readonly IConfiguration _configuration;
     private readonly string _sender;
 
-    public MessageBuilderBase(IConfiguration configuration)
+    protected MessageBuilderBase(IConfiguration configuration)
     {
-        _configuration = configuration;
-        _sender = _configuration.GetSection("SMTP:Username").Value ?? throw new NullReferenceException();
+        _sender = configuration.GetSection("SMTP:Username").Value ?? throw new NullReferenceException();
     }
 
     protected MailMessage BuildBaseMessage(string toEmail)
@@ -41,9 +39,9 @@ public abstract class MessageBuilderBase
         var html = File.ReadAllText(filePath);
 
         var engine = new RazorLightEngineBuilder()
-                      .UseFileSystemProject(Path.GetDirectoryName(filePath))
-                      .UseMemoryCachingProvider()
-                      .Build();
+            .UseFileSystemProject(Path.GetDirectoryName(filePath))
+            .UseMemoryCachingProvider()
+            .Build();
 
         var body = engine.CompileRenderStringAsync(Guid.NewGuid().ToString(), html, model).Result;
 

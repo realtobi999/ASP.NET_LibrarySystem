@@ -2,6 +2,4 @@
 
 namespace LibrarySystem.Domain.Interfaces.Services;
 
-public interface IGenreService : IBaseService<Genre>
-{
-}
+public interface IGenreService : IBaseService<Genre>;

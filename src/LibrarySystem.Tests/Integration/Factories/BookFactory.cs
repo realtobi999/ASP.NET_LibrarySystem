@@ -3,11 +3,11 @@ using LibrarySystem.Domain.Entities;
 
 namespace LibrarySystem.Tests.Integration.Factories;
 
-internal class BookFactory
+internal static class BookFactory
 {
-    private static readonly Faker<Book> _factory = new Faker<Book>()
+    private static readonly Faker<Book> Factory = new Faker<Book>()
         .RuleFor(b => b.Id, f => f.Random.Guid())
-        .RuleFor(b => b.ISBN, f => f.Random.Replace("###-#-##-######-#"))
+        .RuleFor(b => b.Isbn, f => f.Random.Replace("###-#-##-######-#"))
         .RuleFor(b => b.Title, f => f.Lorem.Sentence(3))
         .RuleFor(b => b.Description, f => f.Lorem.Paragraph())
         .RuleFor(b => b.PagesCount, f => f.Random.Int(100, 1000))
@@ -18,6 +18,6 @@ internal class BookFactory
 
     public static Book CreateWithFakeData()
     {
-        return _factory.Generate();
+        return Factory.Generate();
     }
 }
